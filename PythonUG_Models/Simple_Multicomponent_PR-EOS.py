@@ -98,7 +98,7 @@ print 'T:', T,'K and P:', P/1.e5, 'bar'
 
 MixingParameters = MixingRules(T) # Calculating am and bm through simple mixing rules based on individual attractive and repulsive binary parameters
 Zvapour = 0.
-Cubic_PR( T, P, MixingParameters[0], MixingParameters[1] )
+#Cubic_PR( T, P, MixingParameters[0], MixingParameters[1] )
 
-#Zvapour = Cubic_PR( T, P, MixingParameters[0], MixingParameters[1] )
+Zvapour = Cubic_PR( T, P, MixingParameters[0], MixingParameters[1] )
 print 'Zvapour: ', Zvapour
