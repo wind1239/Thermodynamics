@@ -47,7 +47,7 @@ def set_Global_Variables(): # Global variables
     kij = [0. for i in range( Nc**2 ) ]
     i = 0 ; j = 1 ; node  = i * Nc + j 
     i = 1 ; j = 0 ; node2 = i * Nc + j 
-    kij[ node ] = 0.02 # THIS VALUE NEEDS TO BE UPDATED ...
+    kij[ node ] = 0.022 # THIS VALUE NEEDS TO BE UPDATED ...
     kij[ node2 ] = kij[ node ]
     
 
@@ -85,7 +85,7 @@ def MixingRules(T):
     sum1 = 0. ; sum2 = 0.
     for i in range( Nc ):
         for j in range( Nc ):
-            node = i * Nc + j 
+            node = i * Nc + j
             if i == j:
                 aij[ node ] = PREoS_Calc_a( i , T )
             else:
@@ -156,15 +156,65 @@ print ' '
 print 'Binary interaction parameter (Kij):', kij[1]
 print ' '
 
-MixingParameters = [0 for i in range(2) ]
-T = 300. ; P = 1.e7
-print 'T:', T,'K and P:', P/1.e5, 'bar'
 
-MixingParameters = MixingRules(T) # Calculating am and bm through simple mixing rules based on individual attractive and repulsive binary parameters
+# Creating Temperature and Pressure arrays:
+nt = 5
+T_work = np.array( [ 298.15, 350., 400., 450., 500. ] )
 
-Zvapour = Cubic_PR( T, P, MixingParameters[0], MixingParameters[1] )
-print ' '
+n = 100 ; Pmax = 450. ; Pmin = 1.
+P_work = [0. for i in range( n ) ] # creating an array of pressure
+dP = ( Pmax - Pmin ) * 1.e5 / float( n - 1 )
+#dP = 1.5
+P_work[ 0 ] = 1.e5 # associating P(0) = 10^5 Pa = 1 bar
+for i in range ( n - 1 ): # Populating the array T with prescribed temperature values 
+    P_work[ i + 1 ] = P_work[ i ] + dP
 
-print 'Zvapour: ', Zvapour
+
+P_bar = [0. for i in range( n ) ]
+for i in range( n ):
+    P_bar[ i ] = P_work[ i ] * 1.e-5
+
+Zvapour = [0. for i in range( n * nt ) ]
+for j in range( nt ):
+    MixingParameters = [0. for i in range(2) ]
+    MixingParameters = MixingRules( T_work[ j ] ) # Calculating am and bm through simple mixing rules based on individual attractive and repulsive binary parameters
+    for i in range( n ):
+        node = n * j + i 
+        Zvapour[ node ] = Cubic_PR( T_work[ j ], P_work[ i ], MixingParameters[ 0 ], MixingParameters[ 1 ] )
+    print ' '
 
 # Now, add here functions to calculate molar volume of the gaseous mixture and specific volume of chemical species at reservoir conditions
+
+
+
+# ========== PLOTTING DATA ==========================# 
+
+bplot.title('Pressure X Compressibility')        #title of the plot
+#nt = 2
+for j in range( nt ):
+    node1 = n * j + 0 ; node2 = n * j + n - 1
+    if j == 0:
+        colour = 'k-'  
+    elif j == 1:
+        colour = 'b-o' 
+    elif j == 2:
+        colour = 'r-'  
+    elif j == 3:
+        colour = 'r--' 
+    elif j == 4:
+        colour = 'g-s'  
+
+    text = 'T = ' + str( T_work[ j ] ) + ' K'
+
+    bplot.plot(P_bar, Zvapour[ node1 : node2 + 1 ], colour, label= text)           #ploting  ya vs. time in green color
+
+
+bplot.grid(True)                                      #using this to display the grid
+bplot.xlabel('Pressure (bar)')                                  #putting labels in x axis
+bplot.ylabel('Z')                                     #putting labels in y axis
+
+bplot.legend(loc = 0)                                 #the location of the legend, 0:upper left corner ang going clockwise -> 1:upper right corner, 2:lower right corner, 3: lower left corner
+
+bplot.show()                                          #command that you put at the end of the plot to make it appear
+
+
