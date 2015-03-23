@@ -4,17 +4,17 @@
 import matplotlib.pyplot as bplot
 import numpy as np
 import math # to explain/use the math functions
-import ThermoTools
+import ThermoTools as ThT
 
 
 ###
 ### FUNCTION: Calculating parameter of binary attraction of Peng-Robinson
 ###
 def PREoS_Calc_a( i, T ): 
-    set_Global_Variables()
-    k = 0.37464 + 1.5422 * w[i] - 0.26992 * w[i]**2
-    alpha = ( 1. + k * ( 1. - math.sqrt( T / Tc[i] ) )) **2
-    a_k = 0.45724 * ( Rconst * Tc[i] )**2 / Pc[i] * alpha
+    ThT.set_Global_Variables()
+    k = 0.37464 + 1.5422 * ThT.w[i] - 0.26992 * ThT.w[i]**2
+    alpha = ( 1. + k * ( 1. - math.sqrt( T / ThT.Tc[i] ) )) **2
+    a_k = 0.45724 * ( ThT.Rconst * ThT.Tc[i] )**2 / ThT.Pc[i] * alpha
     return a_k
 
 
@@ -22,9 +22,9 @@ def PREoS_Calc_a( i, T ):
 ### FUNCTION: Calculating parameter of binary repulsion of Peng-Robinson
 ###
 def PREoS_Calc_b( i ): 
-    set_Global_Variables()
+    ThT.set_Global_Variables()
 
-    b_k = 0.07780 * Rconst * Tc[i]  / Pc[i]
+    b_k = 0.07780 * ThT.Rconst * ThT.Tc[i]  / ThT.Pc[i]
 
     return b_k
 
@@ -32,11 +32,11 @@ def PREoS_Calc_b( i ):
 ###
 ### FUNCTION: Solving the Peng-Robinson EOS in the cubic form
 ###
-def Cubic_PR( T, P, am, bm ): # Building up and solving cubic EOS
-    set_Global_Variables()
+def Cubic_PR( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cubic EOS
+    ThT.set_Global_Variables()
 
-    Big_A = am * P / ( Rconst * T )**2
-    Big_B = bm * P / ( Rconst * T )
+    Big_A = am * P / ( ThT.Rconst * T )**2
+    Big_B = bm * P / ( ThT.Rconst * T )
 
 # For a polynomial of order n:
 #  c[0]*Z**n + c[1]*Z**(n-1) + ... + c[n] = 0
@@ -68,6 +68,12 @@ def Cubic_PR( T, P, am, bm ): # Building up and solving cubic EOS
 # algorithm (see quicksort and/or bubblesort) within Numpy (np.sort).
 
     Z_realroot = np.sort( Z_realroot ) # Quick-sort algorithm -- Largest/smallest real root: vapour / liquid
-    Zvapour = Z_realroot[ 2 ] # Largest real root: vapour
-    return Zvapour 
+    Zvapour = 1.e-6 ; Zliquid = 1.e6
+
+    for i in range( 3 ):
+        Zvapour = max( Zvapour, Z_realroot[ i ] ) # Largest real root: vapour
+        Zliquid = min( Zliquid, Z_realroot[ i ] ) # Smallest real rrot: liquid
+
+    print 'Z::',Zvapour, Zliquid
+    return ( Zvapour, Zliquid ) 
     

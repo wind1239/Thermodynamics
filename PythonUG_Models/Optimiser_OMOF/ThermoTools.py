@@ -15,7 +15,7 @@ import math # to explain/use the math functions
 
 def set_Global_Variables(): # Global variables
 # Building up a small data bank for species C1 and C2:
-    global Rconst, Nc, species, MW, Tc, Pc, w, FeedMoleFraction,kij
+    global Rconst, Nc, species, MW, Tc, Pc, w, FeedMoleFraction, kij
 
     Rconst = 8.314 # Gas constant [J/(gmol.K)]
 
@@ -49,4 +49,5 @@ def set_Global_Variables(): # Global variables
     i = 1 ; j = 0 ; node2 = i * Nc + j 
     kij[ node ] = 0.02 # THIS VALUE NEEDS TO BE UPDATED ...
     kij[ node2 ] = kij[ node ]
-    
+
+
