@@ -74,6 +74,5 @@ def Cubic_PR( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cu
         Zvapour = max( Zvapour, Z_realroot[ i ] ) # Largest real root: vapour
         Zliquid = min( Zliquid, Z_realroot[ i ] ) # Smallest real rrot: liquid
 
-    print 'Z::',Zvapour, Zliquid
     return ( Zvapour, Zliquid ) 
     
