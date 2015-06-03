@@ -1,0 +1,507 @@
+%\documentclass[11pts,a4paper,amsmath,amssymb,floatfix]{article}%{report}%{book}
+\documentclass[12pts,a4paper,amsmath,amssymb,floatfix]{article}%{report}%{book}
+\usepackage{graphicx,wrapfig}% Include figure files
+%\usepackage{dcolumn,enumerate}% Align table columns on decimal point
+\usepackage{bm,dpfloat}% bold math
+\usepackage[pdftex,bookmarks,colorlinks=true,urlcolor=rltblue,citecolor=blue]{hyperref}
+\usepackage{amsfonts,amsmath,amssymb,stmaryrd,indentfirst}
+%\usepackage{chemist}
+\usepackage{times,psfrag}
+\usepackage{natbib} 
+\usepackage{color}
+\usepackage{units}
+\usepackage{rotating}
+\usepackage{multirow}
+\usepackage{gantt}
+\usepackage{pdflscape}
+\usepackage{comment}
+ 
+\usepackage{enumerate}%,enumitem}% Align table columns on decimal point
+
+% Text + Eqn box:
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{lipsum}
+\mdfdefinestyle{JFrame}{%
+    linecolor=blue,
+    outerlinewidth=1pt,
+    roundcorner=20pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    innerrightmargin=20pt,
+    innerleftmargin=20pt,
+    backgroundcolor=blue!10!white}
+
+%\usepackage{pifont}
+%\usepackage{subfigure}
+%\usepackage{subeqnarray}
+%\usepackage{ifthen}
+ 
+\usepackage{supertabular}
+\usepackage{moreverb}
+\usepackage{listings} 
+\usepackage{palatino}
+%\usepackage{doi}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{perpage}
+\MakeSorted{figure}
+%\usepackage{pdflscape}
+
+
+\definecolor{rltblue}{rgb}{0,0,0.75}
+
+
+%\usepackage{natbib}
+\usepackage{fancyhdr} %%%%
+\pagestyle{fancy}%%%%
+% with this we ensure that the chapter and section
+% headings are in lowercase
+%%%%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{} %delete the current section for header and footer
+\fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[LO]{\bfseries\rightmark}
+\fancyhead[RE]{\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+% make space for the rule
+\fancypagestyle{plain}{%
+\fancyhead{} %get rid of the headers on plain pages
+\renewcommand{\headrulewidth}{0pt} % and the line
+}
+
+\def\newblock{\hskip .11em plus .33em minus .07em}
+\usepackage{color}
+
+%\usepackage{makeidx}
+%\makeindex
+
+\setlength\textwidth      {16.cm}
+\setlength\textheight     {21.6cm}
+\setlength\oddsidemargin  {-0.3cm}
+\setlength\evensidemargin {0.3cm}
+
+\setlength\headheight{14.49998pt} 
+\setlength\topmargin{0.0cm}
+\setlength\headsep{1.cm}
+\setlength\footskip{1.cm}
+\setlength\parskip{0pt}
+\setlength\parindent{0pt}
+
+
+%%%
+%%% Headers and Footers
+\lhead[] {\text{\small{CompRS}}} 
+\rhead[] {{\text{\small{CoMaELa}}}}
+%\chead[] {\text{\small{Session 2012/13}}} 
+\lfoot[]{{\today}}
+%\cfoot[\thepage]{\thepage}
+\rfoot[\text{\small{\thepage}}]{\thepage}
+\renewcommand{\headrulewidth}{0.8pt}
+
+
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[version=3]{mhchem}
+
+
+\makeatletter
+\newcounter{reaction}
+%%% >> for article <<
+\renewcommand\thereaction{C\,\arabic{reaction}}
+%%% << for article <<
+%%% >> for report and book >>
+%\renewcommand\thereaction{C\,\thechapter.\arabic{reaction}}
+%\@addtoreset{reaction}{chapter}
+%%% << for report and book <<
+\newcommand\reactiontag{\refstepcounter{reaction}\tag{\thereaction}}
+\newcommand\reaction@[2][]{\begin{equation}\ce{#2}%
+\ifx\@empty#1\@empty\else\label{#1}\fi%
+\reactiontag\end{equation}}
+\newcommand\reaction@nonumber[1]{\begin{equation*}\ce{#1}%
+\end{equation*}}
+\newcommand\reaction{\@ifstar{\reaction@nonumber}{\reaction@}}
+\makeatother
+
+
+%%%
+%%% Notes
+%%%
+\newcommand{\JGnote}[1]{\fbox{\parbox{\textwidth}{\color{blue} JG: #1}}}
+
+
+
+%%%
+%%% space between lines
+%%%
+\renewcommand{\baselinestretch}{1.5}
+
+\newenvironment{VarDescription}[1]%
+  {\begin{list}{}{\renewcommand{\makelabel}[1]{\textbf{##1:}\hfil}%
+    \settowidth{\labelwidth}{\textbf{#1:}}%
+    \setlength{\leftmargin}{\labelwidth}\addtolength{\leftmargin}{\labelsep}}}%
+  {\end{list}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%                              %%%%%%%
+%%%%%%      NOTATION SECTION        %%%%%%%
+%%%%%%                              %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Text abbreviations.
+\newcommand{\ie}{{\em{i.e., }}}
+\newcommand{\eg}{{\em{e.g., }}}
+%XS\newcommand{\cf}{{\em{cf., }}}
+\newcommand{\wrt}{with respect to}
+\newcommand{\lhs}{left hand side}
+\newcommand{\rhs}{right hand side}
+% Commands definining mathematical notation.
+
+% This is for quantities which are physically vectors.
+\renewcommand{\vec}[1]{{\mbox{\boldmath$#1$}}}
+% Physical rank 2 tensors
+\newcommand{\tensor}[1]{\overline{\overline{#1}}}
+% This is for vectors formed of the value of a quantity at each node.
+\newcommand{\dvec}[1]{\underline{#1}}
+% This is for matrices in the discrete system.
+\newcommand{\mat}[1]{\mathrm{#1}}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lemma}[thm]{Lemma}
+
+%\newcommand\qed{\hfill\mbox{$\Box$}}
+\newcommand{\re}{{\mathrm{I}\hspace{-0.2em}\mathrm{R}}}
+\newcommand{\inner}[2]{\langle#1,#2\rangle}
+\renewcommand\leq{\leqslant}
+\renewcommand\geq{\geqslant}
+\renewcommand\le{\leqslant}
+\renewcommand\ge{\geqslant}
+\renewcommand\epsilon{\varepsilon}
+\newcommand\eps{\varepsilon}
+\renewcommand\phi{\varphi}
+\newcommand{\bmF}{\vec{F}}
+\newcommand{\bmphi}{\vec{\phi}}
+\newcommand{\bmn}{\vec{n}}
+\newcommand{\bmns}{{\textrm{\scriptsize{\boldmath $n$}}}}
+\newcommand{\bmi}{\vec{i}}
+\newcommand{\bmj}{\vec{j}}
+\newcommand{\bmk}{\vec{k}}
+\newcommand{\bmx}{\vec{x}}
+\newcommand{\bmu}{\vec{u}}
+\newcommand{\bmv}{\vec{v}}
+\newcommand{\bmr}{\vec{r}}
+\newcommand{\bma}{\vec{a}}
+\newcommand{\bmg}{\vec{g}}
+\newcommand{\bmU}{\vec{U}}
+\newcommand{\bmI}{\vec{I}}
+\newcommand{\bmq}{\vec{q}}
+\newcommand{\bmT}{\vec{T}}
+\newcommand{\bmM}{\vec{M}}
+\newcommand{\bmtau}{\vec{\tau}}
+\newcommand{\bmOmega}{\vec{\Omega}}
+\newcommand{\pp}{\partial}
+\newcommand{\kaptens}{\tensor{\kappa}}
+\newcommand{\tautens}{\tensor{\tau}}
+\newcommand{\sigtens}{\tensor{\sigma}}
+\newcommand{\etens}{\tensor{\dot\epsilon}}
+\newcommand{\ktens}{\tensor{k}}
+\newcommand{\half}{{\textstyle \frac{1}{2}}}
+\newcommand{\tote}{E}
+\newcommand{\inte}{e}
+\newcommand{\strt}{\dot\epsilon}
+\newcommand{\modu}{|\bmu|}
+% Derivatives
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\D}{\mathrm{D}}
+\newcommand{\ddx}[2][x]{\frac{\d#2}{\d#1}}
+\newcommand{\ddxx}[2][x]{\frac{\d^2#2}{\d#1^2}}
+\newcommand{\ddt}[2][t]{\frac{\d#2}{\d#1}}
+\newcommand{\ddtt}[2][t]{\frac{\d^2#2}{\d#1^2}}
+\newcommand{\ppx}[2][x]{\frac{\partial#2}{\partial#1}}
+\newcommand{\ppxx}[2][x]{\frac{\partial^2#2}{\partial#1^2}}
+\newcommand{\ppt}[2][t]{\frac{\partial#2}{\partial#1}}
+\newcommand{\pptt}[2][t]{\frac{\partial^2#2}{\partial#1^2}}
+\newcommand{\DDx}[2][x]{\frac{\D#2}{\D#1}}
+\newcommand{\DDxx}[2][x]{\frac{\D^2#2}{\D#1^2}}
+\newcommand{\DDt}[2][t]{\frac{\D#2}{\D#1}}
+\newcommand{\DDtt}[2][t]{\frac{\D^2#2}{\D#1^2}}
+% Norms
+\newcommand{\Ltwo}{\ensuremath{L_2} }
+% Basis functions
+\newcommand{\Qone}{\ensuremath{Q_1} }
+\newcommand{\Qtwo}{\ensuremath{Q_2} }
+\newcommand{\Qthree}{\ensuremath{Q_3} }
+\newcommand{\QN}{\ensuremath{Q_N} }
+\newcommand{\Pzero}{\ensuremath{P_0} }
+\newcommand{\Pone}{\ensuremath{P_1} }
+\newcommand{\Ptwo}{\ensuremath{P_2} }
+\newcommand{\Pthree}{\ensuremath{P_3} }
+\newcommand{\PN}{\ensuremath{P_N} }
+\newcommand{\Poo}{\ensuremath{P_1P_1} }
+\newcommand{\PoDGPt}{\ensuremath{P_{-1}P_2} }
+
+\newcommand{\metric}{\tensor{M}}
+\newcommand{\configureflag}[1]{\texttt{#1}}
+
+% Units
+\newcommand{\m}[1][]{\unit[#1]{m}}
+\newcommand{\km}[1][]{\unit[#1]{km}}
+\newcommand{\s}[1][]{\unit[#1]{s}}
+\newcommand{\invs}[1][]{\unit[#1]{s}\ensuremath{^{-1}}}
+\newcommand{\ms}[1][]{\unit[#1]{m\ensuremath{\,}s\ensuremath{^{-1}}}}
+\newcommand{\mss}[1][]{\unit[#1]{m\ensuremath{\,}s\ensuremath{^{-2}}}}
+\newcommand{\K}[1][]{\unit[#1]{K}}
+\newcommand{\PSU}[1][]{\unit[#1]{PSU}}
+\newcommand{\Pa}[1][]{\unit[#1]{Pa}}
+\newcommand{\kg}[1][]{\unit[#1]{kg}}
+\newcommand{\rads}[1][]{\unit[#1]{rad\ensuremath{\,}s\ensuremath{^{-1}}}}
+\newcommand{\kgmm}[1][]{\unit[#1]{kg\ensuremath{\,}m\ensuremath{^{-2}}}}
+\newcommand{\kgmmm}[1][]{\unit[#1]{kg\ensuremath{\,}m\ensuremath{^{-3}}}}
+\newcommand{\Nmm}[1][]{\unit[#1]{N\ensuremath{\,}m\ensuremath{^{-2}}}}
+
+% Dimensionless numbers
+\newcommand{\dimensionless}[1]{\mathrm{#1}}
+\renewcommand{\Re}{\dimensionless{Re}}
+\newcommand{\Ro}{\dimensionless{Ro}}
+\newcommand{\Fr}{\dimensionless{Fr}}
+\newcommand{\Bu}{\dimensionless{Bu}}
+\newcommand{\Ri}{\dimensionless{Ri}}
+\renewcommand{\Pr}{\dimensionless{Pr}}
+\newcommand{\Pe}{\dimensionless{Pe}}
+\newcommand{\Ek}{\dimensionless{Ek}}
+\newcommand{\Gr}{\dimensionless{Gr}}
+\newcommand{\Ra}{\dimensionless{Ra}}
+\newcommand{\Sh}{\dimensionless{Sh}}
+\newcommand{\Sc}{\dimensionless{Sc}}
+
+
+% Journals
+\newcommand{\IJHMT}{{\it International Journal of Heat and Mass Transfer}}
+\newcommand{\NED}{{\it Nuclear Engineering and Design}}
+\newcommand{\ICHMT}{{\it International Communications in Heat and Mass Transfer}}
+\newcommand{\NET}{{\it Nuclear Engineering and Technology}}
+\newcommand{\HT}{{\it Heat Transfer}}   
+\newcommand{\IJHT}{{\it International Journal for Heat Transfer}}
+
+\newcommand{\frc}{\displaystyle\frac}
+\newenvironment{frcseries}{\fontfamily{frc}\selectfont}{}
+\newcommand{\textfrc}[1]{{\frcseries#1}}
+\newcommand{\summation}{\sum\limits}
+\newcommand{\red}{\textcolor{red}} 
+\newcommand{\blue}{\textcolor{blue}} 
+\newcommand{\green}{\textcolor{green}} 
+
+
+%\usepackage{enumitem}%
+%\newlist{ExList}{enumerate}{1}
+%\setlist[ExList,1]{label={\bf Example 1.} {\bf \arabic*}}
+
+%\newlist{ProbList}{enumerate}{1}
+%\setlist[ProbList,1]{label={\bf Problem 1.} {\bf \arabic*}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%                              %%%%%%%
+%%%%%% END OF THE NOTATION SECTION  %%%%%%%
+%%%%%%                              %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Cause numbering of subsubsections. 
+%\setcounter{secnumdepth}{8}
+%\setcounter{tocdepth}{8}
+
+\setcounter{secnumdepth}{4}%
+\setcounter{tocdepth}{4}%
+
+\begin{document}
+
+
+\begin{center}
+{\Large {\bf Developing an Integrated EOS-based Compositional Simulator Modelling Framework for Environmental and Industrial Flow Applications}}
+\end{center}
+\begin{flushright}
+\today
+\end{flushright}
+
+%%%
+%%% SECTION
+%%%
+\section{Thermodynamic Formulation}
+ 
+%%% SUB-SECTION
+\subsection{Mass Balance}
+For a system with $n_{p}$ phases and $n_{c}$ components, the mass of each phase $j$ is,
+\begin{equation}
+m^{j} = \summation_{i=1}^{n_{c}}m_{i}^{j}\;\;\;\text{ for }j=1,2,\cdots,n_{p}
+\label{Eqn_MassBalance_Phase}
+\end{equation}
+
+And the mass of each component $i\left(=1,2,\cdots,n_{c}\right)$,
+\begin{equation}
+m_{i} = m_{i}^{1} + m_{i}^{2} + \cdots + m_{i}^{n_{p}} = \summation_{j=1}^{n_{p}}m_{i}^{j}
+\label{Eqn_MassBalance_Component}
+\end{equation}
+
+The total mass $m$ can be define as,
+\begin{equation}
+m - m^{1} + m^{2} + \cdots + m^{n_{p}} = \summation_{j=1}^{n_{p}}m^{j} = \summation_{i=1}^{n_{c}}m_{i}
+\label{Eqn_MassBalance_Mass}
+\end{equation}
+
+Defining the intensive properties:
+\begin{eqnarray}
+w_{i}^{j} = \frc{m_{i}^{j}}{m^{j}} \label{Eqn_MassBalance_MassFraction} \\
+z_{i} = \frc{m_{i}}{m} \label{Eqn_MassBalance_MassFractionFeeding} \\
+\Pi^{j} = \frc{m^{j}}{m}\label{Eqn_MassBalance_PhaseMassFraction} 
+\end{eqnarray}
+where $w_{i}^{j}$ is the mass fraction of component $i$ in phase $j$, $\Pi^{j}$ is the mass fraction of phase $j$ and $z_{i}$ is the overall feed mass fraction of component $i$. From Eqns.~\ref{Eqn_MassBalance_Mass}-~\ref{Eqn_MassBalance_PhaseMassFraction}, we can define normalised quantities, i.e., fractions, and we can add the following constraints:
+\begin{eqnarray}
+&&w_{n_{c}}^{j} = 1 - \summation_{i=1}^{n_{c}-1}w_{i}^{j}  \hspace{3cm} j=1,2,\cdots,n_{p}  \label{Eqn_MassBalance_MassFraction2} \\
+&&z_{n_{c}} = 1 - \summation_{i=1}^{n_{c}-1}z_{1}  \\
+&&\Pi^{n_{p}} = 1 - \left(\Pi^{1} + \Pi^{2} + \cdots + \Pi^{n_{p}-1}\right) = 1 - \summation_{j=1}^{n_{p}-1} \Pi^{j}\label{Eqn_MassBalance_PhaseMassFraction2}
+\end{eqnarray} 
+with
+\begin{displaymath}
+  z_{i} = \frc{m_{i}}{m} = \frc{\summation_{j=1}^{n_{p}}m_{i}^{j}}{m} \frc{m^{j}}{m^{j}} = \underbrace{\frc{m^{j}}{m}}_{\red{\Pi^{j}}} \cdot \overbrace{\frc{\summation_{j=1}^{n_{p}}m_{i}^{j}}{m^{j}}}^{\red{\summation_{j=1}^{n_{p}}w_{i}^{j}}} 
+\end{displaymath}
+leading to
+\begin{equation}
+z_{i} = \Pi^{1}w_{i}^{1} + \Pi^{2}w_{i}^{2} + \cdots + \Pi^{n_{p}}w_{i}^{n_{p}}
+\label{Eqn_MassBalance_FeedMassFractionConstraint}
+\end{equation}
+with
+\begin{equation}
+0\leq\Pi^{j}\leq 1 \hspace{3cm} 0\leq w_{i}^{j}\leq 1
+\end{equation}
+
+If the solution is contained within \red{$n_{p}$} phases, the inequality can be rewritten as,
+\begin{equation}
+0 < \Pi^{j} < 1
+\end{equation}
+Thus
+\begin{displaymath}
+\Pi^{k} = 1 - \summation_{j=1,j\neq k}^{n_{p}} \Pi^{j} \neq 0
+\end{displaymath}
+Therefore from Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint},
+\begin{equation}
+w_{i}^{k} = \frc{z_{i}+\summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}w_{i}^{j}}{\Pi^{k}} = \frc{z_{i} + \summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}w_{i}^{j}}{1-\summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}}
+\label{Eqn_MassBalance_FeedMassFractionConstraint2}
+\end{equation}
+
+
+\begin{mdframed}[style=JFrame]
+For 2 phases, $\Pi^{1}=L$ and $\Pi^{2}=V$, Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint} becomes:
+\begin{displaymath}
+w_{i}^{V} = \frc{z_{i}-Lw_{i}^{L}}{1-L}
+\end{displaymath}
+for $i=1,2,\cdots,n_{c}$, and for 3 phases,$\Pi^{1}=L$, $\Pi^{2}=V$ and $\Pi^{3}=H$:
+\begin{displaymath}
+w_{i}^{H} = \frc{z_{i}-\left(V w_{i}^{V} + L w_{i}^{L}\right)}{1 - \left(V w_{i}^{V} + L w_{i}^{L}\right)}
+\end{displaymath}
+\end{mdframed}
+
+%% SUB-SECTION
+\subsection{Free Gibbs Energy}
+For equilibrium problems (e.g., vapour-liquid equilibrium, VLE), the total free Gibbs energy can be expressed as,
+\begin{equation}
+G = \summation_{j=1}^{n_{p}}\left(\summation_{i=1}^{n_{c}} m_{i}^{j}\mu_{i}^{j}\right)
+\label{MassGibbs_Definition}
+\end{equation} 
+this represents
+\begin{displaymath}
+G = \summation_{i=1}^{n_{c}} m_{i}^{1}\mu_{i}^{1} + \summation_{i=1}^{n_{c}} m_{i}^{2}\mu_{i}^{2} + \cdots + \summation_{i=1}^{n_{c}} m_{i}^{n_{p}}\mu_{i}^{n_{p}}
+\end{displaymath}
+The chemical potential $\left(\mu\right)$ can be written as a function of the mass of each component at each phase,
+\begin{eqnarray}
+\mu_{i}^{j} &=& \mu_{i}^{j}\left(m_{1}^{j}, m_{2}^{j}, \cdots, m_{n_{c}}^{j}\right) = \mu_{i}^{j}\left(\frc{m_{1}^{j}}{m^{j}}, \frc{m_{2}^{j}}{m^{j}}, \cdots, \frc{m_{n_{c}}^{j}}{m^{j}}\right)\nonumber \\
+ &=& \mu_{i}^{j}\left(w_{1}^{j}, w_{2}^{j}, \cdots, w_{n_{c}}^{j}\right)\label{chempotential_functional}
+\end{eqnarray}
+Dividing Eqn.~\ref{MassGibbs_Definition} by $m$,
+\begin{equation}
+g = \frc{G}{m} = \summation_{j=1}^{n_{p}}\left(\summation_{i=1}^{n_{c}}\frc{m_{i}^{j}}{m}\mu_{i}^{j}\right) = \summation_{i=1}^{n_{c}}\frc{m_{i}^{1}}{m^{1}} \cdot \frc{m^{1}}{m} \mu_{i}^{1} + \cdots + \summation_{i=1}^{n_{c}}\frc{m_{i}^{n_{p}}}{m^{n_{p}}} \cdot \frc{m^{n_{p}}}{m} \mu_{i}^{n_{p}}
+\label{MassGibbs_Definition2}
+\end{equation}
+And we rewrite Eqn.~\ref{MassGibbs_Definition2} as,
+\begin{equation}
+g = \summation_{i=1}^{n_{c}}\Pi^{1}w_{i}^{1}\mu_{i}^{1} + \summation_{i=1}^{n_{c}}\Pi^{2}w_{i}^{2}\mu_{i}^{2} + \cdots + \summation_{i=1}^{n_{c}}\Pi^{n_{p}}w_{i}^{n_{p}}\mu_{i}^{n_{p}} = \summation_{j=1}^{n_{p}}\left[\summation_{i}^{n_{c}}\Pi^{j}w_{i}^{j}\mu_{i}^{j}\right] \label{MassGibbs_Definition3}
+\end{equation}
+
+
+\begin{mdframed}[style=JFrame]
+For 2 ($L$ and $V$) phases,
+\begin{displaymath}
+g = \summation_{i=1}^{n_{c}}Lw_{i}^{L}\mu_{i}^{L} + \summation_{i=1}^{n_{c}}Vw_{i}^{V}\mu_{i}^{V}
+\end{displaymath}
+and 3 ($L$, $V$ and $H$) phases,
+\begin{displaymath}
+g = \summation_{i=1}^{n_{c}}Lw_{i}^{L}\mu_{i}^{L} + \summation_{i=1}^{n_{c}}Vw_{i}^{V}\mu_{i}^{V} + \summation_{i=1}^{n_{c}}Hw_{i}^{H}\mu_{i}^{H}
+\end{displaymath}
+\end{mdframed}
+
+
+Now replacing Eqn.~\ref{Eqn_MassBalance_MassFraction2} in Eqn.~\ref{MassGibbs_Definition3},
+\begin{equation}
+g = \summation_{i=1}^{n_{c}-1}\Pi^{1}w_{i}^{1}\left(\mu_{i}^{1}-\mu_{n_{c}}^{1}\right) + \Pi^{1}\mu_{n_{c}}^{1} + \summation_{i=1}^{n_{c}-1}\Pi^{2}w_{i}^{2}\left(\mu_{i}^{2}-\mu_{n_{c}}^{2}\right) + \Pi^{2}\mu_{n_{c}}^{2} + \cdots + \summation_{i=1}^{n_{c}-1}\Pi^{n_{p}}w_{i}^{n_{p}}\left(\mu_{i}^{n_{p}}-\mu_{n_{c}}^{n_{p}}\right) + \Pi^{n_{p}}\mu_{n_{c}}^{n_{p}}
+\label{MassGibbs_Definition4}
+\end{equation}
+Now replacing Eqns.~\ref{Eqn_MassBalance_PhaseMassFraction2} and~\ref{Eqn_MassBalance_FeedMassFractionConstraint2} in~\ref{MassGibbs_Definition4}:
+\begin{eqnarray}
+g &=& \summation_{i=1}^{n_{c}}\Pi^{1}w_{i}^{1}\left(\mu_{i}^{1}-\mu_{n_{c}}^{1}\right) + \Pi^{1}\mu_{n_{c}}^{1} + \cdots + \summation_{i=1}^{n_{c}}\Pi^{n_{p}-1}w_{i}^{n_{p}-1}\left(\mu_{i}^{n_{p}-1}-\mu_{n_{c}}^{n_{p}-1}\right) + \Pi^{n_{p}-1}\mu_{n_{c}}^{n_{p}-1} + \nonumber \\
+   && \summation_{i=1}^{n_{c}-1}\left[z_{i} - \summation_{j=1}^{n_{p}-1}\Pi^{j}w_{i}^{j}\right]\left(\mu_{i}^{n_{p}}-\mu_{n_{c}}^{n_{p}}\right) + \Pi^{n_{p}}\mu_{n_{c}}^{n_{p}}\nonumber
+\end{eqnarray}
+
+Rearranging
+\begin{eqnarray}
+g &=& \summation_{i=1}^{n_{c}}\Pi^{1}w_{i}^{1}\left[\left(\mu_{i}^{1}-\mu_{i}^{n_{p}}\right) - \left(\mu_{n_{c}}^{1}-\mu_{n_{c}}^{n_{p}}\right)\right] + \cdots + \summation_{i=1}^{n_{c}}\Pi^{n_{p}-1}w_{i}^{n_{p}-1}\left[\left(\mu_{i}^{n_{p}-1}-\mu_{i}^{n_{p}}\right) - \left(\mu_{n_{c}}^{n_{p}-1}-\mu_{n_{c}}^{n_{p}}\right)\right] + \nonumber \\
+&& \summation_{j=1}^{n_{p}-1}\Pi^{j}\mu_{n_{c}}^{j} + \summation_{i=1}^{n_{c}-1}z_{i}\left(\mu_{i}^{n_{p}}-\mu_{n_{c}}^{n_{p}}\right) +\left(1-\summation_{j=1}^{n_{p}-1}\Pi^{j}\right)\mu_{n_{c}}^{n_{p}} \nonumber
+\end{eqnarray}
+
+With a compressed notation:
+
+\begin{eqnarray}
+g &=& \summation_{i=1}^{n_{c}-1}\left\{\summation_{j=1}^{n_{p}-1}\Pi^{j}w_{i}^{j}\left[\left(\mu_{i}^{j}-\mu_{i}^{n_{p}}\right) - \left(\mu_{n_{c}}^{j}-\mu_{n_{c}}^{n_{p}}\right)\right]\right\} + \summation_{j=1}^{n_{p}-1}\Pi^{j}\left(\mu_{n_{c}}^{j}-\mu_{n_{c}}^{n_{p}}\right) +  \nonumber \\
+&& \hspace{3cm} \summation_{i=1}^{n_{c}-1} z_{i}\mu_{i}^{n_{p}} + \underbrace{\left(1-\summation_{i=1}^{n_{c}-1}z_{i}\right)}_{\red{z_{n_{c}}}}\mu_{n_{c}}^{n_{p}} \nonumber 
+\end{eqnarray}
+Thus
+\red{\begin{equation}
+g = \summation_{i=1}^{n_{c}-1}\left\{\summation_{j=1}^{n_{p}-1}\Pi^{j}w_{i}^{j}\left[\left(\mu_{i}^{j}-\mu_{i}^{n_{p}}\right) - \left(\mu_{n_{c}}^{j}-\mu_{n_{c}}^{n_{p}}\right)\right]\right\} + \summation_{j=1}^{n_{p}-1}\Pi^{j}\left(\mu_{n_{c}}^{j}-\mu_{n_{c}}^{n_{p}}\right) + \summation_{i=1}^{n_{c}}z_{i}\mu_{i}^{n_{p}}
+\end{equation}}
+
+The chemical potential was defined as a functional (Eqn.~\ref{chempotential_functional}):
+\begin{eqnarray}
+&& \mu_{i}^{1} = \mu_{i}^{1}\left(w_{1}^{1},w_{2}^{1},\cdots,w_{n_{c}}^{1}\right) \nonumber \\
+&& \mu_{i}^{2} = \mu_{i}^{2}\left(w_{1}^{2},w_{2}^{2},\cdots,w_{n_{c}}^{2}\right) \nonumber \\
+&& \hspace{2cm}\vdots \nonumber \\
+&& \mu_{i}^{n_{p}} = \mu_{i}^{n_{p}}\left(w_{1}^{n_{p}},w_{2}^{n_{p}},\cdots,w_{n_{c}}^{n_{p}}\right) \label{ChemPotDef2}
+\end{eqnarray}
+with constraint Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint2} in Eqn.~\ref{ChemPotDef2},
+\begin{eqnarray}
+\mu_{l}^{k} &=& \mu_{l}^{k}\left(w_{i}^{j},\Pi^{j}\right) \nonumber \\
+           &=& \mu_{l}^{k}\left(w_{1}^{1},\cdots,w_{n_{c}-1}^{1},w_{1}^{2},\cdots,w_{n_{c}-1}^{2},\cdots,w_{1}^{n_{p}},w_{2}^{n_{p}},\cdots,w_{n_{c}-1}^{n_{p}},\Pi^{1},\cdots,\Pi^{n_{p}}\right)\nonumber
+\end{eqnarray}
+with $i = 1, 2, \cdots, l, \cdots, n_{c} - 1$, $j = 1, 2, \cdots, n_{p}$ and $j\neq k$
+
+And the mass-based free Gibbs energy should take the following format
+\begin{displaymath}
+g = g\left(w_{i}^{j},\Pi^{j}\right).
+\end{displaymath}
+From classical thermodynamic, $\mu_{i}^{j}$ can be defined as a function of the fugacity coefficient, $\varphi_{i}^{j}$,
+\begin{equation}
+\mu_{i}^{j}= R T\left[\ln\varphi_{i}^{j} + \ln\left(P x_{i}^{j}\right)\right] + \theta_{i}\left(T\right),
+\end{equation}
+where $\theta_{i}$ is an integration constant. The fugacity coefficient is defined as,
+\begin{equation}
+\varphi_{i}^{j} = \frc{f_{i}^{j}}{P x_{i}^{j}},
+\end{equation}
+where $f$ and $x$ are the fugacity and molar fraction respectively.
+\bibliographystyle{unsrt}
+%\bibliographystyle{plainnat}
+%\bibliographystyle{acm}
+\bibliography{references}
+
+
+
+\end{document}
