@@ -55,6 +55,7 @@ def Envelope_Constraints( n, X ):
 
     rand = []
     TryAgain = True
+    evaluations = 1
     while TryAgain:
         for i in range( n - 1 ):
             if ( ( X[ i ] < SAT.Lower[ i ] ) | ( X[ i ] > SAT.Upper[ i ] ) ):
@@ -68,12 +69,21 @@ def Envelope_Constraints( n, X ):
         if ( Sum < 1. ):
             X[ n - 1 ] = 1. - Sum
             TryAgain == False
+            #print 'number of evaluations:', evaluations
             return X
         else:
-            for i in range( n ):
+            for i in range( n - 1 ):
                 rand = RandomNumberGenerator( n )
-                X[ i ] = SAT.Lower[ i ] + ( SAT.Upper[ i ] - SAT.Lower[ i ] ) * \
-                    rand[ i ]
+                if ( evaluations % 3 == 0 ):
+                    X[ i ] = rand[ i ]
+                elif ( evaluations % 7 == 0 ):
+                    X[ i ] = min( rand[ i ], rand[ i + 1 ] ) / max( 1.e-7, float( i ), 1. / rand[ i + 1 ] )
+                elif ( evaluations % 11 == 0 ):
+                    X[ i ] = abs( 1. - rand[ i ] / rand[ i + 1 ] )
+                else:
+                    X[ i ] = rand[ i - 1 ]
+
+            evaluations = evaluations + 1
 
     
 ###

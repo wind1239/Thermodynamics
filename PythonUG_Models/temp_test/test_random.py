@@ -43,11 +43,12 @@ def RandomNumberGenerator( n ):
 
 def Envelope_Constraints( n, X ):
 
-    Upper = [ 1. for i in range( n ) ]
-    Lower = [ 0. for i in range( n ) ]
+    Upper = [ 0.99999 for i in range( n ) ]
+    Lower = [ 0.00001 for i in range( n ) ]
 
     rand = []
     TryAgain = True
+    evaluations = 1
     #print 'n::', n
     while TryAgain:
         for i in range( n - 1 ):
@@ -64,21 +65,56 @@ def Envelope_Constraints( n, X ):
             X[ n - 1 ] = 1. - Sum
             TryAgain == False
             print 'Sum:::', Sum
+            print 'number of evaluations:', evaluations
             return X
         else:
-            for i in range( n ):
+            for i in range( n - 1 ):
                 rand = RandomNumberGenerator( n )
-                X[ i ] = Lower[ i ] + ( Upper[ i ] - Lower[ i ] ) * \
-                    rand[ i ]
+                if( evaluations % 3 == 0 ):
+                    X[ i ] = rand[ i ]
+                elif ( evaluations % 7 == 0 ):
+                    X[ i ] = min( rand[ i ], rand[ i + 1 ] ) / max( 1.e-7, float( i ), 1. / rand[ i + 1 ] )
+                elif ( evaluations % 11 == 0 ):
+                    X[ i ] = abs( 1. - rand[ i ] / rand[ i + 1 ] )
+                else:
+                    X[ i ] = rand[ i - 1 ]
 
+            evaluations = evaluations + 1
+
+            
+def skip_comments( file ):
+    for line in file:
+        if not line.strip().startswith( '#' ):
+            yield line
 
 
 xx = []
-n = 3
+xx_opt = []
+SA_Cooling = []
+maxminoption = True
 
+
+with open( 'sa.in', 'rt' ) as f:
+    for line in skip_comments( f ):
+        #n = f.read( line )
+        SA_Cooling.append( line )
+        
+
+#print 'n::', n
+print 'SA', len( SA_Cooling ), SA_Cooling
+        
 xx = RandomNumberGenerator( n )
-print 'xx:', xx, 'Sum:', ListSum( xx )
+xx_opt = xx
 
 Envelope_Constraints( n, xx )
+Envelope_Constraints( n, xx_opt )
 
 print 'xx2:', xx, 'Sum2:', ListSum( xx )
+
+
+
+
+""" Starting the SA """
+
+
+xx_opt = xx
