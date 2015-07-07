@@ -87,27 +87,62 @@ def skip_comments( file ):
         if not line.strip().startswith( '#' ):
             yield line
 
+def num(s):
+    try:
+        return int(s)
+    except ValueError:
+        return float(s)
+
+def to_bool(value):
+    """
+       Converts 'something' to boolean. Raises exception for invalid formats
+           Possible True  values: 1, True, "1", "TRue", "yes", "y", "t"
+           Possible False values: 0, False, None, [], {}, "", "0", "faLse", "no", "n", "f", 0.0, ...
+    """
+    if str(value).lower() in ("yes", "y", "true",  "t", "1"): return True
+    if str(value).lower() in ("no",  "n", "false", "f", "0", "0.0", "", "none", "[]", "{}"): return False
+    raise Exception('Invalid value for boolean conversion: ' + str(value))
 
 xx = []
 xx_opt = []
 SA_Cooling = []
+SA_Cooling_list = []
 maxminoption = True
+icount = 0
 
 
-with open( 'sa.in', 'rt' ) as f:
-    for line in skip_comments( f ):
-        #n = f.read( line )
-        SA_Cooling.append( line )
-        
+with open( 'sa.in', 'r' ) as f:
+    for line in f:
+        print 'icount:', icount
+        if line[ 0 ] == '#':
+            line.rstrip()
+            SA_Cooling_list.append( line[ 2 : len( line ) - 1 ] )
+            icount += 1
+        elif ( line == '\n' ):
+            line.rstrip()
+        else:
+            inner_list = []
+            if ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Maxminoption' ) ):
+                inner_list = [ elt.strip() for elt in line.split(',') ]
+                SA_Cooling.append( to_bool( inner_list[0] ) )
+            else:
+                inner_list = [ float(elt.strip()) for elt in line.split(',') ]
+                SA_Cooling.append( inner_list )
 
-#print 'n::', n
-print 'SA', len( SA_Cooling ), SA_Cooling
-        
-xx = RandomNumberGenerator( n )
+f.close()
+
+SA_MinMax = SA_Cooling[ 0 ]           
+SA_N = num( SA_Cooling[ 1 ][0] )
+SA_Ns = num( SA_Cooling[ 2 ][0] )
+
+print 'SA_MinMax, SA_N, SA_Ns:', SA_MinMax, SA_N, SA_Ns
+
+xx = RandomNumberGenerator( SA_N )
 xx_opt = xx
 
-Envelope_Constraints( n, xx )
-Envelope_Constraints( n, xx_opt )
+
+Envelope_Constraints( SA_N, xx )
+Envelope_Constraints( SA_N, xx_opt )
 
 print 'xx2:', xx, 'Sum2:', ListSum( xx )
 

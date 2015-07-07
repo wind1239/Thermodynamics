@@ -1,4 +1,16 @@
-# number of components
+# Maxminoption
+True
+# N
 5
-# ns
+# NS
 50
+# NT
+100
+# MaxEvl
+10000
+# EPS
+1.E-6
+# RT
+0.37
+# Temp
+25.
