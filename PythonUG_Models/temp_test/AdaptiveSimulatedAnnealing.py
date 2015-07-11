@@ -136,17 +136,13 @@ def Envelope_Constraints( X, **kwargs ):
                 UpperBounds = kwargs[ key ]
             elif ( key == 'NDim' ):
                 n = kwargs[ key ]
+            elif ( key == 'Try' ):
+                Try = Kwargs[ key ]
     else:
          LowerBounds = SA_LowerBounds
          UpperBounds = SA_UpperBounds
          n = SA_N
     
-
-
-
-    print 'Ub:', UpperBounds
-    print 'Lb:', LowerBounds, n
-
     
     evaluations = 1
     while TryAgain:
@@ -157,6 +153,7 @@ def Envelope_Constraints( X, **kwargs ):
                 X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
                     rand[ i ]
                 X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
+                Try = True
 
         Sum = ListSum( X[ 0 : n-1 ] )
 
@@ -179,6 +176,7 @@ def Envelope_Constraints( X, **kwargs ):
                     X[ i ] = rand[ i - 1 ]
 
             evaluations = evaluations + 1
+            Try = True
 
             
 def num(s):
@@ -199,6 +197,157 @@ def to_bool(value):
     raise Exception('Invalid value for boolean conversion: ' + str(value))
 
 
+def ExtractingFields_BM( itest ):
+    """ Here we extract all relevant cooling schedule fields for the benchmark test case ITEST """
+
+    
+    TestName =  SA_Benchmarks[ itest ][ 0 ]
+
+    Dimension = int( SA_Benchmarks[ itest ][ 1 ] )
+
+    i = 2 + Dimension
+    Lower_Bounds = ( SA_Benchmarks[ itest ][ 2 : i ] )
+    BM_Lower_Bounds = [ float( res ) for res in Lower_Bounds ]
+
+    j = i + Dimension
+    Upper_Bounds = ( SA_Benchmarks[ itest ][ i : j ] )
+    BM_Upper_Bounds = [ float( res ) for res in Upper_Bounds ]
+
+    k = j + Dimension
+    VM = ( SA_Benchmarks[ itest ][ j : k ] )
+    BM_VM = [ float( res ) for res in VM ]
+
+    l = k + Dimension
+    C = ( SA_Benchmarks[ itest ][ k : l ] )
+    BM_C = [ float( res ) for res in C ]
+
+    m = l + Dimension
+    Sol = ( SA_Benchmarks[ itest ][ l : m ] )
+    BM_Solution = [ float( res ) for res in Sol ]
+
+    BM_Optimal = ( SA_Benchmarks[ itest ][ m ] )
+
+    return TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BM_Optimal
+
+
+def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try ):
+
+
+    XP = []
+    Try = False
+    NAcc = 0; Nobds = 0; NFCNEV = 0
+
+    """ Beginning of the main outter loop: """
+    while kloop <= SA_MaxEvl:
+
+        NUp = 0; NRej = 0; NNew = 0; NDown = 0; LNobds = 0
+
+
+        """ Beginning of the m loop: """
+        while mloop <= SA_NT:
+
+
+            """ Beginning of j loop: """
+            while jloop <= SA_NS:
+
+
+
+                """ Beginning of the h loop: """
+                while hloop <= Ndim:
+
+                    """ Beginning of the i loop: """
+                    while iloop <= sys.maxint:
+
+                        for i in range( Ndim - 1 ):
+                            rand = RandomNumberGenerator( Ndim )
+                            
+                            if ( i == hloop ):
+                                XP[ i ] = X_Try[ i ] + VM[ i ] * rand[ i ]
+                            else:
+                                XP[ i ] = X_Try[ i ]
+
+                        XP[ Ndim ] = 1. - ListSum( XP[ 0 : Ndim - 1 ] )
+                        Envelope_Constraints( XP, NDim = Ndim, LBounds = Lower_Bounds, UBounds = Upper_Bounds, Try = Try )
+
+                        if Try:
+                            LNobds += 1
+                            Nobds += 1
+
+                        """ IOMOF Option/Conditional should come here """
+
+                        FuncP = BTest.TestFunction( TestName, Ndim, XP )
+
+                        """ The function must be minimum """
+                        if SA_Minimum:
+                            FuncP = [ - res for res in FuncP ]
+
+                        NFCNEV += 1
+                        
+                        """ If there were more than MAXEVL evaluations of the
+                            objective function, the SA algorithm may finish """
+                        if ( NFCNEV >= SA_MaxEvl ):
+                            
+
+                        
+
+
+                        """ End of i loop """
+                        iloop += 1
+
+
+
+                    """ End of h loop """
+                    hloop += 1
+                    
+
+                """ End of j loop """
+                jloop += 1
+
+
+
+
+            """ End of m loop """
+            mloop += 1
+            
+
+
+        """ End of k loop """
+        kloop += 1
+
+    
+
+    
+
+    
+ #   """ Beginning of the main outter loop: 
+ #   while kloop <= SA_MaxEvl:
+ #       #NUp, NDown, NRej, NNew, LNobds#
+#
+#        while m <= SA_NT:
+#
+#            while j <= SA_NS:#
+#
+#                while h <= SA_N:
+#
+#
+#
+#               """ End of j loop """
+#                j += 1
+#
+#
+#            """ End of m loop """
+#            m += 1
+#
+#
+#
+#        """  End of kloop """
+#        kloop += 1
+#
+#"""
+
+
+
+
 
 """ =========================================================================
 
@@ -206,7 +355,7 @@ def to_bool(value):
 
     =========================================================================  """
 
-def SimulatedAnnealing()
+def SimulatedAnnealing():
 
     """ Reading the Cooling Schedule from the sa.in file """
     ReadAll_SA()
@@ -222,42 +371,35 @@ def SimulatedAnnealing()
     if SA_Testing:
         for itest in range( len( SA_Benchmarks ) ):
 
-            Dimension = int( SA_Benchmarks[ itest ][ 1 ] )
+            TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BL_Optimal = ExtractingFields_BM( itest )
+            
             """ This need to be modified to be obtained from the function calling """
             xx = RandomNumberGenerator( Dimension )
-            i = 2 + Dimension
-            j = i + Dimension
-            Lower_Bounds = ( SA_Benchmarks[ itest ][ 2 : i  ] )
-            Lower_Bounds = [ float( res ) for res in Lower_Bounds]
-            Upper_Bounds = ( SA_Benchmarks[ itest ][ i : j  ] )
-            Upper_Bounds = [ float( res ) for res in Upper_Bounds]
 
-            Envelope_Constraints( xx , NDim = Dimension, LBounds = Lower_Bounds, UBounds = Upper_Bounds )
+            Envelope_Constraints( xx , NDim = Dimension, LBounds = BM_Lower_Bounds, UBounds = BM_Upper_Bounds )
 
     else:
         xx = RandomNumberGenerator( SA_N )
         Envelope_Constraints( xx )
 
     xx_opt = xx
-    print 'xx:', xx, SA_Testing
 
     """ Checking if the initial temperature is negative """
     if ( SA_Temp <= 0. ):
         sys.exit("*** Stop! Negative SA temperature")
 
-    """ Calling the objective function for the first time """
 
+    """ Calling the objective function for the first time """
     if SA_Testing:
         for itest in range( len( SA_Benchmarks ) ):
-            TestName =  SA_Benchmarks[ itest ][ 0 ]
-            Dimension = int( SA_Benchmarks[ itest ][ 1 ] )
+            TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BL_Optimal = ExtractingFields_BM( itest )
             func.append( BTest.TestFunction( TestName, Dimension, xx ) )
 
     else:
         TestName = 'Dummy1'
         func.append( BTest.TestFunction( TestName, SA_N, xx ) )
 
-    print 'xx2:', xx, 'Sum2:', ListSum( xx ), 'with ', func
+    print ' ***** xx2:', xx, 'Sum2:', ListSum( xx ), 'with ', func
 
 
     """ The function must be minimum, thus, in order to avoid any 
@@ -267,49 +409,27 @@ def SimulatedAnnealing()
 
     fstar.append( func )
 
-    print 'func, fstar:', func, fstar
 
     if SA_Testing:
-        for itest in range( len( SA_Benchmarks ) ):
-
-            TestName =  SA_Benchmarks[ itest ][ 0 ]                
-            Dimension = int( SA_Benchmarks[ itest ][ 1 ] )
-            i = 2 + Dimension
-            j = i + Dimension
-            Lower_Bounds = ( SA_Benchmarks[ itest ][ 2 : i  ] )
-            Lower_Bounds = [ float( res ) for res in Lower_Bounds]
-            Upper_Bounds = ( SA_Benchmarks[ itest ][ i : j  ] )
-            Upper_Bounds = [ float( res ) for res in Upper_Bounds]
-
-            xxopt, fopt = AdaptiveSimulatedAneealing( TestName, Dimension, Lower_Bounds, Upper_Bounds )
-
+        Runs = len( SA_Benchmarks )
     else:
-        xxopt, fopt = AdaptiveSimulatedAneealing( TestName, SA_N, SA_LowerBounds, SA_UpperBounds )
+        Runs = 1
+
+    for irun in range( Runs ):
+        if SA_Testing:
+            TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BL_Optimal = ExtractingFields_BM( irun )
+            xxopt, fopt = ASA_Loops( TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, xx )
+
+            x_opt.append( xxopt )
+            f_opt.append( fopt )
+            
+        else:
+            xxopt, fopt = ASA_Loops( TestName, SA_N, SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, xx )
 
 
 
 
-    """ Beginning of the main outter loop: """
-    while kloop <= SA_MaxEvl:
-        #NUp, NDown, NRej, NNew, LNobds
 
-        while m <= SA_NT:
+    return xxopt, func[ 0 ]
 
-            while j <= SA_NS:
-
-                while h <= SA_N:
-
-
-
-                """ End of j loop """
-                j += 1
-
-
-            """ End of m loop """
-            m += 1
-
-
-
-        """  End of kloop """
-        kloop += 1
 
