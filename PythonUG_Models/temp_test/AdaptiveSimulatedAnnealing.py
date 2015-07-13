@@ -320,6 +320,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                                 this will be chosen as the new optimum """
 
                             if ( FuncP > FOpt ):
+                                XOpt = XP
 
                         
 
