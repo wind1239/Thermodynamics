@@ -230,12 +230,19 @@ def ExtractingFields_BM( itest ):
     return TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BM_Optimal
 
 
-def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try ):
+def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
 
     XP = []
+    NACP = []
     Try = False
     NAcc = 0; Nobds = 0; NFCNEV = 0
+    NACP = [ 0. for i in NACP ]
+
+    print 'vm, c:', len(X_Try), len(VM), X_Try, Func
+
+
+    kloop = 0 ; mloop = 0 ; jloop = 0 ; hloop = 0 ; iloop = 0 
 
     """ Beginning of the main outter loop: """
     while kloop <= SA_MaxEvl:
@@ -286,7 +293,18 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try ):
                         """ If there were more than MAXEVL evaluations of the
                             objective function, the SA algorithm may finish """
                         if ( NFCNEV >= SA_MaxEvl ):
-                            
+                            print 'Maximum number of evaluations of the function was '
+                            print 'reached. Change MAXEVL or NS and NT'
+                            sys.exit
+
+                        if ( FuncP >= Func ):
+                            X_Try = XP
+                            Func = FuncP
+
+                            NAcc += 1
+                            NACP[ hloop ] += 1
+
+                        
 
                         
 
@@ -418,13 +436,13 @@ def SimulatedAnnealing():
     for irun in range( Runs ):
         if SA_Testing:
             TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BL_Optimal = ExtractingFields_BM( irun )
-            xxopt, fopt = ASA_Loops( TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, xx )
+            xxopt, fopt = ASA_Loops( TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, xx, func[ irun ] )
 
             x_opt.append( xxopt )
             f_opt.append( fopt )
             
         else:
-            xxopt, fopt = ASA_Loops( TestName, SA_N, SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, xx )
+            xxopt, fopt = ASA_Loops( TestName, SA_N, SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, xx, func[ irun ] )
 
 
 
