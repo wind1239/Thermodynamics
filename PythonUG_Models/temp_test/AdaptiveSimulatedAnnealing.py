@@ -136,19 +136,19 @@ def Envelope_Constraints( X, **kwargs ):
                 UpperBounds = kwargs[ key ]
             elif ( key == 'NDim' ):
                 n = kwargs[ key ]
-            elif ( key == 'Try' ):
-                Try = Kwargs[ key ]
+            elif ( key == 'TryC' ):
+                Try = kwargs[ key ]
+
     else:
          LowerBounds = SA_LowerBounds
          UpperBounds = SA_UpperBounds
          n = SA_N
     
-    
     evaluations = 1
+
     while TryAgain:
         for i in range( n - 1 ):
-            #print 'loop1 ==>', i
-            if ( (X[ i ] < LowerBounds[ i ]) | (X[ i ] > UpperBounds[ i ] )):
+            if ( ( X[ i ] < LowerBounds[ i ]) | (X[ i ] > UpperBounds[ i ] ) ):
                 rand = RandomNumberGenerator( n )
                 X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
                     rand[ i ]
@@ -159,10 +159,15 @@ def Envelope_Constraints( X, **kwargs ):
 
         if ( Sum < 1. ):
             X[ n - 1 ] = 1. - Sum
-            TryAgain == False
-            print 'Sum:::', Sum
-            print 'number of evaluations:', evaluations
-            return X
+            TryAgain = False
+            if kwargs:
+                for key in kwargs:
+                    if ( key == 'TryC' ):
+                        return X, Try
+                    else:
+                        return X
+            else:
+                return X
         else:
             for i in range( n - 1 ):
                 rand = RandomNumberGenerator( n )
@@ -234,12 +239,14 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
 
     XP = []
+    XP = [ 0. for i in XP ]
+    FOpt = 0.
     NACP = []
     Try = False
-    NAcc = 0; Nobds = 0; NFCNEV = 0
+    NAcc = 0; Nobds = 0; NFCNEV = 0; NUp = 0
     NACP = [ 0. for i in NACP ]
 
-    print 'vm, c:', len(X_Try), len(VM), X_Try, Func
+    print 'vm, c:', TestName, len(X_Try), X_Try, len(VM), VM, Func
 
 
     kloop = 0 ; mloop = 0 ; jloop = 0 ; hloop = 0 ; iloop = 0 
@@ -258,7 +265,6 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
             while jloop <= SA_NS:
 
 
-
                 """ Beginning of the h loop: """
                 while hloop <= Ndim:
 
@@ -269,12 +275,12 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                             rand = RandomNumberGenerator( Ndim )
                             
                             if ( i == hloop ):
-                                XP[ i ] = X_Try[ i ] + VM[ i ] * rand[ i ]
+                                XP.append( X_Try[ i ] + VM[ i ] * rand[ i ] )
                             else:
-                                XP[ i ] = X_Try[ i ]
+                                XP.append( X_Try[ i ] )
 
-                        XP[ Ndim ] = 1. - ListSum( XP[ 0 : Ndim - 1 ] )
-                        Envelope_Constraints( XP, NDim = Ndim, LBounds = Lower_Bounds, UBounds = Upper_Bounds, Try = Try )
+                        XP.append( 1. - ListSum( XP[ 0 : Ndim - 1 ] ) )
+                        Envelope_Constraints( XP, NDim = Ndim, LBounds = Lower_Bounds, UBounds = Upper_Bounds, TryC = Try )
 
                         if Try:
                             LNobds += 1
@@ -284,9 +290,11 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
                         FuncP = BTest.TestFunction( TestName, Ndim, XP )
 
+                        print 'Func{P:', FuncP
+
                         """ The function must be minimum """
                         if SA_Minimum:
-                            FuncP = [ - res for res in FuncP ]
+                            FuncP = -FuncP
 
                         NFCNEV += 1
                         
@@ -297,12 +305,21 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                             print 'reached. Change MAXEVL or NS and NT'
                             sys.exit
 
+
+                        """ The new coordinate is accepted and the objective
+                            function increases """
                         if ( FuncP >= Func ):
                             X_Try = XP
                             Func = FuncP
 
                             NAcc += 1
                             NACP[ hloop ] += 1
+                            NUp += 1
+
+                            """ If the new FP is larger than any other point,
+                                this will be chosen as the new optimum """
+
+                            if ( FuncP > FOpt ):
 
                         
 
@@ -336,32 +353,6 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
     
 
-    
- #   """ Beginning of the main outter loop: 
- #   while kloop <= SA_MaxEvl:
- #       #NUp, NDown, NRej, NNew, LNobds#
-#
-#        while m <= SA_NT:
-#
-#            while j <= SA_NS:#
-#
-#                while h <= SA_N:
-#
-#
-#
-#               """ End of j loop """
-#                j += 1
-#
-#
-#            """ End of m loop """
-#            m += 1
-#
-#
-#
-#        """  End of kloop """
-#        kloop += 1
-#
-#"""
 
 
 
@@ -378,12 +369,18 @@ def SimulatedAnnealing():
     """ Reading the Cooling Schedule from the sa.in file """
     ReadAll_SA()
 
+    
+    """ Checking if the initial temperature is negative """
+    if ( SA_Temp <= 0. ):
+        sys.exit("*** Stop! Negative SA temperature")
+
     """ Initialising a few key variables """
     xx = [] # xx will be obtained from the up routine
     xx_opt = []
     func = []
     func_opt = []
-    fstar = []
+    fstar = []    
+
 
     """ Initilising and bounding the X variable """
     if SA_Testing:
@@ -393,57 +390,42 @@ def SimulatedAnnealing():
             
             """ This need to be modified to be obtained from the function calling """
             xx = RandomNumberGenerator( Dimension )
-
             Envelope_Constraints( xx , NDim = Dimension, LBounds = BM_Lower_Bounds, UBounds = BM_Upper_Bounds )
+
+            """ Calling the objective function for the first time """
+            func.append( BTest.TestFunction( TestName, Dimension, xx ) )
+
+            """ The function must be minimum, thus, in order to avoid any
+            possible mess all the signals may be changed """
+            if SA_Minimum:
+                func = [ - res for res in func ]
+
+            fstar.append( func )
+
+            """ Calling the SA algorithm main loop """
+            xxopt, fopt = ASA_Loops( TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, xx, func[ itest ] )
 
     else:
         xx = RandomNumberGenerator( SA_N )
         Envelope_Constraints( xx )
 
-    xx_opt = xx
-
-    """ Checking if the initial temperature is negative """
-    if ( SA_Temp <= 0. ):
-        sys.exit("*** Stop! Negative SA temperature")
-
-
-    """ Calling the objective function for the first time """
-    if SA_Testing:
-        for itest in range( len( SA_Benchmarks ) ):
-            TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BL_Optimal = ExtractingFields_BM( itest )
-            func.append( BTest.TestFunction( TestName, Dimension, xx ) )
-
-    else:
+        """ Calling the objective function for the first time """
         TestName = 'Dummy1'
         func.append( BTest.TestFunction( TestName, SA_N, xx ) )
 
-    print ' ***** xx2:', xx, 'Sum2:', ListSum( xx ), 'with ', func
+        """ The function must be minimum, thus, in order to avoid any
+        possible mess all the signals may be changed """
+        if SA_Minimum:
+            func = [ - res for res in func ]
 
+        fstar.append( func )
 
-    """ The function must be minimum, thus, in order to avoid any 
-          possible mess all the signals may be changed """
-    if SA_Minimum:
-        func = [ - res for res in func ]
+        """ Calling the SA algorithm main loop """
+        xxopt, fopt = ASA_Loops( TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, xx, func[ itest ] )
 
-    fstar.append( func )
+    xx_opt = xx
 
-
-    if SA_Testing:
-        Runs = len( SA_Benchmarks )
-    else:
-        Runs = 1
-
-    for irun in range( Runs ):
-        if SA_Testing:
-            TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BL_Optimal = ExtractingFields_BM( irun )
-            xxopt, fopt = ASA_Loops( TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, xx, func[ irun ] )
-
-            x_opt.append( xxopt )
-            f_opt.append( fopt )
-            
-        else:
-            xxopt, fopt = ASA_Loops( TestName, SA_N, SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, xx, func[ irun ] )
-
+    
 
 
 
