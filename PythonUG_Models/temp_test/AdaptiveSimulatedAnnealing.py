@@ -240,13 +240,16 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
     XP = []
     XP = [ 0. for i in XP ]
-    FOpt = 0.
+    FStar = []
+    FOpt = 0. 
     NACP = []
     Try = False
     NAcc = 0; Nobds = 0; NFCNEV = 0; NUp = 0
-    NACP = [ 0. for i in NACP ]
+    NACP = [ 0 for i in NACP ]
 
-    print 'vm, c:', TestName, len(X_Try), X_Try, len(VM), VM, Func
+    Temp = SA_Temp
+    VM
+
 
 
     kloop = 0 ; mloop = 0 ; jloop = 0 ; hloop = 0 ; iloop = 0 
@@ -254,7 +257,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
     """ Beginning of the main outter loop: """
     while kloop <= SA_MaxEvl:
 
-        NUp = 0; NRej = 0; NNew = 0; NDown = 0; LNobds = 0
+        NUp = 0; NRej = 0; NDown = 0; LNobds = 0
 
 
         """ Beginning of the m loop: """
@@ -268,82 +271,106 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                 """ Beginning of the h loop: """
                 while hloop <= Ndim:
 
-                    """ Beginning of the i loop: """
-                    while iloop <= sys.maxint:
+                    for i in range( Ndim - 1 ):
+                        rand = RandomNumberGenerator( Ndim )
 
-                        for i in range( Ndim - 1 ):
-                            rand = RandomNumberGenerator( Ndim )
-                            
-                            if ( i == hloop ):
-                                XP.append( X_Try[ i ] + VM[ i ] * rand[ i ] )
-                            else:
-                                XP.append( X_Try[ i ] )
+                        if ( i == hloop ):
+                            XP.append( X_Try[ i ] + VM[ i ] * rand[ i ] )
+                        else:
+                            XP.append( X_Try[ i ] )
 
-                        XP.append( 1. - ListSum( XP[ 0 : Ndim - 1 ] ) )
-                        Envelope_Constraints( XP, NDim = Ndim, LBounds = Lower_Bounds, UBounds = Upper_Bounds, TryC = Try )
+                    XP.append( 1. - ListSum( XP[ 0 : Ndim - 1 ] ) )
+                    Envelope_Constraints( XP, NDim = Ndim, LBounds = Lower_Bounds, UBounds = Upper_Bounds, TryC = Try )
 
-                        if Try:
-                            LNobds += 1
-                            Nobds += 1
+                    if Try:
+                        LNobds += 1
+                        Nobds += 1
 
-                        """ IOMOF Option/Conditional should come here """
+                    FuncP = BTest.TestFunction( TestName, Ndim, XP )
 
-                        FuncP = BTest.TestFunction( TestName, Ndim, XP )
+                    print 'FuncP:', FuncP
 
-                        print 'Func{P:', FuncP
+                    """ The function must be minimum """
+                    if SA_Minimum:
+                        FuncP = -FuncP
 
-                        """ The function must be minimum """
-                        if SA_Minimum:
-                            FuncP = -FuncP
-
-                        NFCNEV += 1
-                        
-                        """ If there were more than MAXEVL evaluations of the
-                            objective function, the SA algorithm may finish """
-                        if ( NFCNEV >= SA_MaxEvl ):
-                            print 'Maximum number of evaluations of the function was '
-                            print 'reached. Change MAXEVL or NS and NT'
-                            sys.exit
+                    NFCNEV += 1
 
 
-                        """ The new coordinate is accepted and the objective
-                            function increases """
-                        if ( FuncP >= Func ):
+                    """ If there were more than MAXEVL evaluations of the
+                        objective function, the SA algorithm may finish """
+                    if ( NFCNEV >= SA_MaxEvl ):
+                        print 'Maximum number of evaluations of the function was '
+                        print 'reached. Change MAXEVL or NS and NT'
+                        sys.exit
+
+
+                    """ The new coordinate is accepted and the objective
+                        function increases """
+                    if ( FuncP >= Func ):
+                        X_Try = XP
+                        Func = FuncP
+
+                        NAcc += 1
+                        NACP[ hloop ] += 1
+                        NUp += 1
+
+                        """ If the new FP is larger than any other point,
+                            this will be chosen as the new optimum """
+
+                        if ( FuncP > FOpt ):
+                            XOpt = XP
+                            FOpt = FuncP
+
+                    else:
+                        """ However if FuncP is smaller than the others, thus the Metropolis
+                            criteria (Gaussian probability density function) - or any other
+                            density function that may be added latter - may be used to either
+                            accept or reject this coordinate.  """
+                        rand = RandomNumberGenerator( iloop )
+                        Density = math.exp( ( FuncP - Func ) / max( Temp, 1.e-5 ) )
+                        Density_Gauss = 0.5 * ( rand[ 0 ] * rand[ iloop ] )
+
+                        if ( Density_Gauss < Density ):
                             X_Try = XP
                             Func = FuncP
 
                             NAcc += 1
                             NACP[ hloop ] += 1
-                            NUp += 1
+                            NDown += 1
 
-                            """ If the new FP is larger than any other point,
-                                this will be chosen as the new optimum """
-
-                            if ( FuncP > FOpt ):
-                                XOpt = XP
-
-                        
-
-                        
-
-
-                        """ End of i loop """
-                        iloop += 1
-
-
+                        else:
+                            NRej += 1
 
                     """ End of h loop """
                     hloop += 1
                     
-
                 """ End of j loop """
                 jloop += 1
 
+            """ As half of the evaluations may be accepted, thus the VM array may be adjusted """
+            for i in range( SA_N ):
+                Ratio = float( NACP[ i ] ) / float( SA_NS )
+                if ( Ratio > 0.6 ):
+                    VM[ i ] = VM[ i ] * ( 1. + C[ i ] * ( Ratio - 0.6 ) / 0.4 )
+
+                elif ( Ratio < 0.4 ):
+                    VM[ i ] = VM[ i ] * ( 1. + C[ i ] * ( 0.4 - Ratio ) / 0.4 )
+
+                if ( VM[ i ] > ( Upper_Bounds[ i ] - Lower_Bound[ i ] ) ):
+                    VM[ i ] =  Upper_Bounds[ i ] - Lower_Bound[ i ]
 
 
-
+            NACP = [ 0 for i in NACP ]
+            
             """ End of m loop """
             mloop += 1
+
+        """ Checking the stopping criteria """
+        Quit = True
+        FStar.append( Func )
+
+        if ( ( FOpt - FStar[ 0 ] ) <= 
             
 
 
