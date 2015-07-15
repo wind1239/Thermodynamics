@@ -174,7 +174,7 @@ def Envelope_Constraints( X, **kwargs ):
                 if( evaluations % 3 == 0 ):
                     X[ i ] = rand[ i ]
                 elif ( evaluations % 7 == 0 ):
-                    X[ i ] = min( rand[ i ], rand[ i + 1 ] ) / max( 1.e-7, float( i ), 1. / rand[ i + 1 ] )
+                    X[ i ] = min( rand[ i ], rand[ i + 1 ] ) / max( MinNum, float( i ), 1. / rand[ i + 1 ] )
                 elif ( evaluations % 11 == 0 ):
                     X[ i ] = abs( 1. - rand[ i ] / rand[ i + 1 ] )
                 else:
@@ -236,20 +236,23 @@ def ExtractingFields_BM( itest ):
 
 
 def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
-
+   
+    NACP = []
+    NACP = [ 0 for i in NACP ]
+    
+    Try = False
+    NAcc = 0; Nobds = 0; NFCNEV = 0; NUp = 0; NEps = 4
+    MaxNum = 1.e20; MinNum = 1.e-7
 
     XP = []
     XP = [ 0. for i in XP ]
+    
     FStar = []
+    Fstar = [ MaxNum for i in FStar ]
+    
     FOpt = 0. 
-    NACP = []
-    Try = False
-    NAcc = 0; Nobds = 0; NFCNEV = 0; NUp = 0
-    NACP = [ 0 for i in NACP ]
 
     Temp = SA_Temp
-    VM
-
 
 
     kloop = 0 ; mloop = 0 ; jloop = 0 ; hloop = 0 ; iloop = 0 
@@ -328,7 +331,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                             density function that may be added latter - may be used to either
                             accept or reject this coordinate.  """
                         rand = RandomNumberGenerator( iloop )
-                        Density = math.exp( ( FuncP - Func ) / max( Temp, 1.e-5 ) )
+                        Density = math.exp( ( FuncP - Func ) / max( Temp, MinNum ) )
                         Density_Gauss = 0.5 * ( rand[ 0 ] * rand[ iloop ] )
 
                         if ( Density_Gauss < Density ):
@@ -368,12 +371,32 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
         """ Checking the stopping criteria """
         Quit = True
-        FStar.append( Func )
+        FStar[ 0 ] = Func
 
-        if ( ( FOpt - FStar[ 0 ] ) <= 
+        if ( ( FOpt - FStar[ 0 ] ) <= MinNum ):
+            Quit = True
+
+        for i in range( NEps ):
+            if ( abs( Func - FStar[ i ] ) > MinNum ):
+                Quit = False
+
+        if Quit:
+            X_Try = XOpt
+
+            if SA_Minimum:
+                FOpt = - FOpt
+
+            return XOpt, FOpt
+
+        """ If the stoppage criteria can not be reached, return to the LOOP """
+        Temp = SA_RT * Temp
+        for i in xrange( NEps, 1, -1 ):
+            FStar[ i ] = FStar[ i - 1 ]
+
+        Func = FOpt
+        X_Try = XOpt
+        
             
-
-
         """ End of k loop """
         kloop += 1
 
