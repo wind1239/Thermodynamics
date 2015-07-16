@@ -8,4 +8,4 @@ X_Opt = []
 
 X_Opt, F_Opt = ASA.SimulatedAnnealing()
 
-print X_Opt
+print 'X :', X_Opt, F_Opt
