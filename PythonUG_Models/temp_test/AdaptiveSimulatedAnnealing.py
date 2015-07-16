@@ -100,6 +100,9 @@ def ReadAll_SA():
                sys.exit("**** Stop !!! Dimensions do not match")
 
 
+    
+
+
 ###
 ### Random number generators 
 ###
@@ -426,8 +429,20 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
 def SimulatedAnnealing():
 
+
+    """ Creating file for general output """
+    f_SAOutput = open( 'sa.out', 'w' )
+
     """ Reading the Cooling Schedule from the sa.in file """
     ReadAll_SA()
+
+
+    #for line in f_SAOutput:
+        #print( line.rstrip() )
+    f_SAOutput.write( str(SA_Testing ))
+
+
+    
 
     
     """ Checking if the initial temperature is negative """
