@@ -314,8 +314,12 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                         X_Try = XP
                         Func = FuncP
 
+                        print 'Func::', Func, NACP[ hloop ]
+
                         NAcc += 1
-                        NACP[ hloop ] += 1
+                        temp = NACP[ hloop ]
+                        temp += 1
+                        NACP[ hloop ] = temp
                         NUp += 1
 
                         """ If the new FP is larger than any other point,
@@ -401,13 +405,6 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
         kloop += 1
 
     
-
-    
-
-
-
-
-
 
 """ =========================================================================
 
