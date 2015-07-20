@@ -16,8 +16,8 @@ def TestFunction( TestName, n, X ):
     elif ( TestName == 'Beale Function' ):
         Result = TestFunction_Beale( n, X )
         
-    elif ( TestName == 'Dummy Function' ):
-        Result = TestFunction_Dummy( n, X )
+    elif ( TestName == 'Easom Function' ):
+        Result = TestFunction_Easom( n, X )
 
     else:
         print '====> ', TestName, ' <===='
@@ -35,8 +35,12 @@ def TestFunction_Beale( n, X ):
 
     return F
 
-def TestFunction_Dummy( n, X ):
-    F = X[ 0 ]**2 - X[ 1 ]**2
+def TestFunction_Easom( n, X ):
+    """ Easom Function """
+    
+    Pi = 4. * math.atan( 1. )
+    F = - math.cos( X[ 0 ] ) * math.cos( X[ 1 ] ) * \
+        math.exp( -( X[ 0 ] - Pi )**2 - ( X[ 1 ] - Pi )**2 )    
 
     return F
 

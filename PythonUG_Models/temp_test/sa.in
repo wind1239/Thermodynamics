@@ -34,3 +34,6 @@ True
 
 # Benchmark Beale Function:
 Beale Function, 2, -4.5, -4.5, 4.5, 4.5, 1.1e-2, 1.3e-2, 1.7e-3, 1.9e-3, 3., .5, 0.
+
+# Benchmark Easom Function:
+Easom Function, 2, -5., -5., 5., 5., 1.e-2, 1.e-2, 1.e-3, 1.e-3,  3.141592653589793, 3.141592653589793, -1.

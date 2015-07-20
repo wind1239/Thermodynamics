@@ -7,6 +7,7 @@ import math
 import sys
 import numpy as np
 import BenchmarkTests as BTest
+import SA_IO as IO
 
 
     
@@ -98,6 +99,43 @@ def ReadAll_SA():
     if ( SA_N != len( SA_LowerBounds ) ) or ( SA_N != len( SA_LowerBounds ) ) or \
             ( SA_N != len( SA_VM ) ) or ( SA_N != len( SA_C ) ):
                sys.exit("**** Stop !!! Dimensions do not match")
+
+
+    """ Printing initialisation of the SA Algorithm """
+    IO.f_SAOutput.write( '\n' )
+    IO.f_SAOutput.write( '============================================================ \n' )
+    IO.f_SAOutput.write( '   Initialisation of the Simulated Annealing Algorithm: \n' )
+    IO.f_SAOutput.write( '============================================================ \n' )
+    IO.f_SAOutput.write( '\n' )
+    IO.f_SAOutput.write( 'Minimisation: {a:>10s}'.format( a = str( SA_Minimum ) ) + '\n' )
+    IO.f_SAOutput.write( 'Dimension-Space: {a:4d}'.format( a = SA_N ) + '\n' )
+    IO.f_SAOutput.write( 'Maximum Number of Function Evaluations: {a:4d}'.format( a = int( SA_MaxEvl ) ) + '\n' )
+    IO.f_SAOutput.write( '\n' )
+    IO.f_SAOutput.write( 'NS: {a:3d}, NT: {b:3d}'.format( a = SA_NS, b = SA_NT ) + '\n' )
+    IO.f_SAOutput.write( 'EPS: {a:.4e}'.format( a = SA_EPS ) + '\n' )
+    IO.f_SAOutput.write( '\n' )
+    IO.f_SAOutput.write( 'Temperature: {a:.4f} \nParameter for temperature reduction (RT): {b:.4f}'.format( a = SA_Temp, b = SA_RT ) + '\n' )
+    IO.f_SAOutput.write( '\n' )
+    IO.f_SAOutput.write( 'Lower Bounds: {a:}, Upper Bounds: {b:}'.format( a = SA_LowerBounds, b = SA_UpperBounds ) + '\n' )
+    IO.f_SAOutput.write( 'VM: {a:}, C: {b:}'.format( a = SA_VM, b = SA_C ) + '\n' )
+
+    if SA_Testing: # Printing tests
+        IO.f_SAOutput.write( '\n' )
+        IO.f_SAOutput.write( '------------------ Benchmark Test-Cases --------------------\n' )
+        IO.f_SAOutput.write( '\n' )
+        for itest in range( ntest ):
+             TestName, Dimension, Lower_Bounds, Upper_Bounds, VM, C, Solution, Optimal = ExtractingFields_BM( itest )
+             IO.f_SAOutput.write( '{a:2d}. Test Case: {b:} ({c:1d} dimensions)'.format( a = itest + 1, b = TestName, c = Dimension ) + '\n' )
+             IO.f_SAOutput.write( '{s:20} Lower Bounds: {a:}, Upper Bounds: {b:}'.format( s =' ', a = Lower_Bounds, b = Upper_Bounds ) + '\n' ) 
+             IO.f_SAOutput.write( '{s:20} VM: {a:}, C: {b:}'.format( s =' ', a = VM, b = C ) + '\n' ) 
+             IO.f_SAOutput.write( '{s:20} Optimal Vector-Solution: {a:}  (F_Opt: {b:})'.format( s = ' ', a = Solution, b = Optimal ) + '\n' )
+             IO.f_SAOutput.write( '\n' )
+
+        
+        IO.f_SAOutput.write( '\n' )
+        IO.f_SAOutput.write( '------------------ Benchmark Test-Cases --------------------\n' )
+        IO.f_SAOutput.write( '\n' )
+    
 
 
     
@@ -257,11 +295,14 @@ def ExtractingFields_BM( itest ):
 ###
 def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
+    IO.f_SAOutput.write( '\n' )
+    IO.f_SAOutput.write( 'Initialising SA Algorithm for: {a:}'.format( a = TestName ) + '\n' )
+
 
     """ Initialisation of a few parameters. """
     Try = False
     NAcc = 0; Nobds = 0; NFCNEV = 0; NUp = 0; NEps = 4
-    MaxNum = 1.e20; MinNum = 1.e-7
+    MaxNum = 1.e20
    
     NACP = [ 0 for i in range( Ndim ) ]
     XP = [ 0. for i in range( Ndim ) ]
@@ -272,7 +313,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
     Temp = SA_Temp
 
-    kloop = 0 ; mloop = 0 ; jloop = 0 ; hloop = 0 ; iloop = 0 
+    kloop = 0 ; mloop = 0 ; jloop = 0 ; hloop = 0 ; iloop = 0
 
     """ Beginning of the main outter loop: """
     while kloop <= SA_MaxEvl:
@@ -295,11 +336,15 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                         rand = RandomNumberGenerator( Ndim, Lower_Bounds, Upper_Bounds )
 
                         if ( i == hloop ):
-                            XP.append( X_Try[ i ] + VM[ i ] * rand[ i ] )
+                            XP[ i ] = X_Try[ i ] + VM[ i ] * rand[ i ] 
+                            #XP.append( X_Try[ i ] + VM[ i ] * rand[ i ] )
                         else:
-                            XP.append( X_Try[ i ] )
+                            XP[ i ] = X_Try[ i ]
+                            #XP.append( X_Try[ i ] )
 
-                    XP.append( 1. - ListSum( XP[ 0 : Ndim - 1 ] ) )
+                    XP[ Ndim - 1 ] = 1. - ListSum( XP[ 0 : Ndim - 1 ] )
+
+                    #XP.append( 1. - ListSum( XP[ 0 : Ndim - 1 ] ) )
                     Envelope_Constraints( XP, NDim = Ndim, LBounds = Lower_Bounds, UBounds = Upper_Bounds, TryC = Try )
 
                     if Try:
@@ -307,8 +352,6 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                         Nobds += 1
 
                     FuncP = BTest.TestFunction( TestName, Ndim, XP )
-
-                    print 'FuncP:', FuncP, Func
 
                     """ The function must be minimum """
                     if SA_Minimum:
@@ -320,8 +363,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                     """ If there were more than MAXEVL evaluations of the
                         objective function, the SA algorithm may finish """
                     if ( NFCNEV >= SA_MaxEvl ):
-                        print 'Maximum number of evaluations of the function was '
-                        print 'reached. Change MAXEVL or NS and NT'
+                        IO.f_SAOutput.write( '{s:20} Maximum number of evaluations of the function was reached. Change MAXEVL or NS and NT (NFCNEV: {a:}'.format( s = ' ', a = NFCNEV ) + '\n' )
                         sys.exit
 
 
@@ -330,8 +372,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                     if ( FuncP >= Func ):
                         X_Try = XP
                         Func = FuncP
-
-                        print 'Func::', hloop, Func, len(NACP), NACP
+                        IO.f_SAOutput.write( '{s:20} New vector-solution is accepted ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
 
                         NAcc += 1
                         NACP[ hloop ] += 1
@@ -350,12 +391,13 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                             density function that may be added latter - may be used to either
                             accept or reject this coordinate.  """
                         rand = RandomNumberGenerator( max( 1, iloop ), Lower_Bounds, Upper_Bounds )
-                        Density = math.exp( ( FuncP - Func ) / max( Temp, MinNum ) )
+                        Density = math.exp( ( FuncP - Func ) / max( Temp, SA_EPS ) )
                         Density_Gauss = 0.5 * ( rand[ 0 ] * rand[ iloop ] )
 
                         if ( Density_Gauss < Density ):
                             X_Try = XP
                             Func = FuncP
+                            IO.f_SAOutput.write( '{s:20} Metropolis Criteria; New vector-solution is generated ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
 
                             NAcc += 1
                             NACP[ hloop ] += 1
@@ -363,6 +405,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
                         else:
                             NRej += 1
+                            print 'NRej:',  NRej
 
                     """ End of h loop """
                     hloop += 1
@@ -371,6 +414,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                 jloop += 1
 
             """ As half of the evaluations may be accepted, thus the VM array may be adjusted """
+            print 'NACP:', NACP
             for i in range( SA_N ):
                 Ratio = float( NACP[ i ] ) / float( SA_NS )
                 if ( Ratio > 0.6 ):
@@ -382,6 +426,9 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                 if ( VM[ i ] > ( Upper_Bounds[ i ] - Lower_Bounds[ i ] ) ):
                     VM[ i ] =  Upper_Bounds[ i ] - Lower_Bounds[ i ]
 
+            
+            IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = VM ) + '\n' )
+
 
             NACP = [ 0 for i in NACP ]
             
@@ -392,11 +439,11 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
         Quit = True
         FStar[ 0 ] = Func
 
-        if ( ( FOpt - FStar[ 0 ] ) <= MinNum ):
+        if ( ( FOpt - FStar[ 0 ] ) <= SA_EPS ):
             Quit = True
 
         for i in range( NEps ):
-            if ( abs( Func - FStar[ i ] ) > MinNum ):
+            if ( abs( Func - FStar[ i ] ) > SA_EPS ):
                 Quit = False
 
         if Quit:
@@ -404,6 +451,8 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
             if SA_Minimum:
                 FOpt = - FOpt
+
+            IO.f_SAOutput.write( '{s:20} Minimum was found (FOpt = {a:}) with coordinates XOpt: {b:}'.format( s = ' ', a = FOpt, b = XOpt ) + '\n' )
 
             return XOpt, FOpt
 
@@ -431,19 +480,10 @@ def SimulatedAnnealing():
 
 
     """ Creating file for general output """
-    f_SAOutput = open( 'sa.out', 'w' )
+    IO.OutPut()
 
     """ Reading the Cooling Schedule from the sa.in file """
     ReadAll_SA()
-
-
-    #for line in f_SAOutput:
-        #print( line.rstrip() )
-    f_SAOutput.write( str(SA_Testing ))
-
-
-    
-
     
     """ Checking if the initial temperature is negative """
     if ( SA_Temp <= 0. ):
