@@ -174,6 +174,7 @@ def Envelope_Constraints( X, **kwargs ):
 
     rand = []
     TryAgain = True
+    IsNormalised = True
 
     if kwargs:
         for key in kwargs:
@@ -185,6 +186,8 @@ def Envelope_Constraints( X, **kwargs ):
                 n = kwargs[ key ]
             elif ( key == 'TryC' ):
                 Try = kwargs[ key ]
+            elif ( key == 'IsNormalised' ):
+                IsNormalised = kwargs[ key ]
 
     else:
          LowerBounds = SA_LowerBounds
@@ -192,9 +195,16 @@ def Envelope_Constraints( X, **kwargs ):
          n = SA_N
     
     evaluations = 1
+    
+    if ( IsNormalised ): # Mole/Mass/Volume Fraction
+        dim = n - 1
+    else:
+        dim = n
 
+        
     while TryAgain:
-        for i in range( n - 1 ):
+           
+        for i in range( dim ):
             if ( ( X[ i ] < LowerBounds[ i ]) | (X[ i ] > UpperBounds[ i ] ) ):
                 rand = RandomNumberGenerator( n, LowerBounds, UpperBounds )
                 X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
@@ -202,11 +212,37 @@ def Envelope_Constraints( X, **kwargs ):
                 X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
                 Try = True
 
-        Sum = ListSum( X[ 0 : n-1 ] )
+        if ( IsNormalised ):
+            
+            Sum = ListSum( X[ 0 : dim ] )
 
-        if ( Sum < 1. ):
-            X[ n - 1 ] = 1. - Sum
-            TryAgain = False
+            if ( Sum < 1. ):
+                X[ n - 1 ] = 1. - Sum
+                TryAgain = False
+                if kwargs:
+                    for key in kwargs:
+                        if ( key == 'TryC' ):
+                            return X, Try
+                        else:
+                            return X
+                else:
+                    return X
+            else:
+                for i in range( dim ):
+                    rand = RandomNumberGenerator( n, LowerBounds, UpperBounds )
+                    if( evaluations % 3 == 0 ):
+                        X[ i ] = rand[ i ]
+                    elif ( evaluations % 7 == 0 ):
+                        X[ i ] = min( rand[ i ], rand[ i + 1 ] ) / max( MinNum, float( i ), 1. / rand[ i + 1 ] )
+                    elif ( evaluations % 11 == 0 ):
+                        X[ i ] = abs( 1. - rand[ i ] / rand[ i + 1 ] )
+                    else:
+                        X[ i ] = rand[ i - 1 ]
+
+                evaluations = evaluations + 1
+                Try = True
+
+        else:
             if kwargs:
                 for key in kwargs:
                     if ( key == 'TryC' ):
@@ -215,20 +251,6 @@ def Envelope_Constraints( X, **kwargs ):
                         return X
             else:
                 return X
-        else:
-            for i in range( n - 1 ):
-                rand = RandomNumberGenerator( n, LowerBounds, UpperBounds )
-                if( evaluations % 3 == 0 ):
-                    X[ i ] = rand[ i ]
-                elif ( evaluations % 7 == 0 ):
-                    X[ i ] = min( rand[ i ], rand[ i + 1 ] ) / max( MinNum, float( i ), 1. / rand[ i + 1 ] )
-                elif ( evaluations % 11 == 0 ):
-                    X[ i ] = abs( 1. - rand[ i ] / rand[ i + 1 ] )
-                else:
-                    X[ i ] = rand[ i - 1 ]
-
-            evaluations = evaluations + 1
-            Try = True
 
 
 ###
@@ -312,8 +334,14 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
     XOpt = X_Try
 
     Temp = SA_Temp
+    Fraction = True
 
-    kloop = 0 ; mloop = 0 ; jloop = 0 ; hloop = 0 ; iloop = 0
+
+    if SA_Testing:
+        Fraction = False
+    
+
+    kloop = 0 
 
     """ Beginning of the main outter loop: """
     while kloop <= SA_MaxEvl:
@@ -322,36 +350,46 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
 
         """ Beginning of the m loop: """
+        mloop = 0
         while mloop < SA_NT:
 
 
             """ Beginning of j loop: """
+            jloop = 0
             while jloop < SA_NS:
 
 
                 """ Beginning of the h loop: """
+                hloop = 0
                 while hloop < Ndim:
 
-                    for i in range( Ndim - 1 ):
+                    if Fraction:
+                        dim = Ndim - 1
+                    else:
+                        dim = Ndim
+
+                    for i in range( dim ):
                         rand = RandomNumberGenerator( Ndim, Lower_Bounds, Upper_Bounds )
 
                         if ( i == hloop ):
                             XP[ i ] = X_Try[ i ] + VM[ i ] * rand[ i ] 
-                            #XP.append( X_Try[ i ] + VM[ i ] * rand[ i ] )
                         else:
                             XP[ i ] = X_Try[ i ]
-                            #XP.append( X_Try[ i ] )
 
-                    XP[ Ndim - 1 ] = 1. - ListSum( XP[ 0 : Ndim - 1 ] )
-
-                    #XP.append( 1. - ListSum( XP[ 0 : Ndim - 1 ] ) )
-                    Envelope_Constraints( XP, NDim = Ndim, LBounds = Lower_Bounds, UBounds = Upper_Bounds, TryC = Try )
+                    if Fraction:
+                        XP[ dim ] = 1. - ListSum( XP[ 0 : dim ] )
+                        
+                    Envelope_Constraints( XP, NDim = Ndim, LBounds = Lower_Bounds, UBounds = Upper_Bounds, TryC = Try, IsNormalised = Fraction )
 
                     if Try:
                         LNobds += 1
                         Nobds += 1
 
                     FuncP = BTest.TestFunction( TestName, Ndim, XP )
+
+                    #print 'kloop:', kloop, ', mloop:', mloop, ', jloop:', jloop
+
+                    #print 'XP:', XP, '===>', FuncP
 
                     """ The function must be minimum """
                     if SA_Minimum:
@@ -375,7 +413,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                         IO.f_SAOutput.write( '{s:20} New vector-solution is accepted ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
 
                         NAcc += 1
-                        NACP[ hloop ] += 1
+                        NACP[ hloop ] = NACP[ hloop ] + 1
                         NUp += 1
 
                         """ If the new FP is larger than any other point,
@@ -390,9 +428,9 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                             criteria (Gaussian probability density function) - or any other
                             density function that may be added latter - may be used to either
                             accept or reject this coordinate.  """
-                        rand = RandomNumberGenerator( max( 1, iloop ), Lower_Bounds, Upper_Bounds )
+                        rand = RandomNumberGenerator( Ndim, Lower_Bounds, Upper_Bounds )
                         Density = math.exp( ( FuncP - Func ) / max( Temp, SA_EPS ) )
-                        Density_Gauss = 0.5 * ( rand[ 0 ] * rand[ iloop ] )
+                        Density_Gauss = 0.5 * ( rand[ 0 ] * rand[ Ndim - 1 ] )
 
                         if ( Density_Gauss < Density ):
                             X_Try = XP
@@ -400,12 +438,12 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                             IO.f_SAOutput.write( '{s:20} Metropolis Criteria; New vector-solution is generated ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
 
                             NAcc += 1
-                            NACP[ hloop ] += 1
+                            NACP[ hloop ] = NACP[ hloop ] + 1
                             NDown += 1
 
                         else:
                             NRej += 1
-                            print 'NRej:',  NRej
+                            IO.f_SAOutput.write( '{s:20} Number of points rejected: {a:4d}'.format( s = ' ', a = NRej ) + '\n' )
 
                     """ End of h loop """
                     hloop += 1
@@ -414,7 +452,6 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                 jloop += 1
 
             """ As half of the evaluations may be accepted, thus the VM array may be adjusted """
-            print 'NACP:', NACP
             for i in range( SA_N ):
                 Ratio = float( NACP[ i ] ) / float( SA_NS )
                 if ( Ratio > 0.6 ):
@@ -453,6 +490,8 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                 FOpt = - FOpt
 
             IO.f_SAOutput.write( '{s:20} Minimum was found (FOpt = {a:}) with coordinates XOpt: {b:}'.format( s = ' ', a = FOpt, b = XOpt ) + '\n' )
+
+            print 'X:', XOpt, BTest.TestFunction( TestName, Ndim, XOpt )
 
             return XOpt, FOpt
 
@@ -494,7 +533,9 @@ def SimulatedAnnealing():
     xx_opt = []
     func = []
     func_opt = []
-    fstar = []    
+    fstar = []
+
+    Fraction = True
 
 
     """ Initilising and bounding the X variable """
@@ -506,7 +547,8 @@ def SimulatedAnnealing():
             
             """ This need to be modified to be obtained from the function calling """
             xx = RandomNumberGenerator( Dimension, BM_Lower_Bounds, BM_Upper_Bounds )
-            Envelope_Constraints( xx , NDim = Dimension, LBounds = BM_Lower_Bounds, UBounds = BM_Upper_Bounds )
+            Fraction = False
+            Envelope_Constraints( xx , NDim = Dimension, LBounds = BM_Lower_Bounds, UBounds = BM_Upper_Bounds, IsNormalised = Fraction )
 
             """ Calling the objective function for the first time """
             func.append( BTest.TestFunction( TestName, Dimension, xx ) )
