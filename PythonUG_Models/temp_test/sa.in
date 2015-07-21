@@ -33,4 +33,4 @@ True
 # BENCHMARKS: Function name, dimension (n), lower boundary(n), upper boundary(n), vm(n), c(n), xopt(n), fopt
 
 # Benchmark Beale Function:
-Beale Function, 2, -4.5, -4.5, 4.5, 4.5, 1.1e-2, 1.3e-2, 1.7e-3, 1.9e-3, 3., .5, 0.
+Beale Function, 2, 0., 0., 3.5, 3.5, 1.e-1, 1.e-1, 1.e-2, 1.e-2, 3., .5, 0.

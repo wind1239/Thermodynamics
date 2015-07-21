@@ -9,6 +9,9 @@ import numpy as np
 import BenchmarkTests as BTest
 import SA_IO as IO
 
+#import pdb
+#import pydbgr
+
 
     
 ###
@@ -316,6 +319,8 @@ def ExtractingFields_BM( itest ):
 ### Main SA loop
 ###
 def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
+    """ For debugging """
+    #pdb.set_trace()
 
     IO.f_SAOutput.write( '\n' )
     IO.f_SAOutput.write( 'Initialising SA Algorithm for: {a:}'.format( a = TestName ) + '\n' )
@@ -323,14 +328,14 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
     """ Initialisation of a few parameters. """
     Try = False
-    NAcc = 0; Nobds = 0; NFCNEV = 0; NUp = 0; NEps = 4
+    NAcc = 0; Nobds = 0; NFCNEV = 0; NEps = 4
     MaxNum = 1.e20
    
     NACP = [ 0 for i in range( Ndim ) ]
     XP = [ 0. for i in range( Ndim ) ]
-    FStar = [ MaxNum for i in range ( NEps ) ]
+    FStar = [ MaxNum for i in range ( NEps ) ] ; FStar[ 0 ] = Func
     
-    FOpt = 0.
+    FOpt = Func
     XOpt = X_Try
 
     Temp = SA_Temp
@@ -372,7 +377,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                         rand = RandomNumberGenerator( Ndim, Lower_Bounds, Upper_Bounds )
 
                         if ( i == hloop ):
-                            XP[ i ] = X_Try[ i ] + VM[ i ] * rand[ i ] 
+                            XP[ i ] = X_Try[ i ] + VM[ i ] * ( 2. * rand[ i ] - 1. ) 
                         else:
                             XP[ i ] = X_Try[ i ]
 
@@ -387,10 +392,6 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
                     FuncP = BTest.TestFunction( TestName, Ndim, XP )
 
-                    #print 'kloop:', kloop, ', mloop:', mloop, ', jloop:', jloop
-
-                    #print 'XP:', XP, '===>', FuncP
-
                     """ The function must be minimum """
                     if SA_Minimum:
                         FuncP = -FuncP
@@ -398,8 +399,8 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                     NFCNEV += 1
 
 
-                    """ If there were more than MAXEVL evaluations of the
-                        objective function, the SA algorithm may finish """
+                    """ If there were more than MAXEVL evaluations of the objective function, 
+                        the SA algorithm may finish """
                     if ( NFCNEV >= SA_MaxEvl ):
                         IO.f_SAOutput.write( '{s:20} Maximum number of evaluations of the function was reached. Change MAXEVL or NS and NT (NFCNEV: {a:}'.format( s = ' ', a = NFCNEV ) + '\n' )
                         sys.exit
@@ -422,6 +423,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                         if ( FuncP > FOpt ):
                             XOpt = XP
                             FOpt = FuncP
+                            print 'new optimum:', kloop, mloop, jloop, hloop, XOpt, FOpt
 
                     else:
                         """ However if FuncP is smaller than the others, thus the Metropolis
@@ -451,6 +453,8 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                 """ End of j loop """
                 jloop += 1
 
+                print 'XOpt==>', XOpt, XP
+
             """ As half of the evaluations may be accepted, thus the VM array may be adjusted """
             for i in range( SA_N ):
                 Ratio = float( NACP[ i ] ) / float( SA_NS )
@@ -458,11 +462,10 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                     VM[ i ] = VM[ i ] * ( 1. + C[ i ] * ( Ratio - 0.6 ) / 0.4 )
 
                 elif ( Ratio < 0.4 ):
-                    VM[ i ] = VM[ i ] * ( 1. + C[ i ] * ( 0.4 - Ratio ) / 0.4 )
+                    VM[ i ] = VM[ i ] * ( 1. + C[ i ] * ( 0.41 - Ratio ) / 0.4 )
 
                 if ( VM[ i ] > ( Upper_Bounds[ i ] - Lower_Bounds[ i ] ) ):
                     VM[ i ] =  Upper_Bounds[ i ] - Lower_Bounds[ i ]
-
             
             IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = VM ) + '\n' )
 
@@ -491,7 +494,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
             IO.f_SAOutput.write( '{s:20} Minimum was found (FOpt = {a:}) with coordinates XOpt: {b:}'.format( s = ' ', a = FOpt, b = XOpt ) + '\n' )
 
-            print 'X:', XOpt, BTest.TestFunction( TestName, Ndim, XOpt )
+            print 'X:::', XOpt, BTest.TestFunction( TestName, Ndim, XOpt ), FOpt
 
             return XOpt, FOpt
 
@@ -502,6 +505,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
         Func = FOpt
         X_Try = XOpt
+        print 'X stoppage::', XOpt, BTest.TestFunction( TestName, Ndim, XOpt ), FOpt
         
             
         """ End of k loop """
