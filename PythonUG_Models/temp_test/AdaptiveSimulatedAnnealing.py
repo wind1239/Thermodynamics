@@ -30,7 +30,8 @@ def ListSum( XList ):
 def ReadAll_SA():
     """Reading SA cooling schedule."""
     global SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Testing, SA_Benchmarks
+        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, \
+        SA_Testing, SA_Benchmarks
 
     SA_Cooling = []
     SA_Cooling_list = []
@@ -55,6 +56,10 @@ def ReadAll_SA():
                 inner_list = []
                 if ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Minimum' ) ):
                     inner_list = [ elt.strip() for elt in line.split(',') ]                    
+                    SA_Cooling.append( to_bool( inner_list[ 0 ] ) )
+                    
+                elif ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Debugging' ) ):
+                    inner_list = [ elt.strip() for elt in line.split(',') ]
                     SA_Cooling.append( to_bool( inner_list[ 0 ] ) )
                     
                 elif ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Testing' ) ):
@@ -85,18 +90,19 @@ def ReadAll_SA():
     SA_UpperBounds = SA_Cooling[ 9 ]
     SA_VM = SA_Cooling[ 10 ]
     SA_C = SA_Cooling[ 11 ]
+    SA_Debugging = SA_Cooling[ 12 ]
 
-    if SA_Cooling[ 12 ]:
-        SA_Testing = SA_Cooling[ 12 ]
+    if SA_Cooling[ 13 ]:
+        SA_Testing = SA_Cooling[ 13 ]
 
         if SA_Testing:
             if ( ntest > 1 ):
                 for itest in range( ntest ):
-                    jtest = len( SA_Cooling[ 12 + itest + 1 ] )
-                    SA_Benchmarks.append( SA_Cooling[ 12 + itest + 1 ][ 0 : jtest ] )
+                    jtest = len( SA_Cooling[ 13 + itest + 1 ] )
+                    SA_Benchmarks.append( SA_Cooling[ 13 + itest + 1 ][ 0 : jtest ] )
             else:
-                jtest = len( SA_Cooling[ 12 + ntest ] )
-                SA_Benchmarks.append( SA_Cooling[ 12 + ntest ][0 : jtest ] )
+                jtest = len( SA_Cooling[ 13 + ntest ] )
+                SA_Benchmarks.append( SA_Cooling[ 13 + ntest ][0 : jtest ] )
 
 
     if ( SA_N != len( SA_LowerBounds ) ) or ( SA_N != len( SA_LowerBounds ) ) or \
@@ -402,8 +408,9 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                     """ If there were more than MAXEVL evaluations of the objective function, 
                         the SA algorithm may finish """
                     if ( NFCNEV >= SA_MaxEvl ):
-                        IO.f_SAOutput.write( '{s:20} Maximum number of evaluations of the function was reached. Change MAXEVL or NS and NT (NFCNEV: {a:}'.format( s = ' ', a = NFCNEV ) + '\n' )
-                        sys.exit
+                        IO.f_SAOutput.write( '\n \n ##################################################################################################################### \n' )
+                        IO.f_SAOutput.write( '{s:20} Maximum number of evaluations of the function was reached. Change MAXEVL or NS and NT (NFCNEV: {a:})'.format( s = ' ', a = NFCNEV ) + '\n' )
+                        sys.exit()
 
 
                     """ The new coordinate is accepted and the objective
@@ -411,7 +418,9 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                     if ( FuncP >= Func ):
                         X_Try = XP
                         Func = FuncP
-                        IO.f_SAOutput.write( '{s:20} New vector-solution is accepted ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
+
+                        if ( SA_Debugging ):
+                            IO.f_SAOutput.write( '{s:20} New vector-solution is accepted ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
 
                         NAcc += 1
                         NACP[ hloop ] = NACP[ hloop ] + 1
@@ -421,9 +430,9 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                             this will be chosen as the new optimum """
 
                         if ( FuncP > FOpt ):
-                            XOpt = XP
+                            for i in range( Ndim ):
+                                XOpt[ i ] = XP[ i ]
                             FOpt = FuncP
-                            print 'new optimum:', kloop, mloop, jloop, hloop, XOpt, FOpt
 
                     else:
                         """ However if FuncP is smaller than the others, thus the Metropolis
@@ -437,7 +446,10 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                         if ( Density_Gauss < Density ):
                             X_Try = XP
                             Func = FuncP
-                            IO.f_SAOutput.write( '{s:20} Metropolis Criteria; New vector-solution is generated ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
+
+                            if ( SA_Debugging ):
+                                IO.f_SAOutput.write( '\n \n ')
+                                IO.f_SAOutput.write( '{s:20} Metropolis Criteria; New vector-solution is generated ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
 
                             NAcc += 1
                             NACP[ hloop ] = NACP[ hloop ] + 1
@@ -445,15 +457,12 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
                         else:
                             NRej += 1
-                            IO.f_SAOutput.write( '{s:20} Number of points rejected: {a:4d}'.format( s = ' ', a = NRej ) + '\n' )
 
                     """ End of h loop """
                     hloop += 1
                     
                 """ End of j loop """
                 jloop += 1
-
-                print 'XOpt==>', XOpt, XP
 
             """ As half of the evaluations may be accepted, thus the VM array may be adjusted """
             for i in range( SA_N ):
@@ -467,7 +476,7 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
                 if ( VM[ i ] > ( Upper_Bounds[ i ] - Lower_Bounds[ i ] ) ):
                     VM[ i ] =  Upper_Bounds[ i ] - Lower_Bounds[ i ]
             
-            IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = VM ) + '\n' )
+            #IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = VM ) + '\n' )
 
 
             NACP = [ 0 for i in NACP ]
@@ -492,9 +501,10 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
             if SA_Minimum:
                 FOpt = - FOpt
 
-            IO.f_SAOutput.write( '{s:20} Minimum was found (FOpt = {a:}) with coordinates XOpt: {b:}'.format( s = ' ', a = FOpt, b = XOpt ) + '\n' )
+            IO.f_SAOutput.write( '\n \n              ******** TERMINATION ALGORITHM *********** \n \n ' )
 
-            print 'X:::', XOpt, BTest.TestFunction( TestName, Ndim, XOpt ), FOpt
+            IO.f_SAOutput.write( '{s:20} Minimum was found (FOpt = {a:}) with coordinates XOpt: {b:}'.format( s = ' ', a = FOpt, b = XOpt ) + '\n' )
+            IO.f_SAOutput.write( '{s:20} Number of evaluations of the function:{a:5d}. Number of rejected points:{b:5d}'.format( s = ' ', a = NFCNEV, b = NRej ) + '\n' )
 
             return XOpt, FOpt
 
@@ -505,7 +515,6 @@ def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
 
         Func = FOpt
         X_Try = XOpt
-        print 'X stoppage::', XOpt, BTest.TestFunction( TestName, Ndim, XOpt ), FOpt
         
             
         """ End of k loop """
