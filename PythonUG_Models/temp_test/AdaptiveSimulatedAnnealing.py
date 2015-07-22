@@ -296,14 +296,12 @@ def ExtractingFields_BM( itest ):
 
     Dimension = int( SA_Benchmarks[ itest ][ 1 ] )
 
-    if ( ( SA_Benchmarks[ itest ][ 2 ] == 'Minimum' ) OR ( SA_Benchmarks[ itest ][ 2 ] == 'minimum' ) OR \
-             ( SA_Benchmarks[ itest ][ 2 ] == 'MINIMUM' ) OR ( SA_Benchmarks[ itest ][ 2 ] == 'True' ) OR \
-             ( SA_Benchmarks[ itest ][ 2 ] == 'true' ) ):
-             BM_Minimum = True
-    elif ( ( SA_Benchmarks[ itest ][ 2 ] == 'Maximum' ) OR ( SA_Benchmarks[ itest ][ 2 ] == 'maximum' ) OR \
-             ( SA_Benchmarks[ itest ][ 2 ] == 'MAXIMUM' ) OR ( SA_Benchmarks[ itest ][ 2 ] == 'False' ) OR \
-             ( SA_Benchmarks[ itest ][ 2 ] == 'false' ) ):
-             BM_Minimum = False
+    if str( SA_Benchmarks[ itest ][ 2 ] ).lower() in ( 'Minimum', 'minimum', 'MINIMUM', 'True', 'true' ):
+        BM_Minimum = True
+
+    elif str( SA_Benchmarks[ itest ][ 2 ] ).lower() in ( 'Maximum', 'maximum', 'MAXIMUM', 'False', 'false' ):
+        BM_Minimum = False
+
     else:
         sys.exit( 'Option for Maximum or Minimum of the benchmark function not recognised' )
     
@@ -359,6 +357,7 @@ def ASA_Loops( TestName, X_Try, Func, **kwargs ):
         Ndim = SA_N
         VM = SA_VM
         C = SA_C
+        Minimum = SA_Minimum
 
         
     """ For debugging """
@@ -435,7 +434,7 @@ def ASA_Loops( TestName, X_Try, Func, **kwargs ):
                     FuncP = BTest.TestFunction( TestName, Ndim, XP )
 
                     """ The function must be minimum """
-                    if SA_Minimum:
+                    if Minimum:
                         FuncP = -FuncP
 
                     NFCNEV += 1
@@ -444,8 +443,9 @@ def ASA_Loops( TestName, X_Try, Func, **kwargs ):
                     """ If there were more than MAXEVL evaluations of the objective function, 
                         the SA algorithm may finish """
                     if ( NFCNEV >= SA_MaxEvl ):
-                        IO.f_SAOutput.write( '\n \n ##################################################################################################################### \n' )
+                        IO.f_SAOutput.write( '\n \n    ################################################################################## \n' )
                         IO.f_SAOutput.write( '{s:20} Maximum number of evaluations of the function was reached. Change MAXEVL or NS and NT (NFCNEV: {a:})'.format( s = ' ', a = NFCNEV ) + '\n' )
+                        IO.f_SAOutput.write( '{s:20} XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
                         sys.exit()
 
 
@@ -534,7 +534,7 @@ def ASA_Loops( TestName, X_Try, Func, **kwargs ):
         if Quit:
             X_Try = XOpt
 
-            if SA_Minimum:
+            if Minimum:
                 FOpt = - FOpt
 
             IO.f_SAOutput.write( '\n \n     ******** TERMINATION ALGORITHM *********** \n \n ' )
@@ -604,10 +604,12 @@ def SimulatedAnnealing():
 
             """ The function must be minimum, thus, in order to avoid any
             possible mess all the signals may be changed """
-            if SA_Minimum:
+            if BM_Minimum:
                 func = [ - res for res in func ]
 
             fstar.append( func )
+
+            print 'test:', TestName, itest, len( SA_Benchmarks )
 
             """ Calling the SA algorithm main loop """
             xxopt, fopt = ASA_Loops( TestName, xx, func[ itest ], NDim = Dimension, Minimum = BM_Minimum, LBounds = BM_Lower_Bounds, UBounds = BM_Upper_Bounds, VM = BM_VM, C = BM_C  )

@@ -52,11 +52,11 @@ def TestFunction_CosineMixture2D( n, X ):
     """ Cosine Mixture (2D) Function """
 
     Pi = 4. * math.atan( 1. )
-    F1 = 0.; F2 = 0.
+    F = 0.; F1 = 0.; F2 = 0.
     for i in range( n ):
         F1 = F1 + 1.e-1 * math.cos( 5. * Pi * X[ i ] )
         F2 = F2 + X[ i ]**2
-        F = -( F1 + F2 )
+        F = F -( F1 + F2 )
 
     return F
                        
