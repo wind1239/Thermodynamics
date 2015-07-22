@@ -133,8 +133,8 @@ def ReadAll_SA():
         IO.f_SAOutput.write( '------------------ Benchmark Test-Cases --------------------\n' )
         IO.f_SAOutput.write( '\n' )
         for itest in range( ntest ):
-             TestName, Dimension, Lower_Bounds, Upper_Bounds, VM, C, Solution, Optimal = ExtractingFields_BM( itest )
-             IO.f_SAOutput.write( '{a:2d}. Test Case: {b:} ({c:1d} dimensions)'.format( a = itest + 1, b = TestName, c = Dimension ) + '\n' )
+             TestName, Dimension, Minimum, Lower_Bounds, Upper_Bounds, VM, C, Solution, Optimal = ExtractingFields_BM( itest )
+             IO.f_SAOutput.write( '{a:2d}. Test Case: {b:} ({c:1d} dimensions) -- {d:}'.format( a = itest + 1, b = TestName, c = Dimension, d = SA_Benchmarks[ itest ][ 2 ] ) + '\n' )
              IO.f_SAOutput.write( '{s:20} Lower Bounds: {a:}, Upper Bounds: {b:}'.format( s =' ', a = Lower_Bounds, b = Upper_Bounds ) + '\n' ) 
              IO.f_SAOutput.write( '{s:20} VM: {a:}, C: {b:}'.format( s =' ', a = VM, b = C ) + '\n' ) 
              IO.f_SAOutput.write( '{s:20} Optimal Vector-Solution: {a:}  (F_Opt: {b:})'.format( s = ' ', a = Solution, b = Optimal ) + '\n' )
@@ -296,8 +296,19 @@ def ExtractingFields_BM( itest ):
 
     Dimension = int( SA_Benchmarks[ itest ][ 1 ] )
 
-    i = 2 + Dimension
-    Lower_Bounds = ( SA_Benchmarks[ itest ][ 2 : i ] )
+    if ( ( SA_Benchmarks[ itest ][ 2 ] == 'Minimum' ) OR ( SA_Benchmarks[ itest ][ 2 ] == 'minimum' ) OR \
+             ( SA_Benchmarks[ itest ][ 2 ] == 'MINIMUM' ) OR ( SA_Benchmarks[ itest ][ 2 ] == 'True' ) OR \
+             ( SA_Benchmarks[ itest ][ 2 ] == 'true' ) ):
+             BM_Minimum = True
+    elif ( ( SA_Benchmarks[ itest ][ 2 ] == 'Maximum' ) OR ( SA_Benchmarks[ itest ][ 2 ] == 'maximum' ) OR \
+             ( SA_Benchmarks[ itest ][ 2 ] == 'MAXIMUM' ) OR ( SA_Benchmarks[ itest ][ 2 ] == 'False' ) OR \
+             ( SA_Benchmarks[ itest ][ 2 ] == 'false' ) ):
+             BM_Minimum = False
+    else:
+        sys.exit( 'Option for Maximum or Minimum of the benchmark function not recognised' )
+    
+    i = 3 + Dimension
+    Lower_Bounds = ( SA_Benchmarks[ itest ][ 3 : i ] )
     BM_Lower_Bounds = [ float( res ) for res in Lower_Bounds ]
 
     j = i + Dimension
@@ -318,13 +329,38 @@ def ExtractingFields_BM( itest ):
 
     BM_Optimal = ( SA_Benchmarks[ itest ][ m ] )
 
-    return TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BM_Optimal
+    return TestName, Dimension, BM_Minimum, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BM_Optimal
 
 
 ###
 ### Main SA loop
 ###
-def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
+#def ASA_Loops( TestName, Ndim, Lower_Bounds, Upper_Bounds, VM, C, X_Try, Func ):
+def ASA_Loops( TestName, X_Try, Func, **kwargs ):
+
+    if kwargs:
+        for key in kwargs:
+            if ( key == 'LBounds' ):
+                Lower_Bounds = kwargs[ key ]
+            elif( key == 'UBounds' ):
+                Upper_Bounds = kwargs[ key ]
+            elif( key == 'Minimum' ):
+                Minimum = kwargs[ key ]
+            elif( key == 'NDim' ):
+                Ndim = kwargs[ key ]
+            elif( key == 'VM' ):
+                VM = kwargs[ key ]
+            elif( key == 'C' ):
+                C =  kwargs[ key ]
+
+    else:
+        Lower_Bounds = SA_LowerBounds
+        Upper_Bounds = SA_UpperBounds
+        Ndim = SA_N
+        VM = SA_VM
+        C = SA_C
+
+        
     """ For debugging """
     #pdb.set_trace()
 
@@ -555,7 +591,7 @@ def SimulatedAnnealing():
     if SA_Testing:
         for itest in range( len( SA_Benchmarks ) ):
 
-            TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BL_Optimal = ExtractingFields_BM( itest )
+            TestName, Dimension, BM_Minimum, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BL_Optimal = ExtractingFields_BM( itest )
 
             
             """ This need to be modified to be obtained from the function calling """
@@ -574,7 +610,7 @@ def SimulatedAnnealing():
             fstar.append( func )
 
             """ Calling the SA algorithm main loop """
-            xxopt, fopt = ASA_Loops( TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, xx, func[ itest ] )
+            xxopt, fopt = ASA_Loops( TestName, xx, func[ itest ], NDim = Dimension, Minimum = BM_Minimum, LBounds = BM_Lower_Bounds, UBounds = BM_Upper_Bounds, VM = BM_VM, C = BM_C  )
 
     else:
         xx = RandomNumberGenerator( SA_N, SA_LowerBounds, SA_UpperBounds )
@@ -592,7 +628,7 @@ def SimulatedAnnealing():
         fstar.append( func )
 
         """ Calling the SA algorithm main loop """
-        xxopt, fopt = ASA_Loops( TestName, Dimension, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, xx, func[ itest ] )
+        xxopt, fopt = ASA_Loops( TestName, xx, func[ itest ] )
 
     xx_opt = xx
 
