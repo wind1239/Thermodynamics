@@ -5,6 +5,7 @@ import matplotlib.pyplot as bplot
 import numpy as np
 import math 
 import sys
+import AdaptiveSimulatedAnnealing as ASA
 
 
 def TestFunction( TestName, n, X ):
@@ -18,6 +19,9 @@ def TestFunction( TestName, n, X ):
         
     elif ( TestName == 'Easom Function' ):
         Result = TestFunction_Easom( n, X )
+
+    elif ( TestName == 'Cosine Mixture Function' ):
+        Result = TestFunction_CosineMixture2D( n, X )
 
     else:
         print '====> ', TestName, ' <===='
@@ -43,6 +47,15 @@ def TestFunction_Easom( n, X ):
         math.exp( -( X[ 0 ] - Pi )**2 - ( X[ 1 ] - Pi )**2 )    
 
     return F
+
+def TestFunction_CosineMixture2D( n, X ):
+    """ Cosine Mixture (2D) Function """
+
+    Pi = 4. * math.atan( 1. )
+    F = -.1 * ASA.ListSum( math.cos( 5. * Pi * X ) ) - ASA.ListSum( X**2 )
+
+    return F
+                       
 
 def TestFunction_Dummy2( n, X ):
     F = X[ 0 ]**2 - X[ 1 ]**2 + X[ 2 ]**3

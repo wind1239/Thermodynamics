@@ -40,3 +40,6 @@ Beale Function, 2, 0., 0., 3.5, 3.5, 1.e-1, 1.e-1, 1.e-2, 1.e-2, 3., .5, 0.
 
 # Benchmark Easom Function:
 Easom Function, 2, -5., -5., 5., 5., 1.e-2, 1.e-2, 1.e-3, 1.e-3,  3.141592653589793, 3.141592653589793, -1.
+
+# Benchmark Cosine Mixture Function:
+Cosine Mixture Function, 2, -1., -1., 1., 1., 1.e-2, 1.e-2, 1.e-3, 1.e-3, 0., 0., -.2
