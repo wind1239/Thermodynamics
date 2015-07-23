@@ -56,7 +56,8 @@ def TestFunction_CosineMixture2D( n, X ):
     for i in range( n ):
         F1 = F1 + 1.e-1 * math.cos( 5. * Pi * X[ i ] )
         F2 = F2 + X[ i ]**2
-        F = F -( F1 + F2 )
+
+    F = F1 - F2 
 
     return F
                        

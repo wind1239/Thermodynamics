@@ -444,7 +444,7 @@ def ASA_Loops( TestName, X_Try, Func, **kwargs ):
                         the SA algorithm may finish """
                     if ( NFCNEV >= SA_MaxEvl ):
                         IO.f_SAOutput.write( '\n \n    ################################################################################## \n' )
-                        IO.f_SAOutput.write( '{s:20} Maximum number of evaluations of the function was reached. Change MAXEVL or NS and NT (NFCNEV: {a:})'.format( s = ' ', a = NFCNEV ) + '\n' )
+                        IO.f_SAOutput.write( '{s:20} Maximum number of evaluations of the function was reached. Either increase MAXEVL or EPS or reduce RT or NT (NFCNEV: {a:})'.format( s = ' ', a = NFCNEV ) + '\n' )
                         IO.f_SAOutput.write( '{s:20} XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
                         sys.exit()
 
