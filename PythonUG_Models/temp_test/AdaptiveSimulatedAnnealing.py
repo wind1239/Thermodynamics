@@ -567,8 +567,41 @@ def ASA_Loops( TestName, X_Try, Func, **kwargs ):
 def SimulatedAnnealing():
 
 
+# Input of argument:
+if len( sys.argv) == 1:
+    print ' '
+    print 'Missing argument, command line should be:'
+    print ' '
+    sys.exit( "python main.py <Task = 'Benchmarks' or 'Problem'>" )
+    
+elif len( sys.argv ) == 2 :
+    Task = sys.argv[1]
+    
     """ Creating file for general output """
     IO.OutPut()
+
+    """ Reading input file name """
+    FileName = Task + '.in'
+
+    if( Task == 'Benchmarks' ):
+        List = ReadAll_SA( FileName, ntest )
+
+    elif( Task == 'Problem' ):
+        List = ReadAll_SA( FileName )
+
+    else:
+        print 'Wrong Task Option, comand line should be:'
+        sys.exit( "python main.py <Task = 'Benchmarks' or 'Problem'>" )
+
+else:
+    print 'Wrong Task Option, comand line should be:'
+    sys.exit( "python main.py <Task = 'Benchmarks' or 'Problem'>" )
+
+
+
+
+
+
 
     """ Reading the Cooling Schedule from the sa.in file """
     ReadAll_SA()
