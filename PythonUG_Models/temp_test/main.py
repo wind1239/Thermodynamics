@@ -5,9 +5,13 @@ import sys
 import SA_IO as IO
 
 
+
+###                                     ###
+###              MAIN CODE              ###
+###                                     ###
+
 """ Starting code. Procedure for input deck will be changed
     soon. """
-
 
 # Input of argument:
 if len( sys.argv ) < 4:
@@ -15,51 +19,42 @@ if len( sys.argv ) < 4:
     sys.exit()
     
 else:
-    Task = sys.argv[ 2 ]
-    Method = sys.argv[ 3 ]
+    Method = sys.argv[ 2 ]
+    Task = sys.argv[ 3 ]
 
     if Task == 'Problem':
         ProblemFileName = sys.argv[ 4 ]
-    """ Creating a file for general output """
-    IO.OutPut( Task, Method )
 
-    """ Reading input file name """
-    FileName = Task + '.in'
-
-    if( Task == 'Benchmarks' ):
-        List = ReadAll_SA( FileName, ntest )
-
-    elif( Task == 'Problem' ):
-        List = ReadAll_SA( FileName )
-
-    else:
-        print 'Wrong Task Option, comand line should be:'
-        sys.exit( "python main.py <Task = 'Benchmarks' or 'Problem'>" )
-
-else:
-    print 'Wrong Task Option, comand line should be:'
-    sys.exit( "python main.py <Task = 'Benchmarks' or 'Problem'>" )
+""" Creating a file for general output """
+IO.OutPut( Task, Method )
 
 
 
+""" Generating X_Opt array """
 X_Opt = []
+
+""" Calling the optimisation routine """
+
+if 
 
 X_Opt, F_Opt = SimulatedAnnealing()
 
 print 'X :', X_Opt, F_Opt
 
 
-
+###
+###
+###
 def HelpInput():
     print ' '
     print 'Missing argument, command line should be:'
     print ' '
-    print "python main.py <Task = 'Benchmarks'> <Method = 'SA'> "
+    print "python main.py <Method = 'SA'> <Task = 'Benchmarks'> "
     print "              OR  "
-    print "python main.py <Task = 'Problem'> <Method = SA> <File Name >"
+    print "python main.py <Method = SA>  <Task = 'Problem'> <File Name >"
     print ' '
-    print "e.g., python main.py Benchmarks SA"
-    print "      python main.py Problem    SA VLE_MethanePentane.in "
+    print "e.g., python main.py SA Benchmarks"
+    print "      python main.py SA Problem    VLE_MethanePentane.in "
     print ' '
     print " Info for the benchmark test-cases must be contained in the file"
     print " Benchmarks.in"
