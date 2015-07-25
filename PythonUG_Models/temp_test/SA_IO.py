@@ -5,12 +5,13 @@ import sys
 
 ###
 ###
-def OutPut():
+def OutPut( Task, Method ):
     """ Output: Opening output file """
     global f_SAOutput
 
     """ Creating file for general output """
-    f_SAOutput = open( 'sa.out', 'w' )
+    FileName = Task + '_' + Method + '.out'
+    f_SAOutput = open( FileName, 'w' )
 
 ###
 ###
