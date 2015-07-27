@@ -564,7 +564,42 @@ def ASA_Loops( TestName, X_Try, Func, **kwargs ):
 
     =========================================================================  """
 
-def SimulatedAnnealing():
+def SimulatedAnnealing( Method, Task, **kwargs ):
+
+
+    """ Reading cooling schedule """
+    if kwargs:
+        for key in kwargs:
+            if ( key == 'FileName' ):
+                Problem_FileName = kwargs[ key ]
+
+        ntest = IO.ReadInCoolingSchedule( File_Name = Problem_FileName )
+
+    else:
+        ntest = IO.ReadInCoolingSchedule()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
 
 # Input of argument:

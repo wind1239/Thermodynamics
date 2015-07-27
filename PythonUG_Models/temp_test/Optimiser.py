@@ -3,6 +3,7 @@
 
 import sys
 import SA_IO as IO
+import AdaptiveSimulatedAnnealing as ASA
 
 
 
@@ -35,10 +36,17 @@ X_Opt = []
 
 """ Calling the optimisation routine """
 
-if 
+if ( Method == 'SA' ):
+    if ( Task == 'Problem' ):
+        X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = ProblemFileName )
+    elif( Task == 'Benchmarks' ):
+        X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task )
+        
+else:
+    print "Method", Method, "has not been defined yet!"
+    sys.exit()
 
-X_Opt, F_Opt = SimulatedAnnealing()
-
+    
 print 'X :', X_Opt, F_Opt
 
 
@@ -49,12 +57,12 @@ def HelpInput():
     print ' '
     print 'Missing argument, command line should be:'
     print ' '
-    print "python main.py <Method = 'SA'> <Task = 'Benchmarks'> "
+    print "python Optimiser.py <Method = 'SA'> <Task = 'Benchmarks'> "
     print "              OR  "
-    print "python main.py <Method = SA>  <Task = 'Problem'> <File Name >"
+    print "python Optimiser.py <Method = SA>  <Task = 'Problem'> <File Name >"
     print ' '
-    print "e.g., python main.py SA Benchmarks"
-    print "      python main.py SA Problem    VLE_MethanePentane.in "
+    print "e.g., python Optimiser.py SA Benchmarks"
+    print "      python Optimiser.py SA Problem    VLE_MethanePentane.in "
     print ' '
     print " Info for the benchmark test-cases must be contained in the file"
     print " Benchmarks.in"
