@@ -1,0 +1,38 @@
+
+$$ Benchmark Beale Function:
+
+# Function
+Beale Function
+
+# Dimension
+2
+
+# Minimum
+True
+
+# NS
+90
+
+# NT
+120
+
+# MaxEvl
+10000
+
+# EPS
+1.e-6
+
+# RT
+0.15
+
+# Temperature
+28.
+
+# Lower Bounds
+0., 0.
+
+# Upper Bounds
+3.5, 3.5
+
+# VM(i)
+1.e-1, 1.e-1, 1.e-2, 1.e-2, 3., .5, 0.

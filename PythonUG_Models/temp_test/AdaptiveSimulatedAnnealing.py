@@ -568,14 +568,14 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
 
     """ Reading cooling schedule """
-    if kwargs:
+    if kwargs: # For Problems
         for key in kwargs:
-            if ( key == 'FileName' ):
+            if ( key == 'FileName' ): 
                 Problem_FileName = kwargs[ key ]
 
         ntest = IO.ReadInCoolingSchedule( File_Name = Problem_FileName )
 
-    else:
+    else: # For Benchmark test-cases
         ntest = IO.ReadInCoolingSchedule()
 
 

@@ -31,10 +31,7 @@ def ReadInCoolingSchedule( **kwargs ):
     SA_Cooling = []
     SA_Cooling_list = []
     
-    SA_Benchmarks = []
-    
-    icount = 0
-    ntest = 0
+    icount = 0 ; ntest = 0
     SA_Testing = False
 
 
@@ -43,7 +40,11 @@ def ReadInCoolingSchedule( **kwargs ):
     with open( FileName, 'r' ):
         
         for line in f:
-            if line[ 0 ] == '#': # Comments
+            if line[ 0 : 1 ] == '$$': # Test Name
+                line.rstrip()
+                SA_Cooling_list.append( line[ 3 : len( line ) - 1 ] )
+                icount += 1
+            elif line[ 0 ] == '#': # Variable's name
                 line.rstrip()
                 SA_Cooling_list.append( line[ 2 : len( line ) - 1 ] )
                 icount += 1
@@ -51,22 +52,22 @@ def ReadInCoolingSchedule( **kwargs ):
                 line.rstrip()
             else:
                 inner_list = []
-                if ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Minimum' ) ):
+                if ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ][0:9] ) == 'Benchmark' ) ):
+                    ntest += 1
+
+                elif ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Minimum' ) ):
                     inner_list = [ elt.strip() for elt in line.split(',') ]                    
                     SA_Cooling.append( to_bool( inner_list[ 0 ] ) )
+                    
                     
                 elif ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Debugging' ) ):
                     inner_list = [ elt.strip() for elt in line.split(',') ]
                     SA_Cooling.append( to_bool( inner_list[ 0 ] ) )
                     
+                    
                 elif ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Testing' ) ):
                     inner_list = [ elt.strip() for elt in line.split(',') ]
                     SA_Cooling.append( to_bool( inner_list[ 0 ] ) )
-                    
-                elif ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ][0:9] ) == 'Benchmark' ) ):
-                    ntest += 1
-                    inner_list = [ elt.strip() for elt in line.split(',') ]
-                    SA_Cooling.append( inner_list )
                     
                 else:
                     inner_list = [ float(elt.strip()) for elt in line.split(',') ]
