@@ -1,0 +1,39 @@
+# Minimum
+True
+
+# N
+2
+# NS
+90
+# NT
+25
+# MaxEvl
+50000000
+
+# EPS
+1.E-6
+# RT
+0.09
+# Temp
+58.
+
+# LowerBounds
+-1.5, -1.5
+# UpperBounds
+1.5, 1.5  
+
+# VM(i)
+1.e-2, 1.e-2
+# C(i)
+1.e-3, 1.e-3
+
+# Debugging
+True
+
+# Testing
+True
+
+# BENCHMARKS: Function name, dimension (n), Minimum, lower boundary(n), upper boundary(n), vm(n), c(n), xopt(n), fopt
+
+# Benchmark Cosine Mixture Function:
+Cosine Mixture Function, 2, Maximum, -1.e-1, -1.e-1, 1.e-1, 1.e-1, 1.5e-3, 1.5e-3, 1.e-3, 1.e-3, 0., 0., -.2
