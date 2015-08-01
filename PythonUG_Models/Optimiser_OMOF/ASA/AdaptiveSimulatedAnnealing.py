@@ -8,6 +8,7 @@ import sys
 import numpy as np
 import BenchmarkTests as BTest
 import SA_IO as IO
+import RandomGenerator as RanGen
 
 #import pdb
 #import pydbgr
@@ -151,31 +152,6 @@ def ReadAll_SA():
 
 
 ###
-### Random number generators 
-###
-def RandomNumberGenerator( n, Lower, Upper ):
-
-    rn = []
-    # Initialisation:
-    for i in range( n ):
-        r = random.SystemRandom()
-        seed = time.time() # seed
-        if ( seed % 2 > 1. ):
-            r = random.SystemRandom( seed )
-        else:
-            r0, r1 = math.modf( seed )
-            if ( i % 2 == 0 ):
-                r = random.SystemRandom( r0 )
-            else:
-                r = random.SystemRandom( r1 )
-
-        #rn.append( r.random() )
-        rn.append( r.uniform( Upper[ i ], Lower[ i ]  ) )
-                
-    return rn
-
-
-###
 ### Imposing constraints into field variables
 ###
 def Envelope_Constraints( X, **kwargs ):
@@ -215,7 +191,7 @@ def Envelope_Constraints( X, **kwargs ):
            
         for i in range( dim ):
             if ( ( X[ i ] < LowerBounds[ i ]) | (X[ i ] > UpperBounds[ i ] ) ):
-                rand = RandomNumberGenerator( n, LowerBounds, UpperBounds )
+                rand = RanGen.RandomNumberGenerator( n, LowerBounds, UpperBounds )
                 X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
                     rand[ i ]
                 X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
@@ -238,7 +214,7 @@ def Envelope_Constraints( X, **kwargs ):
                     return X
             else:
                 for i in range( dim ):
-                    rand = RandomNumberGenerator( n, LowerBounds, UpperBounds )
+                    rand = RanGen.RandomNumberGenerator( n, LowerBounds, UpperBounds )
                     if( evaluations % 3 == 0 ):
                         X[ i ] = rand[ i ]
                     elif ( evaluations % 7 == 0 ):
@@ -415,7 +391,7 @@ def ASA_Loops( TestName, X_Try, Func, **kwargs ):
                         dim = Ndim
 
                     for i in range( dim ):
-                        rand = RandomNumberGenerator( Ndim, Lower_Bounds, Upper_Bounds )
+                        rand = RanGen.RandomNumberGenerator( Ndim, Lower_Bounds, Upper_Bounds )
 
                         if ( i == hloop ):
                             XP[ i ] = X_Try[ i ] + VM[ i ] * ( 2. * rand[ i ] - 1. ) 
@@ -475,7 +451,7 @@ def ASA_Loops( TestName, X_Try, Func, **kwargs ):
                             criteria (Gaussian probability density function) - or any other
                             density function that may be added latter - may be used to either
                             accept or reject this coordinate.  """
-                        rand = RandomNumberGenerator( Ndim, Lower_Bounds, Upper_Bounds )
+                        rand = RanGen.RandomNumberGenerator( Ndim, Lower_Bounds, Upper_Bounds )
                         Density = math.exp( ( FuncP - Func ) / max( Temp, SA_EPS ) )
                         Density_Gauss = 0.5 * ( rand[ 0 ] * rand[ Ndim - 1 ] )
 
@@ -566,144 +542,83 @@ def ASA_Loops( TestName, X_Try, Func, **kwargs ):
 
 def SimulatedAnnealing( Method, Task, **kwargs ):
 
+    IO.OutPut( Task, Method )
 
-    """ Reading cooling schedule """
-    if kwargs: # For Problems
-        for key in kwargs:
-            if ( key == 'FileName' ): 
-                Problem_FileName = kwargs[ key ]
+    IO.SA_GlobalVariables()
 
-        ntest = IO.ReadInCoolingSchedule( File_Name = Problem_FileName )
-
-    else: # For Benchmark test-cases
-        ntest = IO.ReadInCoolingSchedule()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-# Input of argument:
-if len( sys.argv) == 1:
-    print ' '
-    print 'Missing argument, command line should be:'
-    print ' '
-    sys.exit( "python main.py <Task = 'Benchmarks' or 'Problem'>" )
-    
-elif len( sys.argv ) == 2 :
-    Task = sys.argv[1]
-    
-    """ Creating file for general output """
-    IO.OutPut()
-
-    """ Reading input file name """
-    FileName = Task + '.in'
-
+    ntests = 0
     if( Task == 'Benchmarks' ):
-        List = ReadAll_SA( FileName, ntest )
+        ntests = IO.CheckNumberTests()
+        IO.ReadInCoolingSchedule( No_Tests = ntests )
 
     elif( Task == 'Problem' ):
-        List = ReadAll_SA( FileName )
+        if kwargs: # For Problems
+            for key in kwargs:
+                if ( key == 'FileName' ): 
+                    Problem_FileName = kwargs[ key ]
+
+            IO.ReadInCoolingSchedule( File_Name = Problem_FileName )
+            ntests = 0
+
+        else: 
+            sys.exit( 'Option not found' )
 
     else:
-        print 'Wrong Task Option, comand line should be:'
-        sys.exit( "python main.py <Task = 'Benchmarks' or 'Problem'>" )
-
-else:
-    print 'Wrong Task Option, comand line should be:'
-    sys.exit( "python main.py <Task = 'Benchmarks' or 'Problem'>" )
+        sys.exit( 'Option not found' )
 
 
+    """ Calling main SA loop: """
 
+    print '>>', SA_Function
+    for itest in range( ntests ):
 
+        Function = SA_Function[ itest ]
+        Ndim = SA_N[ itest ]
+        Minimum = SA_Minimum[ itest ]
+        NS = SA_NS[ itest ]
+        NT = SA_NT[ itest ]
+        MaxEvl = SA_MaxEvl[ itest ]
+        EPS = SA_EPS[ itest ]
+        RT = SA_RT[ itest ]
+        Temp = SA_Temp[ itest ]
+        LowerBounds = SA_LowerBounds[ itest ]
+        UpperBounds = SA_LowerBounds[ itest ]
+        VM = SA_VM[ itest ]
+        C = SA_C[ itest ]
+        Debugging = SA_Debugging[ itest ]
 
+        if( Task == 'Benchmarks' ):
+            XSolution = SA_Xopt[ itest ]
+            FSolution = SA_Fopt[ itest ]
 
+        print '---->', itest, Temp, VM, S
+        
 
-    """ Reading the Cooling Schedule from the sa.in file """
-    ReadAll_SA()
-    
-    """ Checking if the initial temperature is negative """
-    if ( SA_Temp <= 0. ):
-        sys.exit("*** Stop! Negative SA temperature")
+        """ Initial guess-solution obtained randomly """
+        X_Guess = []
+        #X_Guess = RanGen.RandomNumberGenerator( SA_N[ itest ], SA_LowerBounds[ itest : itest + SA_N[ itest ] ] = [], SA_UpperBounds[ itest : itest + SA_N[ itest ] ] )
 
-    """ Initialising a few key variables """
-    xx = [] # xx will be obtained from the up routine
-    xx_opt = []
-    func = []
-    func_opt = []
-    fstar = []
+        """ Calling the function for the first time before the SA main loop """
+        #Func = BTest.TestFunction( SA_Function[ itest ] , SA_N[ itest ], 
 
-    Fraction = True
+        stop
 
-
-    """ Initilising and bounding the X variable """
-    if SA_Testing:
-        for itest in range( len( SA_Benchmarks ) ):
-
-            TestName, Dimension, BM_Minimum, BM_Lower_Bounds, BM_Upper_Bounds, BM_VM, BM_C, BM_Solution, BL_Optimal = ExtractingFields_BM( itest )
 
             
-            """ This need to be modified to be obtained from the function calling """
-            xx = RandomNumberGenerator( Dimension, BM_Lower_Bounds, BM_Upper_Bounds )
-            Fraction = False
-            Envelope_Constraints( xx , NDim = Dimension, LBounds = BM_Lower_Bounds, UBounds = BM_Upper_Bounds, IsNormalised = Fraction )
+        #X_OPT, F_OPT = ASA_Loops
 
-            """ Calling the objective function for the first time """
-            func.append( BTest.TestFunction( TestName, Dimension, xx ) )
 
-            """ The function must be minimum, thus, in order to avoid any
-            possible mess all the signals may be changed """
-            if BM_Minimum:
-                func = [ - res for res in func ]
 
-            fstar.append( func )
 
-            print 'test:', TestName, itest, len( SA_Benchmarks )
 
-            """ Calling the SA algorithm main loop """
-            xxopt, fopt = ASA_Loops( TestName, xx, func[ itest ], NDim = Dimension, Minimum = BM_Minimum, LBounds = BM_Lower_Bounds, UBounds = BM_Upper_Bounds, VM = BM_VM, C = BM_C  )
 
-    else:
-        xx = RandomNumberGenerator( SA_N, SA_LowerBounds, SA_UpperBounds )
-        Envelope_Constraints( xx )
 
-        """ Calling the objective function for the first time """
-        TestName = 'Dummy1'
-        func.append( BTest.TestFunction( TestName, SA_N, xx ) )
 
-        """ The function must be minimum, thus, in order to avoid any
-        possible mess all the signals may be changed """
-        if SA_Minimum:
-            func = [ - res for res in func ]
 
-        fstar.append( func )
 
-        """ Calling the SA algorithm main loop """
-        xxopt, fopt = ASA_Loops( TestName, xx, func[ itest ] )
 
-    xx_opt = xx
 
-    
 
-    return xxopt, fopt
+
 
 
