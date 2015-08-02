@@ -96,9 +96,11 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         print 'X_OPT, F_OPT:', X_OPT, F_OPT
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
-                                
 
-
+        TestSolution.append( BTest.AssessTests( Function_Name, XSolution, X_OPT, EPS ) )
+        IO.f_SAOutput.write( '\n' )
+        IO.f_SAOutput.write( '{a:}:{b:}'.format( a = Function_Name, b = TestSolution[ itest ] ) + '\n' )
+        IO.f_SAOutput.write( '\n' )      
 
 
 ###

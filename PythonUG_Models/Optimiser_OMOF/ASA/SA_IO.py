@@ -210,15 +210,9 @@ def ReadInCoolingSchedule( **kwargs ):
         f_SAOutput.write( ' \n' )
         f_SAOutput.write( '============================================================ \n' )
         f_SAOutput.write( '\n' )
-
-
-        
-
             
     return SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
         SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, SA_Fopt
-
-    
 
 
 

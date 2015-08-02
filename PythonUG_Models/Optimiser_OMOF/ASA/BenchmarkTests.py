@@ -7,7 +7,9 @@ import math
 import sys
 import AdaptiveSimulatedAnnealing as ASA
 
-
+####
+####
+####
 def TestFunction( TestName, n, X ):
     """ Calling test functions """
 
@@ -29,7 +31,24 @@ def TestFunction( TestName, n, X ):
 
     return Result
 
+####
+####
+####
+def AssessTests( TestName, XSolution, XOpt, F_EPS ):
 
+    FSolution = TestFunction( TestName, len( XSolution ), XSolution )
+    FOpt = TestFunction( TestName, len( XOpt ), XOpt )
+
+    Result = True
+
+    if ( abs( FSolution - FOpt ) >= F_EPS ):
+        Result = False
+
+    return Result
+
+####
+####
+####
 def TestFunction_Beale( n, X ):
     """ Beale function, Fmin @ (3., 0.5) """
     F1 = ( 1.5 - X[ 0 ] + X[ 0 ] * X[ 1 ] )**2
@@ -39,6 +58,9 @@ def TestFunction_Beale( n, X ):
 
     return F
 
+####
+####
+####
 def TestFunction_Easom( n, X ):
     """ Easom Function """
     
@@ -48,6 +70,9 @@ def TestFunction_Easom( n, X ):
 
     return F
 
+####
+####
+####
 def TestFunction_CosineMixture2D( n, X ):
     """ Cosine Mixture (2D) Function """
 
@@ -61,7 +86,9 @@ def TestFunction_CosineMixture2D( n, X ):
 
     return F
                        
-
+####
+####
+####
 def TestFunction_Dummy2( n, X ):
     F = X[ 0 ]**2 - X[ 1 ]**2 + X[ 2 ]**3
 
