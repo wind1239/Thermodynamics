@@ -3,7 +3,7 @@
 
 import sys
 import SA_IO as IO
-import AdaptiveSimulatedAnnealing as ASA
+import Simulated_Annealing as ASA
 import SA_Print as SAPrint
 
 

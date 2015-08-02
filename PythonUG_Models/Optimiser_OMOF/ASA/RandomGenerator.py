@@ -4,6 +4,7 @@
 import math
 import random
 import time
+import numpy as np
 
 ###
 ### Random number generators 
@@ -23,8 +24,6 @@ def RandomNumberGenerator( n, Lower, Upper ):
                 r = random.SystemRandom( r0 )
             else:
                 r = random.SystemRandom( r1 )
-
-        #rn.append( r.random() )
-        rn.append( r.uniform( Upper[ i ], Lower[ i ]  ) )
+        rn.append( r.uniform( Lower[ i ], Upper[ i ] ) )
                 
     return rn

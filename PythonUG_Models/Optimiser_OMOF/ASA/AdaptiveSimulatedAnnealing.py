@@ -549,7 +549,9 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
     ntests = 0
     if( Task == 'Benchmarks' ):
         ntests = IO.CheckNumberTests()
-        IO.ReadInCoolingSchedule( No_Tests = ntests )
+        SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
+            SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, \
+            SA_Fopt = IO.ReadInCoolingSchedule( No_Tests = ntests )
 
     elif( Task == 'Problem' ):
         if kwargs: # For Problems
@@ -557,7 +559,11 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                 if ( key == 'FileName' ): 
                     Problem_FileName = kwargs[ key ]
 
-            IO.ReadInCoolingSchedule( File_Name = Problem_FileName )
+            #IO.ReadInCoolingSchedule( File_Name = Problem_FileName )
+            rub1 = [], rub2 = []
+            SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
+                SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, rub1, \
+                rub2 =  IO.ReadInCoolingSchedule( File_Name = Problem_FileName )
             ntests = 0
 
         else: 
@@ -569,7 +575,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
     """ Calling main SA loop: """
 
-    print '>>', SA_Function
+
     for itest in range( ntests ):
 
         Function = SA_Function[ itest ]
@@ -582,7 +588,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         RT = SA_RT[ itest ]
         Temp = SA_Temp[ itest ]
         LowerBounds = SA_LowerBounds[ itest ]
-        UpperBounds = SA_LowerBounds[ itest ]
+        UpperBounds = SA_UpperBounds[ itest ]
         VM = SA_VM[ itest ]
         C = SA_C[ itest ]
         Debugging = SA_Debugging[ itest ]
@@ -591,21 +597,23 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             XSolution = SA_Xopt[ itest ]
             FSolution = SA_Fopt[ itest ]
 
-        print '---->', itest, Temp, VM, S
         
 
         """ Initial guess-solution obtained randomly """
         X_Guess = []
-        #X_Guess = RanGen.RandomNumberGenerator( SA_N[ itest ], SA_LowerBounds[ itest : itest + SA_N[ itest ] ] = [], SA_UpperBounds[ itest : itest + SA_N[ itest ] ] )
+        X_Guess = RanGen.RandomNumberGenerator( Ndim, LowerBounds, UpperBounds )
 
         """ Calling the function for the first time before the SA main loop """
-        #Func = BTest.TestFunction( SA_Function[ itest ] , SA_N[ itest ], 
+        Func = BTest.TestFunction( Function, Ndim, X_Guess )
+        print 'X,F:', Function, X_Guess, Func
 
-        stop
 
 
             
-        #X_OPT, F_OPT = ASA_Loops
+        X_OPT, F_OPT = ASA_Loops( Function, Ndim, Minimum, NS, NT, MaxEvl, EPS, RT, Temp, \
+                                      LowerBounds, UpperBounds, VM, C, Debugging, \
+                                      X_Guess, Func )
+                                
 
 
 

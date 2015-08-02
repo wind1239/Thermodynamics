@@ -7,7 +7,16 @@ import sys
 def SA_GlobalVariables():
     
     global SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, SA_Fopt
+        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, SA_Fopt, \
+        X_Optimum, F_Optimum
+
+    
+    SA_Function = [] ; SA_Minimum = [] ; SA_N = [] ; SA_NS = [] ; SA_NT = [] ; \
+        SA_MaxEvl = [] ; SA_EPS = [] ; SA_RT = [] ; SA_Temp = [] ; \
+        SA_LowerBounds = [] ;  SA_UpperBounds = [] ; SA_VM = [] ; SA_C = [] ; \
+        SA_Debugging = [] ; SA_Xopt = [] ; SA_Fopt = [] ; \
+        X_Optimum = [] ; F_Optimum = []
+
 
 ###
 ### Converting string to boolean
@@ -68,12 +77,6 @@ def ReadInCoolingSchedule( **kwargs ):
 
     SA_GlobalVariables()
 
-    
-    SA_Function = [] ; SA_Minimum = [] ; SA_N = [] ; SA_NS = [] ; SA_NT = [] ; \
-        SA_MaxEvl = [] ; SA_EPS = [] ; SA_RT = [] ; SA_Temp = [] ; \
-        SA_LowerBounds = [] ;  SA_UpperBounds = [] ; SA_VM = [] ; SA_C = [] ; \
-        SA_Debugging = [] ; SA_Xopt = [] ; SA_Fopt = []
-
 
     """ Local variables: """
     SA_Cooling = []
@@ -127,7 +130,7 @@ def ReadInCoolingSchedule( **kwargs ):
 
                 elif ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Minimum' ) ):
                     inner_list = [ elt.strip() for elt in line.split(',') ]  
-                    print 'here:', inner_list[ 0 ]                  
+                    #print 'here:', inner_list[ 0 ]                  
                     SA_Cooling.append( to_bool( inner_list[ 0 ] ) )
 
 
@@ -175,9 +178,9 @@ def ReadInCoolingSchedule( **kwargs ):
         if N_Tests > 0:
             SA_Xopt.append( SA_Cooling[ node + 14 ] )
             SA_Fopt.append( SA_Cooling[ node + 15 ][ 0 ] )
-
-        print '-->', SA_Function
-
+        else:
+            SA_Xopt.append( 0. )
+            SA_Fopt.append( 0. )
 
         """ Printing initialisation of the SA Algorithm """
         f_SAOutput.write( '\n' )
@@ -202,13 +205,18 @@ def ReadInCoolingSchedule( **kwargs ):
         if N_Tests > 0:
             f_SAOutput.write( '{s:10} X_Opt: {a:}'.format( s = ' ', a = SA_Xopt[ itest ] ) + '\n' )
             f_SAOutput.write( '{s:10} F_Opt: {a:}'.format( s = ' ', a = SA_Fopt[ itest ] ) + '\n' )
+        f_SAOutput.write( '\n' )
+        f_SAOutput.write( '============================================================ \n' )
+        f_SAOutput.write( ' \n' )
+        f_SAOutput.write( '============================================================ \n' )
+        f_SAOutput.write( '\n' )
 
 
         
 
             
-    #return SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-    #    SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, SA_Fopt
+    return SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
+        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, SA_Fopt
 
     
 
