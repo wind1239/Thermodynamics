@@ -25,6 +25,8 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
     IO.SA_GlobalVariables()
 
+    X_Optimum = [] ; F_Optimum = [] ; TestSolution = []
+
     ntests = 0
     if( Task == 'Benchmarks' ):
         ntests = IO.CheckNumberTests()
@@ -87,20 +89,18 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
 
         X_OPT, F_OPT = ASA_Loops( Task, X_Guess, Func )
-
-            
-        #X_OPT, F_OPT = ASA_Loops( Task, Function, Ndim, Minimum, NS, NT, MaxEvl, \
-        #                              EPS, RT, Temp, LowerBounds, UpperBounds, \
-        #                              VM, C, Debugging, X_Guess, Func )
-
-        print 'X_OPT, F_OPT:', X_OPT, F_OPT
+        
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
+
+        """" Printing solutions in the screen and in the output file """
 
         TestSolution.append( BTest.AssessTests( Function_Name, XSolution, X_OPT, EPS ) )
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( '{a:}:{b:}'.format( a = Function_Name, b = TestSolution[ itest ] ) + '\n' )
-        IO.f_SAOutput.write( '\n' )      
+        IO.f_SAOutput.write( '\n' )
+
+        print Function_Name, ':', TestSolution[ itest ]
 
 
 ###
@@ -117,8 +117,6 @@ def ASA_Loops( Task, X_Try, Func ):
     #IO.SA_GlobalVariables2()
     TestName = Function_Name
     Temp  = Temperature
-
-    print 'Ndim:', Ndim, Temp
 
     IO.f_SAOutput.write( '\n' )
     IO.f_SAOutput.write( 'Initialising SA Algorithm for: {a:}'.format( a = TestName ) + '\n' )
@@ -202,7 +200,10 @@ def ASA_Loops( Task, X_Try, Func ):
                         IO.f_SAOutput.write( '\n \n    ################################################################################## \n' )
                         IO.f_SAOutput.write( '{s:20} Maximum number of evaluations of the function was reached. Either increase MAXEVL or EPS or reduce RT or NT (NFCNEV: {a:})'.format( s = ' ', a = NFCNEV ) + '\n' )
                         IO.f_SAOutput.write( '{s:20} XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
-                        sys.exit()
+                        
+                        SpFunc.CreateDummyArray( Ndim, XOpt, FOpt, EPS )
+                        return XOpt, FOpt
+                        #sys.exit()
 
 
                     """ The new coordinate is accepted and the objective
@@ -267,8 +268,9 @@ def ASA_Loops( Task, X_Try, Func ):
 
                 if ( VM[ i ] > ( UpperBounds[ i ] - LowerBounds[ i ] ) ):
                     VM[ i ] =  UpperBounds[ i ] - LowerBounds[ i ]
-            
-            #IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = VM ) + '\n' )
+
+                if Debugging:
+                    IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = VM ) + '\n' )
 
 
             NACP = [ 0 for i in NACP ]
