@@ -31,23 +31,25 @@
 \usepackage{float}
 \usepackage{perpage}
 \MakeSorted{figure}
+\usepackage{framed}
+\definecolor{shadecolor}{gray}{0.9}
 %\usepackage{pdflscape}
 
 % Appendix allows the inclusion of a line for "appendices", which otherwise won't get the right page number. You must
 % use the [toc] option.
 %\usepackage[toc]{appendix}% Text + Eqn box:
 
-\usepackage[framemethod=TikZ]{./mdframed/mdframed}
-\usepackage{lipsum}
-\mdfdefinestyle{JFrame}{%
-    linecolor=blue,
-    outerlinewidth=1pt,
-    roundcorner=20pt,
-    innertopmargin=\baselineskip,
-    innerbottommargin=\baselineskip,
-    innerrightmargin=20pt,
-    innerleftmargin=20pt, 
-    backgroundcolor=blue!10!white}
+%\usepackage[framemethod=TikZ]{./mdframed/mdframed}
+%\usepackage{lipsum}
+%\mdfdefinestyle{JFrame}{%
+%    linecolor=blue,
+%    outerlinewidth=1pt,
+%    roundcorner=20pt,
+%    innertopmargin=\baselineskip,
+%    innerbottommargin=\baselineskip,
+%    innerrightmargin=20pt,
+%    innerleftmargin=20pt, 
+%    backgroundcolor=blue!10!white}
 
 %\usepackage[framemethod=default]{./mdframed/mdframed}
 %\usepackage{showexpl}
@@ -84,6 +86,15 @@
 \theoremstyle{definition}
 \newtheorem{exmp}{Example}[chapter]
 
+\newenvironment{fminipage}%
+{\fbox{\begin{minipage}}%
+{\end{minipage}}}
+%\newenvironment{fminipage}%
+%{\begin{Sbox}\begin{minipage}}%
+%{\end{minipage}\end{Sbox}\fbox{\TheSbox}}
+
+
+
 % For theorems
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}{Corollary}[theorem]
@@ -100,7 +111,7 @@
 \setlength\headheight{14.49998pt} 
 \setlength\topmargin{0.0cm}
 \setlength\headsep{1.cm}
-\setlength\footskip{-0.cm}
+\setlength\footskip{-0.5cm}
 \setlength\parskip{0pt}
 
 %%%
@@ -355,19 +366,19 @@
 \tableofcontents
 \vfill
 
-\pagebreak
-\listoftables
-\vfill
-\pagebreak
-\listoffigures
-\vfill
-\pagebreak
+%\pagebreak
+%\listoftables
+%\vfill
+%\pagebreak
+%\listoffigures
+%\vfill
+%\pagebreak
 
 \input{MainBoxFormulation}
 
 %\input{Integrated_Compositional} % Compositional
 
-%\input{Hydrate_Formulation} % Simple Hydrate Model
+\input{Hydrate_Formulation} % Simple Hydrate Model
 
 \pagebreak
 

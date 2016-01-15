@@ -65,13 +65,139 @@ w_{i}^{k} = \frc{z_{i}-\summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}w_{i}^{j}}{\Pi^{k}
 \end{equation}
 
 
-\begin{mdframed}style=exampledefault,frametitle={Inhomogeneous linear}]%[style=JFrame]
-For 2 phases, $\Pi^{1}=L$ and $\Pi^{2}=V$, Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint} becomes:
+\begin{shaded}
+   For 2 phases, $\Pi^{1}=L$ and $\Pi^{2}=V$, Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint} becomes:
+     \begin{displaymath}
+      w_{i}^{V} = \frc{z_{i}-Lw_{i}^{L}}{1-L}
+     \end{displaymath}
+     for $i=1,2,\cdots,n_{c}$, and for 3 phases,$\Pi^{1}=L$, $\Pi^{2}=V$ and $\Pi^{3}=H$:
+        \begin{displaymath}
+           w_{i}^{H} = \frc{z_{i}-\left(V w_{i}^{V} + L w_{i}^{L}\right)}{1 - \left(V w_{i}^{V} + L w_{i}^{L}\right)}
+        \end{displaymath}
+\end{shaded}
+
+%% SECTION
+\section{Free Gibbs Energy}
+For equilibrium problems (e.g., vapour-liquid equilibrium, VLE), the total free Gibbs energy can be expressed as,
+\begin{equation}
+G = \summation_{j=1}^{n_{p}}\left(\summation_{i=1}^{n_{c}} m_{i}^{j}\mu_{i}^{j}\right)
+\label{MassGibbs_Definition}
+\end{equation} 
+this represents
 \begin{displaymath}
-w_{i}^{V} = \frc{z_{i}-Lw_{i}^{L}}{1-L}
+G = \summation_{i=1}^{n_{c}} m_{i}^{1}\mu_{i}^{1} + \summation_{i=1}^{n_{c}} m_{i}^{2}\mu_{i}^{2} + \cdots + \summation_{i=1}^{n_{c}} m_{i}^{n_{p}}\mu_{i}^{n_{p}}
 \end{displaymath}
-for $i=1,2,\cdots,n_{c}$, and for 3 phases,$\Pi^{1}=L$, $\Pi^{2}=V$ and $\Pi^{3}=H$:
+The chemical potential $\left(\mu\right)$ can be written as a function of the mass of each component at each phase,
+\begin{eqnarray}
+\mu_{i}^{j} &=& \mu_{i}^{j}\left(m_{1}^{j}, m_{2}^{j}, \cdots, m_{n_{c}}^{j}\right) = \mu_{i}^{j}\left(\frc{m_{1}^{j}}{m^{j}}, \frc{m_{2}^{j}}{m^{j}}, \cdots, \frc{m_{n_{c}}^{j}}{m^{j}}\right)\nonumber \\
+ &=& \mu_{i}^{j}\left(w_{1}^{j}, w_{2}^{j}, \cdots, w_{n_{c}}^{j}\right)\label{chempotential_functional}
+\end{eqnarray}
+Dividing Eqn.~\ref{MassGibbs_Definition} by $m$,
+\begin{equation}
+g = \frc{G}{m} = \summation_{j=1}^{n_{p}}\left(\summation_{i=1}^{n_{c}}\frc{m_{i}^{j}}{m}\mu_{i}^{j}\right) = \summation_{i=1}^{n_{c}}\frc{m_{i}^{1}}{m^{1}} \cdot \frc{m^{1}}{m} \mu_{i}^{1} + \cdots + \summation_{i=1}^{n_{c}}\frc{m_{i}^{n_{p}}}{m^{n_{p}}} \cdot \frc{m^{n_{p}}}{m} \mu_{i}^{n_{p}}
+\label{MassGibbs_Definition2}
+\end{equation}
+And we rewrite Eqn.~\ref{MassGibbs_Definition2} as,
+\begin{equation}
+g = \summation_{i=1}^{n_{c}}\Pi^{1}w_{i}^{1}\mu_{i}^{1} + \summation_{i=1}^{n_{c}}\Pi^{2}w_{i}^{2}\mu_{i}^{2} + \cdots + \summation_{i=1}^{n_{c}}\Pi^{n_{p}}w_{i}^{n_{p}}\mu_{i}^{n_{p}} = \summation_{j=1}^{n_{p}}\left[\summation_{i}^{n_{c}}\Pi^{j}w_{i}^{j}\mu_{i}^{j}\right] \label{MassGibbs_Definition3}
+\end{equation}
+
+
+%\begin{mdframed}[style=JFrame]
+\begin{shaded}
+   For 2 ($L$ and $V$) phases,
+     \begin{displaymath}
+        g = \summation_{i=1}^{n_{c}}Lw_{i}^{L}\mu_{i}^{L} + \summation_{i=1}^{n_{c}}Vw_{i}^{V}\mu_{i}^{V}
+     \end{displaymath}
+     and 3 ($L$, $V$ and $H$) phases,
+     \begin{displaymath}
+       g = \summation_{i=1}^{n_{c}}Lw_{i}^{L}\mu_{i}^{L} + \summation_{i=1}^{n_{c}}Vw_{i}^{V}\mu_{i}^{V} + \summation_{i=1}^{n_{c}}Hw_{i}^{H}\mu_{i}^{H}
+     \end{displaymath}
+\end{shaded}
+%\end{mdframed}
+
+
+Now replacing Eqn.~\ref{Eqn_MassBalance_MassFraction2} in Eqn.~\ref{MassGibbs_Definition3},
+\begin{equation}
+g = \summation_{i=1}^{n_{c}-1}\Pi^{1}w_{i}^{1}\left(\mu_{i}^{1}-\mu_{n_{c}}^{1}\right) + \Pi^{1}\mu_{n_{c}}^{1} + \summation_{i=1}^{n_{c}-1}\Pi^{2}w_{i}^{2}\left(\mu_{i}^{2}-\mu_{n_{c}}^{2}\right) + \Pi^{2}\mu_{n_{c}}^{2} + \cdots + \summation_{i=1}^{n_{c}-1}\Pi^{n_{p}}w_{i}^{n_{p}}\left(\mu_{i}^{n_{p}}-\mu_{n_{c}}^{n_{p}}\right) + \Pi^{n_{p}}\mu_{n_{c}}^{n_{p}}
+\label{MassGibbs_Definition4}
+\end{equation}
+Now replacing Eqns.~\ref{Eqn_MassBalance_PhaseMassFraction2} and~\ref{Eqn_MassBalance_FeedMassFractionConstraint2} in~\ref{MassGibbs_Definition4}:
+\begin{eqnarray}
+g &=& \summation_{i=1}^{n_{c}}\Pi^{1}w_{i}^{1}\left(\mu_{i}^{1}-\mu_{n_{c}}^{1}\right) + \Pi^{1}\mu_{n_{c}}^{1} + \cdots + \summation_{i=1}^{n_{c}}\Pi^{n_{p}-1}w_{i}^{n_{p}-1}\left(\mu_{i}^{n_{p}-1}-\mu_{n_{c}}^{n_{p}-1}\right) + \Pi^{n_{p}-1}\mu_{n_{c}}^{n_{p}-1} + \nonumber \\
+   && \summation_{i=1}^{n_{c}-1}\left[z_{i} - \summation_{j=1}^{n_{p}-1}\Pi^{j}w_{i}^{j}\right]\left(\mu_{i}^{n_{p}}-\mu_{n_{c}}^{n_{p}}\right) + \Pi^{n_{p}}\mu_{n_{c}}^{n_{p}}\nonumber
+\end{eqnarray}
+
+Rearranging
+\begin{eqnarray}
+g &=& \summation_{i=1}^{n_{c}}\Pi^{1}w_{i}^{1}\left[\left(\mu_{i}^{1}-\mu_{i}^{n_{p}}\right) - \left(\mu_{n_{c}}^{1}-\mu_{n_{c}}^{n_{p}}\right)\right] + \cdots + \summation_{i=1}^{n_{c}}\Pi^{n_{p}-1}w_{i}^{n_{p}-1}\left[\left(\mu_{i}^{n_{p}-1}-\mu_{i}^{n_{p}}\right) - \left(\mu_{n_{c}}^{n_{p}-1}-\mu_{n_{c}}^{n_{p}}\right)\right] + \nonumber \\
+&& \summation_{j=1}^{n_{p}-1}\Pi^{j}\mu_{n_{c}}^{j} + \summation_{i=1}^{n_{c}-1}z_{i}\left(\mu_{i}^{n_{p}}-\mu_{n_{c}}^{n_{p}}\right) +\left(1-\summation_{j=1}^{n_{p}-1}\Pi^{j}\right)\mu_{n_{c}}^{n_{p}} \nonumber
+\end{eqnarray}
+
+With a compressed notation:
+
+\begin{eqnarray}
+g &=& \summation_{i=1}^{n_{c}-1}\left\{\summation_{j=1}^{n_{p}-1}\Pi^{j}w_{i}^{j}\left[\left(\mu_{i}^{j}-\mu_{i}^{n_{p}}\right) - \left(\mu_{n_{c}}^{j}-\mu_{n_{c}}^{n_{p}}\right)\right]\right\} + \summation_{j=1}^{n_{p}-1}\Pi^{j}\left(\mu_{n_{c}}^{j}-\mu_{n_{c}}^{n_{p}}\right) +  \nonumber \\
+&& \hspace{3cm} \summation_{i=1}^{n_{c}-1} z_{i}\mu_{i}^{n_{p}} + \underbrace{\left(1-\summation_{i=1}^{n_{c}-1}z_{i}\right)}_{\red{z_{n_{c}}}}\mu_{n_{c}}^{n_{p}} \nonumber 
+\end{eqnarray}
+Thus
+\red{\begin{equation}
+g = \summation_{i=1}^{n_{c}-1}\left\{\summation_{j=1}^{n_{p}-1}\Pi^{j}w_{i}^{j}\left[\left(\mu_{i}^{j}-\mu_{i}^{n_{p}}\right) - \left(\mu_{n_{c}}^{j}-\mu_{n_{c}}^{n_{p}}\right)\right]\right\} + \summation_{j=1}^{n_{p}-1}\Pi^{j}\left(\mu_{n_{c}}^{j}-\mu_{n_{c}}^{n_{p}}\right) + \summation_{i=1}^{n_{c}}z_{i}\mu_{i}^{n_{p}}
+\end{equation}}
+
+The chemical potential was defined as a functional (Eqn.~\ref{chempotential_functional}):
+\begin{eqnarray}
+&& \mu_{i}^{1} = \mu_{i}^{1}\left(w_{1}^{1},w_{2}^{1},\cdots,w_{n_{c}}^{1}\right) \nonumber \\
+&& \mu_{i}^{2} = \mu_{i}^{2}\left(w_{1}^{2},w_{2}^{2},\cdots,w_{n_{c}}^{2}\right) \nonumber \\
+&& \hspace{2cm}\vdots \nonumber \\
+&& \mu_{i}^{n_{p}} = \mu_{i}^{n_{p}}\left(w_{1}^{n_{p}},w_{2}^{n_{p}},\cdots,w_{n_{c}}^{n_{p}}\right) \label{ChemPotDef2}
+\end{eqnarray}
+with constraint Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint2} in Eqn.~\ref{ChemPotDef2},
+\begin{eqnarray}
+\mu_{l}^{k} &=& \mu_{l}^{k}\left(w_{i}^{j},\Pi^{j}\right) \nonumber \\
+           &=& \mu_{l}^{k}\left(w_{1}^{1},\cdots,w_{n_{c}-1}^{1},w_{1}^{2},\cdots,w_{n_{c}-1}^{2},\cdots,w_{1}^{n_{p}},w_{2}^{n_{p}},\cdots,w_{n_{c}-1}^{n_{p}},\Pi^{1},\cdots,\Pi^{n_{p}}\right)\nonumber
+\end{eqnarray}
+with $i=1,2,\cdots,l,\cdots,n_{c}-1$ and $j = 1,2,\cdots,n_{p}$ and $j\neq k$
+
+And the mass-based free Gibbs energy should take the following format
 \begin{displaymath}
-w_{i}^{H} = \frc{z_{i}-\left(V w_{i}^{V} + L w_{i}^{L}\right)}{1 - \left(V w_{i}^{V} + L w_{i}^{L}\right)}
+g = g\left(w_{i}^{j},\Pi^{j}\right).
 \end{displaymath}
-\end{mdframed}
+From classical thermodynamic, $\mu_{i}^{j}$ can be defined as a function of the fugacity coefficient, $\varphi_{i}^{j}$,
+\begin{equation}
+\mu_{i}^{j}= R T\left[\ln\varphi_{i}^{j} + \ln\left(P x_{i}^{j}\right)\right] + \theta_{i}\left(T\right),
+\end{equation}
+where $\theta_{i}$ is an integration constant. The fugacity coefficient is defined as,
+\begin{equation}
+\varphi_{i}^{j} = \frc{f_{i}^{j}}{P x_{i}^{j}},
+\end{equation}
+where $f$ and $x$ are the fugacity and molar fraction respectively.
+
+\clearpage
+
+\begin{shaded}
+   \begin{center}
+     {\bf Statement of the VLE Problem}
+   \end{center}
+
+   Given $T$, $P$ and $z_{i}$ $\left(i=1,2,\cdots,n_{c}\right)$. Find the set of $w_{1}^{L},\cdots,w_{n_{c}-1}^{L}$ and $L$ that minimises
+   \begin{eqnarray}
+      g\left(w_{1}^{L},\cdots,w_{n_{c}-1}^{L}, L\right) &=& \summation_{i=1}^{n_{c}-1}Lw_{i}^{L}\left[\left(\mu_{i}^{L}-\mu_{i}^{V}\right)-\left(\mu_{n_{c}}^{L}-\mu_{n_{c}}^{V}\right)\right] \nonumber\\
+         &=& L\left(\mu_{i}^{L}-\mu_{i}^{V}\right) + \summation_{i}^{n_{c}}z_{i}\mu_{i}^{V} 
+   \end{eqnarray}
+   with the constraints:
+\[ 
+\left\{
+  \begin{tabular}{l}
+  $0 < L < 1$ \\
+  $0 < w_{i}^{L} < 1$, \hspace{1cm} $i=1,2,\cdots,n_{c}-1$\\
+  $\summation_{i=1}^{n_{c}}w_{i}^{L} < 1$\\ 
+  \end{tabular}
+\right.
+\]
+where,
+\begin{displaymath}
+   \mu_{i}^{L}=\mu_{i}^{L}\left(w_{1}^{L},\cdots,w_{n_{c}-1}^{L}\right)\text{ and }\mu_{i}^{V}=\mu_{i}^{V}\left(w_{1}^{L},\cdots,w_{n_{c}-1}^{L}, L\right)
+\end{displaymath}
+
+\end{shaded}

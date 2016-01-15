@@ -66,7 +66,8 @@ w_{i}^{k} = \frc{z_{i}+\summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}w_{i}^{j}}{\Pi^{k}
 \end{equation}
 
 
-\begin{mdframed}[style=JFrame]
+
+%\begin{mdframed}[style=JFrame]
 For 2 phases, $\Pi^{1}=L$ and $\Pi^{2}=V$, Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint} becomes:
 \begin{displaymath}
 w_{i}^{V} = \frc{z_{i}-Lw_{i}^{L}}{1-L}
@@ -75,7 +76,7 @@ for $i=1,2,\cdots,n_{c}$, and for 3 phases,$\Pi^{1}=L$, $\Pi^{2}=V$ and $\Pi^{3}
 \begin{displaymath}
 w_{i}^{H} = \frc{z_{i}-\left(V w_{i}^{V} + L w_{i}^{L}\right)}{1 - \left(V w_{i}^{V} + L w_{i}^{L}\right)}
 \end{displaymath}
-\end{mdframed}
+%\end{mdframed}
 
 %% SUB-SECTION
 \subsection{Free Gibbs Energy}
@@ -104,7 +105,7 @@ g = \summation_{i=1}^{n_{c}}\Pi^{1}w_{i}^{1}\mu_{i}^{1} + \summation_{i=1}^{n_{c
 \end{equation}
 
 
-\begin{mdframed}[style=JFrame]
+%\begin{mdframed}[style=JFrame]
 For 2 ($L$ and $V$) phases,
 \begin{displaymath}
 g = \summation_{i=1}^{n_{c}}Lw_{i}^{L}\mu_{i}^{L} + \summation_{i=1}^{n_{c}}Vw_{i}^{V}\mu_{i}^{V}
@@ -113,7 +114,7 @@ and 3 ($L$, $V$ and $H$) phases,
 \begin{displaymath}
 g = \summation_{i=1}^{n_{c}}Lw_{i}^{L}\mu_{i}^{L} + \summation_{i=1}^{n_{c}}Vw_{i}^{V}\mu_{i}^{V} + \summation_{i=1}^{n_{c}}Hw_{i}^{H}\mu_{i}^{H}
 \end{displaymath}
-\end{mdframed}
+%\end{mdframed}
 
 
 Now replacing Eqn.~\ref{Eqn_MassBalance_MassFraction2} in Eqn.~\ref{MassGibbs_Definition3},
