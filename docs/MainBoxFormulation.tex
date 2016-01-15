@@ -1,0 +1,77 @@
+
+%%%
+%%% CHAPTER
+%%%
+\chapter{Thermodynamic Formulation}
+
+ 
+%%% SECTION
+\section{Mass Balance}
+For a system with $n_{p}$ phases and $n_{c}$ components, the mass of each $j$ phase is,
+\begin{equation}
+m^{j} = \summation_{i=1}^{n_{c}}m_{i}^{j}\;\;\;\text{ for }j=1,2,\cdots,n_{p}
+\label{Eqn_MassBalance_Phase}
+\end{equation}
+
+And the mass of each component $i\left(=1,2,\cdots,n_{c}\right)$,
+\begin{equation}
+m_{i} = m_{i}^{1} + m_{i}^{2} + \cdots + m_{i}^{n_{p}} = \summation_{j=1}^{n_{p}}m_{i}^{j}
+\label{Eqn_MassBalance_Component}
+\end{equation}
+
+The total mass $m$ can be define as,
+\begin{eqnarray}
+m & = & m^{1} + m^{2} + \cdots + m^{n_{p}} = \summation_{j=1}^{n_{p}}m^{j} \nonumber \\
+  & = & m_{1} + m_{2} + \cdots + m_{n_{c}} = \summation_{i=1}^{n_{c}}m_{i} \nonumber 
+\label{Eqn_MassBalance_Mass}
+\end{eqnarray}
+
+Defining the intensive properties:
+\begin{eqnarray}
+&& w_{i}^{j} = \frc{m_{i}^{j}}{m^{j}}, \hspace{2cm} z_{i} = \frc{m_{i}}{m},\label{Eqn_MassBalance_MassFraction} \\
+&& \Pi^{j} = \frc{m^{j}}{m}\label{Eqn_MassBalance_PhaseMassFraction} 
+\end{eqnarray}
+where $w_{i}^{j}$ is the mass fraction of component $i$ in phase $j$, $\Pi^{j}$ is the mass fraction of phase $j$ and $z_{i}$ is the overall feed mass fraction of component $i$. From Eqns.~\ref{Eqn_MassBalance_Mass}-~\ref{Eqn_MassBalance_PhaseMassFraction}, we can define normalised quantities, i.e., fractions, and we can add the following constraints:
+\begin{eqnarray}
+&&w_{n_{c}}^{j} = 1 - \summation_{i=1}^{n_{c}-1}w_{i}^{j},\hspace{1cm}  z_{n_{c}} = 1 - \summation_{i=1}^{n_{c}-1}z_{i},  \label{Eqn_MassBalance_MassFraction2} \\
+&&\Pi^{n_{p}} = 1 - \left(\Pi^{1} + \Pi^{2} + \cdots + \Pi^{n_{p}-1}\right) = 1 - \summation_{j=1}^{n_{p}-1} \Pi^{j}\hspace{1cm} j=1,2,\cdots,n_{p} \label{Eqn_MassBalance_PhaseMassFraction2}
+\end{eqnarray} 
+with
+\begin{displaymath}
+  z_{i} = \frc{m_{i}}{m} = \frc{\summation_{j=1}^{n_{p}}m_{i}^{j}}{m} \frc{m^{j}}{m^{j}} = \underbrace{\frc{m^{j}}{m}}_{\red{\Pi^{j}}} \cdot \overbrace{\frc{\summation_{j=1}^{n_{p}}m_{i}^{j}}{m^{j}}}^{\red{\summation_{j=1}^{n_{p}}w_{i}^{j}}} 
+\end{displaymath}
+leading to
+\begin{equation}
+z_{i} = \Pi^{1}w_{i}^{1} + \Pi^{2}w_{i}^{2} + \cdots + \Pi^{n_{p}}w_{i}^{n_{p}}
+\label{Eqn_MassBalance_FeedMassFractionConstraint}
+\end{equation}
+with
+\begin{equation}
+0\leq\Pi^{j}\leq 1 \hspace{3cm} 0\leq w_{i}^{j}\leq 1
+\end{equation}
+
+If the solution is contained within \red{$n_{p}$} phases, the inequality can be rewritten as,
+\begin{equation} 
+0 < \Pi^{j} < 1
+\end{equation}
+Thus
+\begin{displaymath}
+\Pi^{k} = 1 - \summation_{j=1,j\neq k}^{n_{p}} \Pi^{j} \neq 0
+\end{displaymath}
+Therefore from Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint},
+\begin{equation}
+w_{i}^{k} = \frc{z_{i}-\summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}w_{i}^{j}}{\Pi^{k}} = \frc{z_{i} - \summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}w_{i}^{j}}{1-\summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}}
+\label{Eqn_MassBalance_FeedMassFractionConstraint2}
+\end{equation}
+
+
+\begin{mdframed}style=exampledefault,frametitle={Inhomogeneous linear}]%[style=JFrame]
+For 2 phases, $\Pi^{1}=L$ and $\Pi^{2}=V$, Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint} becomes:
+\begin{displaymath}
+w_{i}^{V} = \frc{z_{i}-Lw_{i}^{L}}{1-L}
+\end{displaymath}
+for $i=1,2,\cdots,n_{c}$, and for 3 phases,$\Pi^{1}=L$, $\Pi^{2}=V$ and $\Pi^{3}=H$:
+\begin{displaymath}
+w_{i}^{H} = \frc{z_{i}-\left(V w_{i}^{V} + L w_{i}^{L}\right)}{1 - \left(V w_{i}^{V} + L w_{i}^{L}\right)}
+\end{displaymath}
+\end{mdframed}
