@@ -113,7 +113,7 @@
 \setlength\headsep{1.cm}
 \setlength\footskip{-0.5cm}
 \setlength\parskip{0pt}
-
+\setlength\parindent{0pt}
 %%%
 %%% Headers and Footers
 %\lhead[\text{\small{WORK IN PROGRESS}}] {\text{\small{ICON/AMCG}}} 
@@ -297,6 +297,7 @@
 \newcommand{\purple}{\textcolor{purple}}
 \newcommand{\PNDG}[3][error]{P$_{#1}$DG-P$_{#2}$DG$_{#3}$}
 \newcommand{\Partial}[3][error]{\left(\frc{\partial #1}{\partial #2}\right)_{#3}}
+\newcommand{\mfr}[3][error]{#1_{#2}^{\left(#3\right)}}
 %{P$_{#1}$DG-P$_{#2}$DG}%$_{#3}$}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -375,15 +376,13 @@
 %\pagebreak
 
 \input{MainBoxFormulation}
+\input{EOS_PR} % Simple Hydrate Model
+\input{Hydrate_Formulation} % Simple Hydrate Model
 
 %\input{Integrated_Compositional} % Compositional
-
-\input{Hydrate_Formulation} % Simple Hydrate Model
-\input{EOS_PR} % Simple Hydrate Model
-
 \pagebreak
 
-\cleardoublepage
+%\cleardoublepage
 
 %\part{Appendices}
 
@@ -396,7 +395,7 @@
 %     \input{Appendix_Examples}
 %  \end{appendix}
 
-\cleardoublepage
+%\cleardoublepage
 
 \pagebreak
 

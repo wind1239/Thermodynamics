@@ -6,7 +6,7 @@
 
 
 %%% Section
-\section{Mass Conservation and Degrees of Freedom Analysis}
+\section{Mass Conservation and Degrees of Freedom Analysis}\label{Chapter:Hydrate:Section:MassConservation}
 
 Assuming an isothermal flash with the following phases present in the equilibrium:
   \begin{center}
@@ -18,25 +18,26 @@ Assuming an isothermal flash with the following phases present in the equilibriu
 $L$, $V$, $H$ and $I$ are the molar fraction of each phase. In addition, $F$ represents the molar fraction of the feeding stream. Finally, let's define $x_{i}^{j}$ as the molar fraction of component $i \left(=1,2,\cdots,n_{c}\right)$ in phase $j \left(=L,V,H,I,F\right)$. Thus, assuming a closed system (\ie no mass transfer across a defined domain border):
   \begin{eqnarray}
      && L + V + H + I = 1 \\\label{Chapter:Hydrate:Eqn:Balance:MassFractionPhase}
-     && x_{i}^{F}F = x_{i}^{V}V + x_{i}^{L}L + x_{i}^{H}H + x_{i}^{I}I, \label{Chapter:Hydrate:Eqn:Balance:MassFractionComponent}
+     && \mfr[x]{i}{F}F = \mfr[x]{i}{V}V + \mfr[x]{i}{L}L + \mfr[x]{i}{H}H + \mfr[x]{i}{I}I, \label{Chapter:Hydrate:Eqn:Balance:MassFractionComponent}
   \end{eqnarray}
 with the following linear constraints:
   \begin{equation}
-    \summation_{i}^{n_{c}} x_{i}^{j} = 1, \hspace{2cm} j=L,V,H,I,F\label{Chapter:Hydrate:Eqn:Balance:MassFractionConstraint}
+    \summation_{i}^{n_{c}} \mfr[x]{i}{j} = 1, \hspace{2cm} j=L,V,H,I,F\label{Chapter:Hydrate:Eqn:Balance:MassFractionConstraint}
   \end{equation}
  
-The resulting system of non-linear algebraic equations have $4n_{c}+6$ unknowns, \ie $x_{i}^{V}, x_{i}^{L}, x_{i}^{H}, x_{i}^{I}$ (each of them with $n_{c}$ components), $L$, $V$, $I$, $H$, temperature ($T$) and pressure ($P$).  In the case of methane hydrate, $n_{c}=2$ $\left(\text{\ie} CH_{4}+H_{2}O\right)$. Additionally, the ice phase ($I$) contains just water -- $w_{w}^{I}=1$, and the number of unknowns and equations (linear constraint for ice) are reduced.
+The resulting system of non-linear algebraic equations have $4n_{c}+6$ unknowns, \ie $\mfr[x]{i}{V}, \mfr[x]{i}{L}, \mfr[x]{i}{H}, \mfr[x]{i}{I}$ (each of them with $n_{c}$ components), $L$, $V$, $I$, $H$, temperature ($T$) and pressure ($P$).  In the case of methane hydrate, $n_{c}=2$ $\left(\text{\ie} CH_{4}+H_{2}O\right)$. Additionally, the ice phase ($I$) contains just water -- $w_{w}^{I}=1$, and the number of unknowns and equations (linear constraint for ice) are reduced.
 
 In the equilibrium, the equality of phase fugacities for a given component $i$,
    \begin{equation}
-      f_{i}^{V} = f_{i}^{L} = f_{i}^{H} = f_{i}^{I} \hspace{2cm}\text{with } i=1,\cdots,n_{c} \label{Chapter:Hydrate:Eqn:FugacityEquality}
+      \mfr[f]{i}{V} = \mfr[f]{i}{L} = \mfr[f]{i}{H} = \mfr[f]{i}{I} \hspace{2cm}\text{with } i=1,\cdots,n_{c} \label{Chapter:Hydrate:Eqn:FugacityEquality}
    \end{equation}
-Note that one of the relations in Eqn.~\ref{Chapter:Hydrate:Eqn:FugacityEquality} is not independent. Thus the total number of independent equations is $4n_{c}+4$, and the number of degrees of freedom $\left(\varphi\right)$, \ie   \begin{center} 
- (number of unknowns) - (number of independent equations),
+Note that one of the relations in Eqn.~\ref{Chapter:Hydrate:Eqn:FugacityEquality} is not independent. Thus the total number of independent equations is $4n_{c}+4$, and the number of degrees of freedom $\left(\varphi\right)$, \ie   
+   \begin{center} 
+      (number of unknowns) - (number of independent equations),
    \end{center}
 is equal to $2$.
 
-If we specify the pair $\left[T,P\right]$, we can determine the composition of each component, $x_{i}^{j}$, and each phase $j$. The Gibb's phase rule,
+If we specify the pair $\left[T,P\right]$, we can determine the composition of each component, $\mfr[x]{i}{j}$, and each phase $j$. The Gibb's phase rule,
   \begin{eqnarray}
      \varphi &=& 2 + n_{c} - n_{p} \\ \nonumber
              &=& 2 + 2 - n_{p} = 4 - n_{p},

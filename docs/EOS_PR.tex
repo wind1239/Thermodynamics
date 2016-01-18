@@ -5,4 +5,20 @@
 \chapter{Equations of State}\label{Chapter:EOSPR}
 
 %%% Section
-\section{Peng-Robinson Equation of State (PR-EOS)}\label{Chapter:EOSPR:PR}
+\section{Peng-Robinson Equation of State (PR-EOS)}\label{Chapter:EOSPR:Section:PR}
+The PR-EOS for pure components is defined as,
+   \begin{equation}
+      P = \frc{RT}{V-b} - \frc{a}{V(V+b) + b(V-b)}\label{Chapter:EOSPR:Section:PR:Eqn:PR},
+   \end{equation}
+with
+   \begin{displaymath}
+      a(T)=0.45724\frc{R^{2}T_{c}^{2}}{P_{c}}\alpha(T)\;\;\text{ and }\;\;b(T) = 0.07780\frc{RT_{c}}{P_{c}}
+   \end{displaymath}
+where $V$ is the molar volume. The $\alpha$ parameter is defined as,
+   \begin{equation}
+         \alpha = \left[1 + \kappa\left(1 - \sqrt{T_{r}}\right)\right]^{2},
+   \end{equation}
+with
+   \begin{equation}
+         \kappa = 0.37464 + 1.5422\omega - 0.26992\omega^{2}.
+   \end{equation}
