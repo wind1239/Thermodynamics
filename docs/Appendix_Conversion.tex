@@ -1,0 +1,82 @@
+
+%%%
+%%% CHAPTER
+%%%
+\chapter{Converting Mole and Mass Fractions}\label{Chapter:ConversionCompositions}
+
+%%%
+%%% Section
+%%%
+\section{Calculating Mass Fraction from Mole Fraction}\label{Chapter:ConversionCompositions:Section:Mass2MoleFraction}
+Given the mole fraction of $n_{c}$ components of a mixture, we want to calculate the respective mass fractions. The mass fraction can be defined as
+   \begin{equation}
+       w_{i} = \frc{m_{i}}{\summation_{i=1}^{n_{c}}m_{i}},\label{Chapter:ConversionCompositions:Section:Mass2MoleFraction:Eqn:1}
+   \end{equation}
+where $m_{i}$ is the mass of this component, defined as
+   \begin{equation}
+      m_{i} = n_{i}\mathcal{M}_{i},\label{Chapter:ConversionCompositions:Section:Mass2MoleFraction:Eqn:2}
+   \end{equation}
+where $n_{i}$ and $\mathcal{M}_{i}$ are the number of moles and the molar mass of component $i$, respectively. The mole fraction is defined as 
+   \begin{equation}
+     x_{i} = \frc{n_{i}}{\summation_{i=1}^{n_{c}} n_{i}}.\label{Chapter:ConversionCompositions:Section:Mass2MoleFraction:Eqn:3}
+   \end{equation}
+Substituting Eqns.~\ref{Chapter:ConversionCompositions:Section:Mass2MoleFraction:Eqn:2} and~\ref{Chapter:ConversionCompositions:Section:Mass2MoleFraction:Eqn:3} in Eqn.~\ref{Chapter:ConversionCompositions:Section:Mass2MoleFraction:Eqn:1},
+   \begin{equation}
+     w_{i} = \frc{x_{i}\mathcal{M}_{i}\summation_{i=1}^{n_{c}}n_{i}}{\summation_{i=1}^{n_{c}}m_{i}},\label{Chapter:ConversionCompositions:Section:Mass2MoleFraction:Eqn:4}
+   \end{equation}
+where 
+   \begin{equation}
+     \summation_{i=1}^{n_{c}}m_{i} = \summation_{i=1}^{n_{c}}n_{i}\overline{\mathcal{M}}.
+   \end{equation}
+$\overline{\mathcal{M}} = \summation_{i=1}^{n_{c}} x_{i}\mathcal{M}_{i}$ is the mean molar mass of the mixture, therefore in Eqn.~\ref{Chapter:ConversionCompositions:Section:Mass2MoleFraction:Eqn:4}
+   \begin{equation}
+     w_{i} = \frc{x_{i}\mathcal{M}_{i}}{\summation_{i=1}^{n_{c}}x_{i}\mathcal{M}_{i}}.\label{Chapter:ConversionCompositions:Section:Mass2MoleFraction:Eqn:5}
+   \end{equation}
+
+
+%%%
+%%% Section
+%%%
+\section{Calculating Mole Fraction from Mass Fraction}\label{Chapter:ConversionCompositions:Section:Mole2MassFraction}
+In order to obtain the mole fraction of $n_{c}$ components of a mixture from the mass composition, we need to write Eqn.~\ref{Chapter:ConversionCompositions:Section:Mass2MoleFraction:Eqn:5} for all $n_{c}$ components,
+  \begin{eqnarray}
+    w_{1}x_{1}\mathcal{M}_{1} + w_{1}x_{2}\mathcal{M}_{2} + \cdots + w_{1}x_{n_{c}-1}\mathcal{M}_{n_{c}-1} + w_{1}x_{n_{c}}\mathcal{M}_{n_{c}}  &=& x_{1}\mathcal{M}_{1} \nonumber \\
+    w_{2}x_{1}\mathcal{M}_{1} + w_{2}x_{2}\mathcal{M}_{2} + \cdots + w_{2}x_{n_{c}-1}\mathcal{M}_{n_{c}-1} + w_{2}x_{n_{c}}\mathcal{M}_{n_{c}}  &=& x_{2}\mathcal{M}_{2} \nonumber \\
+   \cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots && \cdots\cdots\cdots\nonumber \\
+    w_{n_{c}}x_{1}\mathcal{M}_{1} + w_{n_{c}}x_{2}\mathcal{M}_{2} + \cdots + w_{n_{c}}x_{n_{c}-1}\mathcal{M}_{n_{c}-1} + w_{n_{c}}x_{n_{c}}\mathcal{M}_{n_{c}}  &=& x_{n_{c}}\mathcal{M}_{n_{c}} \nonumber
+  \end{eqnarray}
+This is a system of $n_{c}$ unknowns in $n_{c}$ algebraic equations, however mole and mass fractions of one of the components can be defined through the constraint,
+  \begin{equation}
+     x_{n_{c}} = 1 - \summation_{i=1}^{n_{c}-1}x_{i}\hspace{1cm}\text{ and }\hspace{1cm}w_{n_{c}} = 1 - \summation_{i=1}^{n_{c}-1}w_{i}.
+  \end{equation}
+Therefore, there are $\left(n_{c}-1\right)$ equations and $\left(n_{c}-1\right)$ unknowns in the following system of linear equations,
+
+  \begin{eqnarray}
+    && x_{1}\left[\mathcal{M}_{1}\left(w_{1}-1\right)-w_{1}\mathcal{M}_{n_{c}}\right] + x_{2}\left(w_{1}\mathcal{M}_{2}-w_{1}\mathcal{M}_{n_{c}}\right) + x_{3}\left(w_{1}\mathcal{M}_{3}-w_{1}\mathcal{M}_{n_{c}}\right) + \cdots + \nonumber \\
+    &&  \hspace{2cm} x_{n_{c}-1}\left(w_{1}\mathcal{M}_{n_{c}-1}-w_{1}\mathcal{M}_{n_{c}}\right) = -w_{1}\mathcal{M}_{n_{c}} \nonumber \\
+    && x_{1}\left(w_{2}\mathcal{M}_{1}-w_{2}\mathcal{M}_{n_{c}}\right) + x_{2}\left[\mathcal{M}_{2}\left(w_{2}-1\right)-w_{2}\mathcal{M}_{n_{c}}\right] + x_{3}\left(w_{2}\mathcal{M}_{3}-w_{2}\mathcal{M}_{n_{c}}\right) + \cdots + \nonumber \\
+    &&  \hspace{2cm} x_{n_{c}-1}\left(w_{2}\mathcal{M}_{n_{c}-1}-w_{2}\mathcal{M}_{n_{c}}\right) = -w_{2}\mathcal{M}_{n_{c}} \nonumber \\
+    &&\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots \nonumber \\
+    && x_{1}\left(w_{n_{c}-1}\mathcal{M}_{1}-w_{n_{c}-1}\mathcal{M}_{n_{c}}\right) + x_{2}\left(w_{n_{c}-1}\mathcal{M}_{2}-w_{n_{c}}\mathcal{M}_{n_{c}}\right) + x_{3}\left(w_{n_{c}-1}\mathcal{M}_{3}-w_{n_{c}-1}\mathcal{M}_{n_{c}}\right) + \cdots + \nonumber \\
+    &&  \hspace{2cm} x_{n_{c}-1}\left(w_{n_{c}-1}\mathcal{M}_{n_{c}-1}-w_{n_{c}-1}\mathcal{M}_{n_{c}}\right) = -w_{n_{c}-1}\mathcal{M}_{n_{c}} \nonumber 
+  \end{eqnarray}
+In matricial form,
+   \begin{displaymath}
+      \underline{\underline{A}}\underline{x} = \underline{b},
+   \end{displaymath}
+where the the components of matrix $\underline{\underline{A}}$ are
+   \begin{displaymath}
+      a_{ij} = 
+        \begin{cases}
+           \mathcal{M}_{i}\left(w_{i}-1\right) - w_{i}\mathcal{M}_{n_{c}}, & \text{ if }\; i=j, \\
+           w_{i}\mathcal{M}_{j} - w_{i}\mathcal{M}_{n_{c}}. & 
+        \end{cases}
+   \end{displaymath}
+And $\underline{b}$ is
+   \begin{displaymath}
+      b_{i} = -w_{i}\mathcal{M}_{n_{c}} \hspace{1cm}\text{ for } \hspace{1cm} i=1,2,\cdots,n_{c}-1.
+   \end{displaymath}
+This system of linear equations may be solved by any numerical method (\eg Gauss-Seidel), however for binary mixtures, the system can be solved by
+   \begin{displaymath}
+      x_{1} = - \frc{w_{1}\mathcal{M}_{2}}{w_{1}\left(\mathcal{M}_{i}-\mathcal{M}_{2}\right)-\mathcal{M}_{1}}\hspace{1cm}\text{ and }\hspace{1cm} x_{2}=1-x_{1}.
+   \end{displaymath}
