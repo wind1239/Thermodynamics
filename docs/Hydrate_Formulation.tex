@@ -5,7 +5,9 @@
 \chapter{Hydrate Formation}\label{Chapter:Hydrate}
 
 
+%%%
 %%% Section
+%%%
 \section{Mass Conservation and Degrees of Freedom Analysis}\label{Chapter:Hydrate:Section:MassConservation}
 
 Assuming an isothermal flash with the following phases present in the equilibrium:
@@ -43,3 +45,98 @@ If we specify the pair $\left[T,P\right]$, we can determine the composition of e
              &=& 2 + 2 - n_{p} = 4 - n_{p},
   \end{eqnarray}
 states the possibility of a quadruple point $\left(\varphi=0\right)$, however if we want to specify $\left[T,P\right]$ then a two-phase system may occur.
+
+
+
+%%%
+%%% Section
+%%%
+\section{Fugacity Models}\label{Chapter:Hydrate:Section:FugacityModels}
+
+%%%
+\subsection{Models for Liquid and Vapour Phases}\label{Chapter:Hydrate:Section:FugacityModels:Section:L_V}
+
+%%%
+\subsubsection{Soave-Redlich-Kwong Equation of State (SRK-EOS)}\label{Chapter:Hydrate:Section:FugacityModels:Section:L_V:Section:SRKEOS}
+The cubic polynomial in $z$ (compressibility factor) representation of the SRK-EOS can be expressed as,
+   \begin{equation}
+      z^{3} - z^{2} + \left(A-B-B^{2}\right)z - AB = 0 \label{Chapter:Hydrate:Section:FugacityModels:Section:L_V:Section:SRKEOS:Eqn:SRKEOS}
+   \end{equation}
+where $A$ and $B$ are defined in Eqn.~\ref{Chapter:EOSPR:Section:PR:Eqn:CubicPR_Z_Parameters} with
+   \begin{displaymath}
+      a = \sum\limits_{i=1}^{n_{c}}\sum\limits_{j=1}^{n_{c}}x_{i}x_{j}a_{i,j} \hspace{1cm}\text{ and }\hspace{1cm} b = \sum\limits_{i=1}^{n_{c}}x_{i}b_{i}
+   \end{displaymath}
+with
+   \begin{displaymath}
+      a_{i}=0.42747\frc{\left(RT_{c,i}\right)^{2}}{P_{c,i}}, \hspace{1cm} b_{i}=0.08664\frc{RT_{c,i}}{P_{c,i}}\hspace{1cm}\text{ and }\hspace{1cm}a_{i,j} = \sqrt{\alpha_{i}a_{i}\alpha_{j}a_{j}}
+   \end{displaymath}
+
+The fugacity is  expressed as 
+   \begin{eqnarray}
+      f_{i}(T,P) &=& P\exp{\left[\left(z-1\right)-\ln{\left(z-B\right)}-\frc{A}{B}\ln{\left(1+\frc{B}{Z}\right)}\right]}  \\
+      f\left(T,P,x_{i}\right) &=& x_{i}P\exp{\left[\frc{b_{i}}{b}\left(z-1\right)-\ln{\left(z-B\right)}-\frc{A}{B}\left(\frc{2\sum\limits_{j=1}^{n_{c}}x_{j}a_{i,j}}{a}-\frc{b_{i}}{b}\right)\ln{\left(1+\frc{B}{Z}\right)}\right]} 
+   \end{eqnarray}
+
+%%%
+\subsubsection{Peng-Robinson Equation of State (PR-EOS)}\label{Chapter:Hydrate:Section:FugacityModels:Section:L_V:Section:PREOS}
+The cubic polynomial in $z$ (compressibility factor) representation of the SRK-EOS can be expressed as,
+   \begin{displaymath}
+      z^{3} -\left(1-B\right)z^{2} + \left(A-2B-3B^{2}\right)z^{2} - \left(AB -B^{3} - B^{2}\right) = 0
+   \end{displaymath}
+(see Eqn.~\ref{Chapter:EOSPR:Section:PR:Eqn:CubicPR_Z}) with fugacities,
+   \begin{eqnarray}
+      f_{i}(T,P) &=& P\exp{\left\{\left(z-1\right)-\ln{\left(z-B\right)}-\frc{A}{2\sqrt{2}B}\ln{\left[\frc{z + \left(\sqrt{2}+1\right)}{z-\left(\sqrt{2}-1\right)}\right]}\right\}}  \\
+      f\left(T,P,x_{i}\right) &=& x_{i}P\exp\left\{\frc{b_{i}}{b}\left(z-1\right)-\ln{\left(z-B\right)}-\frc{A}{1\sqrt{2}B}\left(\frc{2\sum\limits_{j=1}^{n_{c}}x_{j}a_{i,j}}{a}-\frc{b_{i}}{b}\right) \times \right.\nonumber \\
+                              && \hspace{6cm}\left.\ln{\left[\frc{z + \left(1-\sqrt{2}\right)B}{z +\left(1+\sqrt{2}\right)B}\right]}\right\} 
+   \end{eqnarray}
+
+%%%
+\subsection{Host-Component in the Liquid Phase}\label{Chapter:Hydrate:Section:FugacityModels:Section:HostLiquid}
+The host component (hydrocarbon) in the liquid phase is constant for a given temperature according to the Henry's law for the solubility calculation of hydrocarbons in water -- negligible at low temperatures bur relatively high for high temperatures,
+   \begin{equation}
+      \mfr[x]{i}{L} = \mfr[f]{i}{L}\left[\mathcal{H}_{i}\exp{\left(\frc{P\overline{V}^{\infty}}{RT}\right)}\right]^{-1},\hspace{1cm} i=1,2,\cdots,n_{c}
+   \end{equation}
+where $\overline{V}^{\infty}$ is the partial molar volume at infinite dilution, $\mathcal{H}_{i}$ is the Henry's constant~\citep{Prausnitz_2000} defined as
+   \begin{equation}
+      -\ln{\left[\frc{\mathcal{H}_{i}}{101325}\right]} = \mfr[\mathcal{H}]{i}{1} + \frc{\mfr[\mathcal{H}]{i}{2}}{T} + \mfr[\mathcal{H}]{i}{3}\ln{T} +  \mfr[\mathcal{H}]{i}{4}T,
+   \end{equation}
+where $\mfr[\mathcal{H}]{i}{j}$ are constants. For binary systems, the molar fraction of water in the liquid phase can be calculated as,
+   \begin{equation}
+     \mfr[x]{w}{L} = 1 - \mfr[f]{i}{L}\left[\mathcal{H}_{i}\exp{\left(\frc{P\overline{V}^{\infty}}{RT}\right)}\right].
+   \end{equation}
+
+
+
+
+%%%
+%%% Section
+%%%
+\section{Models for the Hydrate Phase}\label{Chapter:Hydrate:Section:HydrateModels}
+
+
+%%%
+\subsection{van der Waals and Platteeuw Model}\label{Chapter:Hydrate:Section:HydrateModels:Section:vdW_Platteeuw}
+This model~\citep{vdWP_1959} is based on the assumption of the equality of the chemical potential of water in the hydrate phase ($H$) and a second phase, either liquid ($L$) or ice ($I$). We can generalise (for simplicity in the notation) these two phases as $\Pi$:
+   \begin{equation}
+      \Delta\mfr[\mu]{w}{H} = \mfr[\mu]{w}{\beta} - \mfr[\mu]{w}{H} =  \mfr[\mu]{w}{\beta} - \mfr[\mu]{w}{\Pi} = \Delta\mfr[\mu]{w}{\Pi},
+   \end{equation}
+where $\mfr[\mu]{w}{\beta}$ is the chemical potential of water when the clathrate cage is {\it empty} -- this is often considered as a meta-stable phase as the hydrate structure can still `welcome' a guest-molecule (hydrocarbon). And,
+   \begin{equation}
+     \mfr[\mu]{w}{H}(T,P) = \mfr[\mu]{w}{\beta}(T,P) + KT\summation_{m}\nu_{m}\ln{\left[1-\summation_{i}\Theta_{im}(T,P)\right]}
+   \end{equation}
+
+%%%
+\subsection{Fugacity of Water}\label{Chapter:Hydrate:Section:HydrateModels:Section:FugacityWater}
+\citet{klauda_2000}:
+   \begin{equation}
+      \mfr[f]{w}{H}(T,P) = \mfr[f]{w}{\beta}(T,P)\exp{\left[-\frc{\Delta\mfr[\mu]{w}{H}(T,P)}{RT}\right]},
+   \end{equation}
+with 
+   \begin{eqnarray}
+       \Delta\mfr[\mu]{w}{H} = -RT\summation_{m}\nu_{}\ln{\left(1-\summation_{i}\Theta_{im}\right)}\hspace{2cm}\text{ and}, \\
+       \mfr[f]{w}{\beta}(T,P) = \mfr[P]{w}{\text{sat},\beta}(T)\exp{\left\{\frc{\mfr[v]{w}{\beta}\left[P-\mfr[P]{w}{\text{sat},\beta}(T)\right]}{RT}\right\}},
+   \end{eqnarray}
+where $\mfr[P]{w}{\text{sat},\beta}$ is the vapour pressure of the water in the hydrate phase, $\mfr[v]{w}{\beta}$ is the volume of the empty hydrate that depends on the hydrate structure, $k$ is the Boltzmann constant, $\nu_{m}$ is the number of cavities (\ie cages) od the hydrate structure of type $m$ per water molecule, $\Theta_{im}(T,P)$ is the volume fraction occupied by the guest molecule $i$ in cavity $m$ and is calculated from the Langmuir adsorption isothermal relation,
+   \begin{equation}
+      \Theta_{im}(t,P) = \frc{C_{im}(T)f_{i}(T,P)}{1=\summation_{m}C_{m}(T)f_{i}(T,P)}
+   \end{equation}

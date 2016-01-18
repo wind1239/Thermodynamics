@@ -10,7 +10,7 @@
 \usepackage[pdftex,bookmarks,colorlinks=true,urlcolor=rltblue,citecolor=blue]{hyperref}
 \usepackage{amsfonts,amsmath,amsthm,amssymb,stmaryrd,indentfirst}
 \usepackage{times,psfrag,pdfpages}
-%\usepackage{natbib} 
+\usepackage[sort&compress,comma,authoryear]{natbib}
 \usepackage{color}
 \usepackage{units}
 \usepackage{rotating}
@@ -155,7 +155,7 @@
 \newcommand{\event}{{EVENT }}
 \newcommand{\gem}{GEM }
 \newcommand{\radiant}{RADIANT }
-\newcommand{\wrt}{with respect to}
+\newcommand{\wrt}{with respect to }
 \newcommand{\lhs}{left hand side}
 \newcommand{\rhs}{right hand side}
 \newcommand{\vv}{V$\&$V }
@@ -380,7 +380,7 @@
 \input{Hydrate_Formulation} % Simple Hydrate Model
 
 %\input{Integrated_Compositional} % Compositional
-\pagebreak
+%\pagebreak
 
 %\cleardoublepage
 
@@ -397,9 +397,12 @@
 
 %\cleardoublepage
 
-\pagebreak
+%\pagebreak
 
 %\bibliographystyle{plain}
+%\bibliography{references}
+%\bibliographystyle{unsrt}
+\bibliographystyle{plainnat}
 \bibliography{references}
 \bibliographystyle{unsrt}
 

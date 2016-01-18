@@ -1,10 +1,13 @@
 
+
 %%%
 %%% CHAPTER
 %%%
 \chapter{Equations of State}\label{Chapter:EOSPR}
 
+%%
 %%% Section
+%%
 \section{Peng-Robinson Equation of State (PR-EOS)}\label{Chapter:EOSPR:Section:PR}
 The PR-EOS for pure components is defined as,
    \begin{equation}
@@ -20,5 +23,212 @@ where $V$ is the molar volume. The $\alpha$ parameter is defined as,
    \end{equation}
 with
    \begin{equation}
-         \kappa = 0.37464 + 1.5422\omega - 0.26992\omega^{2}.
+         \kappa = 0.37464 + 1.5422\omega - 0.26992\omega^{2}.\label{Chapter:EOSPR:Section:PR:Eqn:PR_k}
    \end{equation}
+
+The PR-EOS is cubic EOS with three parameters, critical temperature $\left(T_{c}\right)$, $\left(P_{c}\right)$ and accentric factor $\left(\omega\right)$. The PR-EOS can also be expressed as a function of the compressibility factor $z$, by replacing $V=zRT/P$ in Eqn.~\ref{Chapter:EOSPR:Section:PR:Eqn:PR},
+   \begin{displaymath}
+           P = \frc{PRT}{zRT-bP} - \frc{aP^{2}}{z^{2}R^{2}T^{2} +2bzPRT-b^{2}P^{2}},
+   \end{displaymath} 
+leading to 
+   \begin{equation}
+      z^{3} -\left(1-B\right)z^{2} + \left(A-2B-3B^{2}\right)z^{2} - \left(AB -B^{3} - B^{2}\right) = 0,\label{Chapter:EOSPR:Section:PR:Eqn:CubicPR_Z}
+   \end{equation}
+with
+\begin{equation}
+B = \frc{bP}{RT} \hspace{1cm}\text{ and }\hspace{1cm} A =\frc{aP}{R^{2}T^{2}}.\label{Chapter:EOSPR:Section:PR:Eqn:CubicPR_Z_Parameters}
+\end{equation}
+
+%%%
+%%% Section
+%%%
+\section{Modified Peng-Robinson Equation of State (PRSV-EOS)}\label{Chapter:EOSPR:Section:PRSV}
+The PR-EOS results in (reasonably) accurate solutions for slightly polar hydrocarbons at reduced temperature larger than $0.7$. However for $T_{r}<0.7$ large discrepancies have been observed. \citet[PRSV-EOS]{stryjek_1986} suggested a small modification of the PR-EOS (\ie in Eqn.~\ref{Chapter:EOSPR:Section:PR:Eqn:PR_k})
+   \begin{eqnarray}
+     && \kappa = \kappa_{0} + \kappa_{1}\left(1+\sqrt{T_{r}}\right)\left(0.7-T_{r}\right) \\
+     && \kappa_{0} = 0.378893 + 1.4897153\omega - 0.17131848\omega^{2} + 0..0196554\omega^{3} \nonumber
+   \end{eqnarray}
+
+%%%
+%%% Section
+%%%
+\section{Mixing Rules}\label{Chapter:EOSPR:Section:MixRules}
+
+
+%%% Subsection
+\subsection{Classical Mixing Rules}\label{Chapter:EOSPR:Section:MixRules:Classical}
+The classical mixing rules are expressed as~\citep{Sandler_Book}, 
+  \begin{equation}
+    a_{m} = \summation_{i=1}^{n_{c}}\summation_{j=1}^{n_{c}} a_{i,j}x_{i}x_{j}\hspace{1cm}\text{ and }\hspace{1cm} b_{m} = \summation_{i=1}^{n_{c}}b_{i}x_{i},
+  \end{equation}
+with
+  \begin{displaymath}
+     a_{i,j}=\sqrt{a_{i,i}a_{j,j}}\left(1-k_{iij}\right) \hspace{1cm}\text{ and }\hspace{1cm} k_{ij}=k_{ji},
+  \end{displaymath}
+where $b_{i}$ is the repulsion parameter of pure component $i$. $a_{i,i}$ and $a_{j,j}$ are the attractive parameters for pure components $i$ and $j$. $a_{i,j}$ is the attractive parameter for the binary mixture. $a_{m}$ and $b_{m}$ are the attractive and repulsion parameters for the mixture, and $k_{i,j}$ is the binary interaction parameter, obtained from experimental data at thermodynamic equilibrium. The linear mixing rule for $b_{m}$ can be replaced by a quadratic expression similar to the one used for $a_{m}$,
+  \begin{equation}
+     b_{m} = \summation_{i=1}^{n_{c}}\summation_{j=1}^{n_{c}} b_{i,j}x_{i}x_{j}\hspace{1cm}\text{ where }\hspace{1cm} b_{i,j} = \frc{b_{i}+b_{j}}{2}.
+  \end{equation}
+
+
+%%% Subsection
+\subsection{Mixing Rules and the Free Helmholtz Energy in Excess}\label{Chapter:EOSPR:Section:MixRules:Helmholtz}
+At infinite pressure all fluids (at vapour, liquid or supercritical states) tend to a state of high density. In this section, we will assume that this is the reference state. 
+
+First, let's define the difference between the free Helmholtz energy ($A$) of a pure chemical species $i$, $A_{i}$ and the ideal gas, $\mfr[A]{i}{\text{id}}$, both at the same pressure and temperature conditions,
+   \begin{equation}
+      A_{i}(T,P) - \mfr[A]{i}{\text{id}} = \left(-\int\limits_{V=\infty}^{V_{i}} PdV\right) - \left(-\int\limits_{V=\infty}^{V=RT/P}\frc{RT}{V}dV\right).
+   \end{equation}
+For a van der Waals fluid~\citep{SmithVanNess_Book},
+   \begin{equation}
+      A_{i}(T,P) - \mfr[A]{i}{\text{id}} = -RT\ln{\left[\frc{P}{RT}\left(V_{i}-b_{i}\right)\right] - \frc{a_{i}}{V_{i}}}.\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:vdWFluid}
+   \end{equation}
+
+For a mixture,
+   \begin{equation}
+      A_{m} - \mfr[A]{m}{\text{idm}} = -RT\ln{\left[\frc{P}{RT}\left(V_{m}-b_{m}\right)\right] - \frc{a_{m}}{V_{m}}},\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:vdWFluid2}
+   \end{equation}
+and the free Helmholtz energy for a mixture behaving as an ideal gas is defined as~\citep{Sandler_Book},
+   \begin{equation}
+      \mfr[A]{m}{\text{id}} = \summation_{i=1}^{n_{c}} x_{i}A_{i} + RT\summation_{i=1}^{n_{c}}x_{i}\ln{x_{i}}.
+   \end{equation}
+ The free Helmholtz energy in excess is defined as the difference between the thermodynamic potential of the mixture and the ideal mixture equivalent,
+   \begin{eqnarray}
+      A^{E} &=& A_{m} - \mfr[A]{i}{\text{id}} = A_{m} - \left[\summation_{i=1}^{n_{c}} x_{i}A_{i} + RT\summation_{i=1}^{n_{c}}x_{i}\ln{x_{i}}\right] \nonumber \\
+           &=& \mfr[A]{m}{\text{idm}} - RT\ln{\left[\frc{P}{RT}\left(V_{m}-b_{m}\right)\right] - \frc{a_{m}}{V_{m}}} - \summation_{i=1}^{n_{c}} x_{i}A_{i} - RT\summation_{i=1}^{n_{c}}x_{i}\ln{x_{i}}.\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess}
+   \end{eqnarray}
+If we multiply Eqn.~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:vdWFluid} (for pure component) by $\sum\limits_{i=1}^{n_{c}}x_{i}$,
+   \begin{equation}
+      \sum\limits_{i=1}^{n_{c}}x_{i}A_{i} = \sum\limits_{i=1}^{n_{c}}x_{i}\mfr[A]{i}{\text{id}} - RT\sum\limits_{i=1}^{n_{c}}x_{i}\left[\frc{P}{RT}\left(V_{i}-b_{i}\right)\right] - \sum\limits_{i=1}^{n_{c}}x_{i}\frc{a_{i}}{V_{i}}
+   \end{equation}
+
+However,
+   \begin{equation}
+      \mfr[A]{i}{\text{idm}} - \sum\limits_{i=1}^{n_{c}}x_{i}\mfr[A]{i}{\text{id}} = RT\sum\limits_{i=1}^{n_{c}}x_{i}\ln{x_{i}},
+   \end{equation}
+and substituting $\mfr[A]{i}{\text{idm}}$ in Eqn.~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess},
+   \begin{equation}
+      A^{E} = RT\left\{ \sum\limits_{i=1}^{n_{c}}x_{i}\ln{\left[\frc{P}{RT}\left(V_{i}-b_{i}\right)\right]} - \ln{\left[\frc{P}{RT}\left(V_{m}-b_{m}\right)\right]}\right\} + \sum\limits_{i=1}^{n_{c}}x_{i}\frc{a_{i}}{V_{i}} - \frc{a_{m}}{V_{m}}.\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess2}
+   \end{equation}
+
+Expressions for the free Helmholtz energy in excess for liquid solutions are often derived from the {\it lattice} model, assuming that there are no empty cells. In other words, in liquid solution the molecules are very close and therefore there are no free volume. In the limit condition, \ie pressure tends to infinity, 
+   \begin{displaymath}
+      \lim_{P\rightarrow\infty} V_{i} = b_{i} \hspace{1cm}\text{ and }\hspace{1cm} \lim_{P\rightarrow\infty} V_{m} = b_{m}.
+   \end{displaymath}
+If the free Helmholtz energy in excess is obtained at infinity pressure, Eqn.~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess2} becomes,
+   \begin{equation}
+     A_{\infty}^{E} = -\frc{a_{m}}{b_{m}} + \sum\limits_{i=1}^{n_{c}}x_{i}\frc{a_{i}}{b_{i}}.
+   \end{equation}
+
+The mixing rules take into account a quadratic dependence of the second coefficient of the Virial $\left(\mathcal{B}\right)$ in the composition,
+   \begin{equation}
+      \mathcal{B}(T) = \sum\limits_{i=1}^{n_{c}}\sum\limits_{j=1}^{n_{c}}x_{i}x_{j}\mathcal{B}_{i,j}(T).
+   \end{equation}
+However, there is no dependency \wrt density, composition and temperature. Expanding the Virial EOS, the second coefficient can be expressed as a function of the attractive and repulsion parameters~\citep[see][]{Vidal_Book},
+   \begin{displaymath}
+      \mathcal{B}(T) = b- \frc{a}{RT},
+   \end{displaymath}
+thus for mixtures,
+   \begin{equation}
+      b_{m} - \frc{a_{m}}{RT} = \sum\limits_{i=1}^{n_{c}}\sum\limits_{j=1}^{n_{c}}x_{i}x_{j}\left(b-\frc{a}{RT}\right)_{i,j},\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess3}
+   \end{equation}
+where
+   \begin{displaymath}
+      \left(b-\frc{a}{RT}\right)_{i,j} = \frc{\left(b_{i} - \frc{a_{i}}{RT}\right) + \left(b_{j} - \frc{a_{j}}{RT}\right)}{2}\left(1-k_{ij}\right),
+   \end{displaymath}
+is the second Virial coefficient expressed without dependency on the composition. \citet{wong_1992} suggested the following modification in the equations to describe the mixture attractive and repulsion parameters, $a_{m}$ and $b_{m}$,
+   \begin{equation}
+     b_{m} = \frc{\sum\limits_{i=1}^{n_{c}}\sum\limits_{j=1}^{n_{c}}x_{i}x_{j}\left(b-\frc{a}{RT}\right)_{i,j}}{1 - \frc{\zeta(x)}{RT}},\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess4}
+   \end{equation}
+   \begin{equation}
+     a_{m} = b_{m}\zeta\left(\underline{x}\right),\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess5}
+   \end{equation}
+where $\zeta\left(\underline{x}\right)$ is an arbitrary function of the array of molar compositions $\left(\underline{x}\right)$. Equations~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess2} and~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess3} define $a_{m}$ and $b_{m}$ as a function of the free Helmholtz energy in excess at infinite pressure, $A_{\infty}^{E}\left(\underline{x}\right)$, and of the binary interaction parameter, $k_{ij}$. This is a system of 2 algebraic equations with 3 unknowns and therefore resulting in several solutions, among them,
+   \begin{eqnarray}
+     && b_{m} = \frc{\sum\limits_{i=1}^{n_{c}}\sum\limits_{j=1}^{n_{c}}x_{i}x_{j}\left(b-\frc{a}{RT}\right)_{i,j}}{1 - \frc{1}{RT}\left[-A_{\infty}^{E}\left(\underline{x}\right) + \sum\limits_{i=1}^{n_{c}} x_{i}\frc{a_{i}}{b_{i}}\right]},\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess6} \\
+     && a_{m} = b_{m}\left[-A_{\infty}^{E}\left(\underline{x}\right) + \sum\limits_{i=1}^{n_{c}} x_{i}\frc{a_{i}}{b_{i}}\right],\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess7}
+   \end{eqnarray}
+therefore, from Eqns.~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess4} and~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess5}, the function $\zeta\left(\underline{x}\right)$ can be defined as,
+   \begin{equation}
+     \zeta\left(\underline{x}\right) = \sum\limits_{i=1}^{n_{c}}x_{i}\frc{a_{i}}{b_{i}} - A_{\infty}^{E}\left(\underline{x}\right).
+   \end{equation}
+This mixing rule define the second Virial coefficient with quadratic dependence on the composition and, at low densities, is able to accurately predict the fugacity of mixtures. However, at high densities, the free Helmholtz energy calculated through activity models of the liquid phase can be described as $A_{\infty}^{E}\left(\underline{x}\right)$. Therefore, this model may be used to fluids at high and low densities.
+
+Applying Eqn.~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:vdWFluid2} into the PR-EOS (and PRSV-EOS),
+   \begin{equation}
+      A_{m} - \mfr[A]{m}{\text{idm}} = -RT\left[\frc{P}{RT}\left(V_{m}-b_{m}\right)\right] + \frc{a_{m}}{2\sqrt{2}b_{m}RT}\ln{\left[\frc{V_{m}+\left(1-\sqrt{2}\right)b_{m}}{V_{m}+\left(1+\sqrt{2}\right)b_{m}}\right]}.\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess8}
+   \end{equation}
+At the limit of pressure,
+   \begin{equation}
+     \lim_{P\rightarrow\infty}\frc{A_{m}-\mfr[A]{m}{\text{idm}}}{RT} = \frc{a}{bRT}c\hspace{1cm}\text{ with }\hspace{1cm} c = \frc{1}{\sqrt{2}}\ln{\left(\sqrt{2}-1\right)}.\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess9}
+   \end{equation}
+
+Thus the free Helmholtz energy in excess at infinite pressure may be defined as,
+   \begin{equation}
+      \frc{A_{\infty}^{E}}{cRT} = \frc{a_{m}}{b_{m}RT} - \summation_{i=1}^{n_{c}} x_{i} \frc{a_{i}}{b_{i}RT}.\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess10}
+   \end{equation}
+Therefore from Eqns.~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess6},~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess7} and~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:HelmholtzExcess10}, we can define the mixture attractive and repulsive parameters for the mixing rule,
+   \begin{equation}
+        b_{m} = \frc{Q}{1-D} \hspace{1cm}\text{ and }\hspace{1cm} a_{m} = RT \frc{QD}{1-D},\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:FinalMixRule1}
+   \end{equation}
+where
+   \begin{equation}
+     Q = \sum\limits_{i=1}^{n_{c}}\sum\limits_{j=1}^{n_{c}}x_{i}x_{j}\left(b- \frc{a}{RT}\right)_{i,j}\hspace{1cm}\text{ and }\hspace{1cm} D = \sum\limits_{i=1}^{n_{c}} x_{i}\frc{a_{i}}{b_{i}RT} + \frc{A_{\infty}^{E}}{cRT}\label{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:FinalMixRule2}
+   \end{equation}
+
+
+%%%
+%%% Section
+%%%
+\section{Free Helmholtz Energy in Excess}\label{Chapter:EOSPR:Section:HelmholtzExcess}
+For closed system at constant pressure and temperature conditions, the Gibbs free energy is the most appropriate thermodynamic potential to define the equilibrium conditions.  However we can express the Gibbs free energy as a function of the Helmholtz free energy,
+    \begin{displaymath}
+       G = A + PV,
+    \end{displaymath}
+or in the format of energy in excess
+    \begin{displaymath}
+       G^{E} = A^{E} + PV^{E}.
+    \end{displaymath}
+The Gibbs free energy in excess is often calculated at low pressure and the volume in excess associated to the mixture is often very small, and therefore negligible, thus 
+    \begin{displaymath}
+       G^{E} \approx A^{E}. 
+    \end{displaymath}
+As $A^{E}$ is nearly invariant \wrt pressure, \citet{wong_1992} \citep[see also][]{orbey_1996} defined,
+    \begin{displaymath}
+       G^{E}\left(T, \underline{x}, P=\text{ low}\right) \approx A^{E}\left(T, \underline{x}, P=\text{ low}\right) = A^{E}\left(T, \underline{x}, P=\infty\right). 
+    \end{displaymath}
+This means that {\it these thermodynamic potentials in excess depend only on the temperature and compositions}.
+
+
+%%%
+%%% Section
+%%%
+\section{Calculation of the Fugacity Coefficient}\label{Chapter:EOSPR:Section:FugacityCoefficients}
+The fugacity coefficient, $\varphi$, is defined as~\citep{SmithVanNess_Book},
+    \begin{equation}
+       \ln{\varphi_{i}} = \int\limits_{V}^{\infty}\left[\frc{1}{RT}\left(\frc{\partial P}{\partial n_{i}}\right)_{T,V,n_{j}} - \frc{1}{V}\right]\d{V} - \ln{\left(\frc{PV}{RT}\right)}.
+    \end{equation}
+Now, applying the PRSV-EOS and the \citet{wong_1992} mixing rules,
+    \begin{eqnarray}
+      \ln{\varphi_{i}} &=& -\ln{\left[\frc{P\left(V-b_{m}\right)}{RT}\right]} + \frc{1}{b_{m}}\left[\frc{\partial\left(nb_{m}\right)}{\partial n_{i}}\right]\left(\frc{PV}{RT}-1\right) + \nonumber \\%\frc{1}{2\sqrt{2}}\left(\frc{a_{m}}{b_{m}RT}\right) \nonumber \\
+         && \frc{1}{2\sqrt{2}}\left(\frc{a_{m}}{b_{m}RT}\right) \left\{ \frc{1}{a_{m}}\left[\frc{1}{n}\frc{\partial\left(n^{2}a_{m}\right)}{\partial n_{i}}\right] - \frc{1}{b_{m}} \left[\frc{\partial\left(nb_{m}\right)}{\partial n_{i}}\right] \right\} \ln{\left[\frc{V+b_{m}\left(1-\sqrt{2}\right)}{v+b_{m}\left(1+\sqrt{2}\right)}\right]},\label{Chapter:EOSPR:Section:FugacityCoefficients:Eqn:FugacityCoefficientDef}
+    \end{eqnarray}
+where the partial derivatives of $a_{m}$ and $b_{m}$ \wrt the number of moles of the chemical species $i$ are defined as,
+    \begin{eqnarray}
+        \frc{\partial}{\partial n_{i}}\left(nb_{m}\right) &=& \frc{1}{1-D}\left[\frc{1}{n}\frc{\partial}{\partial n_{i}}\left(n^{2}Q\right)\right] - \frc{Q}{\left(1-D\right)^{2}}\left[1-\frc{\partial}{\partial n_{i}}\left(nD\right)\right], \nonumber \\
+       \frc{1}{RT}\left[\frc{1}{n}\frc{\partial}{\partial n_{i}}\left(n^{2}a_{m}\right)\right] &=& D\left[\frc{\partial}{\partial n_{i}}\left(nb_{m}\right)\right] + b_{m}\left[\frc{\partial}{\partial n_{i}} \left(nD\right)\right], \nonumber    
+    \end{eqnarray}
+with the partial derivatives of $Q$ and $D$ \wrt the number of moles of the chemical species $i$ defined as,
+    \begin{eqnarray}
+       \left[\frc{1}{n}\frc{\partial}{\partial n_{i}}\left(n^{2}Q\right)\right] &=& 2 \sum\limits_{j=1}^{n_{c}}x_{j}\left(b-\frc{a}{RT}\right)_{i,j} \nonumber \\
+       \left[\frc{\partial}{\partial n_{i}} \left(nD\right)\right] &=& \frc{a_{i}}{b_{i}RT} + \frc{\ln{\gamma_{i}}}{c}.\nonumber
+    \end{eqnarray}
+The activity coefficient $\gamma$ is defined as~\citep{Sandler_Book},
+    \begin{equation}
+       \ln{\gamma_{i}} = \frc{1}{RT}\left[\frc{\partial}{\partial n_{i}}\left(nA^{E}\right)\right]
+    \end{equation}
+The Equation~\ref{Chapter:EOSPR:Section:FugacityCoefficients:Eqn:FugacityCoefficientDef} may be manipulated to be a function of the parameters obtained from the mixing rules (Eqns.~\ref{Chapter:EOSPR:Section:PR:Eqn:CubicPR_Z_Parameters} and~\ref{Chapter:EOSPR:Section:MixRules:Helmholtz:Eqn:FinalMixRule1}) and the compressibility factor (Eqn.~\ref{Chapter:EOSPR:Section:PR:Eqn:CubicPR_Z}),
+    \begin{eqnarray}
+      \ln{\varphi_{i}} &=& -\ln{\left(z-B\right)} + \frc{1}{b_{m}}\left[\frc{\partial}{\partial n_{i}}\left(nb_{m}\right)\right]\left(z-1\right) + \nonumber\\
+                      & & \frc{1}{2\sqrt{2}}\left(\frc{a_{m}}{RTb_{m}}\right)\left\{\frc{1}{a_{m}}\left[\frc{1}{n}\frc{\partial}{\partial n_{i}}\left(n^{2}a_{m}\right)\right] - \frc{1}{b_{m}}\left[\frc{\partial}{\partial n_{i}}\left(nb_{m}\right)\right]\right\}\ln{\left[\frc{z/B+1-\sqrt{2}}{z/B+1+\sqrt{2}}\right]}\label{Chapter:EOSPR:Section:FugacityCoefficients:Eqn:FugacityCoefficient_Final}
+    \end{eqnarray}
