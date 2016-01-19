@@ -9,8 +9,69 @@
 %%%
 \section{Legendre Polynomials}
 
-
+\clearpage
 %%%
 %%% Section
 %%%
 \section{Simulated Annealing Algorithm}
+
+\begin{algorithm}[H]\scriptsize
+   \SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+   \SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+   \SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}\SetKwInOut{Calculate}{Calculate}\SetKwInOut{Set}{Set}\SetKwInOut{Adjust}{Adjust}
+
+      \Input{Given an initial estimative of the array of unknowns $\underline{X}$ and the cooling schedule list:}
+      \Calculate{$F\left[\underline{X}^{\left(0\right)}\right]$}
+      \Set{ $\underline{X}^{\left(\text{opt}\right)} = \underline{X}^{\left(0\right)}$ and $F\left[\underline{X}^{\left(\text{opt}\right)}\right] = F\left[\underline{X}^{\left(0\right)}\right]$ }
+
+      \While{ Convergence }{ 
+         \For{$l \leftarrow 1$ \KwTo$N_{T}$}{
+             \For{$m \leftarrow 1$ \KwTo$N_{S}$}{
+                 \For{$h \leftarrow 1$ \KwTo$N$}{
+                     Update of array $\underline{X}$ \;
+                 
+                     \If{$\left[\underline{X}^{\left(i+1,h\right)}\ge\underline{a}\right.$ {\bf or} $\left.\underline{X}^{\left(i+1,h\right)}\le\underline{b}\right]$}{
+                           \Calculate{$F\left[\underline{X}^{\left(i+1,h\right)}\right]$} 
+                        }
+                 
+                     \eIf{$\left\{F\left[\underline{X}^{\left(i+1,h\right)}\right] > F\left[\underline{X}^{\left(i,h\right)}\right]\right\}$}{
+                           \If{ (Metropolis criteria is accepted) }{
+                                $\underline{X}^{(i,h)} = \underline{X}^{(i+1,h)}$\;
+                                $F\left[\underline{X}^{(i,h)}\right] = F\left[\underline{X}^{(i+1,h)}\right]$      
+                              }
+                         }    {
+                                $\underline{X}^{(i,h)} = \underline{X}^{(i+1,h)}$
+                              }
+                 
+                     \If{ $F\left[\underline{X}^{(i+1,h)}\right] < F\left[\underline{X}^{(\text{opt})}\right]$ }{
+                                $\underline{X}^{(\text{opt})} = \underline{X}^{(i+1,h)}$\;
+                                $F\left[\underline{X}^{(\text{opt})}\right] = F\left[\underline{X}^{(i+1,h)}\right]$    
+                        }
+%
+                 } % Loop h
+             } % Loop m
+%
+             \Adjust{ Step-size matrix}
+%
+         } % Loop l
+%
+         \eIf{ $\left|F\left[\underline{X}^{(i,h)}\right] - F\left[\underline{X}^{(i+1,h)}\right]\right| < \epsilon$ }{
+               \Calculate{ $F\left[\underline{X}^{(\text{opt})}\right]$}
+             }{
+               \Adjust{ Temperature parameter }}
+     } % While
+
+
+
+ \caption{Simmulated Annealing Algorithm.}
+\end{algorithm}
+
+
+
+\clearpage
+
+
+%%%
+%%% Section
+%%%
+\section{Particle Swarm Algorithm}
