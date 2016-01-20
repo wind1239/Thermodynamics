@@ -1,3 +1,5 @@
-Crit_Temp    34.0     25.0
-Crit_Pres     1.2e6    1.05e1
-Molar_Mass   90.09   151.23
+Number_Components           2
+Components                 CH4         CS2
+Crit_Temp                  34.0        25.0
+Crit_Pres                  12.e6       10.5e4
+Molar_Mass                 90.09      151.23

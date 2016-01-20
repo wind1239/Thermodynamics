@@ -4,7 +4,6 @@
 import matplotlib.pyplot as bplot
 import numpy as np
 import math
-import csv
 
 
 # =================== ASSOCIATED/EXTERNAL FUNCTIONS ====================#
@@ -15,39 +14,50 @@ import csv
 ###
 
 def ReadSet_Global_Variables(): # Read variables from a external file called 'input.dat'
+    import csv # Using csv (comma separated values) module
+ 
+    global Ncomp, T_Crit, P_Crit, MolarMass, Components
+
     with open( 'input.dat', 'rt' ) as file:
         reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
-
-        LineData = list()
-#        cols = next( reader )
-#        print( cols )
-#        print '---', len(cols)
-
-#        for col in cols:
-#            LineData.append( list() )
-
-        for line in reader:
-            cols = next( reader )
-            print 'pqp', len( cols ), cols
-            for i in xrange( 0, len( cols ) ):
-                LineData[ i ].append( line[ i ] )
-
-        data = dict()
-
-        for i in xrange( 0, len( cols ) ):
-            data[ cols[ i ] ] = LineData[ i ]
-
-    print( data )
-
-    print '+++++', data['Crit_Temp']
+        for row in reader:
+            if row[ 0 ] == 'Number_Components':
+                Ncomp = int( row[ 1 ] )
+#
+            elif row[ 0 ] == 'Crit_Temp':
+                T_Crit = ReadingRows_Float( row )
+#
+            elif row[ 0 ] == 'Crit_Pres':
+                P_Crit = ReadingRows_Float( row )
+#
+            elif row[ 0 ] == 'Molar_Mass':
+                MolarMass = ReadingRows_Float( row )
+#
+            elif row[ 0 ] == 'Components':
+                for i in xrange( 0, Ncomp ):
+                    print 'opo', row[i]
+               # Components = ReadingRows_String( row )
+                #print Components, row
+                
+        print 'row:', Ncomp, T_Crit, P_Crit , MolarMass, Components
 
 
+# This function reads a row containing float elements
+def ReadingRows_Float( row ):
+    Array = np.arange( float( Ncomp ) )
+    for i in xrange( 0, Ncomp ):
+        Array[ i ] = row[ i + 1 ]
+    return Array
 
-
-#    file = open( 'input.dat', 'r' )
+# This function reads a row containing float elements
+def ReadingRows_String( row ):
+    Array = np.empty( Ncomp, dtype='string' )
+    print 'fck', Array
+    for i in xrange( 0, Ncomp ):
+        Array[ i ] = row[ i + 1 ]
+    return Array
+        
     
-
-
 
 
 def set_Global_Variables2(): # Global variables
