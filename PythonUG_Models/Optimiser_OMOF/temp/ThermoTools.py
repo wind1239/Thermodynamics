@@ -4,6 +4,8 @@
 import matplotlib.pyplot as bplot
 import numpy as np
 import math
+import re
+import sys
 
 
 # =================== ASSOCIATED/EXTERNAL FUNCTIONS ====================#
@@ -16,30 +18,58 @@ import math
 def ReadSet_Global_Variables(): # Read variables from a external file called 'input.dat'
     import csv # Using csv (comma separated values) module
  
-    global Ncomp, T_Crit, P_Crit, MolarMass, Components
+    global Rconst, Ncomp, T_Crit, P_Crit, MolarMass, Components, Accentric_Factor, \
+        Z_Feed, BinaryParameter
 
+    Rconst = 8.314 # Gas constant [J/(gmol.K)]
+
+    ''' The first line MUST contain the number of components that will help to build up
+        all numpy arrays thus, '''
+
+    Are_There_Components = False
+
+    ''' Open a file named 'input.dat' that contains all thermo-physical parameters for
+        the model '''
     with open( 'input.dat', 'rt' ) as file:
         reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
+        
         for row in reader:
             if row[ 0 ] == 'Number_Components':
                 Ncomp = int( row[ 1 ] )
-#
-            elif row[ 0 ] == 'Crit_Temp':
-                T_Crit = ReadingRows_Float( row )
-#
-            elif row[ 0 ] == 'Crit_Pres':
-                P_Crit = ReadingRows_Float( row )
-#
-            elif row[ 0 ] == 'Molar_Mass':
-                MolarMass = ReadingRows_Float( row )
-#
-            elif row[ 0 ] == 'Components':
-                for i in xrange( 0, Ncomp ):
-                    print 'opo', row[i]
-               # Components = ReadingRows_String( row )
-                #print Components, row
+                Are_There_Components = True 
+
+            elif Are_There_Components:              
+    #
+                if row[ 0 ] == 'Crit_Temp': # Critical temperature (in K)
+                    T_Crit = ReadingRows_Float( row )
+    #
+                elif row[ 0 ] == 'Crit_Pres': # Critical pressure (in Pa)
+                    P_Crit = ReadingRows_Float( row )
+    #
+                elif row[ 0 ] == 'Molar_Mass': # Molar mass (in g/gmol)
+                    MolarMass = ReadingRows_Float( row )
+    #
+                elif row[ 0 ] == 'Components':
+                    Components = ReadingRows_String( row )
+    #
+                elif row[ 0 ] == 'Accentric_Factor':
+                    Accentric_Factor = ReadingRows_Float( row )
+    #
+                elif row[ 0 ] == 'Feed_Composition':
+                    Z_Feed = ReadingRows_Float( row )
+                    if ( abs( math.fsum( Z_Feed ) - 1. ) >= 1.e-5 ):
+                        print 'Summation of Compositions is ', math.fsum( Z_Feed ), \
+                            ' and it should be 1.0'
+                        sys.exit()
+
+    #
+            else:
+                print 'Number_components was not defined in the FIRST line'
+                sys.exit()
                 
-        print 'row:', Ncomp, T_Crit, P_Crit , MolarMass, Components
+        print 'row:', Are_There_Components, Ncomp, T_Crit, P_Crit , MolarMass, Components
+
+
 
 
 # This function reads a row containing float elements
@@ -49,13 +79,13 @@ def ReadingRows_Float( row ):
         Array[ i ] = row[ i + 1 ]
     return Array
 
-# This function reads a row containing float elements
+# This function reads a row containing characters elements
 def ReadingRows_String( row ):
-    Array = np.empty( Ncomp, dtype='string' )
-    print 'fck', Array
-    for i in xrange( 0, Ncomp ):
-        Array[ i ] = row[ i + 1 ]
+    Array = []
+    Array.extend( row[ 1 : Ncomp + 1 ] )
     return Array
+
+# This function assess if the summation of compositions (mole/mass fraction) is equal to one
         
     
 

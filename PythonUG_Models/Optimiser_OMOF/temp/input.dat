@@ -1,5 +1,7 @@
 Number_Components           2
-Components                 CH4         CS2
+Components                 "CH4"       "CS2"
 Crit_Temp                  34.0        25.0
 Crit_Pres                  12.e6       10.5e4
 Molar_Mass                 90.09      151.23
+Accentric_Factor            0.45        0.51
+Feed_Composition            0.51        0.34
