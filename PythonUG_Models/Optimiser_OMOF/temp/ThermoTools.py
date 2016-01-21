@@ -6,6 +6,7 @@ import numpy as np
 import math
 import re
 import sys
+import fileinput
 
 
 # =================== ASSOCIATED/EXTERNAL FUNCTIONS ====================#
@@ -34,9 +35,12 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
         reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
         
         for row in reader:
-            if row[ 0 ] == 'Number_Components':
+            if row == [] or ListOfCommentsStrings( row ): # List of comment strings that can be used
+                Nothing_To_Be_Done = True
+
+            elif row[ 0 ] == 'Number_Components': # This MUST be the first variable declared in the input file
                 Ncomp = int( row[ 1 ] )
-                Are_There_Components = True 
+                Are_There_Components = True
 
             elif Are_There_Components:              
     #
@@ -61,13 +65,15 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                         print 'Summation of Compositions is ', math.fsum( Z_Feed ), \
                             ' and it should be 1.0'
                         sys.exit()
-
+    #
+                elif row[ 0 ] == 'BinaryInteraction':
+                    BinaryParameter = ReadingRows_FloatTensor( reader )
     #
             else:
                 print 'Number_components was not defined in the FIRST line'
                 sys.exit()
                 
-        print 'row:', Are_There_Components, Ncomp, T_Crit, P_Crit , MolarMass, Components
+        print 'row:', Are_There_Components, Ncomp, T_Crit, P_Crit , MolarMass, Components,BinaryParameter
 
 
 
@@ -85,8 +91,38 @@ def ReadingRows_String( row ):
     Array.extend( row[ 1 : Ncomp + 1 ] )
     return Array
 
-# This function assess if the summation of compositions (mole/mass fraction) is equal to one
+# This function reads a squared tensor of dimension ncomp X ncomp
+def ReadingRows_FloatTensor( reader ):
+    Array = np.arange( float( Ncomp * Ncomp ) )
+    iline = 1
+    for line in reader:
+        for i in xrange( 0, Ncomp ):
+            Array[ i ] = line[ i ]
+            
+    print '=>', Array
         
+
+# This function assess if the summation of compositions (mole/mass fraction) is equal to one
+def ListOfCommentsStrings( row ):
+    list = []
+    IsItaComment = False
+    if (     row[ 0 ] == ''      or \
+             row[ 0 ] == ' '     or \
+             row[ 0 ] == '  '    or \
+             row[ 0 ] == '   '   or \
+             row[ 0 ] == ''      or \
+             row[ 0 ] == '#'     or \
+             row[ 0 ] == '##'    or \
+             row[ 0 ] == '###'   or \
+             row[ 0 ] == '# '    or \
+             row[ 0 ] == '## '   or \
+             row[ 0 ] == '### '  or \
+             row[ 0 ] == '#  '   or \
+             row[ 0 ] == '##  '  or \
+             row[ 0 ] == '###  ' ):
+        IsItaComment = True
+
+    return IsItaComment
     
 
 
