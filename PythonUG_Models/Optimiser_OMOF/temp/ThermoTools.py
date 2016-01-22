@@ -98,8 +98,8 @@ def ReadingRows_FloatTensor( reader ):
     for line in reader:
         for i in xrange( 0, Ncomp ):
             Array[ i ] = line[ i ]
-            
-    print '=>', Array
+
+    return Array
         
 
 # This function assess if the summation of compositions (mole/mass fraction) is equal to one

@@ -29,4 +29,7 @@ import ThermoTools as ThT
 # def Gibbs( X_Vec, F_Gibbs )
 
 
+# Reading Input data from external file:
 ThT.ReadSet_Global_Variables()
+
+# Calculate ...

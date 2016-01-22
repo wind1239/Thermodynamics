@@ -2,7 +2,7 @@
 ### Input file for this test case
 ###
 
-Number_Components           2
+Number_Components          2
   
 Components                 "CH4"       "CS2"
 
