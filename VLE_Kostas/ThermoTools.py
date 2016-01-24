@@ -106,6 +106,7 @@ def Reading_MixtureConditions_Float( row ):
 def ReadingRows_String( row ):
     Array = []
     Array.extend( row[ 1 : Ncomp + 1 ] )
+    
     return Array
 
 # This function populates the binary interaction parameter (Kij) tensor in which Kij = Kji 
