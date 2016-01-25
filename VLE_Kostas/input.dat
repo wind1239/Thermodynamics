@@ -2,13 +2,17 @@
 ### Input file for this test case
 ###
 
+# Number of Components: 
 Number_Components          4
 
-# Temperature in Kelvin
+# Number of Phases:
+Number_Phases              2
+
+# Temperature in Kelvin (initial, final, increment)
 System_Temperature         298.15      298.15         0.0
 
-# Pressure in bar 
-System_Pressure              8.15      2.42e5         5.89
+# Pressure in bar  (initial, final, increment)
+System_Pressure              1.15e5     2.42e5         .89e4
 
 # Chemical species in the mixture
 Components                 "CH4"       "CS2"        "H2O"            "Fe"
