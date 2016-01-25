@@ -1,9 +1,11 @@
 
 #!/usr/bin/env python
 
+import matplotlib.pyplot as bplot
 import numpy as np
 import math
 import ThermoTools as ThT
+import GibbsFunction as GibbsF
 
 
 ''' This is the main program that aims to calculate the vapour-liquid equilibrium
@@ -51,8 +53,17 @@ ThT.Sum2One( 'Phase Fraction', PhaseFrac )
 
 
 
-''' Initialising Temperature  '''
+''' Initialising Temperature and Pressure '''
 Temp = ThT.T_System[ 0 ]
+Press = ThT.P_System[ 0 ] 
+
+Gibbs_Free = GibbsF.Calc_Gibbs( Temp, Press, MFrac, PhaseFrac )
+
+print 'Gibbs Free Energy:', Gibbs_Free
+
+
+""" This Loop can be used later to obtain equilibrium composition in a 
+      a wide range of temperature and pressure
 
 # Loop for temperature:
 while Temp <= ThT.T_System[ 1 ]:
@@ -61,7 +72,7 @@ while Temp <= ThT.T_System[ 1 ]:
     Press = ThT.P_System[ 0 ] # Initialising Pressure
     while Press <= ThT.P_System[ 1 ]:
 
-       # Gibbs_Free = Gibbs_Function( Temp, Press, MFrac, PhaseFrac )
+       # Gibbs_Free = GibbsF.Gibbs_Function( Temp, Press, MFrac, PhaseFrac )
         a = 1.
         print Temp, Press
 
@@ -75,4 +86,6 @@ while Temp <= ThT.T_System[ 1 ]:
     Temp = Temp + ThT.T_System[ 2 ]+1.e-6 # End of temperature loop
 
 print 'Final Press:', Press
+
+"""
 

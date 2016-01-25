@@ -1,10 +1,8 @@
 
 #!/usr/bin/env python
 
-import matplotlib.pyplot as bplot
 import numpy as np
 import math
-import re
 import sys
 
 # =================== ASSOCIATED/EXTERNAL FUNCTIONS ====================#
