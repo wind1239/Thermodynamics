@@ -1,9 +1,8 @@
 
 #!/usr/bin/env python
 
-import matplotlib.pyplot as bplot
 import numpy as np
-import math # to explain/use the math functions
+import math
 import ThermoTools as ThT
 import EOS_PR as PR
 
@@ -13,14 +12,13 @@ import EOS_PR as PR
 ###           attraction and repulsion, respectively)
 ###
 def MixingRules(T, Composition ):
-    ThT.set_Global_Variables()
 
-    aij = [0. for i in range( ThT.Nc**2 ) ] # Parameter for the combining rule (stored in the same way as kij)
+    aij = [0. for i in range( ThT.NComp**2 ) ] # Parameter for the combining rule (stored in the same way as kij)
 
     sum1 = 0. ; sum2 = 0.
-    for i in range( ThT.Nc ):
-        for j in range( ThT.Nc ):
-            node = i * ThT.Nc + j 
+    for i in range( ThT.NComp ):
+        for j in range( ThT.NComp ):
+            node = i * ThT.NComp + j 
             if i == j:
                 aij[ node ] = PR.PREoS_Calc_a( i , T )
             else:

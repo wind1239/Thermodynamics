@@ -1,9 +1,8 @@
 
 #!/usr/bin/env python
 
-import matplotlib.pyplot as bplot
 import numpy as np
-import math # to explain/use the math functions
+import math 
 import ThermoTools as ThT
 
 
@@ -11,10 +10,9 @@ import ThermoTools as ThT
 ### FUNCTION: Calculating parameter of binary attraction of Peng-Robinson
 ###
 def PREoS_Calc_a( i, T ): 
-    ThT.set_Global_Variables()
-    k = 0.37464 + 1.5422 * ThT.w[i] - 0.26992 * ThT.w[i]**2
-    alpha = ( 1. + k * ( 1. - math.sqrt( T / ThT.Tc[i] ) )) **2
-    a_k = 0.45724 * ( ThT.Rconst * ThT.Tc[i] )**2 / ThT.Pc[i] * alpha
+    k = 0.37464 + 1.5422 * ThT.Accentric_Factor[i] - 0.26992 * ThT.Accentric_Factor[i]**2
+    alpha = ( 1. + k * ( 1. - math.sqrt( T / ThT.T_Crit[i] ) )) **2
+    a_k = 0.45724 * ( ThT.Rconst * ThT.T_Crit[i] )**2 / ThT.P_Crit[i] * alpha
     return a_k
 
 
@@ -24,7 +22,7 @@ def PREoS_Calc_a( i, T ):
 def PREoS_Calc_b( i ): 
     ThT.set_Global_Variables()
 
-    b_k = 0.07780 * ThT.Rconst * ThT.Tc[i]  / ThT.Pc[i]
+    b_k = 0.07780 * ThT.Rconst * ThT.T_Crit[i]  / ThT.P_Crit[i]
 
     return b_k
 
