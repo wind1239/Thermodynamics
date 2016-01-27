@@ -19,10 +19,12 @@ def Calc_Gibbs( Temp, Press, MFrac, PhaseFrac ):
         zi = given from input
 
         mu (greek m = chemical potential) = taken from the 1.18 (calling 1.18), with known P, R, T! 
-                                            while the fugacity coef (calling EOS to calculate it), - or greek f - is taken from the 2.23 by calling it 
-                                            while i know the Big_B, am, bm, R, T  
-                                            z - compressibility factor in 2.23 will come out from the cubic polyonmial, roots of the cubic polynomial ( check the Big_A and
-                                            Big_B based on the EOS we are using?) '''
+                                            while the fugacity coef (calling EOS to calculate it), - or greek f - 
+                                            is taken from the 2.23 by calling it 
+                                            > i know the Big_B, am, bm, R, T  
+                                            > the z - compressibility factor in 2.23 will come out from the cubic polyonmial, 
+                                              roots of the cubic polynomial ( check the Big_A and Big_B based on the EOS 
+                                              we are using I have to change the polynomial ?) '''
    
  
     return GibbsEnergy
