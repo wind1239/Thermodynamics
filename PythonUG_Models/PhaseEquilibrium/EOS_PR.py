@@ -5,11 +5,15 @@ import numpy as np
 import math 
 import ThermoTools as ThT
 
+'''
+      FUNCTIONS USED IN THE THERMODYNAMIC CALCULATIONS USING PENG-ROBINSON
+         (PR) EQUATION OF STATE
+'''
 
 ###
 ### FUNCTION: Calculating parameter of binary attraction of Peng-Robinson
 ###
-def PREoS_Calc_a( i, T ): 
+def PR_EoS_Calc_a( i, T ): 
     k = 0.37464 + 1.5422 * ThT.Accentric_Factor[i] - 0.26992 * ThT.Accentric_Factor[i]**2
     alpha = ( 1. + k * ( 1. - math.sqrt( T / ThT.T_Crit[i] ) )) **2
     a_k = 0.45724 * ( ThT.Rconst * ThT.T_Crit[i] )**2 / ThT.P_Crit[i] * alpha
@@ -19,19 +23,15 @@ def PREoS_Calc_a( i, T ):
 ###
 ### FUNCTION: Calculating parameter of binary repulsion of Peng-Robinson
 ###
-def PREoS_Calc_b( i ): 
-    ThT.set_Global_Variables()
-
+def PR_EoS_Calc_b( i ): 
     b_k = 0.07780 * ThT.Rconst * ThT.T_Crit[i]  / ThT.P_Crit[i]
-
     return b_k
 
 
 ###
 ### FUNCTION: Solving the Peng-Robinson EOS in the cubic form
 ###
-def Cubic_PR( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cubic EOS
-    ThT.set_Global_Variables()
+def PR_Cubic( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cubic EOS
 
     Big_A = am * P / ( ThT.Rconst * T )**2
     Big_B = bm * P / ( ThT.Rconst * T )
@@ -74,3 +74,8 @@ def Cubic_PR( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cu
 
     return ( Zvapour, Zliquid ) 
     
+
+'''
+      FUNCTIONS USED IN THE THERMODYNAMIC CALCULATIONS USING XXXXXXXX
+      EQUATION OF STATE
+'''

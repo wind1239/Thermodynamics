@@ -7,14 +7,18 @@ import ThermoTools as ThT
 import EOS_PR as PR
 
 
-###
-### FUNCTION: Calculation of attraction and repulsion parameters for a simple mixing rule (quadratic and linear formulation for
-###           attraction and repulsion, respectively)
-###
+'''
+    THIS FILE WAS DESIGNED TO CALCULATE MIXING AND COMBINING RULES FOR EQUATIONS
+         OF STATE.
+'''
+ 
+
+'''
+ This function calculates the attraction and repulsion parameters for the classic mixing rule
+      (quadratic and linear formulation for attraction and repulsion, respectively)
+'''
 def MixingRules(T, Composition ):
-
     aij = [0. for i in range( ThT.NComp**2 ) ] # Parameter for the combining rule (stored in the same way as kij)
-
     sum1 = 0. ; sum2 = 0.
     for i in range( ThT.NComp ):
         for j in range( ThT.NComp ):
