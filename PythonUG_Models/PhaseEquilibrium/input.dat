@@ -41,3 +41,18 @@ BinaryInteraction
 2      3       8.90
 2      4       0.01
 3      4       1.23
+
+# Mixing Rules (either Classic or Wong-Sandler)
+Mixing_Rules             "Classic"
+
+# Equations of State:  
+#     If the first line is Equations_of_State   "Each", then
+#        an EOS is assigned to each component, otherwise
+#     If the first line is Equations_of_State   "All"  "Peng-Robinson", then
+#         ONE EOS is assigned to ALL components.
+# For the time being only Peng-Robinson is available.
+Equations_of_State   "Each"
+1    "Peng-Robinson"
+2    "Soave-Redlich-Kwong"
+3    "Peng-Robinson"
+4    "van der Waals"

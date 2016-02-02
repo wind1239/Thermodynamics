@@ -73,6 +73,17 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                 elif row[ 0 ] == 'BinaryInteraction':
                     BinaryParameter = ReadingBinaryParameters( reader )
     #
+                elif row[ 0 ] == 'Equations_of_State':
+                    if row[ 1 ] == 'All':
+                        EOS = []
+                        EOS.append( row[ 2 ] )
+                    else:
+                        EOS = ReadingEOS( reader )
+                    print 'Equations of State:', EOS
+    #
+                elif row[ 0 ] == 'Mixing_Rules':
+                    MixingRules = ReadingMixRules( row )
+    #
             else:
                 print 'Number_components was not defined in the FIRST line'
                 sys.exit()
@@ -124,8 +135,15 @@ def ReadingBinaryParameters( reader ):
     Kij = [ 0. for i in range( NComp ** 2 ) ]
     Array_temp = [] 
 
+    #for line in reader: # Reading input file for Kij and allocating the data in a list
+    #    Array_temp.append(line)
+
+    iline = 0
     for line in reader: # Reading input file for Kij and allocating the data in a list
-        Array_temp.append(line)
+        Array_temp.append( line )
+        if iline == ( NumberOfCombinations( NComp, 2 ) - 1 ):
+            break
+        iline += 1
 
     for k in range( NumberOfCombinations( NComp, 2 ) ):
         temp = Array_temp[ k ]
@@ -181,3 +199,22 @@ def Sum2One( ident, Array ):
         sys.exit()
 
     return
+
+# This function reads the mixing rules used for the equilibrium calculations
+def ReadingMixRules( row ):
+    Array = []
+    Array.extend( row[ 1 : NComp + 1 ] )
+    
+    return Array
+
+def ReadingEOS( reader ):
+    Array_temp = []
+
+    iline = 0
+    for line in reader: # Reading input file for the list of EOS
+        Array_temp.append( line[ 1 ] )
+        if iline == ( NComp - 1 ):
+            break
+        iline += 1
+
+    return Array_temp
