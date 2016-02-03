@@ -10,13 +10,21 @@ import ThermoTools as ThT
          (PR) EQUATION OF STATE
 '''
 
-###
-### FUNCTION: Calculating parameter of binary attraction of Peng-Robinson
-###
-def PR_EoS_Calc_a( i, T ): 
-    k = 0.37464 + 1.5422 * ThT.Accentric_Factor[i] - 0.26992 * ThT.Accentric_Factor[i]**2
-    alpha = ( 1. + k * ( 1. - math.sqrt( T / ThT.T_Crit[i] ) )) **2
-    a_k = 0.45724 * ( ThT.Rconst * ThT.T_Crit[i] )**2 / ThT.P_Crit[i] * alpha
+'''
+     This function calculates the parameter of binary attraction for both:
+           Peng-Robinson and its modified version by Stryjeck-Vera
+'''
+def PR_EoS_Calc_a( i, T ):
+    if ThT.EOS[ i ] == "Peng-Robinson" or ThT.EOS[ i ] == "PR":
+        k = 0.37464 + 1.5422 * ThT.Accentric_Factor[ i ] - 0.26992 * \
+            ThT.Accentric_Factor[ i ]**2
+    elif ThT.EOS[ i ] == "Peng-Robinson-Stryjek-Vera" or ThT.EOS[ i ] == "PRSV":
+        k0 = 0.378893 + 1.4897153 * ThT.Accentric_Factor[ i ] - 0.17131848 * \
+            ThT.Accentric_Factor[ i ]**2 + 0.0196554 * ThT.Accentric_Factor[ i ]**3
+        k = k0 + ThT.EOS_K1[ i ] * ( 1. + math.sqrt( T / ThT.T_Crit[ i ] ) ) *\
+            ( 0.7 - math.sqrt( T / ThT.T_Crit[ i ] ) )
+    alpha = ( 1. + k * ( 1. - math.sqrt( T / ThT.T_Crit[ i ] ) )) **2
+    a_k = 0.45724 * ( ThT.Rconst * ThT.T_Crit[ i ] )**2 / ThT.P_Crit[ i ] * alpha
     return a_k
 
 

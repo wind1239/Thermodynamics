@@ -15,8 +15,9 @@ import sys
 def ReadSet_Global_Variables(): # Read variables from a external file called 'input.dat'
     import csv # Using csv (comma separated values) module
  
-    global Rconst, NComp, NPhase, T_System, P_System, T_Crit, P_Crit, MolarMass, Species, Accentric_Factor, \
-        Z_Feed, BinaryParameter
+    global Rconst, NComp, NPhase, T_System, P_System, \
+        T_Crit, P_Crit, MolarMass, Species, Accentric_Factor, \
+        Z_Feed, BinaryParameter, EOS, EOS_K1, MixingRules
 
     Rconst = 8.314 # Gas constant [J/(gmol.K)]
 
@@ -73,13 +74,20 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                 elif row[ 0 ] == 'BinaryInteraction':
                     BinaryParameter = ReadingBinaryParameters( reader )
     #
+                    ''' Here we are reading the EOS and if the choice is PRSV, then we also
+                              read the K1 parameter '''
                 elif row[ 0 ] == 'Equations_of_State':
                     if row[ 1 ] == 'All':
-                        EOS = []
+                        EOS = []; EOS_K1 = []
                         EOS.append( row[ 2 ] )
+                        if EOS[ 0 ] == "Peng-Robinson-Stryjek-Vera" or \
+                                EOS[ 0 ] == "PRSV":
+                            EOS_K1.append( row[ 3 ] )
+                        for i in range(1, NComp ):
+                            EOS.append( EOS[ i - 1 ] )
+                            EOS_K1.append( EOS_K0[ i - 1 ] )
                     else:
-                        EOS = ReadingEOS( reader )
-                    print 'Equations of State:', EOS
+                        EOS, EOS_K1 = ReadingEOS( reader )
     #
                 elif row[ 0 ] == 'Mixing_Rules':
                     MixingRules = ReadingMixRules( row )
@@ -208,13 +216,19 @@ def ReadingMixRules( row ):
     return Array
 
 def ReadingEOS( reader ):
-    Array_temp = []
+    Array_temp1 = []
+    Array_temp2 = []
 
     iline = 0
     for line in reader: # Reading input file for the list of EOS
-        Array_temp.append( line[ 1 ] )
+        Array_temp1.append( line[ 1 ] )
+        if Array_temp1[ iline ] == "Peng-Robinson-Stryjek-Vera" or\
+                Array_temp1[ iline ] == "PRSV":
+            Array_temp2.append( line[ 2 ] )
+        else:
+            Array_temp2.append('')
         if iline == ( NComp - 1 ):
             break
         iline += 1
 
-    return Array_temp
+    return Array_temp1, Array_temp2

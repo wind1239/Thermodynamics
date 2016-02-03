@@ -46,13 +46,21 @@ BinaryInteraction
 Mixing_Rules             "Classic"
 
 # Equations of State:  
-#     If the first line is Equations_of_State   "Each", then
-#        an EOS is assigned to each component, otherwise
-#     If the first line is Equations_of_State   "All"  "Peng-Robinson", then
-#         ONE EOS is assigned to ALL components.
-# For the time being only Peng-Robinson is available.
-Equations_of_State   "Each"
-1    "Peng-Robinson"
-2    "Soave-Redlich-Kwong"
-3    "Peng-Robinson"
-4    "van der Waals"
+#     If the first line is 
+#           Equations_of_State   "Each"
+#        then an EOS is assigned to each component otherwise;
+#     If the first line is 
+#           Equations_of_State   "All"  "Peng-Robinson"
+#        then ONE EOS is assigned to ALL components.
+#
+#     If the option of EOS is Peng-Robinson-Stryjek-Vera, then a real (i.e., floating) 
+#        number is also read, representing the K1 parameter.
+#          
+#
+# For the time being only Peng-Robinson and Peng-Robinson-Stryjek-Vera are available.
+Equations_of_State   "All"   "Peng-Robinson-Stryjek-Vera"  0.15
+#Equations_of_State   "Each"   
+#1    "Peng-Robinson"       
+#2    "Soave-Redlich-Kwong"
+#3    "Peng-Robinson-Stryjek-Vera"     0.15
+#4    "van der Waals"

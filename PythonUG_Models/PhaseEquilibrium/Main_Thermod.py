@@ -18,12 +18,15 @@ import GibbsFunction as GibbsF
 ThT.ReadSet_Global_Variables()
 
 ''' Printing the data from the input file '''
-print 'Species: ', ThT.Species
 print 'Temp of the mixture (initial, final, increment):', ThT.T_System
 print 'Pres of the mixture (initial, final, increment):', ThT.P_System
-print 'Temperature:', ThT.T_Crit
-print 'Pressure:', ThT.P_Crit
+#
+print 'Species: ', ThT.Species
+print 'Feed Composition: ', ThT.Feed_Composition
+print 'Critical Temperature:', ThT.T_Crit
+print 'Critical Pressure:', ThT.P_Crit
 print 'Molar Mass:', ThT.MolarMass
+#
 print 'Binary Parameter:', ThT.BinaryParameter
 
 
