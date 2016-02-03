@@ -17,44 +17,30 @@ import GibbsFunction as GibbsF
 # Reading Input data from external file:
 ThT.ReadSet_Global_Variables()
 
-''' Printing the data from the input file '''
+''' ====================================================================
+       Printing the data from the input file 
+    ===================================================================='''
+
 print 'Temp of the mixture (initial, final, increment):', ThT.T_System
 print 'Pres of the mixture (initial, final, increment):', ThT.P_System
 #
 print 'Species: ', ThT.Species
-print 'Feed Composition: ', ThT.Feed_Composition
+print 'Feed Composition: ', ThT.Z_Feed
 print 'Critical Temperature:', ThT.T_Crit
 print 'Critical Pressure:', ThT.P_Crit
 print 'Molar Mass:', ThT.MolarMass
 #
 print 'Binary Parameter:', ThT.BinaryParameter
-
-
 #
-# This is a temporary hack for testing the code, as the Simulated
-#    Annealing is introduced, MFrac and PhaseFrac will be estimated 
-#    during the calculations.
-#
-# MFrac stores the normalised composition (i.e., mass fractions or mole fractions) as
-#    MFrac_{1}(Vap), MFrac_{2}(Vap), ..., MFrac_{NComp}(Vap), MFrac_{1}(Liq), 
-#        MFrac_{2}(Liq), ..., MFrac_{NComp}(Liq) 
-#
-# PhaseFrac contains the mole (or mass) fraction of the phase. Assuming that there 
-#    are only 2 phases in equilibrium, Liquid and Vapour, therefore:
-#           PhaseFrac[ 0 ] + PhaseFrac[ 1 ] = 1.0
-#
+print '******  Initial guess composition   *******'
+for i in range( ThT.NPhase ):
+    print 'Phase:', i, ':', ThT.MFrac[ i * ThT.NComp : i * ThT.NComp + ThT.NComp ]
 
-MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]  
-MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; MFrac[ 2 ] = 0.20 ; MFrac[ 3 ] = 0.2 # Vapour phase
-MFrac[ 4 ] = 0.10; MFrac[ 5 ] = 0.10; MFrac[ 6 ] = 0.20 ; MFrac[ 7 ] = 0.6 # Liquid phase
-ThT.Sum2One( 'Mass Fraction (Vapour)', MFrac[ :4 ] )
-ThT.Sum2One( 'Mass Fraction (Liquid)', MFrac[ 4: ] )
+print 'Composition of the phases:', ThT.PhaseFrac
 
-PhaseFrac =  [ 0. for i in range( ThT.NPhase ) ]
-PhaseFrac[ 0 ] = 0.40 ; PhaseFrac[ 1 ] = 0.60 
-ThT.Sum2One( 'Phase Fraction', PhaseFrac )
-
-
+''' ====================================================================
+       Printing the data from the input file 
+    ===================================================================='''
 
 ''' Initialising Temperature and Pressure '''
 Temp = ThT.T_System[ 0 ]
@@ -64,7 +50,7 @@ Press = ThT.P_System[ 0 ]
      MICHAELSEN'S STABILITY TEST: '''
 #Alpha_V = math.fsum( ThT.Z_Feed - 
 
-Gibbs_Free = GibbsF.Calc_Gibbs( Temp, Press, MFrac, PhaseFrac )
+Gibbs_Free = GibbsF.Calc_Gibbs( Temp, Press )
 
 print 'Gibbs Free Energy:', Gibbs_Free
 

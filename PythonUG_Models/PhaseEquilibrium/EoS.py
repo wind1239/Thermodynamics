@@ -6,14 +6,31 @@ import math
 import ThermoTools as ThT
 
 '''
-      FUNCTIONS USED IN THE THERMODYNAMIC CALCULATIONS USING PENG-ROBINSON
-         (PR) EQUATION OF STATE
+      FUNCTIONS USED IN THE THERMODYNAMIC CALCULATIONS USING CUBIC EQUATIONS OF STATE
 '''
 
+# Given the component and temperature, this function will return
+#    the attractive and repulsive parameters calculated based on this EoS
+#    of this component:
+def Cubic_EoS( icomp, Temp ):
+    if ThT.EOS[ icomp ] == "Peng-Robinson" or ThT.EOS[ icomp ] == "PR" or \
+            ThT.EOS[ icomp ] == "Peng-Robinson-Stryjek-Vera" or ThT.EOS[ icomp ] == "PRSV":
+        ai = PR_EoS_Calc_a( icomp, Temp )
+        bi = PR_EoS_Calc_b( icomp )
+#
+    else:
+        print 'For the time being, only PR and PRSV have been included into this code'
+        sys.exit()
+#
+    return ai, bi
+
+
+
 '''
-     This function calculates the parameter of binary attraction for both:
-           Peng-Robinson and its modified version by Stryjeck-Vera
+       PENG-ROBINSON AND PENG-ROBINSON-STRYJECK-VERA
+                    RELATED FUNCTIONS
 '''
+
 def PR_EoS_Calc_a( i, T ):
     if ThT.EOS[ i ] == "Peng-Robinson" or ThT.EOS[ i ] == "PR":
         k = 0.37464 + 1.5422 * ThT.Accentric_Factor[ i ] - 0.26992 * \
@@ -28,9 +45,6 @@ def PR_EoS_Calc_a( i, T ):
     return a_k
 
 
-###
-### FUNCTION: Calculating parameter of binary repulsion of Peng-Robinson
-###
 def PR_EoS_Calc_b( i ): 
     b_k = 0.07780 * ThT.Rconst * ThT.T_Crit[ i ]  / ThT.P_Crit[ i ]
     return b_k

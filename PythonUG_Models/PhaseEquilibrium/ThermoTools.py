@@ -83,10 +83,10 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                         EOS.append( row[ 2 ] )
                         if EOS[ 0 ] == "Peng-Robinson-Stryjek-Vera" or \
                                 EOS[ 0 ] == "PRSV":
-                            EOS_K1.append( row[ 3 ] )
+                            EOS_K1.append( float( row[ 3 ] ) )
                         for i in range(1, NComp ):
                             EOS.append( EOS[ i - 1 ] )
-                            EOS_K1.append( EOS_K0[ i - 1 ] )
+                            EOS_K1.append( float( EOS_K1[ i - 1 ] ) )
                     else:
                         EOS, EOS_K1 = ReadingEOS( reader )
     #
@@ -95,11 +95,13 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
     #
                 elif row[ 0 ] == 'MFrac':
                     MFrac = ReadingRows_Float( row, optional = 'MFrac' )
-                    print 'MFrac:', MFrac
+                    for i in range( NPhase ):
+                        Sum2One( 'Mole Fraction' + ' ' + str( i ), \
+                                     MFrac[ i * NComp : i * NComp + NComp ] )
     #
                 elif row[ 0 ] == 'PhaseFrac':
-                    MFrac = ReadingRows_Float( row, optional = 'PhaseFrac' )
-                    print 'PhaseFrac:', PhaseFrac
+                    PhaseFrac = ReadingRows_Float( row, optional = 'PhaseFrac' )
+                    Sum2One( 'Phase Fraction', PhaseFrac )
     #
             else:
                 print 'Number_components was not defined in the FIRST line'
@@ -108,12 +110,13 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
 
 # This function reads a row containing float elements
 def ReadingRows_Float( row, *positional_parameters, **keyword_parameters ):
+    
     if 'optional' in keyword_parameters:
         if keyword_parameters[ 'optional' ] == 'MFrac':
-            Array = np.range( float( NComp * NPhase ) )
+            Array = np.arange( float( NComp * NPhase ) )
             ndim = NComp * NPhase
         elif keyword_parameters[ 'optional' ] == 'PhaseFrac':
-            Array = np.range( float( NPhase ) )
+            Array = np.arange( float( NPhase ) )
             ndim = NPhase
     else:
         Array = np.arange( float( NComp ) )
@@ -246,11 +249,11 @@ def ReadingEOS( reader ):
         Array_temp1.append( line[ 1 ] )
         if Array_temp1[ iline ] == "Peng-Robinson-Stryjek-Vera" or\
                 Array_temp1[ iline ] == "PRSV":
-            Array_temp2.append( line[ 2 ] )
+            Array_temp2.append( float( line[ 2 ] ) )
         else:
             Array_temp2.append('')
         if iline == ( NComp - 1 ):
             break
         iline += 1
 
-    return Array_temp1, Array_temp2
+    return Array_temp1, Array_temp2 
