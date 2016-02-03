@@ -64,3 +64,11 @@ Equations_of_State   "All"   "Peng-Robinson-Stryjek-Vera"  0.15
 #2    "Soave-Redlich-Kwong"
 #3    "Peng-Robinson-Stryjek-Vera"     0.15
 #4    "van der Waals"
+
+
+# Guess Composition: this is structured as Xij, where i=1,NComp and j=1,NPhase:
+#    X(1,1), X(2,1), ..., X(NComp,1), X(1, 2), ..., X(NComp,2), ..., X(NComp,NPhase)
+MFrac  0.40 0.20 0.20 0.20 0.10 0.10 0.20 0.60
+
+# Guess Phase Fraction: this is structured as Xj, where j=1,NPhase
+PhaseFrac 0.40  0.60

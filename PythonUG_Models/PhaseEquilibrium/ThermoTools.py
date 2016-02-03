@@ -17,7 +17,8 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
  
     global Rconst, NComp, NPhase, T_System, P_System, \
         T_Crit, P_Crit, MolarMass, Species, Accentric_Factor, \
-        Z_Feed, BinaryParameter, EOS, EOS_K1, MixingRules
+        Z_Feed, BinaryParameter, EOS, EOS_K1, MixingRules, \
+        MFrac, PhaseFrac
 
     Rconst = 8.314 # Gas constant [J/(gmol.K)]
 
@@ -92,16 +93,36 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                 elif row[ 0 ] == 'Mixing_Rules':
                     MixingRules = ReadingMixRules( row )
     #
+                elif row[ 0 ] == 'MFrac':
+                    MFrac = ReadingRows_Float( row, optional = 'MFrac' )
+                    print 'MFrac:', MFrac
+    #
+                elif row[ 0 ] == 'PhaseFrac':
+                    MFrac = ReadingRows_Float( row, optional = 'PhaseFrac' )
+                    print 'PhaseFrac:', PhaseFrac
+    #
             else:
                 print 'Number_components was not defined in the FIRST line'
                 sys.exit()
                 
 
 # This function reads a row containing float elements
-def ReadingRows_Float( row ):
-    Array = np.arange( float( NComp ) )
-    for i in xrange( 0, NComp ):
+def ReadingRows_Float( row, *positional_parameters, **keyword_parameters ):
+    if 'optional' in keyword_parameters:
+        if keyword_parameters[ 'optional' ] == 'MFrac':
+            Array = np.range( float( NComp * NPhase ) )
+            ndim = NComp * NPhase
+        elif keyword_parameters[ 'optional' ] == 'PhaseFrac':
+            Array = np.range( float( NPhase ) )
+            ndim = NPhase
+    else:
+        Array = np.arange( float( NComp ) )
+        ndim = NComp
+
+    for i in xrange( 0, ndim ):
         Array[ i ] = row[ i + 1 ]
+
+
     return Array
 
 # This function reads a row containing float elements
@@ -215,6 +236,7 @@ def ReadingMixRules( row ):
     
     return Array
 
+# This function reads the equation of state used by each component:
 def ReadingEOS( reader ):
     Array_temp1 = []
     Array_temp2 = []

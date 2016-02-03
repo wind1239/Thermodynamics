@@ -60,6 +60,10 @@ ThT.Sum2One( 'Phase Fraction', PhaseFrac )
 Temp = ThT.T_System[ 0 ]
 Press = ThT.P_System[ 0 ] 
 
+'''
+     MICHAELSEN'S STABILITY TEST: '''
+#Alpha_V = math.fsum( ThT.Z_Feed - 
+
 Gibbs_Free = GibbsF.Calc_Gibbs( Temp, Press, MFrac, PhaseFrac )
 
 print 'Gibbs Free Energy:', Gibbs_Free

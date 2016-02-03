@@ -21,7 +21,7 @@ def PR_EoS_Calc_a( i, T ):
     elif ThT.EOS[ i ] == "Peng-Robinson-Stryjek-Vera" or ThT.EOS[ i ] == "PRSV":
         k0 = 0.378893 + 1.4897153 * ThT.Accentric_Factor[ i ] - 0.17131848 * \
             ThT.Accentric_Factor[ i ]**2 + 0.0196554 * ThT.Accentric_Factor[ i ]**3
-        k = k0 + ThT.EOS_K1[ i ] * ( 1. + math.sqrt( T / ThT.T_Crit[ i ] ) ) *\
+        k = k0 + ThT.EOS_K1[ i ] * ( 1. + math.sqrt( T / ThT.T_Crit[ i ] ) ) * \
             ( 0.7 - math.sqrt( T / ThT.T_Crit[ i ] ) )
     alpha = ( 1. + k * ( 1. - math.sqrt( T / ThT.T_Crit[ i ] ) )) **2
     a_k = 0.45724 * ( ThT.Rconst * ThT.T_Crit[ i ] )**2 / ThT.P_Crit[ i ] * alpha
@@ -32,7 +32,7 @@ def PR_EoS_Calc_a( i, T ):
 ### FUNCTION: Calculating parameter of binary repulsion of Peng-Robinson
 ###
 def PR_EoS_Calc_b( i ): 
-    b_k = 0.07780 * ThT.Rconst * ThT.T_Crit[i]  / ThT.P_Crit[i]
+    b_k = 0.07780 * ThT.Rconst * ThT.T_Crit[ i ]  / ThT.P_Crit[ i ]
     return b_k
 
 
