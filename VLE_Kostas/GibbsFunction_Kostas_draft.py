@@ -5,9 +5,16 @@ import math
 import sys
 import ThermoTools as ThT
 import EOS_PR as PR
+import time
 
 # Reading Input data from external file:
 ThT.ReadSet_Global_Variables()
+
+MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
+print 'the molar fraction is', MFrac
+
+MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; MFrac[ 2 ] = 0.20 ; MFrac[ 3 ] = 0.2 # Vapour phase
+MFrac[ 4 ] = 0.10; MFrac[ 5 ] = 0.10; MFrac[ 6 ] = 0.20 ; MFrac[ 7 ] = 0.6 # Liquid phase
 
 print
 print '  ---------------------------------------------------------------------------------------------------------------------'
@@ -20,8 +27,7 @@ print '  -----------------------------------------------------------------------
 print
 print '  Below we retrieve the characteristics/input data for each of the components '
 
-
-a_sum = 0,;b_sum = 0. # the initial sum for am and bm based on the eq. 2.7
+a_sum = 0. ;b_sum = 0. # the initial sum for am and bm based on the eq. 2.7
 
 aij = [0. for i in range(ThT.NComp**2) ] # the aij has the same dimension like the kij, a square matrix where the main diagonal is 0
 
@@ -45,8 +51,11 @@ for i in range(ThT.NComp):
         else: # this is for the rest of the elements of the square matrix of the aij
             aij[ node ] = math.sqrt( PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) * PR.PREoS_Calc_a( j , ThT.T_System[ 0 ] ) ) * ( 1. - ThT.BinaryParameter[ node ] )
             print 'you are at the vapour phase - 1 where  i /= j ,',  aij[ node ], i, j
+            print 'malaka to 1 a_sum', a_sum
             a_sum = a_sum + aij[ node ] * MFrac[ i ] * MFrac[ j ]
-            b_sum = b_sum + PR.PREoS_Calc_b(i) * MFrac[ i ]
+            print 'malaka to 2 a_sum', a_sum
+            time.sleep(5)
+            #b_sum = b_sum + PR.PREoS_Calc_b(i) * MFrac[ i ]
 
 print
 print 'the a_mixture = ', a_sum
