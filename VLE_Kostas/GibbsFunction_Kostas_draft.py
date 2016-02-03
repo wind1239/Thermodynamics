@@ -9,8 +9,6 @@ import EOS_PR as PR
 # Reading Input data from external file:
 ThT.ReadSet_Global_Variables()
 
-
-
 print
 print '  ---------------------------------------------------------------------------------------------------------------------'
 # we have already declare the type and number of species from the input.dat
