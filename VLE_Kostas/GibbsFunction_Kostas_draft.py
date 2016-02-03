@@ -10,15 +10,15 @@ import EOS_PR as PR
 ThT.ReadSet_Global_Variables()
 
 print
-print '---------------------------------------------------------------------------------------------------------------------------------'
+print '  ---------------------------------------------------------------------------------------------------------------------'
 # we have already declare the type and number of species from the input.dat
-print 'The number of Species is: ', ThT.NComp , ' while the Species are : ', ThT.Species , ' and the number of phases are :', ThT.NPhase 
-print '---------------------------------------------------------------------------------------------------------------------------------'
+print '  The number of Species is: ', ThT.NComp , ' while the Species are : ', ThT.Species , ' and the number of phases are :', ThT.NPhase 
+print '  ---------------------------------------------------------------------------------------------------------------------'
 
 # I can either use the nc = ThT.NComp = the number of compounds/species that I will have to loop over
 
 print
-print 'Below we retrieve the characteristics/ input data for each of the components '
+print '  Below we retrieve the characteristics/input data for each of the components '
 
 
 a_sum = 0,;b_sum = 0. # the initial sum for am and bm based on the eq. 2.7
@@ -27,27 +27,27 @@ aij = [0. for i in range(ThT.NComp**2) ] # the aij has the same dimension like t
 
 for i in range(ThT.NComp):
     for j in range(ThT.NComp):
-        print '  ======================================================================================================================= '
+        print '  ===================================================================================================================== '
     	print '  for the  ', ThT.Species[i] 
     	print '  T_Crit = ', ThT.T_Crit[i]
     	print '  P_Crit = ', ThT.P_Crit[i]            
-    	print '  wmega  = ', ThT.Accentric_Factor[i],'                                 accentric factor '
-    	print '  Kij    = ', ThT.BinaryParameter[i],'                                  the binary parameter '
-    	print '  xi     = ', ThT.MolarMass[i],'                                       the molar mass '
-    	print '  zi     = ', ThT.Z_Feed[i], '          overall feed mass fraction of the component '
+    	print '  wmega  = ', ThT.Accentric_Factor[i]    # accentric factor 
+    	print '  Kij    = ', ThT.BinaryParameter[i]     # the binary parameter 
+    	print '  xi     = ', ThT.MolarMass[i]           # the molar mass 
+    	print '  zi     = ', ThT.Z_Feed[i]              # overall feed mass fraction of the component 
     	print ''
         
         # using the word node, that defines the componenet ij at the square matrix aij that has the same dimension like the kij
         node = i * ThT.NComp + j
         if i == j: # this is for the main diagonal
             aij[ node ] = PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] )  # I am calling the EOS_PR
-            print 'kosta m@l@k@ 1 to i = j node einai,',  aij[ node ]  
+            print '  i = j ,',  aij[ node ], i, j
         else: # this is for the rest of the elements of the square matrix of the aij
             aij[ node ] = math.sqrt( PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) * PR.PREoS_Calc_a( j , ThT.T_System[ 0 ] ) ) * ( 1. - ThT.BinaryParameter[ node ] )
             print 'kosta m@l@k@ 2 to i /= j node einai,', aij[ node ]
        
-        a_sum = a_sum + aij[ node ] * ThT.NComp[ i ] * ThT.NComp[ j ]
-    b_sum = b_sum + PR.PREoS_Calc_b[ i ] * ThT.NComp[ i ]
+        a_sum = a_sum + aij[ node ] * ThT.NComp * ThT.NComp
+    b_sum = b_sum + PR.PREoS_Calc_b(i) * ThT.NComp
 
 print
 print 'the a_mixture = ', a_sum
