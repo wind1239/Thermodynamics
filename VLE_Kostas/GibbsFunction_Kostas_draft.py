@@ -9,6 +9,8 @@ import EOS_PR as PR
 # Reading Input data from external file:
 ThT.ReadSet_Global_Variables()
 
+
+
 print
 print '  ---------------------------------------------------------------------------------------------------------------------'
 # we have already declare the type and number of species from the input.dat
@@ -37,17 +39,16 @@ for i in range(ThT.NComp):
     	print '  zi     = ', ThT.Z_Feed[i]              # overall feed mass fraction of the component 
     	print ''
         
-        # using the word node, that defines the componenet ij at the square matrix aij that has the same dimension like the kij
+        # using the word node (pointer), that defines the componenet ij at the square matrix aij that has the same dimension like the kij
         node = i * ThT.NComp + j
         if i == j: # this is for the main diagonal
             aij[ node ] = PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] )  # I am calling the EOS_PR
-            print '  i = j ,',  aij[ node ], i, j
+            print 'you are at the vapour phase - 1 where  i = j ,',  aij[ node ], i, j
         else: # this is for the rest of the elements of the square matrix of the aij
             aij[ node ] = math.sqrt( PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) * PR.PREoS_Calc_a( j , ThT.T_System[ 0 ] ) ) * ( 1. - ThT.BinaryParameter[ node ] )
-            print 'kosta m@l@k@ 2 to i /= j node einai,', aij[ node ]
-       
-        a_sum = a_sum + aij[ node ] * ThT.NComp * ThT.NComp
-    b_sum = b_sum + PR.PREoS_Calc_b(i) * ThT.NComp
+            print 'you are at the vapour phase - 1 where  i /= j ,',  aij[ node ], i, j
+            a_sum = a_sum + aij[ node ] * MFrac[ i ] * MFrac[ j ]
+            b_sum = b_sum + PR.PREoS_Calc_b(i) * MFrac[ i ]
 
 print
 print 'the a_mixture = ', a_sum
