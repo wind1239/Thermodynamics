@@ -55,7 +55,7 @@ for i in range(ThT.NComp):
             a_sum = a_sum + aij[ node ] * MFrac[ i ] * MFrac[ j ]
             print 'malaka to 2 a_sum', a_sum
             time.sleep(5)
-            #b_sum = b_sum + PR.PREoS_Calc_b(i) * MFrac[ i ]
+            b_sum = b_sum + PR.PREoS_Calc_b(i) * MFrac[ i ]
 
 print
 print 'the a_mixture = ', a_sum

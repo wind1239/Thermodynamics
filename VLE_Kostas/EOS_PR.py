@@ -20,7 +20,7 @@ def PREoS_Calc_a( i, T ):
 ### FUNCTION: Calculating parameter of binary repulsion of Peng-Robinson
 ###
 def PREoS_Calc_b( i ): 
-    ThT.set_Global_Variables()
+#    ThT.set_Global_Variables()
 
     b_k = 0.07780 * ThT.Rconst * ThT.T_Crit[i]  / ThT.P_Crit[i]
 
