@@ -26,7 +26,8 @@ def Calc_Gibbs( Temp, Press ):
 
         Alpha_Phase[ iphase ] = math.sqrt( Alpha_Phase[ iphase ] )
 
-        ''' This loop needs to be changed into take into account an
+
+    ''' This loop needs to be changed into take into account an
                      arbitrary number of phases. '''
 
     G1 = [ 0. for i in range( ThT.NComp ) ]
