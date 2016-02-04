@@ -19,8 +19,7 @@ def Cubic_EoS( icomp, Temp ):
         bi = PR_EoS_Calc_b( icomp )
 #
     else:
-        print 'For the time being, only PR and PRSV have been included into this code'
-        sys.exit()
+        sys.exit( 'For the time being, only PR and PRSV have been included into this code' )
 #
     return ai, bi
 
