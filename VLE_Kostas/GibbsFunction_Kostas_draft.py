@@ -120,4 +120,3 @@ print 'kosta m@l@k@ as long as you see that the script goes through the lines!'
 
 
 ''' R, Tc, Pc, w all from the input.dat '''
-
