@@ -28,7 +28,8 @@ print '  -----------------------------------------------------------------------
 print
 print '  Below we retrieve the characteristics/input data for each of the components and we loop over the .dat file we have'
 
-a_sum = 0. ;b_sum = 0. # the initial sum for am and bm based on the eq. 2.7
+a_sum_V = 0. ;b_sum_V = 0. # the initial sum for am and bm based on the eq. 2.7 for Vapour phase
+#a_sum_L = 0. ;b_sum_L = 0. # the initial sum for am and bm based on the eq. 2.7 for Liquid phase
 
 aij = [0. for i in range(ThT.NComp**2) ] # the aij has the same dimension like the kij, a square matrix where the main diagonal is 0
 
@@ -48,24 +49,31 @@ for i in range(ThT.NComp):
         node = i * ThT.NComp + j
         if i == j:                                                  # this is for the main diagonal
             aij[ node ] = PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] )  # I am calling the EOS_PR
-            print '  you are at the vapour phase - 1 where  i = j ,', i, j
+            print '  you are at the vapour phase where  i = j ,', i, j
         else:                                                       # this is for the rest of the elements of the square matrix of the aij
             aij[ node ] = math.sqrt( PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) * PR.PREoS_Calc_a( j , ThT.T_System[ 0 ] ) ) * ( 1. - ThT.BinaryParameter[ node ] )
-            print '  you are at the vapour phase - 1 where  i /= j ,', i, j
-            a_sum = a_sum + aij[ node ] * MFrac[ i ] * MFrac[ j ]
-            b_sum = b_sum + PR.PREoS_Calc_b(i) * MFrac[ i ]
-            print '  at the ', i, j, ' the a_mixture = ', a_sum, ' and the b_mixture = ', b_sum
-            print 
-            time.sleep(2)                                           # this command gives the results every 2 sec
+            print '  you are at the vapour phase where  i /= j ,', i, j
+            a_sum_V = a_sum_V + aij[ node ] * MFrac[ i ] * MFrac[ j ]
+            b_sum_V = b_sum_V + PR.PREoS_Calc_b(i) * MFrac[ i ]
+            print '  at the Vapour Phase ', i, j, ' the a_mixture = ', a_sum_V, ' and the b_mixture = ', b_sum_V
+            #a_sum_L = a_sum_L + aij[ node ] * MFrac[ i + 1 ] * MFrac[ j + 1 ]
+            #b_sum_L = b_sum_L + PR.PREoS_Calc_b(i) * MFrac[ i +1 ] 
+            #print '  at the Liquid Phase ', i+1 , j+1 , ' the a_mixture = ', a_sum_L, ' and the b_mixture = ', b_sum_L
+            time.sleep(0)                                           # this command gives the results 
 
-am = a_sum
-bm = b_sum
+amv = a_sum_V
+bmv = b_sum_V
+
+#aml = a_sum_L
+#bml = b_sum_L
 
 print
-print '  the a_mixture = ', a_sum
-print '  the b_mixture = ', b_sum
+print '  the a_mixture_Vapour = ', a_sum_V
+print '  the b_mixture_Vapour = ', b_sum_V
 print
-     
+#print '  the a_mixture_Liquid = ', a_sum_L
+#print '  the b_mixture_Liquid = ', b_sum_L
+#print    
 
 # = = = = = = = = = = = = = = = = = = = = calculate EOS - PR   = = = = = = = = = = = = = = = = = = = = = = = = =
      
@@ -75,11 +83,11 @@ a_k = 0.45724 * ( ThT.Rconst * ThT.T_Crit[i] )**2 / ThT.P_Crit[i] * alpha
 b_k = 0.07780 * ThT.Rconst * ThT.T_Crit[i]  / ThT.P_Crit[i]
 
 print '  the a_k = ', a_k, ' the b_k = ', b_k
-
+print 
 # = = = = = = = = = = = = = = = = = calculate the Cubic_PR( T, P, am, bm ) = = = = = = = = = = = = = = = = = = =
     
-Big_A = am * ThT.P_System[ 0 ] / ( ThT.Rconst * ThT.T_System[ 0 ] )**2
-Big_B = bm * ThT.P_System[ 0 ] / ( ThT.Rconst * ThT.T_System[ 0 ] )
+Big_A = amv * ThT.P_System[ 0 ] / ( ThT.Rconst * ThT.T_System[ 0 ] )**2
+Big_B = bmv * ThT.P_System[ 0 ] / ( ThT.Rconst * ThT.T_System[ 0 ] )
 coeffs = [0. for i in range( 4 ) ] # Coefficient of the polynomial
 Z_root = [0. for i in range( 3 ) ] # Roots of the polynomial
 
@@ -90,10 +98,14 @@ coeffs[ 3 ] = - ( Big_A * Big_B - Big_B**3 - Big_B**2 )
 Z_root = np.roots( coeffs )       # Calculating the roots of the cubic eqn
 
 np.set_printoptions(precision=6)  # Use set_printoptions to set the precision of the output
-print '  the cubic root is = ', Z_root
-
+print '  the cubic root of the cubic_PR is = ', Z_root
+print
    
-# calculating the fugacity coef. for each component at each phase greek phi[i] = fi / Pxi, xi = molar fraction or ThT.MolarMass
+# = = = = = = = = = = = = = = = = = calculating the fugacity coef. = = = = = = = = = = = = = = = = =
+# = = for each component at each phase greek phi[i] = fi / Pxi, xi = molar fraction or ThT.MolarMass
+
+fugacity_coeff = np.log (Z_root / Big_B + 1 - np.sqrt(2) / (Z_root / Big_B + 1 + np.sqrt(2))
+print ' the fugacity_coeff = ', fugacity_coeff
 
 # at this point i have to calculate the ai and bi 
 
@@ -120,3 +132,4 @@ print 'kosta m@l@k@ as long as you see that the script goes through the lines!'
 
 
 ''' R, Tc, Pc, w all from the input.dat '''
+
