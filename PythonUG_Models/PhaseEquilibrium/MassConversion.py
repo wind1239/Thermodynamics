@@ -45,38 +45,25 @@ def Mass2Mole( MassFrac ):
         MoleFrac[ 1 ] = 1. - MoleFrac[ 0 ]
 
     else:
-        dsdas
+        ''' Solving system of linear equations. This may need to be changed/optimised \
+               later on.
+        '''
+        A = [ [0. for j in range( ThT.NComp - 1 )] for i in range( ThT.NComp - 1 )]
+        b = [ 0. for i in range( ThT.NComp - 1 ) ]
+        for i in range( ThT.NComp - 1 ):
+            for j in range( ThT.NComp - 1 ):
+                if i == j:
+                    A[ i ][ j ] = ThT.MolarMass[ i ] * ( MassFrac[ i ]  - 1. ) - \
+                        MassFrac[ i ] * ThT.MolarMass[ ThT.NComp - 1 ]
+                else:
+                    A[ i ][ j ] = MassFrac[ i ] * ThT.MolarMass[ j ] - \
+                        MassFrac[ i ] * ThT.MolarMass[ ThT.NComp - 1 ]
 
+            b[ i ] = - MassFrac[ i ] * ThT.MolarMass[ ThT.NComp - 1 ]
 
-        
+        temp = solve( A, b )
+        for i in range( ThT.NComp - 1 ):
+            MoleFrac[ i ] = temp[ i ]
+        MoleFrac[ ThT.NComp - 1 ] = 1. - math.fsum( temp )
 
-''' This function solves a linear system:
-           A . x = b
-       using the Gauss-Seidl method with initial
-       guess of
-          x0 = [ 0.5 0.5 ... 0.5 ]
-'''
-def GaussSeidl( n, A, b ):
-
-    Guess = [ 0.50 for i in range( n ) ]
-    NIter_max = 501 # Stoppage criteria: Max number of iterations
-    Eps = 1.e-5 # Stoppage criteria: Max error allowed
-
-    iter = 1
-    while iter <= NIter_max:
-
-        for i in range( n ):
-            for j in range( n ):
-
-                sum1 = 0. ; sum2 = 0.
-                if j < i:
-                    sum1 = sum1 + A[
-
-
-
-        iter += 1
-
-    
-
-    
-        
+    return MoleFrac
