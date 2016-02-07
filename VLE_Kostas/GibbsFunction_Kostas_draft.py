@@ -104,8 +104,8 @@ print
 # = = = = = = = = = = = = = = = = = calculating the fugacity coef. = = = = = = = = = = = = = = = = =
 # = = for each component at each phase greek phi[i] = fi / Pxi, xi = molar fraction or ThT.MolarMass
 
-fugacity_coeff = np.log (Z_root / Big_B + 1 - np.sqrt(2) / (Z_root / Big_B + 1 + np.sqrt(2))
-print ' the fugacity_coeff = ', fugacity_coeff
+fugacity_coeff = np.log (Z_root / Big_B + 1 - np.sqrt(2)) / (Z_root / Big_B + 1 + np.sqrt(2))
+print '  the fugacity_coeff = ', fugacity_coeff
 
 # at this point i have to calculate the ai and bi 
 
@@ -132,4 +132,3 @@ print 'kosta m@l@k@ as long as you see that the script goes through the lines!'
 
 
 ''' R, Tc, Pc, w all from the input.dat '''
-
