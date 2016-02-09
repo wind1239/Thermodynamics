@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 
 
 # = = = = = = = = = = = = = = = = = = = = = = = = = Reading Input data from external file = = = = = = = = = = = = = = = = = = = = = = = = = 
+Rconst = 8.314 # Gas constant [J/(gmol.K)]
+
 ThT.ReadSet_Global_Variables()
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
@@ -96,22 +98,22 @@ coeffs[ 0 ] = 1.
 coeffs[ 1 ] = - ( 1. - Big_B )
 coeffs[ 2 ] = Big_A - 2. * Big_B - 3. * Big_B**2
 coeffs[ 3 ] = - ( Big_A * Big_B - Big_B**3 - Big_B**2 )
-Z_root = np.roots( coeffs )       # Calculating the roots of the cubic eqn
+Z_root = np.roots( coeffs )        # Calculating the roots of the cubic eqn
 
-np.set_printoptions(precision=6)  # Use set_printoptions to set the precision of the output
+np.set_printoptions(precision=6)   # Use set_printoptions to set the precision of the output
 print '  the cubic root of the cubic_PR is = ', Z_root
 print
    
 # = = = = = = = = = = = = = = = = = calculating the fugacity coef. = = = = = = = = = = = = = = = = =
 # = = for each component at each phase greek phi[i] = fi / Pxi, xi = molar fraction or ThT.MolarMass
 
-fugacity_coeff = np.log((Z_root / Big_B + 1 - np.sqrt(2)) / (Z_root / Big_B + 1 + np.sqrt(2)))
+fugacity_coeff = - np.log(Z_root - Big_B) + (1 / b_sum_V) * ( 1 ) * (Z_root - 1) + (1 / (2 * np.sqrt(2)) ) * ( a_sum_V / ( Rconst * ThT.T_System[ 0 ] * b_sum_V )) + (1) + np.log((Z_root / Big_B + 1 - np.sqrt(2)) / (Z_root / Big_B + 1 + np.sqrt(2)))
 print '  the fugacity_coeff = ', fugacity_coeff
 
 # at this point i have to calculate the ai and bi 
 
 
-Rconst = 8.314 # Gas constant [J/(gmol.K)]
+'''Rconst = 8.314 # Gas constant [J/(gmol.K)]
 rho = ThT.P_System[ 0 ] / (Rconst * ThT.T_System[ 0 ] * Z_root)
 #if plotcubic:
                           # Plot the cubic equation to visualize the roots
@@ -124,7 +126,7 @@ plt.axvline(x=z)
 plt.axhline(y=0)
 plt.title('Root found @ z = %.2f' % z)
 plt.show()
-    #return {"density(mol/m3)": rho, "fugacity_coefficient": fugacity_coeff, "compressibility_factor": Z_root, "fugacity(bar)": fugacity_coeff * ThT.P_System[ 0 ], "molar_volume(L/mol)": 1.0 / rho * 1000.0}
+    #return {"density(mol/m3)": rho, "fugacity_coefficient": fugacity_coeff, "compressibility_factor": Z_root, "fugacity(bar)": fugacity_coeff * ThT.P_System[ 0 ], "molar_volume(L/mol)": 1.0 / rho * 1000.0} '''
 
 
 
