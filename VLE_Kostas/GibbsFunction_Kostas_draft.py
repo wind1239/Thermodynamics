@@ -6,6 +6,7 @@ import sys
 import ThermoTools as ThT
 import EOS_PR as PR
 import time
+import matplotlib.pyplot as plt
 
 
 # = = = = = = = = = = = = = = = = = = = = = = = = = Reading Input data from external file = = = = = = = = = = = = = = = = = = = = = = = = = 
@@ -104,10 +105,30 @@ print
 # = = = = = = = = = = = = = = = = = calculating the fugacity coef. = = = = = = = = = = = = = = = = =
 # = = for each component at each phase greek phi[i] = fi / Pxi, xi = molar fraction or ThT.MolarMass
 
-fugacity_coeff = np.log (Z_root / Big_B + 1 - np.sqrt(2)) / (Z_root / Big_B + 1 + np.sqrt(2))
+fugacity_coeff = np.log((Z_root / Big_B + 1 - np.sqrt(2)) / (Z_root / Big_B + 1 + np.sqrt(2)))
 print '  the fugacity_coeff = ', fugacity_coeff
 
 # at this point i have to calculate the ai and bi 
+
+
+Rconst = 8.314 # Gas constant [J/(gmol.K)]
+rho = ThT.P_System[ 0 ] / (Rconst * ThT.T_System[ 0 ] * Z_root)
+#if plotcubic:
+                          # Plot the cubic equation to visualize the roots
+zz = np.linspace(0, 1.5)  # array for plotting
+plt.figure()
+plt.plot(zz, g(zz), color='k')
+plt.xlabel('Compressibility, $z$')
+plt.ylabel('Cubic $g(z)$')
+plt.axvline(x=z)
+plt.axhline(y=0)
+plt.title('Root found @ z = %.2f' % z)
+plt.show()
+    #return {"density(mol/m3)": rho, "fugacity_coefficient": fugacity_coeff, "compressibility_factor": Z_root, "fugacity(bar)": fugacity_coeff * ThT.P_System[ 0 ], "molar_volume(L/mol)": 1.0 / rho * 1000.0}
+
+
+
+
 
 
 
@@ -121,9 +142,6 @@ print '  the fugacity_coeff = ', fugacity_coeff
 def Calc_Gibbs( Temp, Press, MFrac, PhaseFrac ):
     GibbsEnergy = sys.float_info.max
     
-    
-              
- 
     return GibbsEnergy
 
 print
@@ -132,3 +150,4 @@ print 'kosta m@l@k@ as long as you see that the script goes through the lines!'
 
 
 ''' R, Tc, Pc, w all from the input.dat '''
+
