@@ -101,21 +101,24 @@ coeffs[ 3 ] = - ( Big_A * Big_B - Big_B**3 - Big_B**2 )
 Z_root = np.roots( coeffs )        # Calculating the roots of the cubic eqn
 
 np.set_printoptions(precision=6)   # Use set_printoptions to set the precision of the output
+print '  The EOS, written in terms of compressibility factor, has three real roots while the intermidiate root may be ignored.'
+print '  The Min root = Liquid phase while the Max root = Vapour phase ' # PVT and Phase Behaviour Of Petroleum Reservoir Fluids Book By Ali Danesh
 print '  the cubic root of the cubic_PR is = ', Z_root, 'while the Max = ', Z_root.max(), ' and the Min = ', Z_root.min() 
 print
-print 
    
 # = = = = = = = = = = = = = = = = = calculating the fugacity coef. = = = = = = = = = = = = = = = = =
 # = = for each component at each phase greek phi[i] = fi / Pxi, xi = molar fraction or ThT.MolarMass
 # = = = = = = = = = I am breaking down the fugacity coef. eq. into its terms = = = = = = = = = = = = 
+
 
 # c term from the eq. 2.26
 c = (1 / np.sqrt(2)) *  np.log( np.sqrt(2)-1 ) 
 print '  the c = ', c
 print
 
-# D term from the eq. 2.29
 Ae = 1
+
+# D term from the eq. 2.29
 D = 0
 for i in range(ThT.NComp):
     D = D + ( MFrac[ i ] * alpha / ( Rconst * ThT.T_System[ 0 ] ) ) + Ae * ( c * Rconst * ThT.T_System[ 0 ] )
@@ -127,11 +130,11 @@ Q = (1 - D) * bmv
 print '  the Q = ', Q
 print
 
-term1 = - np.log(Z_root - Big_B)
+term1 = - np.log(Z_root.max() - Big_B)
 print term1
 print
 
-term2 = (1 / b_sum_V) * ( 1 ) * (Z_root - 1)
+term2 = (1 / b_sum_V) * ( 1 ) * (Z_root.max() - 1)
 print term2
 print
 
@@ -143,12 +146,17 @@ term4 = 1
 print term4
 print
 
-term5 = np.log((Z_root / Big_B + 1 - np.sqrt(2)) / (Z_root / Big_B + 1 + np.sqrt(2)))
+term5 = np.log((Z_root.max() / Big_B + 1 - np.sqrt(2)) / (Z_root.max() / Big_B + 1 + np.sqrt(2)))
 print term5
 print
 
 fugacity_coeff = term1 + term2+ term3 + term4 + term5
-print '  the fugacity_coeff = ', fugacity_coeff
+
+# calculate the ln(greek_fi) = fugacity_coeff
+# greek_fi = e ^ fugacity_coeff
+greek_fi = math.exp(fugacity_coeff)
+
+print '  the fugacity_coeff a.k.a. greek_fi = ', greek_fi
 
 # at this point i have to calculate the ai and bi 
 
