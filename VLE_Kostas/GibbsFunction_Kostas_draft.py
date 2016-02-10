@@ -106,8 +106,47 @@ print
    
 # = = = = = = = = = = = = = = = = = calculating the fugacity coef. = = = = = = = = = = = = = = = = =
 # = = for each component at each phase greek phi[i] = fi / Pxi, xi = molar fraction or ThT.MolarMass
+# = = = = = = = = = I am breaking down the fugacity coef. eq. into its terms = = = = = = = = = = = = 
 
-fugacity_coeff = - np.log(Z_root - Big_B) + (1 / b_sum_V) * ( 1 ) * (Z_root - 1) + (1 / (2 * np.sqrt(2)) ) * ( a_sum_V / ( Rconst * ThT.T_System[ 0 ] * b_sum_V )) + (1) + np.log((Z_root / Big_B + 1 - np.sqrt(2)) / (Z_root / Big_B + 1 + np.sqrt(2)))
+# c term from the eq. 2.26
+c = (1 / np.sqrt(2)) *  np.log( np.sqrt(2)-1 ) 
+print '  the c = ', c
+print
+
+# D term from the eq. 2.29
+Ae = 1
+D = 0
+for i in range(ThT.NComp):
+    D = D + ( MFrac[ i ] * alpha / ( Rconst * ThT.T_System[ 0 ] ) ) + Ae * ( c * Rconst * ThT.T_System[ 0 ] )
+print '  the D = ', D
+print
+
+# Q term from the eq. 2.28 (solving the 2.28 in respect of Q)
+Q = (1 - D) * bmv
+print '  the Q = ', Q
+print
+
+term1 = - np.log(Z_root - Big_B)
+print term1
+print
+
+term2 = (1 / b_sum_V) * ( 1 ) * (Z_root - 1)
+print term2
+print
+
+term3 = (1 / (2 * np.sqrt(2)) ) * ( a_sum_V / ( Rconst * ThT.T_System[ 0 ] * b_sum_V ))
+print term3
+print
+
+term4 = 1
+print term4
+print
+
+term5 = np.log((Z_root / Big_B + 1 - np.sqrt(2)) / (Z_root / Big_B + 1 + np.sqrt(2)))
+print term5
+print
+
+fugacity_coeff = term1 + term2+ term3 + term4 + term5
 print '  the fugacity_coeff = ', fugacity_coeff
 
 # at this point i have to calculate the ai and bi 
