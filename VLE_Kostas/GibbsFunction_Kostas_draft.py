@@ -101,8 +101,9 @@ coeffs[ 3 ] = - ( Big_A * Big_B - Big_B**3 - Big_B**2 )
 Z_root = np.roots( coeffs )        # Calculating the roots of the cubic eqn
 
 np.set_printoptions(precision=6)   # Use set_printoptions to set the precision of the output
-print '  the cubic root of the cubic_PR is = ', Z_root
+print '  the cubic root of the cubic_PR is = ', Z_root, 'while the Max = ', Z_root.max(), ' and the Min = ', Z_root.min() 
 print
+print 
    
 # = = = = = = = = = = = = = = = = = calculating the fugacity coef. = = = = = = = = = = = = = = = = =
 # = = for each component at each phase greek phi[i] = fi / Pxi, xi = molar fraction or ThT.MolarMass
