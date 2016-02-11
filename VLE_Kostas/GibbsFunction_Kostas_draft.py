@@ -118,15 +118,21 @@ print
 
 
 # calculate the Helmoltz free energy in excess Ae from 2.27 
+Ae = 0
 for i in range(ThT.NComp):
-    Ae = c * ( ( amv / bmv ) - ( MFrac[ i ] * alpha ) )
+    Ae = c * ( ( amv / bmv ) - ( MFrac[ i ] * alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) ) )
 print '  the Helmoltz in excess Ae = ', Ae
 print
 
-# D term from the eq. 2.29
+# calculate the ln_gamma from 2.32
+ln_gamma = 1 / ( Rconst * ThT.T_System[ 0 ] ) * Ae
+print '  the ln_gamma = ', ln_gamma
+print 
+
+# D term from the eq. 2.17
 D = 0
 for i in range(ThT.NComp):
-    D = D + ( MFrac[ i ] * alpha / ( Rconst * ThT.T_System[ 0 ] ) ) + Ae * ( c * Rconst * ThT.T_System[ 0 ] )
+    D = D + ( MFrac[ i ] * alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) ) + Ae * ( c * Rconst * ThT.T_System[ 0 ] )
 print '  the D = ', D
 print
 
@@ -147,7 +153,7 @@ term3 = (1 / (2 * np.sqrt(2)) ) * ( a_sum_V / ( Rconst * ThT.T_System[ 0 ] * b_s
 print term3
 print
 
-term4 = 1
+term4 = alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + ( ln_gamma / c )
 print term4
 print
 
@@ -163,17 +169,20 @@ greek_fi = math.exp(fugacity_coeff)
 
 print '  the fugacity_coeff a.k.a. greek_fi = ', greek_fi
 
-
 for i in range(ThT.NComp):
-    greek_mi[ i ]  = ( Rconst * ThT.T_System[ 0 ] ) * ( fugacity_coeff + np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
-print '  the greek mi = ', greek_mi[ i ]
-print
+    greek_mi  = ( Rconst * ThT.T_System[ 0 ] ) * ( fugacity_coeff + np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
+print '  the chemical potential a.k.a the greek_mi for the Vapour Phase !!! = ', greek_mi
+print 
 
-# at this point i have to calculate the ai and bi 
 
 # = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = =
 # = = = = = = = = = = = = = = = = = Statement of the VLE Problem = = = = = = = = = = = = = = = = = =
 # = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = = 
+
+
+print '  - -                                                                                                                     - - '
+print '  - - Based on the things I have done so far the results above are for the Vapour Phase since we are using the Max Z_root - - '
+print '  - -                                                                                                                     - - '
 
 
 
