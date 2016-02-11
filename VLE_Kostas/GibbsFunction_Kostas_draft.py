@@ -6,7 +6,7 @@ import sys
 import ThermoTools as ThT
 import EOS_PR as PR
 import time
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 
 # = = = = = = = = = = = = = = = = = = = = = = = = = Reading Input data from external file = = = = = = = = = = = = = = = = = = = = = = = = = 
@@ -116,7 +116,12 @@ c = (1 / np.sqrt(2)) *  np.log( np.sqrt(2)-1 )
 print '  the c = ', c
 print
 
-Ae = 1
+
+# calculate the Helmoltz free energy in excess Ae from 2.27 
+for i in range(ThT.NComp):
+    Ae = c * ( ( amv / bmv ) - ( MFrac[ i ] * alpha ) )
+print '  the Helmoltz in excess Ae = ', Ae
+print
 
 # D term from the eq. 2.29
 D = 0
@@ -158,7 +163,18 @@ greek_fi = math.exp(fugacity_coeff)
 
 print '  the fugacity_coeff a.k.a. greek_fi = ', greek_fi
 
+
+for i in range(ThT.NComp):
+    greek_mi[ i ]  = ( Rconst * ThT.T_System[ 0 ] ) * ( fugacity_coeff + np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
+print '  the greek mi = ', greek_mi[ i ]
+print
+
 # at this point i have to calculate the ai and bi 
+
+# = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = =
+# = = = = = = = = = = = = = = = = = Statement of the VLE Problem = = = = = = = = = = = = = = = = = =
+# = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = = 
+
 
 
 '''Rconst = 8.314 # Gas constant [J/(gmol.K)]
@@ -200,4 +216,3 @@ print 'kosta m@l@k@ as long as you see that the script goes through the lines!'
 
 
 ''' R, Tc, Pc, w all from the input.dat '''
-
