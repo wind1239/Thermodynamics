@@ -145,7 +145,7 @@ term1 = - np.log(Z_root.max() - Big_B)
 print term1
 print
 
-term2 = (1 / b_sum_V) * ( 1 ) * (Z_root.max() - 1)
+term2 = (1 / b_sum_V) * ( alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + ( ln_gamma / c ) ) * (Z_root.max() - 1)
 print term2
 print
 
@@ -153,7 +153,7 @@ term3 = (1 / (2 * np.sqrt(2)) ) * ( a_sum_V / ( Rconst * ThT.T_System[ 0 ] * b_s
 print term3
 print
 
-term4 = alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + ( ln_gamma / c )
+term4 = ( 1 / amv ) * ( 2 - alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + ( ln_gamma / c ) )
 print term4
 print
 
