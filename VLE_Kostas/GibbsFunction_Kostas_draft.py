@@ -120,8 +120,9 @@ print
 # calculate the Helmoltz free energy in excess Ae from 2.27 
 Ae = 0
 for i in range(ThT.NComp):
-    Ae = c * ( ( amv / bmv ) - ( MFrac[ i ] * alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) ) )
-print '  the Helmoltz in excess Ae = ', Ae
+    Ae1 = c * ( ( amv / bmv ) - ( MFrac[ i ] * alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) ) )
+    Ae = - ( amv / bmv ) + ( MFrac[ i ] * ( alpha / PR.PREoS_Calc_b(i) ) )
+print '  the Helmoltz in excess Ae1 = ', Ae1,  ' &  Ae = ', Ae 
 print
 
 # calculate the ln_gamma from 2.32
