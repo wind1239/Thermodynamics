@@ -206,15 +206,6 @@ plt.show()
 
 
 
-
-
-
-
-
-
-
-
-
 def Calc_Gibbs( Temp, Press, MFrac, PhaseFrac ):
     GibbsEnergy = sys.float_info.max
     
