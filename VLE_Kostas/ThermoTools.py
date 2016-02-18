@@ -74,7 +74,8 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
     #
                 elif row[ 0 ] == 'Lamda_wilson':
                     Lamda_wilson = ReadingLamda_wilson( reader )
-                    print  Lamda_wilson
+                    print  'Here.....', Lamda_wilson
+                    sys.exit()
     #
             else:
                 print 'Number_components was not defined in the FIRST line'
@@ -134,8 +135,12 @@ def ReadingBinaryParameters( reader ):
     Kij = [ 0. for i in range( NComp ** 2 ) ]
     Array_temp = [] 
 
+    iline = 0
     for line in reader: # Reading input file for Kij and allocating the data in a list
         Array_temp.append(line)
+        if iline == ( NumberOfCombinations( NComp, 2 ) - 1 ):
+            break
+        iline += 1
 
     for k in range( NumberOfCombinations( NComp, 2 ) ):
         temp = Array_temp[ k ]
@@ -153,31 +158,31 @@ def ReadingBinaryParameters( reader ):
     return Kij
         
 
-# This function calculates the big_greek_lamda ( Λij ) tensor or Lamda_wilson
-#    and Λij = 0 (for i=1,NComp and j=1,NComp). Kij is stored as an array Λij[ node ] with
+# This function calculates the big_greek_lamda ( Lij ) tensor or Lamda_wilson
+#    and Lij = 0 (for i=1,NComp and j=1,NComp). Kij is stored as an array Lij[ node ] with
 #                             node = i * NComp + j
 #    For 3 components:
-#           Λ11   Λ12   Λ13
-#           Λ21   Λ22   Λ23
-#           Λ31   Λ32   Λ33
-#    In this case, Λ11 = Λ22 = Λ33 = Λ44 = 1  
+#           L11   L12   L13
+#           L21   L22   L23
+#           L31   L32   L33
+#    In this case, L11 = L22 = L33 = L44 = 1  
 #
 def ReadingLamda_wilson( reader ):
-    Lamda_wilsonij = [ 1. for i in range( NComp ** 2 ) ]
+    Lamdaij = [ 1. for i in range( NComp ** 2 ) ]
     Array_temp = [] 
 
-    for line in reader: # Reading input file for Λij and allocating the data in a list
-        Array_temp.append(line)
+    for line in reader: # Reading input file for Lij and allocating the data in a list
+        temp = Array_temp[ line ]
 
-   for i in range( NComp ):
+    for i in range( NComp ):
         for j in range( NComp ):
             node1 = i * NComp + j
             if i == j:
-               Lamdaij[ node1 ] = 1           
+                Lamdaij[ node1 ] = 1           
             else:
-               Lamdaij[ node1 ] = float( temp[2] )
+                Lamdaij[ node1 ] = float( temp[2] )
 
-   return Lamda_wilsonij
+    return Lamdaij
 
 
 
