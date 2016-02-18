@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 
 import numpy as np
@@ -73,6 +72,9 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                 elif row[ 0 ] == 'BinaryInteraction':
                     BinaryParameter = ReadingBinaryParameters( reader )
     #
+                elif row[ 0 ] == 'Lamda_wilson':
+                    Lamda_wilson = ReadingBinaryParameters( reader )
+    #
             else:
                 print 'Number_components was not defined in the FIRST line'
                 sys.exit()
@@ -110,6 +112,13 @@ def ReadingRows_String( row ):
     
     return Array
 
+# This function calculates the number of possible combinations. Given a sample of M items, 
+#    we want to know how many subsets of N tuples can be generated as,
+#              Number_of_Combination = (M!) / [(N!) * ((M-N)!) ]
+def NumberOfCombinations( M, N ):
+    Comb = math.factorial( M ) / ( math.factorial( N ) * math.factorial( M - N ) )
+    return Comb
+
 # This function populates the binary interaction parameter (Kij) tensor in which Kij = Kji 
 #    and Kij = 0 (for i=1,NComp and j=1,NComp). Kij is stored as an array Kij[ node ] with
 #                             node = i * NComp + j
@@ -143,12 +152,32 @@ def ReadingBinaryParameters( reader ):
     return Kij
         
 
-# This function calculates the number of possible combinations. Given a sample of M items, 
-#    we want to know how many subsets of N tuples can be generated as,
-#              Number_of_Combination = (M!) / [(N!) * ((M-N)!) ]
-def NumberOfCombinations( M, N ):
-    Comb = math.factorial( M ) / ( math.factorial( N ) * math.factorial( M - N ) )
-    return Comb
+# This function calculates the big_greek_lamda ( Λij ) tensor or Lamda_wilson
+#    and Λij = 0 (for i=1,NComp and j=1,NComp). Kij is stored as an array Λij[ node ] with
+#                             node = i * NComp + j
+#    For 3 components:
+#           Λ11   Λ12   Λ13
+#           Λ21   Λ22   Λ23
+#           Λ31   Λ32   Λ33
+#    In this case, Λ11 = Λ22 = Λ33 = Λ44 = 1  
+#
+def ReadingBinaryParameters( reader ):
+    Lamda_wilsonij = [ 1. for i in range( NComp ** 2 ) ]
+    Array_temp = [] 
+
+    for line in reader: # Reading input file for Λij and allocating the data in a list
+        Array_temp.append(line)
+
+   for i in range( NComp ):
+        for j in range( NComp ):
+            node1 = i * NComp + j
+            if i == j:
+               Lamdaij[ node1 ] = 1           
+            else:
+               Lamdaij[ node1 ] = float( temp[2] )
+
+   return Lamda_wilsonij
+
 
 
 # This function assess if the summation of compositions (mole/mass fraction) is equal to one
