@@ -73,7 +73,8 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                     BinaryParameter = ReadingBinaryParameters( reader )
     #
                 elif row[ 0 ] == 'Lamda_wilson':
-                    Lamda_wilson = ReadingBinaryParameters( reader )
+                    Lamda_wilson = ReadingLamda_wilson( reader )
+                    print  Lamda_wilson
     #
             else:
                 print 'Number_components was not defined in the FIRST line'
@@ -161,7 +162,7 @@ def ReadingBinaryParameters( reader ):
 #           Λ31   Λ32   Λ33
 #    In this case, Λ11 = Λ22 = Λ33 = Λ44 = 1  
 #
-def ReadingBinaryParameters( reader ):
+def ReadingLamda_wilson( reader ):
     Lamda_wilsonij = [ 1. for i in range( NComp ** 2 ) ]
     Array_temp = [] 
 
