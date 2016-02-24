@@ -74,8 +74,7 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
     #
                 elif row[ 0 ] == 'Lamda_wilson':
                     Lamda_wilson = ReadingLamda_wilson( reader )
-                    print  'Here.....', Lamda_wilson
-                    sys.exit()
+                    
     #
             else:
                 print 'Number_components was not defined in the FIRST line'
@@ -171,6 +170,17 @@ def ReadingLamda_wilson( reader ):
     Lamdaij = [ 1. for i in range( NComp ** 2 ) ]
     Array_temp = [] 
 
+    for l in reader: # Reading input file for Lij and allocating the data in a list
+        temp = Array_temp[ l ]
+        print l
+          
+       # Lamdaij[ node1 ] = float( temp[2] )
+   return Lamdaij 
+
+'''def ReadingLamda_wilson( reader ):
+    Lamdaij = [ 1. for i in range( NComp ** 2 ) ]
+    Array_temp = [] 
+
     for line in reader: # Reading input file for Lij and allocating the data in a list
         temp = Array_temp[ line ]
 
@@ -180,11 +190,7 @@ def ReadingLamda_wilson( reader ):
             if i == j:
                 Lamdaij[ node1 ] = 1           
             else:
-                Lamdaij[ node1 ] = float( temp[2] )
-
-    return Lamdaij
-
-
+                Lamdaij[ node1 ] = float( temp[2] )'''
 
 # This function assess if the summation of compositions (mole/mass fraction) is equal to one
 def ListOfCommentsStrings( row ):
