@@ -42,6 +42,7 @@ a_sum_V = 0. ;b_sum_V = 0.  # the initial sum for am and bm based on the eq. 2.7
 aij = [0. for i in range(ThT.NComp**2) ] # the aij has the same dimension like the kij, a square matrix where the main diagonal is 0
 Lij = [1. for i in range(ThT.NComp**2) ]
 ln_gamma = [0. for i in range(ThT.NComp**2) ]
+Ln_Gamma = [0. for i in range(ThT.NComp**2) ]
 
 for i in range(ThT.NComp):
     for j in range(ThT.NComp):
@@ -60,14 +61,13 @@ for i in range(ThT.NComp):
         node = i * ThT.NComp + j
         if i == j:                                                  # this is for the main diagonal
             aij[ node ] = PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] )  # I am calling the EOS_PR
-            ln_gamma[ node ] = 1 - np.log( np.sum ( MFrac[ i ] * ThT.Lamda_wilson[ node ] ) ) - np.sum( MFrac[ j ] * ThT.Lamda_wilson[ node ] / (np.sum ( MFrac[ i ] * ThT.Lamda_wilson[ node ] ) ) )
+            ln_gamma[ node ] = np.sum ( MFrac[ i ] * ThT.Lamda_wilson[ node ])
             print '  you are at the vapour phase where  i = j ,', i, j,' and the aij = ', aij[ node ], ' the lamdaij = ', ThT.Lamda_wilson[i], ' the ln_gamma = ', ln_gamma[ node ] 
             print
             print 
         else:                                                       # this is for the rest of the elements of the square matrix of the aij
             aij[ node ] = math.sqrt( PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) * PR.PREoS_Calc_a( j , ThT.T_System[ 0 ] ) ) * ( 1. - ThT.BinaryParameter[ node ] )
             print '  you are at the vapour phase where  i /= j ,', i, j, ' where the Kij = ', ThT.BinaryParameter[ node ],  ' and the Lamda_Wilson = ', ThT.Lamda_wilson[ node ]   
-            ln_gamma[ node ] = 1 - np.log( np.sum ( MFrac[ i ] * ThT.Lamda_wilson[ node ] ) ) - np.sum( MFrac[ j ] * ThT.Lamda_wilson[ node ] / (np.sum ( MFrac[ i ] * ThT.Lamda_wilson[ node ] ) ) )
             print '  you are at the vapour phase where  i = j ,', i, j,' and the aij = ', aij[ node ], ' the lamdaij = ', ThT.Lamda_wilson[i], ' the ln_gamma = ', ln_gamma[ node ] 
             print
             a_sum_V = a_sum_V + aij[ node ] * MFrac[ i ] * MFrac[ j ]
@@ -79,8 +79,11 @@ for i in range(ThT.NComp):
             #print '  at the Liquid Phase ', i+1 , j+1 , ' the a_mixture = ', a_sum_L, ' and the b_mixture = ', b_sum_L
             time.sleep(0)                                           # this command gives the results 
          
-         Ln_Gamma = ln_gamma[ node ]   
-         print ' the Ln_Gamma = ', Ln_Gamma        
+            
+
+
+Ln_Gamma = ln_gamma[ node ]   
+print '  the Ln_Gamma = ', Ln_Gamma        
 
 amv = a_sum_V
 bmv = b_sum_V
@@ -177,13 +180,13 @@ sum_partial1_2 = 0
 for i in range(ThT.NComp):
     for j in range(ThT.NComp):
         sum_partial1_1 = sum_partial1_1 + 2 * np.sum( MFrac[i] * ( PR.PREoS_Calc_b(i)  - ( alpha / Rconst * ThT.T_System[ 0 ] ) ) )   
-    sum_partial1_2 = ( alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) ) + 
+    sum_partial1_2 = ( alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) ) 
     
 print sum_partial1_1
 print sum_partial1_2
 
 #term2 = (1 / b_sum_V) *  (Z_root.max() - 1)
-print '  the term 2 = ',term2 = 0
+print '  the term 2 = ',term2 
 print
 
 
