@@ -167,30 +167,25 @@ def ReadingBinaryParameters( reader ):
 #    In this case, L11 = L22 = L33 = L44 = 1  
 #
 def ReadingLamda_wilson( reader ):
-    Lamdaij = [ 1. for i in range( NComp ** 2 ) ]
-    Array_temp = [] 
-
-    for l in reader: # Reading input file for Lij and allocating the data in a list
-        temp = Array_temp[ l ]
-        print l
-          
-       # Lamdaij[ node1 ] = float( temp[2] )
-   return Lamdaij 
-
-'''def ReadingLamda_wilson( reader ):
-    Lamdaij = [ 1. for i in range( NComp ** 2 ) ]
+    Lij = [ 1. for i in range( NComp ** 2 ) ]
     Array_temp = [] 
 
     for line in reader: # Reading input file for Lij and allocating the data in a list
-        temp = Array_temp[ line ]
+        Array_temp.append(line)
+        #temp = Array_temp[ line ]
+        print line
 
-    for i in range( NComp ):
-        for j in range( NComp ):
-            node1 = i * NComp + j
-            if i == j:
-                Lamdaij[ node1 ] = 1           
-            else:
-                Lamdaij[ node1 ] = float( temp[2] )'''
+    for l in range (NComp**2):
+        ltemp = Array_temp[ l ]
+        i = int( ltemp[ 0 ] ) ; j = int( ltemp[ 1 ] )
+        node = ( i - 1 ) * NComp + ( j - 1 )
+        Lij[ node ] = float( ltemp[ 2 ] )
+        print 'the L at the ', i , j, ' = ', Lij[ node ]
+  
+       
+    # Lamdaij[ node1 ] = float( temp[2] )
+    return Lij 
+
 
 # This function assess if the summation of compositions (mole/mass fraction) is equal to one
 def ListOfCommentsStrings( row ):
