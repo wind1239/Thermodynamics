@@ -50,11 +50,11 @@ for i in range(ThT.NComp):
         print '  for the  ', ThT.Species[i] 
     	print '  T_Crit = ', ThT.T_Crit[i]
     	print '  P_Crit = ', ThT.P_Crit[i]            
-    	print '  wmega  = ', ThT.Accentric_Factor[i]    # accentric factor 
-    	print '  Kij    = ', ThT.BinaryParameter[j]     # the binary parameter 
-    	print '  Lij    = ', ThT.Lamda_wilson[j]        # the lamda parameter for the ln_gamma term
-        print '  xi     = ', ThT.MolarMass[i]           # the molar mass 
-    	print '  zi     = ', ThT.Z_Feed[i]              # overall feed mass fraction of the component 
+    	print '  wmega  = ', ThT.Accentric_Factor[i]       # accentric factor 
+    	print '  Kij    = ', ThT.BinaryParameter[node]     # the binary parameter 
+    	print '  Lij    = ', ThT.Lamda_wilson[node]        # the lamda parameter for the ln_gamma term
+        print '  xi     = ', ThT.MolarMass[i]              # the molar mass 
+    	print '  zi     = ', ThT.Z_Feed[i]                 # overall feed mass fraction of the component 
     	print ''
         
         if i == j:                                                  # this is for the main diagonal
@@ -132,41 +132,20 @@ print '  the cubic root of the cubic_PR is = ', Z_root,
 print '  the Max = ', Z_root.max(), ' and the Min = ', Z_root.min()
 print
 
-print    
-print '   = = = = = = = = = = = = = = = = = calculating the fugacity coef. = = = = = = = = = = = = = = = = = '
-print '   = = for each component at each phase greek phi[i] = fi / Pxi, xi = molar fraction or ThT.MolarMass '
-print '   = = = = = = = = = I am breaking down the fugacity coef. eq. into its terms = = = = = = = = = = = = ' 
+print '  = = = = = =                                                                                              = = = = = = '
+print '  = = = =                                   calculating the fugacity coef.                                     = = = = '
+print '  = =         for each component at each phase greek phi[i] = fi / Pxi, xi = molar fraction or ThT.MolarMass       = = '
+print '  = = = =                    I am breaking down the fugacity coef. eq. into its terms                          = = = = ' 
+print '  = = = = = =                                                                                              = = = = = = '
 print
-
-# c term from the eq. 2.26
-c = (1 / np.sqrt(2)) *  np.log( np.sqrt(2)-1 ) 
-print '  the c = ', c
 print
 
 
-# calculate the Helmoltz free energy in excess Ae from 2.27 
-Ae = 0
-for i in range(ThT.NComp):
-    Ae1 = c * ( ( amv / bmv ) - ( MFrac[ i ] * alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) ) )
-    Ae = - ( amv / bmv ) + ( MFrac[ i ] * ( alpha / PR.PREoS_Calc_b(i) ) )
-print '  the Helmoltz in excess Ae1 = ', Ae1,  ' &  Ae = ', Ae 
+c = (1 / np.sqrt(2)) * np.log( np.sqrt(2)-1 )                      # c term from the eq. 2.26
+D = amv/ ( Rconst * ThT.T_System[ 0 ] * bmv )                      # D and Q term from  the eq. 2.28
+Q = bmv * ( 1- D )
+print '  the terms D = ', D, ' Q = ', Q, ' c = ', c  
 print
-
-
-# D term from  the eq. 2.17
-D = 0
-for i in range(ThT.NComp):
-    D = D + ( MFrac[ i ] * alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) ) + Ae * ( c * Rconst * ThT.T_System[ 0 ] )
-print '  the D = ', D
-print
-
-
-# Q term from the eq. 2.28 (solving the 2.28 in respect of Q)
-Q = (1 - D) * bmv
-print '  the Q = ', Q
-print
-
-
 
 
 # = = = = = = = = = = = calculate each term to find the ln_greek_fi a.k.a. fugacity coef. = = = = = = = = = = = 
