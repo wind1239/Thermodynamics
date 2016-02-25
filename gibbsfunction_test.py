@@ -184,34 +184,30 @@ sum_partial1_2 = 0
 for i in range(ThT.NComp):
     for j in range(ThT.NComp):
         sum_partial1_1 = sum_partial1_1 + 2 * np.sum( MFrac[i] * ( PR.PREoS_Calc_b(i)  - ( alpha / Rconst * ThT.T_System[ 0 ] ) ) )   
-    sum_partial1_2 = ( alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) ) 
+    sum_partial1_2 = ( alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + Ln_Gamma / c ) 
     
-print sum_partial1_1
-print sum_partial1_2
+#print sum_partial1_1
+#print sum_partial1_2
 
-#term2 = (1 / b_sum_V) *  (Z_root.max() - 1)
-print '  the term 2 = ',term2 
+partial1 = sum_partial1_1 / (1 - D) + ( Q * ( 1- sum_partial1_2 ) ) / ( ( 1 - D )**2 )
+
+term2 = ( 1 / bmv ) * partial1 * (Z_root.max() - 1)
+
+print '  the term 2 = ', term2
 print
 
-
 # = = = = = = = = = = = = = = = = = = term 3 = = = = = = = = = = = = = = = = = = = = = = = =
-term3 = (1 / (2 * np.sqrt(2)) ) * ( a_sum_V / ( Rconst * ThT.T_System[ 0 ] * b_sum_V ))
-print term3
+term3 = (1 / (2 * np.sqrt(2)) ) * ( a_sum_V / ( Rconst * ThT.T_System[ 0 ] * b_sum_V ) ) * (  ( 1 / a_sum_V ) * ( D * partial1  +  bmv * sum_partial1_2 ) * ( Rconst * ThT.T_System[ 0 ] ) - ( ( 1 / b_sum_V ) * partial1 )   )
+print '  the term 3 = ',term3
 print
 
 
 # = = = = = = = = = = = = = = = = = = term 4 = = = = = = = = = = = = = = = = = = = = = = = =
-#term4 = ( 1 / amv ) * ( 2 - alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + ( ln_gamma / c ) )
-term4 = 0
-print term4
+term4 = np.log((Z_root.max() / Big_B + 1 - np.sqrt(2)) / (Z_root.max() / Big_B + 1 + np.sqrt(2)))
+print '  the term 4 = ',term4
 print
 
-# = = = = = = = = = = = = = = = = = = term 5 = = = = = = = = = = = = = = = = = = = = = = = =
-term5 = np.log((Z_root.max() / Big_B + 1 - np.sqrt(2)) / (Z_root.max() / Big_B + 1 + np.sqrt(2)))
-print '  the term 5 = ',term5
-print
-
-fugacity_coeff = term1 + term2+ term3 + term4 + term5
+fugacity_coeff = term1 + term2+ term3 * term4 
 
 # calculate the ln(greek_fi) = fugacity_coeff
 # greek_fi = e ^ fugacity_coeff
