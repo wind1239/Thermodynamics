@@ -70,7 +70,9 @@ for i in range(ThT.NComp):
             print '  aij = ', aij[ node ]   
             print '  MFrac = ', MFrac[ i ]
             ln_gamma[ node ] = 1 - np.log ( np.inner( MFrac , ThT.Lamda_wilson ) ) - np.sum( ( MFrac[ i ] * ThT.Lamda_wilson[ j ] ) / ( np.inner( MFrac , ThT.Lamda_wilson ) )   )
-            print '  the ln_gamma = ', ln_gamma[ node ] 
+            print '  the ln_gamma = ', ln_gamma[ node ]
+            Ln_Gamma = ln_gamma[ node ]   
+            print '  the Ln_Gamma = ', Ln_Gamma 
             print
             print 
             a_sum_V = a_sum_V + aij[ node ] * MFrac[ i ] * MFrac[ j ]
@@ -190,15 +192,18 @@ fugacity_coeff = term1 + term2+ term3 * term4
 
 # calculate the ln(greek_fi) = fugacity_coeff
 # greek_fi = e ^ fugacity_coeff
-greek_fi = math.exp(fugacity_coeff)
+#greek_fi = math.exp(fugacity_coeff)
 
-print '  the fugacity_coeff a.k.a. greek_fi = ', greek_fi
+print '  the fugacity_coeff a.k.a. ln_greek_fi = ', fugacity_coeff
 
 for i in range(ThT.NComp):
     greek_mi  = ( Rconst * ThT.T_System[ 0 ] ) * ( fugacity_coeff + np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
 print '  the chemical potential a.k.a the greek_mi for the Vapour Phase !!! = ', greek_mi
 print 
 
+Ge = - np.inner( MFrac, np.log( ( np.inner( MFrac , ThT.Lamda_wilson ) ) ) )
+print '  the Gibbs energy in excess is Ge = ', Ge, ' while the equilibrium will achieved for the Ge_min = ', Ge.min()
+print
 
 # = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = =
 # = = = = = = = = = = = = = = = = = Statement of the VLE Problem = = = = = = = = = = = = = = = = = =
