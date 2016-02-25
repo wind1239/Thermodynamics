@@ -67,9 +67,12 @@ for i in range(ThT.NComp):
             print 
         else:                                                       # this is for the rest of the elements of the square matrix of the aij
             aij[ node ] = math.sqrt( PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) * PR.PREoS_Calc_a( j , ThT.T_System[ 0 ] ) ) * ( 1. - ThT.BinaryParameter[ node ] )
-            print '  you are at the i /= j ,', i, j, ' where the Kij = ', ThT.BinaryParameter[ node ],  ' and the Lamda_Wilson = ', ThT.Lamda_wilson[ node ]   
-            print '  you are at the vapour phase where  i = j ,', i, j,' and the aij = ', aij[ node ], ' the lamdaij = ', ThT.Lamda_wilson[i], ' the ln_gamma = ', ln_gamma[ node ] 
+            print '  aij = ', aij[ node ]   
+            print '  MFrac = ', MFrac[ i ]
+            ln_gamma[ node ] = 1 - np.log ( np.inner( MFrac , ThT.Lamda_wilson ) ) - np.sum( ( MFrac[ i ] * ThT.Lamda_wilson[ j ] ) / ( np.inner( MFrac , ThT.Lamda_wilson ) )   )
+            print '  the ln_gamma = ', ln_gamma[ node ] 
             print
+            print 
             a_sum_V = a_sum_V + aij[ node ] * MFrac[ i ] * MFrac[ j ]
             b_sum_V = b_sum_V + PR.PREoS_Calc_b(i) * MFrac[ i ]
             print '  at the Vapour Phase ', i, j, ' the a_mixture = ', a_sum_V, ' the b_mixture = ', b_sum_V, 
@@ -81,9 +84,9 @@ for i in range(ThT.NComp):
          
             
 
-
+print '  - - - - - - - - - - - - - - - - - - - '
 Ln_Gamma = ln_gamma[ node ]   
-print '  the Ln_Gamma = ', Ln_Gamma        
+print '   the final Ln_Gamma = ', Ln_Gamma        
 
 amv = a_sum_V
 bmv = b_sum_V
@@ -91,10 +94,11 @@ bmv = b_sum_V
 #aml = a_sum_L
 #bml = b_sum_L
 
-print
+print '  - - - - - - - - - - - - - - - - - - - '  
 print '  the a_mixture_Vapour = ', amv
 print '  the b_mixture_Vapour = ', bmv
-print
+print '  - - - - - - - - - - - - - - - - - - - '
+print 
 #print '  the a_mixture_Liquid = ', a_sum_L
 #print '  the b_mixture_Liquid = ', b_sum_L
 #print    
