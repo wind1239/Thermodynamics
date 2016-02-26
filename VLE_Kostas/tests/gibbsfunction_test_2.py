@@ -66,14 +66,16 @@ for i in range(ThT.NComp):
             a_i = 0.45724 * ( ThT.Rconst * ThT.T_Crit[i] )**2 / ThT.P_Crit[i] * alpha
             b_i = 0.07780 * ThT.Rconst * ThT.T_Crit[i]  / ThT.P_Crit[i]
             ln_gamma[ node ] = 1 - np.log ( np.inner( MFrac , ThT.Lamda_wilson ) ) - np.sum( ( MFrac[ i ] * ThT.Lamda_wilson[ j ] ) / ( np.inner( MFrac , ThT.Lamda_wilson ) )   )
-            Ge =  - ( ThT.Rconst * ThT.T_Crit[i] ) * ( np.inner( MFrac, np.log( ( np.inner( MFrac , ThT.Lamda_wilson ) ) ) ) )
+            Ge =  - ( ThT.Rconst * ThT.T_System[ 0 ] ) * ( np.inner( MFrac, np.log( ( np.inner( MFrac , ThT.Lamda_wilson ) ) ) ) )
+            Ge = np.sum( Ge )
             print '  the ln_gamma = ', ln_gamma[ node ],'  the k = ', k,'  the alphai = ', alpha, '  the ai = ', a_i, '  the b_i = ', b_i  
             print '  for the component ', ThT.Species[i],' with respect to its self the Ge = ', Ge
             print 
         else:                                                       # this is for the rest of the elements of the square matrix of the aij
-            print '  MFrac = ', MFrac[ i ]
+            print '  MFrac = ', MFrac[ node ]
             ln_gamma[ node ] = 1 - np.log ( np.inner( MFrac , ThT.Lamda_wilson ) ) - np.sum( ( MFrac[ i ] * ThT.Lamda_wilson[ j ] ) / ( np.inner( MFrac , ThT.Lamda_wilson ) )   )
-            Ge =  - ( ThT.Rconst * ThT.T_Crit[i] ) * ( np.inner( MFrac, np.log( ( np.inner( MFrac , ThT.Lamda_wilson ) ) ) ) )
+            Ge =  - ( ThT.Rconst * ThT.T_System[ 0 ] ) * ( np.inner( MFrac, np.log( ( np.inner( MFrac , ThT.Lamda_wilson ) ) ) ) )
+            Ge = np.sum( Ge )
             k = 0.37464 + 1.5422 * ThT.Accentric_Factor[i] - 0.26992 * ThT.Accentric_Factor[i]**2
             alpha = ( 1. + k * ( 1. - math.sqrt( ThT.T_System[ 0 ] / ThT.T_Crit[i] ) )) **2
             a_i = 0.45724 * ( ThT.Rconst * ThT.T_Crit[i] )**2 / ThT.P_Crit[i] * alpha
