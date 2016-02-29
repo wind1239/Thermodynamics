@@ -12,4 +12,5 @@ for i in range(2):
     for j in range(2):
         node = i * 2 + j
         inner = 1 - np.log( np.dot( x, l ) ) - 1 
+        #inner = np.einsum('i,j', x, l)
         print 'at the node = ', node, '  the inner = ', inner
