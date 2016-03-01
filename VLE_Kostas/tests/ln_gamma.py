@@ -15,7 +15,7 @@ sumc_nom = 0
 sumc_denom = 0
 ln_gamma = 0
 
-for iphase in range(1):
+'''for iphase in range(1):
     print ' ---------------------------------------------------------- '
     print '                       iphase = ', iphase
     print ' ---------------------------------------------------------- '
@@ -26,21 +26,34 @@ for iphase in range(1):
             node = k * nc + i
             print ' k, i, node:', k, i, node, x[i],l[node]
             suma = suma + x[i] * l[node]
-        print '                                    the suma = ', suma
+        print '                              the ln( suma ) = ', np.log(suma) 
         print
         
         # this is the second loop for the sumc term
         for j in range(nc):
-            node1 = k *nc + j 
-            sumc = 0
+            node1 = k *nc + j
             sumc_denom = 0
             for i in range(nc):
                 node2 = i * nc + j
                 sumc_denom = sumc_denom + x[i] * l[node2]
+            print ' the sumc_denom = ', sumc_denom
             sumc = sumc + x[j] * l[node1] / sumc_denom          # or it can be done like that sumc = sumc_nom / sumc_denom
-            print ' k, j, node:', k, j, node, x[j],l[node1]
+            #print ' k, j, node:', k, j, node, x[j],l[node2]
         print '                                    the sumc = ', sumc
-        ln_gamma = 1 - np.log(suma) - sumc
-        print '                                    ln_gamma = ', ln_gamma 
-        print ' ---------------------- next node ----------------------- '
+        #ln_gamma = 1 - np.log(suma) - sumc
+        #print '                                    ln_gamma = ', ln_gamma 
+        #print ' ---------------------- next node ----------------------- ' '''
+
+
+for k in range(nc):
+    #sumc_denom = 0
+    for j in range(nc):
+        node1 = k *nc + j
+        for i in range(nc):
+            node2 = i * nc + j
+            sum_denomi =  x[i] * l[node1]   
+            #sumc_denom = sumc_denom + x[i] * l[node2]
+        print ' the sum_denomi = ', sum_denomi, ' the sumc_denom = ', sumc_denom
+        #sumc = sumc + x[j] * l[node1] / sumc_denom 
+
         
