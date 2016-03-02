@@ -21,41 +21,23 @@ for iphase in range(1):
     print '                       iphase = ', iphase
     print ' ---------------------------------------------------------- '
     for k in range(nc):
-        # this is the first loop for the suma
-        suma = 0                                               # I do not want to tranfer the previous sum to the next iteration/node i
-        for i in range(nc):                                    # so everytime, for every new loop, i set the sum a = 0  
+        suma = 0                                               
+        for i in range(nc):                                      
             node = k * nc + i
-            print ' k, i, node:', k, i, node, x[i],l[node]
+            #print ' k, i, node:', k, i, node, x[i],l[node]
             suma = suma + x[i] * l[node]
-        print '                              the ln(suma) = ', np.log(suma) 
-        print
-        '''
-        # this is the second loop for the sumc term
+        print '                              ln(suma) = ', np.log(suma) 
         for j in range(nc):
-            node1 = k *nc + j
-            sumc_denom = 0
+            node1 = j *nc + k 
+            sumc_nom = x[j] * l[node1]
+            #print ' the sumc_nom = ', sumc_nom, j, k
+            sum_denomi = 0
+            sumcj = 0
             for i in range(nc):
-                node2 = i * nc + j
-                sumc_denom = sumc_denom + x[i] * l[node2]
-            print ' the sumc_denom = ', sumc_denom
-            sumc = sumc + x[j] * l[node1] / sumc_denom          # or it can be done like that sumc = sumc_nom / sumc_denom
-            #print ' k, j, node:', k, j, node, x[j],l[node2]
-        print '                                    the sumc = ', sumc
-        #ln_gamma = 1 - np.log(suma) - sumc
-        #print '                                    ln_gamma = ', ln_gamma 
-        #print ' ---------------------- next node ----------------------- ' '''
-
-
-for k in range(nc):
-    for j in range(nc):
-        node1 = j *nc + k 
-        sumc_nom = x[j] * l[node1]
-        #print ' the sumc_nom = ', sumc_nom, j, k
-        sum_denomi = 0
-        for i in range(nc):
-            node2 = i * nc + j
-            sum_denomi =  sum_denomi + x[i] * l[node2]   
-            print ' the sum_denomi = ', sum_denomi, j, i
-            sumc_denom = sum_denomi
-        print '                             the sum_denom = ', sumc_denom
-        #sumc = sumc + x[j] * l[node1] / sumc_denom 
+                node2 = j * nc + i
+                sum_denomi = sum_denomi + x[i] * l[node2]   
+            #print ' the sum_denomi = ', sum_denomi, j, i
+            sumcj = sumcj +  sumc_nom/ sum_denomi
+        print '                                 sumcj = ', sumcj
+        print ' for the componenent ', k , '      ln_gamma = ', 1 - np.log(suma) - sumcj
+        print
