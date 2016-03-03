@@ -42,6 +42,6 @@ BinaryInteraction
 # Component_i Component_j Value
 Lamda_wilson 
 1      1       1
-1      2       0
-2      1       0
+1      2       0.25
+2      1       0.25
 2      2       1
