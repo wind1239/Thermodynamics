@@ -7,8 +7,8 @@ import time
 
 nc = 3
 
-x = [0.2, 0.6, 0.2]
-l = [1., 4.5, 3.8, 0.5, 1., 2.5, 8.6, 2.5, 1. ]
+x = [0.2, 0.5, 0.3]
+l = [1., 0.2, 0.1, 2., 1., 0.5, 0, 0.3, 1. ]
 suma = 0
 sumc = 0
 sumc_nom = 0
@@ -26,13 +26,13 @@ for iphase in range(1):
             node = k * nc + i
             #print ' k, i, node:', k, i, node, x[i],l[node]
             suma = suma + x[i] * l[node]
-        print '                              ln(suma) = ', np.log(suma) 
+        print '                              ln(suma) = ',suma #np.log(suma) 
+        sumcj = 0
         for j in range(nc):
             node1 = j *nc + k 
             sumc_nom = x[j] * l[node1]
             #print ' the sumc_nom = ', sumc_nom, j, k
             sum_denomi = 0
-            sumcj = 0
             for i in range(nc):
                 node2 = j * nc + i
                 sum_denomi = sum_denomi + x[i] * l[node2]   
