@@ -6,6 +6,8 @@
 # wmega = 0.011
 #-----------------------------------------------------
 
+#!/usr/bin/env python
+
 import numpy as np
 import math
 import sys
@@ -50,6 +52,9 @@ ln_gamma = [0. for i in range(ThT.NComp**2) ]
 
 
 for iphase in range(ThT.NPhase):
+    print
+    print '                                                                                               you are at the iphase ', iphase 
+    print
     for i in range(ThT.NComp):
         for j in range(ThT.NComp):
             node = i * ThT.NComp + j
