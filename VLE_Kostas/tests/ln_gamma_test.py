@@ -7,10 +7,6 @@ import EOS_PR_test as PR
 
 
 def ln_gamma( MFrac ):
-#"""    print ' ---------------------------------------------------------- '
-#    print '                       iphase = ', iphase
-#    print ' ---------------------------------------------------------- '
-#"""
     ln_gamma1 = [ 0. for i in range( ThT.NComp ) ]
     for k in range(ThT.NComp):
         suma = 0                                               
@@ -42,13 +38,11 @@ def ln_gamma( MFrac ):
 ThT.ReadSet_Global_Variables()
 nc = ThT.NComp
 print '  the number of components = ', ThT.NComp
-#x = [0.2, 0.6, 0.2]
-#l = [1., 4.5, 3.8, 0.5, 1., 2.5, 8.6, 2.5, 1. ]
-#suma = 0
+
 sumc = 0
 sumc_nom = 0
 sumc_denom = 0
-#ln_gamma = 0
+
 
 MFrac = [ 0. for i in range( ThT.NComp ) ];print '  the initial molar fraction before reading from the input.dat is', MFrac
 
