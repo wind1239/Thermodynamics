@@ -41,7 +41,7 @@ a_sum_V = 0. ;b_sum_V = 0.  # the initial sum for am and bm based on the eq. 2.7
 aij = [0. for i in range(ThT.NComp**2) ] # the aij has the same dimension like the kij, a square matrix where the main diagonal is 0
 Lij = [1. for i in range(ThT.NComp**2) ]
 ln_gamma = [0. for i in range(ThT.NComp**2) ]
-Ln_Gamma = [0. for i in range(ThT.NComp**2) ]
+
 
 for iphase in range(ThT.NPhase):
     for i in range(ThT.NComp):
@@ -61,7 +61,7 @@ for iphase in range(ThT.NPhase):
     	    print ''
         
             if i == j:                                                  # this is for the main diagonal
-               aij[ node ] = PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] )  # I am calling the EOS_PR
+               aij[ node ] = PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] )   # I am calling the EOS_PR
                print '  aij = ', aij[ node ]
                print '  MFrac = ', MFrac[ i ]
                ln_gamma[ node ] = lng.ln_gamma( MFrac )
@@ -72,7 +72,7 @@ for iphase in range(ThT.NPhase):
                aij[ node ] = math.sqrt( PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) * PR.PREoS_Calc_a( j , ThT.T_System[ 0 ] ) ) * ( 1. - ThT.BinaryParameter[ node ] )
                print '  aij = ', aij[ node ]   
                print '  MFrac = ', MFrac[ i ]
-               ln_gamma[ node ] = ln_gamma[ node ] = lng.ln_gamma( MFrac )
+               ln_gamma[ node ] = lng.ln_gamma( MFrac )
                print
                print 
                a_sum_V = a_sum_V + aij[ node ] * MFrac[ i ] * MFrac[ j ]
@@ -85,10 +85,7 @@ for iphase in range(ThT.NPhase):
                time.sleep(0)                                           # this command gives the results 
          
             
-'''
-print '  - - - - - - - - - - - - - - - - - - - '
-Ln_Gamma = ln_gamma[ node ]   
-print '   the final Ln_Gamma = ', Ln_Gamma        
+     
 
 amv = a_sum_V
 bmv = b_sum_V
@@ -165,12 +162,10 @@ sum_partial1_2 = 0
 for i in range(ThT.NComp):
     for j in range(ThT.NComp):
         sum_partial1_1 = sum_partial1_1 + 2 * np.sum( MFrac[i] * ( PR.PREoS_Calc_b(i)  - ( alpha / Rconst * ThT.T_System[ 0 ] ) ) )   
-    sum_partial1_2 = ( alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + Ln_Gamma / c ) 
-    
-#print sum_partial1_1
-#print sum_partial1_2
-
-partial1 = sum_partial1_1 / (1 - D) + ( Q * ( 1- sum_partial1_2 ) ) / ( ( 1 - D )**2 )
+    sum_partial1_2 = ( alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + lng.ln_gamma( MFrac ) / c ) 
+    #print sum_partial1_1
+    #print sum_partial1_2
+    partial1 = sum_partial1_1 / (1 - D) + ( Q * ( 1- sum_partial1_2 ) ) / ( ( 1 - D )**2 )
 
 term2 = ( 1 / bmv ) * partial1 * (Z_root.max() - 1)
 
@@ -202,7 +197,7 @@ print '  the chemical potential a.k.a the greek_mi for the Vapour Phase !!! = ',
 print 
 
 Ge = - np.inner( MFrac, np.log( ( np.inner( MFrac , ThT.Lamda_wilson ) ) ) )
-print '  the Gibbs energy in excess is Ge = ', Ge, ' while the equilibrium will achieved for the Ge_min = ', Ge.min()
+print '  the Gibbs energy in excess is Ge = ', Ge, #' while the equilibrium will achieved for the Ge_min = ', Ge.min()
 print
 
 # = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = =
@@ -218,7 +213,7 @@ print '  - -                                                                    
 
 
 
-
+'''
 
 
 
