@@ -165,7 +165,7 @@ for i in range(ThT.NComp):
     sum_partial1_2 = ( alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + lng.ln_gamma( MFrac ) / c ) 
     #print sum_partial1_1
     #print sum_partial1_2
-    partial1 = sum_partial1_1 / (1 - D) + ( Q * ( 1- sum_partial1_2 ) ) / ( ( 1 - D )**2 )
+partial1 = sum_partial1_1 / (1 - D) + ( Q * ( 1- sum_partial1_2 ) ) / ( ( 1 - D )**2 )
 
 term2 = ( 1 / bmv ) * partial1 * (Z_root.max() - 1)
 
