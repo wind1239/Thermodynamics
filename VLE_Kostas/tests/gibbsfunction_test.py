@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+#-----------------------------------------------------
+# I can use methane at 65.0 bar and 298.0 K. 
+# Methane has a Tc = -82.59 deg. C and Pc = 45.99 bar. 
+# wmega = 0.011
+#-----------------------------------------------------
+
 import numpy as np
 import math
 import sys
