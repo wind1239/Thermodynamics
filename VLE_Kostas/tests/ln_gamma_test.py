@@ -14,7 +14,7 @@ def ln_gamma( MFrac ):
             node = k * ThT.NComp + i
             #print ' k, i, node:', k, i, node, x[i],l[node]
             suma = suma + MFrac[i] * ThT.Lamda_wilson[node]
-        print '                              ln(suma) = ', np.log(suma) 
+        print '                               ln(suma) = ', np.log(suma) 
         sumcj = 0
         for j in range(ThT.NComp):
             node1 = j * ThT.NComp + k 
@@ -26,9 +26,9 @@ def ln_gamma( MFrac ):
                 sum_denomi = sum_denomi + MFrac[i] * ThT.Lamda_wilson[node2]   
                 #print ' the sum_denomi = ', sum_denomi, j, i
                 sumcj = sumcj +  sumc_nom/ sum_denomi
-        print '                                 sumcj = ', sumcj
+        print '                                  sumcj = ', sumcj
         ln_gamma1[k] = 1 - np.log(suma) - sumcj
-        print ' for the componenent ', k , '      ln_gamma = ', ln_gamma1[k]
+        print '  for the componenent ', k , '      ln_gamma = ', ln_gamma1[k]
         print
     return ln_gamma1
 
