@@ -6,6 +6,7 @@ import numpy as np
 import math
 import ThermoTools as ThT
 import GibbsFunction as GibbsF
+import PhaseStability as Michaelsen
 
 
 ''' This is the main program that aims to calculate the vapour-liquid equilibrium
@@ -46,13 +47,21 @@ print 'Composition of the phases:', ThT.PhaseFrac
 Temp = ThT.T_System[ 0 ]
 Press = ThT.P_System[ 0 ] 
 
+
 '''
-     MICHAELSEN'S STABILITY TEST: '''
-#Alpha_V = math.fsum( ThT.Z_Feed - 
+===============================================================
+     MICHAELSEN'S STABILITY TEST: Decision of the Phases 
+===============================================================
+                                                            '''
+G_Zero = Michaelsen.Phase_Stability()
 
-Gibbs_Free = GibbsF.Calc_Gibbs( Temp, Press )
 
-print 'Gibbs Free Energy:', Gibbs_Free
+
+
+
+#Gibbs_Free = GibbsF.Calc_Gibbs( Temp, Press )
+
+#print 'Gibbs Free Energy:', Gibbs_Free
 
 
 """ This Loop can be used later to obtain equilibrium composition in a 

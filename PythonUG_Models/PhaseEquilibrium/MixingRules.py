@@ -21,7 +21,9 @@ def MixingRules_EoS( Temp, Composition ):
     elif ThT.MixingRules == "Wong-Sandler":
         ( am, bm ) = MixingRules_EoS_WongSandler( Temp, Composition )
     else:
-        sys.exit( 'Mixing rules were not defined correctly!' ) 
+        sys.exit( 'Mixing rules were not defined correctly!' )
+
+    return am, bm
  
 
 '''
@@ -31,6 +33,7 @@ def MixingRules_EoS( Temp, Composition ):
 def MixingRules_EoS_Classic( Temp, Composition ):
     # aij: parameter for the combining rule (stored in the same way as kij)
     aij = [ 0. for i in range( ThT.NComp**2 ) ] ; sum1 = 0. ; sum2 = 0.
+    deriv = [ 0. for i in range( 2 ) ]
     
     for icomp in range( ThT.NComp ):
         ai, bi = Cubic_EoS( icomp, Temp )
@@ -49,7 +52,7 @@ def MixingRules_EoS_Classic( Temp, Composition ):
 
     am = sum1 ; bm = sum2 # am and bm (mixing rules)        
 
-    return am, bm
+    return am, bm, deriv
 
 '''
  This function calculates the attraction and repulsion parameters for the

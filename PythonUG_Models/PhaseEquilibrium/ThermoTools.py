@@ -15,12 +15,13 @@ import sys
 def ReadSet_Global_Variables(): # Read variables from a external file called 'input.dat'
     import csv # Using csv (comma separated values) module
  
-    global Rconst, NComp, NPhase, T_System, P_System, \
+    global Debug, Rconst, NComp, NPhase, T_System, P_System, \
         T_Crit, P_Crit, MolarMass, Species, Accentric_Factor, \
         Z_Feed, BinaryParameter, EOS, EOS_K1, MixingRules, \
-        MFrac, PhaseFrac
+        MFrac, PhaseFrac, Wilson_Lambda
 
     Rconst = 8.314 # Gas constant [J/(gmol.K)]
+    Debug = False
 
     ''' The first line MUST contain the number of components that will help to build up
         all numpy arrays thus, '''
@@ -73,7 +74,7 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                         sys.exit()
     #
                 elif row[ 0 ] == 'BinaryInteraction':
-                    BinaryParameter = ReadingBinaryParameters( reader )
+                    BinaryParameter = ReadingRealMatrix( reader )
     #
                     ''' Here we are reading the EOS and if the choice is PRSV, then we also
                               read the K1 parameter '''
@@ -102,6 +103,16 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                 elif row[ 0 ] == 'PhaseFrac':
                     PhaseFrac = ReadingRows_Float( row, optional = 'PhaseFrac' )
                     Sum2One( 'Phase Fraction', PhaseFrac )
+    #
+                elif row[ 0 ] == 'ActivityModel':
+                    if row[ 1 ] == 'Wilson_Model':
+                        Wilson_Lambda = ReadingRealMatrix( reader )
+                    else:
+                        print 'Activity Model not implemented yet'
+                        sys,exit()
+    #
+                elif row[ 0 ] == 'Debugging':
+                    Debug = row[ 1 ]
     #
             else:
                 print 'Number_components was not defined in the FIRST line'
@@ -257,3 +268,25 @@ def ReadingEOS( reader ):
         iline += 1
 
     return Array_temp1, Array_temp2 
+
+# This function reads a matrix/tensor of dimension NxN and allocates into
+#    an array
+def ReadingRealMatrix( reader ):
+    Value = [ 0. for i in range( NComp ** 2 ) ]
+    Array_temp = []
+
+    iline = 0
+    for line in reader:
+        Array_temp.append( line )
+        if iline == ( NComp - 1 ):
+            break
+        iline += 1
+
+    for k in range( NComp ):
+        temp = Array_temp[ k ]
+        for i in range( NComp ):
+            node = k * NComp + i
+            Value[ node ] = float( temp[ i ] )
+
+    return Value
+            
