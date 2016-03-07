@@ -1,10 +1,19 @@
 #!/usr/bin/env python
 
+#-----------------------------------------------------
+# I can use methane at 65.0 bar and 298.0 K. 
+# Methane has a Tc = -82.59 deg. C and Pc = 45.99 bar. 
+# wmega = 0.011
+#-----------------------------------------------------
+
+#!/usr/bin/env python
+
 import numpy as np
 import math
 import sys
 import thermotools_test as ThT
 import EOS_PR_test as PR
+import ln_gamma_test as lng
 import time
 #import matplotlib.pyplot as plt
 
@@ -40,55 +49,54 @@ a_sum_V = 0. ;b_sum_V = 0.  # the initial sum for am and bm based on the eq. 2.7
 aij = [0. for i in range(ThT.NComp**2) ] # the aij has the same dimension like the kij, a square matrix where the main diagonal is 0
 Lij = [1. for i in range(ThT.NComp**2) ]
 ln_gamma = [0. for i in range(ThT.NComp**2) ]
-Ln_Gamma = [0. for i in range(ThT.NComp**2) ]
 
-for i in range(ThT.NComp):
-    for j in range(ThT.NComp):
-        node = i * ThT.NComp + j
-        print '  ===================================================================================================================== '
-    	print '  you are at the component ' , i, j, ' at the node = ', node 
-        print '  for the  ', ThT.Species[i] 
-    	print '  T_Crit = ', ThT.T_Crit[i]
-    	print '  P_Crit = ', ThT.P_Crit[i]            
-    	print '  wmega  = ', ThT.Accentric_Factor[i]       # accentric factor 
-    	print '  Kij    = ', ThT.BinaryParameter[node]     # the binary parameter 
-    	print '  Lij    = ', ThT.Lamda_wilson[node]        # the lamda parameter for the ln_gamma term
-        print '  xi     = ', ThT.MolarMass[i]              # the molar mass 
-    	print '  zi     = ', ThT.Z_Feed[i]                 # overall feed mass fraction of the component 
-    	print ''
+
+for iphase in range(ThT.NPhase):
+    print
+    print '                                                                                               you are at the iphase ', iphase 
+    print
+    for i in range(ThT.NComp):
+        for j in range(ThT.NComp):
+            node = i * ThT.NComp + j
+            print '  ===================================================================================================================== '
+    	    print '  you are at the component ' , i, j, ' at the node = ', node, 'at the ', iphase,' phase'
+            print 
+            print '  for the  ', ThT.Species[i] 
+    	    print '  T_Crit = ', ThT.T_Crit[i]
+    	    print '  P_Crit = ', ThT.P_Crit[i]            
+    	    print '  wmega  = ', ThT.Accentric_Factor[i]       # accentric factor 
+    	    print '  Kij    = ', ThT.BinaryParameter[node]     # the binary parameter 
+    	    print '  Lij    = ', ThT.Lamda_wilson[node]        # the lamda parameter for the ln_gamma term
+            print '  xi     = ', ThT.MolarMass[i]              # the molar mass 
+    	    print '  zi     = ', ThT.Z_Feed[i]                 # overall feed mass fraction of the component 
+    	    print ''
         
-        if i == j:                                                  # this is for the main diagonal
-            aij[ node ] = PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] )  # I am calling the EOS_PR
-            print '  aij = ', aij[ node ]
-            print '  MFrac = ', MFrac[ i ]
-            ln_gamma[ node ] = 1 - np.log ( np.inner( MFrac , ThT.Lamda_wilson ) ) - np.sum( ( MFrac[ i ] * ThT.Lamda_wilson[ j ] ) / ( np.inner( MFrac , ThT.Lamda_wilson ) )   )
-            print '  the ln_gamma = ', ln_gamma[ node ] 
-            print
-            print 
-        else:                                                       # this is for the rest of the elements of the square matrix of the aij
-            aij[ node ] = math.sqrt( PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) * PR.PREoS_Calc_a( j , ThT.T_System[ 0 ] ) ) * ( 1. - ThT.BinaryParameter[ node ] )
-            print '  aij = ', aij[ node ]   
-            print '  MFrac = ', MFrac[ i ]
-            ln_gamma[ node ] = 1 - np.log ( np.inner( MFrac , ThT.Lamda_wilson ) ) - np.sum( ( MFrac[ i ] * ThT.Lamda_wilson[ j ] ) / ( np.inner( MFrac , ThT.Lamda_wilson ) )   )
-            print '  the ln_gamma = ', ln_gamma[ node ]
-            Ln_Gamma = ln_gamma[ node ]   
-            print '  the Ln_Gamma = ', Ln_Gamma 
-            print
-            print 
-            a_sum_V = a_sum_V + aij[ node ] * MFrac[ i ] * MFrac[ j ]
-            b_sum_V = b_sum_V + PR.PREoS_Calc_b(i) * MFrac[ i ]
-            print '  at the Vapour Phase ', i, j, ' the a_mixture = ', a_sum_V, ' the b_mixture = ', b_sum_V, 
-            print
-            #a_sum_L = a_sum_L + aij[ node ] * MFrac[ i + 1 ] * MFrac[ j + 1 ]
-            #b_sum_L = b_sum_L + PR.PREoS_Calc_b(i) * MFrac[ i +1 ] 
-            #print '  at the Liquid Phase ', i+1 , j+1 , ' the a_mixture = ', a_sum_L, ' and the b_mixture = ', b_sum_L
-            time.sleep(0)                                           # this command gives the results 
+            if i == j:                                                  # this is for the main diagonal
+               aij[ node ] = PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] )   # I am calling the EOS_PR
+               print '  aij = ', aij[ node ]
+               print '  MFrac = ', MFrac[ i ]
+               ln_gamma[ node ] = lng.ln_gamma( MFrac )
+               print '  the ln_gamma = ', ln_gamma[ node ] 
+               print
+               print 
+            else:                                              # this is for the rest of the elements of the square matrix of the aij
+               aij[ node ] = math.sqrt( PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) * PR.PREoS_Calc_a( j , ThT.T_System[ 0 ] ) ) * ( 1. - ThT.BinaryParameter[ node ] )
+               print '  aij = ', aij[ node ]   
+               print '  MFrac = ', MFrac[ i ]
+               ln_gamma[ node ] = lng.ln_gamma( MFrac )
+               print
+               print 
+               a_sum_V = a_sum_V + aij[ node ] * MFrac[ i ] * MFrac[ j ]
+               b_sum_V = b_sum_V + PR.PREoS_Calc_b(i) * MFrac[ i ]
+               print '  at the Vapour Phase ', i, j, ' the a_mixture = ', a_sum_V, ' the b_mixture = ', b_sum_V, 
+               print
+               #a_sum_L = a_sum_L + aij[ node ] * MFrac[ i + 1 ] * MFrac[ j + 1 ]
+               #b_sum_L = b_sum_L + PR.PREoS_Calc_b(i) * MFrac[ i +1 ] 
+               #print '  at the Liquid Phase ', i+1 , j+1 , ' the a_mixture = ', a_sum_L, ' and the b_mixture = ', b_sum_L
+               time.sleep(0)                                           # this command gives the results 
          
             
-
-print '  - - - - - - - - - - - - - - - - - - - '
-Ln_Gamma = ln_gamma[ node ]   
-print '   the final Ln_Gamma = ', Ln_Gamma        
+     
 
 amv = a_sum_V
 bmv = b_sum_V
@@ -165,11 +173,9 @@ sum_partial1_2 = 0
 for i in range(ThT.NComp):
     for j in range(ThT.NComp):
         sum_partial1_1 = sum_partial1_1 + 2 * np.sum( MFrac[i] * ( PR.PREoS_Calc_b(i)  - ( alpha / Rconst * ThT.T_System[ 0 ] ) ) )   
-    sum_partial1_2 = ( alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + Ln_Gamma / c ) 
-    
-#print sum_partial1_1
-#print sum_partial1_2
-
+    sum_partial1_2 = ( alpha / ( PR.PREoS_Calc_b(i) * Rconst * ThT.T_System[ 0 ] ) + lng.ln_gamma( MFrac ) / c ) 
+    #print sum_partial1_1
+    #print sum_partial1_2
 partial1 = sum_partial1_1 / (1 - D) + ( Q * ( 1- sum_partial1_2 ) ) / ( ( 1 - D )**2 )
 
 term2 = ( 1 / bmv ) * partial1 * (Z_root.max() - 1)
@@ -202,7 +208,7 @@ print '  the chemical potential a.k.a the greek_mi for the Vapour Phase !!! = ',
 print 
 
 Ge = - np.inner( MFrac, np.log( ( np.inner( MFrac , ThT.Lamda_wilson ) ) ) )
-print '  the Gibbs energy in excess is Ge = ', Ge, ' while the equilibrium will achieved for the Ge_min = ', Ge.min()
+print '  the Gibbs energy in excess is Ge = ', Ge, #' while the equilibrium will achieved for the Ge_min = ', Ge.min()
 print
 
 # = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = =
@@ -218,6 +224,9 @@ print '  - -                                                                    
 
 
 
+'''
+
+
 
 def Calc_Gibbs( Temp, Press, MFrac, PhaseFrac ):
     GibbsEnergy = sys.float_info.max
@@ -227,6 +236,6 @@ def Calc_Gibbs( Temp, Press, MFrac, PhaseFrac ):
 print
 print 'kosta m@l@k@ as long as you see that the script goes through the lines!'
 
-
+'''
 
 ''' R, Tc, Pc, w all from the input.dat ''' 
