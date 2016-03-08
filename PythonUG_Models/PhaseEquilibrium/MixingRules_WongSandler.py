@@ -34,7 +34,7 @@ def MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition ):
 
     """ This is temporary hack. This is valid only for VLE systems.
         Calculating the Compressibility Factor (Z)                  """
-    Zvapour, Zliquid = PR_Cubic( Temp, Press, am, bm )
+    Zvapour, Zliquid = EoS.PR_Cubic( Temp, Press, am, bm )
     if iphase == 0: # Vapour phase
         Z = Zvapour
     elif iphase == 1: # Liquid phase
@@ -85,8 +85,8 @@ def SecondVirialCoeff( icomp, jcomp, Temp ):
            (b - a/RT)ij =
                0.5 * [ (b - a/RT)i + (b - a/RT)j ] * ( 1 - Kij )
                                                                  """
-    ai, bi = Cubic_EOS( icomp, Temp )
-    aj, bj = Cubic_EOS( jcomp, Temp )
+    ( ai, bi ) = EoS.Cubic_EOS( icomp, Temp ) !!!!!!!!!!!!! STOPPED HEREEE
+    aj, bj = EoS.Cubic_EOS( jcomp, Temp )
 
     node = icomp * ThT.NComp + jcomp
 

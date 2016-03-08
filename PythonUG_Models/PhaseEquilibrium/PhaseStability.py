@@ -5,7 +5,7 @@ import numpy as np
 import math
 import sys
 import ThermoTools as ThT
-import GibbsFunction as GibbsFcn
+import MixingRules as MixRules
 
 
 def Phase_Stability( Temp, Press ):
@@ -23,13 +23,24 @@ def Phase_Stability( Temp, Press ):
     BigNumber = - sys.float_info.max
     for iphase in range( ThT.NPhase ):
         if Alpha[ iphase ] > BigNumber:
-            BigNumber = Alpha[ iphase ] ;index_phase = iphase
+            BigNumber = Alpha[ iphase ] ; index_phase = iphase
 
+    """ Calculating the Fugacity coefficient and Gibbs free energy (i.e., chemical potential) of
+            the chosen phase (index_phase) """
+    ( Fug_Coeff, G_Phase ) = MixRules.MixingRules_EoS( Temp, Press, index_phase, ThT.Z_Feed )
+    
+    Composition = [ 0. for i in range( ThT.NComp ) ]
+    for icomp in range( ThT.NComp ):
+        if icomp == ( ThT.NComp - 1 ):
+            Composition[ icomp ] = ThT.PhaseFrac[ index_phase ]
+        else:
+            Composition[ icomp ] = ThT.MFrac[ index_phase * ThT.NComp + icomp ]
 
-    G_Phase = GibbsFcn.GibbsPhase( Temp, Press, iphase )
-
-
-    return
+    GZero = 0.
+    for icomp in range( ThT.NComp ):
+        GZero = GZero + ThT.Z_Feed[ icomp ] * G_Phase[ icomp ]
+        
+    return GZero
 
 #==============
 #

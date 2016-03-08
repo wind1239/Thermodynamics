@@ -17,15 +17,32 @@ import MixingRules_WongSandler as Mix_WS
 # Given component, pressure and temperature, this function will return
 #    the mixture attractive and repulsive parameters:
 def MixingRules_EoS( Temp, Press, iphase, Composition ):
-    if ThT.MixingRules == "Classic":
-        deriv = [ 0. for i in range( 2 ) ]
+    if ThT.MixingRules[ 0 ] == "Classic":
+        ChemPot = [ 0. for i in range( ThT.NComp ) ]
+        FugCoeff = [ 0. for i in range( ThT.NComp ) ]
         ( am, bm ) = MixingRules_EoS_Classic( Temp, Composition )
-    elif ThT.MixingRules == "Wong-Sandler":
-        ( am, bm ) =  Mix_WS.MixingRules_EoS_WongSandler( Temp, Composition )
+        
+        """ This is temporary hack. This is valid only for VLE systems.
+            Calculating the Compressibility Factor (Z)                  """
+        Zvapour, Zliquid = EoS.PR_Cubic( Temp, Press, am, bm )
+        if iphase == 0: # Vapour phase
+            Z = Zvapour
+        elif iphase == 1: # Liquid phase
+            Z = Zliquid
+        else:
+            print 'Fix this hack !!'
+            sys.exit()
+
+        print 'This needs to be fixed ...'
+        sys.exit()
+            
+    elif ThT.MixingRules[ 0 ] == "Wong-Sandler":
+        ( FugCoeff, ChemPotam ) =  Mix_WS.MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition )
+        
     else:
         sys.exit( 'Mixing rules were not defined correctly!' )
 
-    return am, bm, deriv
+    return ( FugCoeff, ChemPotam )
  
 
 '''
