@@ -207,11 +207,12 @@ for i in range(ThT.NComp):
 print '  the chemical potential a.k.a the greek_mi for the Vapour Phase !!! = ', greek_mi
 print 
 
-Ge = 0
+ 
+Gei = 0
 for i in range(ThT.NComp):
-     print '  for the ',ThT.Species[i], ' the MFrac = ', MFrac[i],' and the Lamda_wilson = ', ThT.Lamda_wilson[ i ]
-     Ge[i] = MFrac[ i ] #* ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ i ] ) ) 
-     print '  the Gibbs energy in excess for the component ', ThT.Species[i] ,' is Gei = ', Gei[i]
+    Gei = Gei + MFrac[ i ] * ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ i ] ) ) 
+    Ge = Gei
+    print '  the Gibbs energy in excess for the component ', ThT.Species[i] ,' is Ge = ', Ge
 print
 
 # = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = =
