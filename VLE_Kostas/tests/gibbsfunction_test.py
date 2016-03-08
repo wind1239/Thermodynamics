@@ -51,7 +51,7 @@ Lij = [1. for i in range(ThT.NComp**2) ]
 ln_gamma = [0. for i in range(ThT.NComp**2) ]
 
 
-for iphase in range(ThT.NPhase):
+for iphase in range(1):
     print
     print '                                                                                               you are at the iphase ', iphase 
     print
@@ -207,8 +207,11 @@ for i in range(ThT.NComp):
 print '  the chemical potential a.k.a the greek_mi for the Vapour Phase !!! = ', greek_mi
 print 
 
-Ge = - np.inner( MFrac, np.log( ( np.inner( MFrac , ThT.Lamda_wilson ) ) ) )
-print '  the Gibbs energy in excess is Ge = ', Ge, #' while the equilibrium will achieved for the Ge_min = ', Ge.min()
+Ge = 0
+for i in range(ThT.NComp):
+     print '  for the ',ThT.Species[i], ' the MFrac = ', MFrac[i],' and the Lamda_wilson = ', ThT.Lamda_wilson[ i ]
+     Ge[i] = MFrac[ i ] #* ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ i ] ) ) 
+     print '  the Gibbs energy in excess for the component ', ThT.Species[i] ,' is Gei = ', Gei[i]
 print
 
 # = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = =
@@ -216,26 +219,27 @@ print
 # = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = = 
 
 
-print '  - -                                                                                                                     - - '
-print '  - - Based on the things I have done so far the results above are for the Vapour Phase since we are using the Max Z_root - - '
-print '  - -                                                                                                                     - - '
+#print '  - -                                                                                                                     - - '
+#print '  - - Based on the things I have done so far the results above are for the Vapour Phase since we are using the Max Z_root - - '
+#print '  - -                                                                                                                     - - '
 
 
 
 
 
 '''
-
-
-
 def Calc_Gibbs( Temp, Press, MFrac, PhaseFrac ):
     GibbsEnergy = sys.float_info.max
     
     return GibbsEnergy
+print'''
 
+# -------------------------------------------------------------------------------
 print
-print 'kosta m@l@k@ as long as you see that the script goes through the lines!'
-
-'''
+print '  --------------------------------------------------------------------------- '
+print '  kosta m@l@k@ as long as you see that the script goes through all the lines! '
+print '  --------------------------------------------------------------------------- '
+print
+# -------------------------------------------------------------------------------
 
 ''' R, Tc, Pc, w all from the input.dat ''' 
