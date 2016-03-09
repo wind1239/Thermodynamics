@@ -14,8 +14,9 @@ import sys
 import thermotools_test as ThT
 import EOS_PR_test as PR
 import ln_gamma_test as lng
+import pylab 
 import time
-#import matplotlib.pyplot as plt
+
 
 print
 print
@@ -33,7 +34,7 @@ print '  the initial molar fraction before reading from the input.dat is', MFrac
 
 #declare a vector with MFrac values - molar fraction
 MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
-MFrac[ 2 ] = 0.10; MFrac[ 3 ] = 0.10; # Liquid phase
+MFrac[ 2 ] = 0.30; MFrac[ 3 ] = 0.10; # Liquid phase
 
 print
 print '  ---------------------------------------------------------------------------------------------------------------------'
@@ -194,26 +195,45 @@ term4 = np.log((Z_root.max() / Big_B + 1 - np.sqrt(2)) / (Z_root.max() / Big_B +
 print '  the term 4 = ',term4
 print
 
+
+# = = = = = = = = =  Gibbs energy in excess = Helmoltz energy in excess = = = = = = = = = =
+Gei = [ 0. for i in range( ThT.NComp ) ]
+for j in range(ThT.NComp):
+    node = j * ThT.NComp + i
+    for i in range(ThT.NComp):
+        Gei = - ( Gei + MFrac[ j ] * ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ node ] ) ) ) 
+        print '  the Gibbs energy in excess for the component ', ThT.Species[i] ,' is Ge = ', Gei
+    print
+
+
+
+
 fugacity_coeff = term1 + term2+ term3 * term4 
-
-# calculate the ln(greek_fi) = fugacity_coeff
-# greek_fi = e ^ fugacity_coeff
-#greek_fi = math.exp(fugacity_coeff)
-
 print '  the fugacity_coeff a.k.a. ln_greek_fi = ', fugacity_coeff
 
 for i in range(ThT.NComp):
     greek_mi  = ( Rconst * ThT.T_System[ 0 ] ) * ( fugacity_coeff + np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
-print '  the chemical potential a.k.a the greek_mi for the Vapour Phase !!! = ', greek_mi
+    print '  the grek_mi for the ', ThT.Species[i], ' is', greek_mi
+    #print '  the chemical potential a.k.a the greek_mi for the Vapour Phase !!! = ', greek_mi
 print 
 
- 
-Gei = 0
-for i in range(ThT.NComp):
-    Gei = Gei + MFrac[ i ] * ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ i ] ) ) 
-    Ge = Gei
-    print '  the Gibbs energy in excess for the component ', ThT.Species[i] ,' is Ge = ', Ge
-print
+
+
+MFrac = [0.40, 0.20] # 0.30, 0.10]
+pylab.plot(MFrac, Gei, '-r')  # solid red line ('r' comes from RGB color scheme)
+#pylab.plot(x2, y2, '-b')
+pylab.xlim(0, 1)
+pylab.ylim(-1., 1.)
+
+pylab.xlabel('Molar Fraction')
+pylab.ylabel('this is y!')
+pylab.title('greek_mi vs. molar fractions for the ', ThT.T_System[ 0 ])
+# show the plot on the screen
+pylab.show()
+
+
+
+
 
 # = = = = = = = = = = = = = = = = =                              = = = = = = = = = = = = = = = = = =
 # = = = = = = = = = = = = = = = = = Statement of the VLE Problem = = = = = = = = = = = = = = = = = =
@@ -237,9 +257,9 @@ print'''
 
 # -------------------------------------------------------------------------------
 print
-print '  --------------------------------------------------------------------------- '
-print '  kosta m@l@k@ as long as you see that the script goes through all the lines! '
-print '  --------------------------------------------------------------------------- '
+print '  --------------------------------------------------------------------------------- '
+print '  --    m@l@k@ as long as you see that the script goes through all the lines!    -- '
+print '  --------------------------------------------------------------------------------- '
 print
 # -------------------------------------------------------------------------------
 
