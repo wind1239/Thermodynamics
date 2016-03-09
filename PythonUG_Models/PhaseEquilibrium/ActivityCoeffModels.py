@@ -21,7 +21,7 @@ def Activity_WilsonModel( X ):
         for i in range( ThT.NComp ):
             node1g = j * ThT.NComp + i
             sumg2 = sumg2 + X[ i ] *  ThT.Wilson_Lambda[ node1g ]
-        GeRT = GeRT + X[ j ] * math.log( sumg2 )
+        GeRT = GeRT - X[ j ] * math.log( max( 1.e-7, sumg2 ) )
 
     # Calculating the Activity Coefficient (Gamms)
     for k in range( ThT.NComp ):
@@ -39,6 +39,6 @@ def Activity_WilsonModel( X ):
             node2 = j * ThT.NComp + k
             sum2 = sum2 + X[ j ] * ThT.Wilson_Lambda[ node2 ] / max( 1.e-7, sum3 )
 
-        Gamma[ k ] = math.log( max( 1.e-7, 1. - math.log( sum1 ) - sum2 ) )
+        Gamma[ k ] = math.log( max( 1.e-7, 1. - math.log( max( 1.e-7, sum1 ) ) - sum2 ) )
 
     return GeRT, Gamma

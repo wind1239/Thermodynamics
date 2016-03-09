@@ -43,8 +43,8 @@ def MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition ):
         print 'Fix this hack !!'
         sys.exit()    
 
-    Big_A = am * Press / ( ThT.Rconst * Temp )**2
-    Big_B = bm * Press / ( ThT.Rconst * Temp )
+    Big_A = am * Press / ( ThT.RConst * Temp )**2
+    Big_B = bm * Press / ( ThT.RConst * Temp )
     
     """ Calculating the derivatives of am and bm wrt ni:
             [ d(nbm)/dni ] = 1/(1-D) * [ 1/n d(n^2 Q)/dni ] - 
@@ -66,9 +66,10 @@ def MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition ):
 
         LogPhi = -math.log( max( 1.e-5, Z - Big_B ) ) + 1. / bm * d_bm[ i ] * ( Z - 1 ) + \
                  1. / ( 2. * math.sqrt( 2. ) ) * am / ( ThT.RConst * Temp * bm ) * \
-                 ( 1. / am * d_am - 1. / bm * d_bm ) * \
+                 ( 1. / am * d_am[ i ] - 1. / bm * d_bm[ i ] ) * \
                  math.log( max( 1.e-5, ( Z / Big_B + 1. - math.sqrt( 2. ) ) / \
                                 ( Z / Big_B + 1. + math.sqrt( 2. ) ) ) )
+        print 'Log', LogPhi
         FugCoeff[ i ] = math.exp( LogPhi )
 
         ChemPot[ i ] = ThT.RConst * Temp * LogPhi + math.log( Composition[ i ] * Press )
@@ -85,8 +86,8 @@ def SecondVirialCoeff( icomp, jcomp, Temp ):
            (b - a/RT)ij =
                0.5 * [ (b - a/RT)i + (b - a/RT)j ] * ( 1 - Kij )
                                                                  """
-    ( ai, bi ) = EoS.Cubic_EOS( icomp, Temp ) !!!!!!!!!!!!! STOPPED HEREEE
-    aj, bj = EoS.Cubic_EOS( jcomp, Temp )
+    ai, bi = EoS.Cubic_EoS( icomp, Temp )
+    aj, bj = EoS.Cubic_EoS( jcomp, Temp )
 
     node = icomp * ThT.NComp + jcomp
 
@@ -94,6 +95,7 @@ def SecondVirialCoeff( icomp, jcomp, Temp ):
            ( 1. - ThT.BinaryParameter[ node ] )
 
     return abRT
+
 
 #=================
 #
@@ -132,8 +134,8 @@ def Calc_DPar( Temp, X ):
 
     sum1 = 0.
     for i in range( ThT.NComp ):
-        ai, bi = Cubic_EOS( i, Temp )
-        d_DPar[ i ] = ai / ( bi * ThT.RConst * Temp ) + math.log( Gamma[ i ] )/ C_Par
+        ai, bi = EoS.Cubic_EoS( i, Temp )
+        d_DPar[ i ] = ai / ( bi * ThT.RConst * Temp ) + math.log( max( 1.e-5, Gamma[ i ] ) )/ C_Par
         sum1 = sum1 + X[ i ] * ai / ( bi * ThT.RConst * Temp ) # for DPar
 
     DPar = sum1 + AeRT / C_Par

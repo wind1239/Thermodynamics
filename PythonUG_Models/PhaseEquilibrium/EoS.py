@@ -21,7 +21,7 @@ def Cubic_EoS( icomp, Temp ):
     else:
         sys.exit( 'For the time being, only PR and PRSV have been included into this code' )
 #
-        return ( ai, bi )
+    return ( ai, bi )
 
 
 
@@ -40,12 +40,12 @@ def PR_EoS_Calc_a( i, T ):
         k = k0 + ThT.EOS_K1[ i ] * ( 1. + math.sqrt( T / ThT.T_Crit[ i ] ) ) * \
             ( 0.7 - math.sqrt( T / ThT.T_Crit[ i ] ) )
     alpha = ( 1. + k * ( 1. - math.sqrt( T / ThT.T_Crit[ i ] ) )) **2
-    a_k = 0.45724 * ( ThT.Rconst * ThT.T_Crit[ i ] )**2 / ThT.P_Crit[ i ] * alpha
+    a_k = 0.45724 * ( ThT.RConst * ThT.T_Crit[ i ] )**2 / ThT.P_Crit[ i ] * alpha
     return a_k
 
 
 def PR_EoS_Calc_b( i ): 
-    b_k = 0.07780 * ThT.Rconst * ThT.T_Crit[ i ]  / ThT.P_Crit[ i ]
+    b_k = 0.07780 * ThT.RConst * ThT.T_Crit[ i ]  / ThT.P_Crit[ i ]
     return b_k
 
 
@@ -54,8 +54,8 @@ def PR_EoS_Calc_b( i ):
 ###
 def PR_Cubic( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cubic EOS
 
-    Big_A = am * P / ( ThT.Rconst * T )**2
-    Big_B = bm * P / ( ThT.Rconst * T )
+    Big_A = am * P / ( ThT.RConst * T )**2
+    Big_B = bm * P / ( ThT.RConst * T )
 
 # For a polynomial of order n:
 #  c[0]*Z**n + c[1]*Z**(n-1) + ... + c[n] = 0

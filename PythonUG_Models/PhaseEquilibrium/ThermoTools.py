@@ -15,12 +15,12 @@ import sys
 def ReadSet_Global_Variables(): # Read variables from a external file called 'input.dat'
     import csv # Using csv (comma separated values) module
  
-    global Debug, Rconst, NComp, NPhase, T_System, P_System, \
+    global Debug, RConst, NComp, NPhase, T_System, P_System, \
         T_Crit, P_Crit, MolarMass, Species, Accentric_Factor, \
         Z_Feed, BinaryParameter, EOS, EOS_K1, MixingRules, \
         MFrac, PhaseFrac, Wilson_Lambda
 
-    Rconst = 8.314 # Gas constant [J/(gmol.K)]
+    RConst = 8.314 # Gas constant [J/(gmol.K)]
     Debug = False
 
     ''' The first line MUST contain the number of components that will help to build up
