@@ -25,6 +25,19 @@ def Phase_Stability( Temp, Press ):
         if Alpha[ iphase ] > BigNumber:
             BigNumber = Alpha[ iphase ] ; index_phase = iphase
 
+    if ThT.Debug:
+        print ' '
+        print '================================================='
+        print '       Initial stability test. Phase is:'
+        if index_phase == 0:
+            print '    ---->        Vapour        <----     '
+        elif index_phase == 1:
+            print '    ---->        Liquid        <----    '
+        else:
+            sys.exit()
+        print ' '
+        print '================================================='
+
     """ Calculating the Fugacity coefficient and Gibbs free energy (i.e., chemical potential) of
             the chosen phase (index_phase) """
     ( Fug_Coeff, G_Phase ) = MixRules.MixingRules_EoS( Temp, Press, index_phase, ThT.Z_Feed )
