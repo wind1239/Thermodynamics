@@ -41,19 +41,22 @@ def Phase_Stability( Temp, Press ):
     """ Calculating the Fugacity coefficient and Gibbs free energy (i.e., chemical potential) of
             the chosen phase (index_phase) """
     ( Fug_Coeff, G_Phase ) = MixRules.MixingRules_EoS( Temp, Press, index_phase, ThT.Z_Feed )
-    
+  
     Composition = [ 0. for i in range( ThT.NComp ) ]
+    Comp_Phase = [ 0. for i in range( ThT.NComp ) ]
     for icomp in range( ThT.NComp ):
-        if icomp == ( ThT.NComp - 1 ):
-            Composition[ icomp ] = ThT.PhaseFrac[ index_phase ]
+        Composition[ icomp ] = ThT.MFrac[ index_phase * ThT.NComp + icomp ]
+        if icomp == ThT.NComp - 1:
+            Comp_Phase[ icomp ] = ThT.PhaseFrac[ index_phase ]
         else:
-            Composition[ icomp ] = ThT.MFrac[ index_phase * ThT.NComp + icomp ]
+            Comp_Phase[ icomp ] = ThT.MFrac[ index_phase * ThT.NComp + icomp ]
+
 
     GZero = 0.
     for icomp in range( ThT.NComp ):
         GZero = GZero + ThT.Z_Feed[ icomp ] * G_Phase[ icomp ]
         
-    return GZero
+    return ( Composition, Comp_Phase, GZero )
 
 #==============
 #
@@ -74,5 +77,138 @@ def AlphaPhases():
         
     return Alpha_Phase
 
+
+#==============
+#
+#==============
+
+def CheckingPhases( Comp_Phase, GibbsPhase ):
+
+    """ Assessing the results of the VLE calculation and identifying the
+        phase and compositions (mol fractions).
+        Comp_Phase is an array that contains (NComp-1) mole fractions +
+        (1) PhaseFraction                                                """
+
+    if ThT.NPhase > 2:
+        print 'This function was hacked to work only on a 2-phases system, it thus needs to be generalised.'
+        sys.exit()
+
+    Gibbs = -GibbsPhase
+    YSum = 0.
+    for icomp in range( ThT.NComp - 1):
+        YSum = YSum + Comp_Phase[ icomp ]
+    XMet = 1. - YSum
+
+
+    if XMet > ThT.Z_Feed[ ThT.NComp - 1 ]: # Liquid phase        
+        LiqPhase = Comp_Phase[ ThT.NComp - 1 ]
+        VapPhase = 1. - LiqPhase
+
+        if Comp_Phase[ ThT.NComp - 1 ] < 0.5:
+            print 'Dominant Vapour Phase '
+        else:
+            print 'Dominant Liquid Phase '
+
+        """  Results for the Vapour Phase """
+        XVOpt = [ 0. for i in range( ThT.NComp ) ]
+        XVOpt[ ThT.NComp - 1 ] = 1. - Comp_Phase[ ThT.NComp - 1 ] ; Sum = 0.
+        for icomp in range( ThT.NComp - 1 ):
+            XVOpt[ icomp ] = ThT.Z_Feed[ icomp ] - Comp_Phase[ icomp ] * Comp_Phase[ ThT.NComp - 1 ] / \
+                XVOpt[ ThT.NComp - 1 ]
+            Sum = Sum + XVOpt[ icomp ]
+        XMetV = 1. - Sum
+
+        """ Now calculating the mass of each component in this phase based 
+            on the molar mass of the individual components.                 """
+        MassVapour = 0. ; MassLiquid = 0.
+        for icomp in range( ThT.NComp - 1 ):
+            MassLiquid = MassLiquid + Comp_Phase[ icomp ] * ThT.MolarMass[ icomp ]
+            MassVapour = MassVapour + XVOpt[ icomp ] * ThT.MolarMass[ icomp ]
+
+        MassLiquid_Total = MassLiquid + XMet  * ThT.MolarMass[ ThT.NComp - 1 ]
+        MassVapour_Total = MassVapour + XMetV * ThT.MolarMass[ ThT.NComp - 1 ]
+
+        if MassLiquid_Total > MassVapour_Total:
+            print ' '
+            print '==================================================================='
+            print ' '
+            print ' Composition of', ThT.Species[0],':', Comp_Phase[ 0 ]
+            print ' Liquid phase Composition:', LiqPhase
+            print ' Gibbs free energy:', Gibbs
+            print ' '
+            print '==================================================================='
+            print ' '
+
+        else:
+            print ' '
+            print '==================================================================='
+            print ' '
+            print ' Composition of', ThT.Species[0],':', Comp_Phase[ 0 ]
+            print ' Vapour phase Composition:', VapPhase
+            print ' Gibbs free energy:', Gibbs
+            print ' '
+            print '==================================================================='
+            print ' '
+
+    else: # Vapour phase       
+              
+        VapPhase = Comp_Phase[ ThT.NComp - 1 ]
+        LiqPhase = 1. - VapPhase
+
+        if Comp_Phase[ ThT.NComp - 1 ] < 0.5:
+            print 'Dominant Liquid Phase '
+        else:
+            print 'Dominant Vapour Phase '
+
+        """  Results for the Liquid Phase """
+        XLOpt = [ 0. for i in range( ThT.NComp ) ]
+        XLOpt[ ThT.NComp - 1 ] = 1. - Comp_Phase[ ThT.NComp - 1 ] ; Sum = 0.
+        for icomp in range( ThT.NComp - 1 ):
+            XLOpt[ icomp ] = ThT.Z_Feed[ icomp ] - Comp_Phase[ icomp ] * Comp_Phase[ ThT.NComp - 1 ] / \
+                XLOpt[ ThT.NComp - 1 ]
+            Sum = Sum + XLOpt[ icomp ]
+        XMetL = 1. - Sum
+
+        """ Now calculating the mass of each component in this phase based 
+            on the molar mass of the individual components.                 """
+        MassVapour = 0. ; MassLiquid = 0.
+        for icomp in range( ThT.NComp - 1 ):
+            MassLiquid = MassLiquid + XLOpt[ icomp ] * ThT.MolarMass[ icomp ]
+            MassVapour = MassVapour + Comp_Phase[ icomp ] * ThT.MolarMass[ icomp ]
+
+        MassLiquid_Total = MassLiquid + XMetL * ThT.MolarMass[ ThT.NComp - 1 ]
+        MassVapour_Total = MassVapour + XMet  * ThT.MolarMass[ ThT.NComp - 1 ]
+
+        if MassLiquid_Total > MassVapour_Total:
+            print ' '
+            print '==================================================================='
+            print ' '
+            print ' Composition of', ThT.Species[0],':', Comp_Phase[ 0 ]
+            print ' Liquid phase Composition:', LiqPhase
+            print ' Gibbs free energy:', Gibbs
+            print ' '
+            print '==================================================================='
+            print ' '
+
+        else:
+            print ' '
+            print '==================================================================='
+            print ' '
+            print ' Composition of', ThT.Species[0],':', Comp_Phase[ 0 ]
+            print ' Vapour phase Composition:', VapPhase
+            print ' Gibbs free energy:', Gibbs
+            print ' '
+            print '==================================================================='
+            print ' '
+
+
+    return 
         
 
+
+
+#==============
+#
+#==============
+
+    

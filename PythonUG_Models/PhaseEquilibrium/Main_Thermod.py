@@ -53,12 +53,12 @@ Press = ThT.P_System[ 0 ]
      MICHAELSEN'S STABILITY TEST: Decision of the Phases 
 ===============================================================
                                                             '''
-GZero = Michaelsen.Phase_Stability( Temp, Press )
+( Comp, Comp_Phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
 
 
-print 'GZero:', GZero
+print 'GZero:', GZero, Comp_Phase
 
-
+# ########  Michaelsen.CheckingPhases( Comp_Phase, GZero )
 
 
 

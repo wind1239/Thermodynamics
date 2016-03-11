@@ -33,7 +33,7 @@ Molar_Mass                 16.043       30.070
 Accentric_Factor            0.0114       0.093
 
 # Composition of the feeding stream (z, dimensionless)
-Feed_Composition            0.50         0.50
+Feed_Composition            0.75         0.25
 
 # Binary interaction parameter
 # Component_i Component_j Value
