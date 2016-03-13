@@ -1,0 +1,77 @@
+
+
+%%%
+%%% CHAPTER
+%%%
+\chapter{Material Balance based on Mass Fraction}\label{Appendix:MaterialBalance}
+
+%%% SECTION
+\section{Mass Balance}\label{Appendix:ThermodynamicFormulation:Section:MassBalance}
+For a system with $n_{p}$ phases and $n_{c}$ components, the mass of each $j$ phase is,
+\begin{equation}
+m^{(j)} = \summation_{i=1}^{n_{c}}\mfr[m]{i}{j}\;\;\;\text{ for }j=1,2,\cdots,n_{p}
+\label{Appendix:MaterialBalance_Eqn_MassBalance_Phase}
+\end{equation}
+
+And the mass of each component $i\left(=1,2,\cdots,n_{c}\right)$,
+\begin{equation}
+m_{i} = m_{i}^{(1)} + m_{i}^{(2)} + \cdots + m_{i}^{\left(n_{p}\right)} = \summation_{j=1}^{n_{p}}\mfr[m]{i}{j}
+\label{Appendix:MaterialBalance_Eqn_MassBalance_Component}
+\end{equation}
+
+The total mass $m$ can be define as,
+\begin{eqnarray}
+m & = & m^{(1)} + m^{(2)} + \cdots + m^{\left(n_{p}\right)} = \summation_{j=1}^{n_{p}}m^{(j)} \nonumber \\
+  & = & m_{1} + m_{2} + \cdots + m_{n_{c}} = \summation_{i=1}^{n_{c}}m_{i} \nonumber 
+\label{Appendix:MaterialBalance_Eqn_MassBalance_Mass}
+\end{eqnarray}
+
+Defining the intensive properties:
+\begin{eqnarray}
+&& \mfr[w]{i}{j} = \frc{\mfr[m]{i}{j}}{m^{(j)}}, \hspace{2cm} z_{i} = \frc{m_{i}}{m},\label{Appendix:MaterialBalance_Eqn_MassBalance_MassFraction} \\
+&& \Pi^{(j)} = \frc{m^{(j)}}{m}\label{Appendix:MaterialBalance_Eqn_MassBalance_PhaseMassFraction} 
+\end{eqnarray}
+where $\mfr[w]{i}{j}$ is the mass fraction of component $i$ in phase $j$, $\Pi^{j}$ is the mass fraction of phase $j$ and $z_{i}$ is the overall feed mass fraction of component $i$. From Eqns.~\ref{Appendix:MaterialBalance_Eqn_MassBalance_Mass}-~\ref{Appendix:MaterialBalance_Eqn_MassBalance_PhaseMassFraction}, we can define normalised quantities, i.e., fractions, and we can add the following constraints:
+\begin{eqnarray}
+&&\mfr[w]{n_{c}}{j} = 1 - \summation_{i=1}^{n_{c}-1}\mfr[w]{i}{j},\hspace{1cm}  z_{n_{c}} = 1 - \summation_{i=1}^{n_{c}-1}z_{i},  \label{Appendix:MaterialBalance_Eqn_MassBalance_MassFraction2} \\
+&&\Pi^{\left(n_{p}\right)} = 1 - \left(\Pi^{(1)} + \Pi^{(2)} + \cdots + \Pi^{\left(n_{p}-1\right)}\right) = 1 - \summation_{j=1}^{n_{p}-1} \Pi^{j}\hspace{1cm} j=1,2,\cdots,n_{p} \label{Appendix:MaterialBalance_Eqn_MassBalance_PhaseMassFraction2}
+\end{eqnarray} 
+with
+\begin{displaymath}
+  z_{i} = \frc{m_{i}}{m} = \frc{\summation_{j=1}^{n_{p}}\mfr[m]{i}{j}}{m} \frc{m^{(j)}}{m^{(j)}} = \underbrace{\frc{m^{(j)}}{m}}_{\red{\Pi^{j}}} \cdot \overbrace{\frc{\summation_{j=1}^{n_{p}}\mfr[m]{i}{j}}{m^{(j)}}}^{\red{\summation_{j=1}^{n_{p}}\mfr[w]{i}{j}}} 
+\end{displaymath}
+leading to
+\begin{equation}
+z_{i} = \Pi^{(1)}w_{i}^{(1)} + \Pi^{(2)}w_{i}^{(2)} + \cdots + \Pi^{\left(n_{p}\right)}w_{i}^{\left(n_{p}\right)}
+\label{Appendix:MaterialBalance_Eqn_MassBalance_FeedMassFractionConstraint}
+\end{equation}
+with
+\begin{equation}
+0\leq\Pi^{(j)}\leq 1 \hspace{3cm} 0\leq \mfr[w]{i}{j}\leq 1
+\end{equation}
+
+If the solution is contained within \red{$n_{p}$} phases, the inequality can be rewritten as,
+\begin{equation} 
+0 < \Pi^{(j)} < 1
+\end{equation}
+Thus
+\begin{displaymath}
+\Pi^{(k)} = 1 - \summation_{j=1,j\neq k}^{n_{p}} \Pi^{(j)} \neq 0
+\end{displaymath}
+Therefore from Eqn.~\ref{Appendix:MaterialBalance_Eqn_MassBalance_FeedMassFractionConstraint},
+\begin{equation}
+w_{i}^{(k)} = \frc{z_{i}-\summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}\mfr[w]{i}{j}}{\Pi^{(k)}} = \frc{z_{i} - \summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}\mfr[w]{i}{j}}{1-\summation_{j=1,j\neq k}^{n_{p}}\Pi^{(j)}}
+\label{Appendix:MaterialBalance_Eqn_MassBalance_FeedMassFractionConstraint2}
+\end{equation}
+
+
+\begin{shaded}\noindent
+   For 2 phases, $\Pi^{(1)}=L$ and $\Pi^{(2)}=V$, Eqn.~\ref{Appendix:MaterialBalance_Eqn_MassBalance_FeedMassFractionConstraint} becomes:
+     \begin{displaymath}
+      \mfr[w]{i}{V} = \frc{z_{i}-L\mfr[w]{i}{L}}{1-L}, \hspace{1cm}\text{ for } i=1,2,\cdots,n_{c}
+     \end{displaymath}
+     And for 3 phases, $\Pi^{(1)}=L$, $\Pi^{(2)}=V$ and $\Pi^{(3)}=H$ (see Section~\ref{Appendix:Hydrate:Section:MassConservation}):
+        \begin{displaymath}
+           \mfr[w]{i}{H} = \frc{z_{i}-\left(V \mfr[w]{i}{V} + L \mfr[w]{i}{L}\right)}{1 - \left(V \mfr[w]{i}{V} + L \mfr[w]{i}{L}\right)}
+        \end{displaymath}
+\end{shaded}

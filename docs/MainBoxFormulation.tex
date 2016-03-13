@@ -6,185 +6,213 @@
  
 %%% SECTION
 \section{Mass Balance}\label{Chapter:ThermodynamicFormulation:Section:MassBalance}
-For a system with $n_{p}$ phases and $n_{c}$ components, the mass of each $j$ phase is,
+Given a closed system at constant pressure and temperature conditions with $n_{c}$ components contained in $n_{p}$ phases. We can define a normalised concentration, i.e., mole fraction $\left(\mfr[x]{i}{j}\right)$ based on the relationship between the number of moles of component $i$ at phase $j$ with the total number of moles contained in the same phase, 
 \begin{equation}
-m^{(j)} = \summation_{i=1}^{n_{c}}\mfr[m]{i}{j}\;\;\;\text{ for }j=1,2,\cdots,n_{p}
-\label{Eqn_MassBalance_Phase}
+    \mfr[x]{i}{j} = \frc{\mfr[n]{i}{j}}{\mfr[n]{}{j}} = \frc{\frc{\mfr[m]{i}{j}}{MW_{i}}}{\frc{\mfr[m]{}{j}}{\mfr[\overline{MW}]{}{j}}}, \hfill \text{ with } i=1, \cdots, n_{c} \text{ and } j=1, \cdots, n_{p}
+\label{Chapter:ThermodynamicFormulation:Eqn:MoleFractionDef}
 \end{equation}
-
-And the mass of each component $i\left(=1,2,\cdots,n_{c}\right)$,
-\begin{equation}
-m_{i} = m_{i}^{(1)} + m_{i}^{(2)} + \cdots + m_{i}^{\left(n_{p}\right)} = \summation_{j=1}^{n_{p}}\mfr[m]{i}{j}
-\label{Eqn_MassBalance_Component}
-\end{equation}
-
-The total mass $m$ can be define as,
+where $MW$ is the molar mass, $n$ is the number of moles and $m$ is the mass. In this Chapter, superscripts and subscripts stand for phase and component identities, respectively.  For completeness, we can also define
 \begin{eqnarray}
-m & = & m^{(1)} + m^{(2)} + \cdots + m^{\left(n_{p}\right)} = \summation_{j=1}^{n_{p}}m^{(j)} \nonumber \\
-  & = & m_{1} + m_{2} + \cdots + m_{n_{c}} = \summation_{i=1}^{n_{c}}m_{i} \nonumber 
-\label{Eqn_MassBalance_Mass}
+    z_{i} = \frc{n_{i}}{n} &=& \frc{\frc{m_{i}}{MW_{i}}}{\frc{m}{\overline{MW}}}\label{Chapter:ThermodynamicFormulation:Eqn:FeedFractionDef} \\
+    \mfr[\Pi]{}{j} = \frc{\mfr[n]{}{j}}{n} &=& \frc{\frc{\mfr[m]{}{j}}{\mfr[\overline{MW}]{}{j}}}{\frc{m}{\overline{MW}}},\label{Chapter:ThermodynamicFormulation:Eqn:PhaseFractionDef} 
 \end{eqnarray}
-
-Defining the intensive properties:
+where $z_{i}$ is the overall feed mass fraction of component $i$, and $\Pi$ is the mole fraction of phase $j$. The relations above are subject to the following constraints:
+\begin{equation}
+    \summation_{i=1}^{n_{c}}\mfr[x]{i}{j} = 1 \;\;\;,\;\;\; \summation_{i=1}^{n_{c}}z_{i} = 1 \;\;\;,\;\;\; \summation_{j=1}^{n_{p}}\mfr[\Pi]{}{j} = 1. \label{Chapter:ThermodynamicFormulation:Eqn:FractionConstraints1}
+\end{equation}
+These linear constraints can be expressed as
+\begin{equation}
+    \mfr[x]{n_{c}}{j}= 1 - \summation_{i=1}^{n_{c}-1}\mfr[x]{i}{j} \;\;\;,\;\;\; z_{n_{c}}= 1 - \summation_{i=1}^{n_{c}-1}z_{i} \;\;\;,\;\;\; \mfr[\Pi]{}{n_{p}} = 1 - \summation_{j=1}^{n_{p}-1}\mfr[\Pi]{}{j} \label{Chapter:ThermodynamicFormulation:Eqn:FractionConstraints2}
+\end{equation}
+Equation~\ref{Chapter:ThermodynamicFormulation:Eqn:FeedFractionDef} can be rearranged as,
 \begin{eqnarray}
-&& \mfr[w]{i}{j} = \frc{\mfr[m]{i}{j}}{m^{(j)}}, \hspace{2cm} z_{i} = \frc{m_{i}}{m},\label{Eqn_MassBalance_MassFraction} \\
-&& \Pi^{(j)} = \frc{m^{(j)}}{m}\label{Eqn_MassBalance_PhaseMassFraction} 
+  z_{i} &=& \frc{n_{i}}{n} = \frc{\summation_{j=1}^{n_{p}}\mfr[n]{i}{j}}{n} \cdot \frc{\summation_{j=1}^{n_{p}}\mfr[n]{}{j}}{\summation_{j=1}^{n_{p}}\mfr[n]{}{j}} = \underbrace{\frc{ \summation_{j=1}^{n_{p}}\mfr[n]{}{j}}{n}}_{\red{\summation_{j=1}^{n_{p}}\mfr[\Pi]{}{j}}} \cdot \overbrace{ \frc{\summation_{j=1}^{n_{p}}\mfr[n]{i}{j}}{\summation_{j=1}^{n_{p}}\mfr[n]{}{j}}}^{\red{\summation_{j=1}^{n_{p}}\mfr[x]{i}{j}}}, \nonumber \\
+       &=& \summation_{j=1}^{n_{p}} \mfr[\Pi]{}{j}\mfr[x]{i}{j},\;\;\;\;\;i=1, \cdots, n_{c}\hfill\label{Chapter:ThermodynamicFormulation:Eqn:FeedFractionDef2} 
 \end{eqnarray}
-where $\mfr[w]{i}{j}$ is the mass fraction of component $i$ in phase $j$, $\Pi^{j}$ is the mass fraction of phase $j$ and $z_{i}$ is the overall feed mass fraction of component $i$. From Eqns.~\ref{Eqn_MassBalance_Mass}-~\ref{Eqn_MassBalance_PhaseMassFraction}, we can define normalised quantities, i.e., fractions, and we can add the following constraints:
-\begin{eqnarray}
-&&\mfr[w]{n_{c}}{j} = 1 - \summation_{i=1}^{n_{c}-1}\mfr[w]{i}{j},\hspace{1cm}  z_{n_{c}} = 1 - \summation_{i=1}^{n_{c}-1}z_{i},  \label{Eqn_MassBalance_MassFraction2} \\
-&&\Pi^{\left(n_{p}\right)} = 1 - \left(\Pi^{(1)} + \Pi^{(2)} + \cdots + \Pi^{\left(n_{p}-1\right)}\right) = 1 - \summation_{j=1}^{n_{p}-1} \Pi^{j}\hspace{1cm} j=1,2,\cdots,n_{p} \label{Eqn_MassBalance_PhaseMassFraction2}
-\end{eqnarray} 
-with
+with 
+\begin{equation}
+      0\leq \mfr[x]{i}{j} \leq 1 \;\;\;\text{ and }\;\;\; 0\leq\mfr[\Pi]{}{j}\leq 1 \hfill
+\end{equation}
+If the solution is contained in $n_{p}$ phases, the inequality can be rewritten as, 
+\begin{equation}
+    0 < \mfr[x]{i}{j} < 1 \;\;\;\text{ and }\;\;\;  0 < \mfr[\Pi]{}{j} < 1.
+\end{equation}
+And therefore
 \begin{displaymath}
-  z_{i} = \frc{m_{i}}{m} = \frc{\summation_{j=1}^{n_{p}}\mfr[m]{i}{j}}{m} \frc{m^{(j)}}{m^{(j)}} = \underbrace{\frc{m^{(j)}}{m}}_{\red{\Pi^{j}}} \cdot \overbrace{\frc{\summation_{j=1}^{n_{p}}\mfr[m]{i}{j}}{m^{(j)}}}^{\red{\summation_{j=1}^{n_{p}}\mfr[w]{i}{j}}} 
+   \mfr[x]{p}{j} = 1 - \summation_{i=1,i\ne p}^{n_{c}}\mfr[x]{i}{j} \ne 0 \;\;\;\text{ and }\;\;\; \mfr[\Pi]{}{k} = 1 - \summation_{j=1,j\ne k}^{n_{p}}\mfr[\Pi]{}{j} \ne 0.
 \end{displaymath}
-leading to
+Equation~\ref{Chapter:ThermodynamicFormulation:Eqn:FeedFractionDef2} may be rewritten as
 \begin{equation}
-z_{i} = \Pi^{(1)}w_{i}^{(1)} + \Pi^{(2)}w_{i}^{(2)} + \cdots + \Pi^{\left(n_{p}\right)}w_{i}^{\left(n_{p}\right)}
-\label{Eqn_MassBalance_FeedMassFractionConstraint}
+   \mfr[x]{i}{k} = \frc{ z_{i} - \summation_{j=1,j\ne k}^{n_{p}} \mfr[\Pi]{}{j}\mfr[x]{i}{j}}{\mfr[\Pi]{}{k}} = \frc{ z_{i} - \summation_{j=1,j\ne k}^{n_{p}} \mfr[\Pi]{}{j}\mfr[x]{i}{j}}{ 1 - \summation_{j=1,j\ne k}^{n_{p}} \mfr[\Pi]{}{j}}\label{Chapter:ThermodynamicFormulation:Eqn:MoleFractionDef2}
 \end{equation}
-with
-\begin{equation}
-0\leq\Pi^{(j)}\leq 1 \hspace{3cm} 0\leq \mfr[w]{i}{j}\leq 1
-\end{equation}
-
-If the solution is contained within \red{$n_{p}$} phases, the inequality can be rewritten as,
-\begin{equation} 
-0 < \Pi^{(j)} < 1
-\end{equation}
-Thus
-\begin{displaymath}
-\Pi^{(k)} = 1 - \summation_{j=1,j\neq k}^{n_{p}} \Pi^{(j)} \neq 0
-\end{displaymath}
-Therefore from Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint},
-\begin{equation}
-w_{i}^{(k)} = \frc{z_{i}-\summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}\mfr[w]{i}{j}}{\Pi^{(k)}} = \frc{z_{i} - \summation_{j=1,j\neq k}^{n_{p}}\Pi^{j}\mfr[w]{i}{j}}{1-\summation_{j=1,j\neq k}^{n_{p}}\Pi^{(j)}}
-\label{Eqn_MassBalance_FeedMassFractionConstraint2}
-\end{equation}
-
 
 \begin{shaded}\noindent
-   For 2 phases, $\Pi^{(1)}=L$ and $\Pi^{(2)}=V$, Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint} becomes:
+   For 2 phases, $\Pi^{(1)}=L$ and $\Pi^{(2)}=V$, Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:MoleFractionDef2} becomes:
      \begin{displaymath}
-      \mfr[w]{i}{V} = \frc{z_{i}-L\mfr[w]{i}{L}}{1-L}, \hspace{1cm}\text{ for } i=1,2,\cdots,n_{c}
+      \mfr[x]{i}{V} = \frc{z_{i}-L\mfr[x]{i}{L}}{1-L}, \hspace{1cm}\text{ for } i=1,2,\cdots,n_{c}
      \end{displaymath}
      And for 3 phases, $\Pi^{(1)}=L$, $\Pi^{(2)}=V$ and $\Pi^{(3)}=H$ (see Section~\ref{Chapter:Hydrate:Section:MassConservation}):
         \begin{displaymath}
-           \mfr[w]{i}{H} = \frc{z_{i}-\left(V \mfr[w]{i}{V} + L \mfr[w]{i}{L}\right)}{1 - \left(V \mfr[w]{i}{V} + L \mfr[w]{i}{L}\right)}
+           \mfr[x]{i}{H} = \frc{z_{i}-\left(V \mfr[x]{i}{V} + L \mfr[x]{i}{L}\right)}{1 - \left(V + L \right)}
         \end{displaymath}
 \end{shaded}
 
 %% SECTION
 \section{Free Gibbs Energy}\label{Chapter:ThermodynamicFormulation:Section:GibbsEnergy}
-For equilibrium problems (e.g., vapour-liquid equilibrium, VLE), the total free Gibbs energy can be expressed as,
+By definition the chemical potential, $\mu$ is defined as
 \begin{equation}
-G = \summation_{j=1}^{n_{p}}\left(\summation_{i=1}^{n_{c}} \mfr[m]{i}{j}\mfr[\mu]{i}{j}\right)
-\label{MassGibbs_Definition}
+   \mu_{i} \equiv \Partial[G]{n_{i}}{T,P,n_{j\ne i}},
+\end{equation}
+where the Gibbs free energy, $G$, can be expressed as a function of the composition of the species present in the domain,
+\begin{equation}
+   G = G\left(n_{1}, n_{2}, \cdots, n_{n_{c}}\right).
+\end{equation}
+Now defining the molar Gibbs free energy, $g$,
+\begin{displaymath}
+   g = \frc{1}{n}G\left(n_{1}, n_{2}, \cdots, n_{n_{c}}\right).
+\end{displaymath}
+Assuming that $G$ is a {\it homogeneous function of the first order},
+\begin{eqnarray}
+   g &=& \frc{1}{n}G\left(n_{1}, n_{2}, \cdots, n_{n_{c}}\right) = G\left(\frc{n_{1}}{n}, \frc{n_{2}}{n}, \cdots, \frc{n_{n_{c}}}{n}\right) \nonumber \\
+     &=& G\left(x_{1}, x_{2}, \cdots, x_{n_{c}}\right). \nonumber
+\end{eqnarray}
+This relation is {\it true only} on regions of {\it single phase}. In multiphase regions, the molar Gibbs free energy is given by,
+\begin{equation}
+   g = \mfr[g]{}{1} + \mfr[g]{}{2} + \cdots + \mfr[g]{}{n_{p}} = \summation_{j=1}^{n_{p}}\mfr[g]{}{j},
+\end{equation}
+with
+\begin{displaymath}
+   \mfr[g]{}{k} = \frc{1}{\mfr[n]{}{k}} \mfr[G]{}{k}\left(\mfr[n]{1}{k}, \mfr[n]{2}{k}, \cdots, \mfr[n]{n_{c}}{k}\right)
+\end{displaymath}
+As $\mfr[G]{}{k}$ is a homogeneous function of the first order,
+\begin{eqnarray}
+ \mfr[g]{}{k} &=& \frc{1}{\mfr[n]{}{k}} \mfr[G]{}{k}\left(\mfr[n]{1}{k}, \mfr[n]{2}{k}, \cdots, \mfr[n]{n_{c}}{k}\right) \nonumber \\
+              &=&  \mfr[G]{}{k}\left( \frc{\mfr[n]{1}{k}}{\mfr[n]{}{k}}, \frc{\mfr[n]{2}{k}}{\mfr[n]{}{k}}, \cdots, \frc{\mfr[n]{n_{c}}{k}}{\mfr[n]{}{k}}\right) \nonumber \\
+              &=&  \mfr[G]{}{k}\left(\mfr[x]{1}{k}, \mfr[x]{2}{k}, \cdots, \mfr[x]{n_{c}}{k}\right) \nonumber \\
+    \text{ thus, }     && \nonumber\\
+\mfr[g]{}{k} &=&  \mfr[g]{}{k}\left(\mfr[x]{1}{k}, \mfr[x]{2}{k}, \cdots, \mfr[x]{n_{c}}{k}\right). 
+\end{eqnarray}
+
+For two phase (liquid and vapour problems),
+\begin{displaymath}
+  \left \{
+  \begin{aligned}
+    & \mfr[g]{}{L} = \mfr[g]{}{L}\left(\mfr[x]{i}{L}\right) && \text{ with } \;\;\;i = 1, 2, \cdots, n_{c} \\
+    & 0 \leq \mfr[x]{i}{L} \leq 1 
+  \end{aligned} \right.
+\end{displaymath} 
+
+\begin{displaymath}
+  \left \{
+  \begin{aligned}
+    & \mfr[g]{}{V} = \mfr[g]{}{V}\left(\mfr[x]{i}{V}\right) && \text{ with } \;\;\;i = 1, 2, \cdots, n_{c} \\
+    & 0 \leq \mfr[x]{i}{V} \leq 1 
+  \end{aligned} \right.
+\end{displaymath} 
+
+Therefore,
+\begin{equation}
+  \left \{
+  \begin{aligned}
+    & g = \mfr[g]{}{V}\left(\mfr[x]{i}{V}\right) + \mfr[g]{}{L}\left(\mfr[x]{i}{L}\right) && \text{ with } \;\;\;i = 1, 2, \cdots, n_{c} \\
+    & 0 \leq \mfr[x]{i}{V} \leq 1 \text{ and } 0 \leq \mfr[x]{i}{L} \leq 1 
+  \end{aligned} \right.
 \end{equation} 
-this represents
+
+We can use the property of homogeneity of first order to describe a thermodynamic potential as (for $\forall\lambda > 0$),
 \begin{displaymath}
-G = \summation_{i=1}^{n_{c}} \mfr[m]{i}{1}\mfr[\mu]{i}{1} + \summation_{i=1}^{n_{c}} \mfr[m]{i}{2}\mfr[\mu]{i}{2} + \cdots + \summation_{i=1}^{n_{c}} \mfr[m]{i}{n_{p}}\mfr[\mu]{i}{n_{p}}
+   U\left(\lambda\cdot S, \lambda\cdot V,  \lambda\cdot n_{1}, \cdots, \lambda\cdot n_{n_{c}}\right) = \lambda U\left(S, V, n_{1}, \cdots, n_{n_{c}}\right),
 \end{displaymath}
-The chemical potential $\left(\mu\right)$ can be written as a function of the mass of each component at each phase,
+where $U$, $S$ and $V$ are internal energy, entropy and volume, respectively
+
+If we differentiate both sides with respect to $\lambda$ and using the {\it chain rule} in the left-hand side,
 \begin{eqnarray}
-\mfr[\mu]{i}{j} &=& \mfr[\mu]{i}{j}\left(\mfr[m]{1}{j}, \mfr[m]{2}{j}, \cdots, \mfr[m]{n_{c}}{j}\right) = \mfr[\mu]{i}{j}\left(\frc{\mfr[m]{1}{j}}{\mfr[m]{}{j}}, \frc{\mfr[m]{2}{j}}{\mfr[m]{}{j}}, \cdots, \frc{\mfr[m]{n_{c}}{j}}{\mfr[m]{}{j}}\right)\nonumber \\
-&=& \mfr[\mu]{i}{j}\left(\mfr[w]{1}{j}, \mfr[w]{2}{j}, \cdots, \mfr[w]{n_{c}}{j}\right)\label{chempotential_functional}
+  &&\frc{\partial}{\partial S} U\left(\lambda\cdot S, \lambda\cdot V,  \lambda\cdot n_{1}, \cdots, \lambda\cdot n_{n_{c}}\right)S + \frc{\partial}{\partial V} U\left(\lambda\cdot S, \lambda\cdot V,  \lambda\cdot n_{1}, \cdots, \lambda\cdot n_{n_{c}}\right)V + \nonumber \\
+ && \hfill \summation_{i=1}^{n_{c}} \frc{\partial}{\partial n_{i}} U\left(\lambda\cdot S, \lambda\cdot V,  \lambda\cdot n_{1}, \cdots, \lambda\cdot n_{n_{c}}\right)n_{i} = U\left(S, V, n_{1}, \cdots, n_{n_{c}}\right) \nonumber 
 \end{eqnarray}
-Dividing Eqn.~\ref{MassGibbs_Definition} by $m$,
+Assuming $\lambda=1$,
+\begin{displaymath}
+   \Partial[U]{S}{V,n_{i}}S + \Partial[U]{V}{S,n_{i}}V + \summation_{i=1}^{n_{c}}\Partial[U]{n_{i}}{V,S,n_{j\ne i}}n_{i} = U,
+\end{displaymath}
+and using the Maxwell relations to replace the differential quantities
 \begin{equation}
-g = \frc{G}{m} = \summation_{j=1}^{n_{p}}\left(\summation_{i=1}^{n_{c}}\frc{\mfr[m]{i}{j}}{m}\mfr[\mu]{i}{j}\right) = \summation_{i=1}^{n_{c}}\frc{\mfr[m]{i}{1}}{m^{(1)}} \cdot \frc{m^{(1)}}{m} \mfr[\mu]{i}{1} + \cdots + \summation_{i=1}^{n_{c}}\frc{\mfr[m]{i}{n_{p}}}{\mfr[m]{}{n_{p}}} \cdot \frc{\mfr[m]{}{n_{p}}}{m} \mfr[\mu]{i}{n_{p}}
-\label{MassGibbs_Definition2}
+   U = TS - PV + \summation_{i=1}^{n_{c}} \mu_{i}n_{i}\label{Chapter:ThermodynamicFormulation:Eqn:EulerRelation}
 \end{equation}
-And we can rewrite Eqn.~\ref{MassGibbs_Definition2} as,
+This equation is known as {\it Euler relation}.  From the Gibbs free energy definition,
+\begin{displaymath}
+   G = U-TS+PV
+\end{displaymath}
+Replacing Euler relation in the equation above,
 \begin{equation}
-g = \summation_{i=1}^{n_{c}}\Pi^{(1)}\mfr[w]{i}{1}\mfr[\mu]{i}{1} + \summation_{i=1}^{n_{c}}\Pi^{(2)}\mfr[w]{i}{2}\mfr[\mu]{i}{2} + \cdots + \summation_{i=1}^{n_{c}}\mfr[\Pi]{}{n_{p}}\mfr[w]{i}{n_{p}}\mfr[\mu]{i}{n_{p}} = \summation_{j=1}^{n_{p}}\left[\summation_{i}^{n_{c}}\mfr[\Pi]{}{j}\mfr[w]{i}{j}\mfr[\mu]{i}{j}\right] \label{MassGibbs_Definition3}
+   G = \summation_{i=1}^{n_{c}} \mu_{i}n_{i},
+\end{equation}
+or for system with multiple phases in equilibrium,
+\begin{equation}
+   \mfr[G]{}{j} = \summation_{i=1}^{n_{c}}\mfr[\mu]{i}{j}\mfr[x]{i}{j},\;\;\;\;\; j=1, \cdots, n_{p}.
 \end{equation}
 
+For $T$ and $P$ constant, the chemical potential, $\mu$ can be written as a non-linear function
+\begin{equation}
+   \mfr[\mu]{i}{j} = \mfr[\mu]{i}{j}\left(\mfr[x]{1}{j} \cdots, \mfr[x]{n_{c}}{j}\right).\label{Chapter:ThermodynamicFormulation:Eqn:ChemPotDef2}
+\end{equation}
+The total Gibbs free energy can be then rewritten as
+\begin{equation}
+   G = \summation_{j=1}^{n_{p}} \mfr[G]{}{j} = \summation_{j=1}^{n_{p}}\summation_{i=1}^{n_{c}} \mfr[\mu]{i}{j}\mfr[n]{i}{j}.\label{Chapter:ThermodynamicFormulation:Eqn:GibbsTotal}
+ \end{equation}
 
-%\begin{mdframed}[style=JFrame]
+Assuming that we are dealing with closed system(i.e., $n$ is constant) and replacing Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsTotal} in,
+\begin{eqnarray}
+     g = \frc{G}{n} &=& \frc{\summation_{i=1}^{n_{c}}\mfr[\mu]{i}{1}\mfr[n]{i}{1}}{n} +  \cdots +  \frc{\summation_{i=1}^{n_{c}}\mfr[\mu]{i}{n_{p}}\mfr[n]{i}{n_{p}}}{n} \nonumber \\
+       &=& \summation_{i=1}^{n_{c}} \underbrace{\frc{\mfr[n]{i}{1}}{\mfr[n]{}{1}}}_{\red{\mfr[x]{i}{1}}} \cdot\underbrace{\frc{\mfr[n]{}{1}}{n}}_{\red{\mfr[\Pi]{}{1}}}\mfr[\mu]{i}{1} + \cdots + \summation_{i=1}^{n_{c}} \underbrace{\frc{\mfr[n]{i}{n_{p}}}{\mfr[n]{}{n_{p}}}}_{\red{\mfr[x]{i}{n_{p}}}} \cdot\underbrace{\frc{\mfr[n]{}{n_{p}}}{n}}_{\red{\mfr[\Pi]{}{n_{p}}}}\mfr[\mu]{i}{n_{p}} \nonumber \\
+      &=& \summation_{i=1}^{n_{c}} \mfr[\Pi]{}{1}\mfr[x]{i}{1}\mfr[\mu]{i}{1} + \cdots + \summation_{i=1}^{n_{c}} \mfr[\Pi]{}{n_{p}}\mfr[x]{i}{n_{p}}\mfr[\mu]{i}{n_{p}} \nonumber \\
+      &=& \summation_{j=1}^{n_{p}}\left[\summation_{i=1}^{n_{c}} \mfr[\mu]{}{j}\mfr[x]{i}{j}\mfr[\mu]{i}{j}\right].
+\end{eqnarray}
+Using the linear constraint (Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:FractionConstraints2}),
 \begin{shaded}\noindent
-   For 2 ($L$ and $V$) phases,
-     \begin{displaymath}
-        g = \summation_{i=1}^{n_{c}}L\mfr[w]{i}{L}\mfr[\mu]{i}{L} + \summation_{i=1}^{n_{c}}V\mfr[w]{i}{V}\mfr[\mu]{i}{V}
-     \end{displaymath}
-     and 3 ($L$, $V$ and $H$) phases,
-     \begin{displaymath}
-       g = \summation_{i=1}^{n_{c}}L\mfr[w]{i}{L}\mfr[\mu]{i}{L} + \summation_{i=1}^{n_{c}}V\mfr[w]{i}{V}\mfr[\mu]{i}{V} + \summation_{i=1}^{n_{c}}H\mfr[w]{i}{H}\mfr[\mu]{i}{H}
-     \end{displaymath}
+   \begin{equation}
+      g = \summation_{j=1}^{n_{p}}\left[\summation_{i=1}^{n_{c}-1} \mfr[\Pi]{}{j}\mfr[x]{i}{j}\left(\mfr[\mu]{i}{j}-\mfr[\mu]{n_{c}}{j}\right) + \mfr[\Pi]{}{j}\mfr[\mu]{n_{c}}{j}\right]\label{Chapter:ThermodynamicFormulation:Eqn:GibbsMolar1}
+   \end{equation}
 \end{shaded}
-%\end{mdframed}
 
-
-Now replacing Eqn.~\ref{Eqn_MassBalance_MassFraction2} in Eqn.~\ref{MassGibbs_Definition3},
-\begin{eqnarray}
-g &=& \summation_{i=1}^{n_{c}-1}\Pi^{(1)}\mfr[w]{i}{1}\left(\mfr[\mu]{i}{1}-\mfr[\mu]{n_{c}}{1}\right) + \Pi^{(1)}\mfr[\mu]{n_{c}}{1} + \summation_{i=1}^{n_{c}-1}\Pi^{(2)}\mfr[w]{i}{2}\left(\mfr[\mu]{i}{2}-\mfr[\mu]{n_{c}}{2}\right) + \Pi^{(2)}\mfr[\mu]{n_{c}}{2} + \cdots + \nonumber \\
-  && \summation_{i=1}^{n_{c}-1}\mfr[\Pi]{}{n_{p}}\mfr[w]{i}{n_{p}}\left(\mfr[\mu]{i}{n_{p}}-\mfr[\mu]{n_{c}}{n_{p}}\right) + \mfr[\Pi]{}{n_{p}}\mfr[\mu]{n_{c}}{n_{p}}
-\label{MassGibbs_Definition4}
-\end{eqnarray}
-Now replacing Eqns.~\ref{Eqn_MassBalance_PhaseMassFraction2} and~\ref{Eqn_MassBalance_FeedMassFractionConstraint2} in~\ref{MassGibbs_Definition4}:
-\begin{eqnarray}
-g &=& \summation_{i=1}^{n_{c}}\Pi^{(1)}\mfr[w]{i}{1}\left(\mfr[\mu]{i}{1}-\mfr[\mu]{n_{c}}{1}\right) + \Pi^{(1)}\mfr[\mu]{n_{c}}{1} + \cdots + \summation_{i=1}^{n_{c}}\mfr[\Pi]{}{n_{p}-1}\mfr[w]{i}{n_{p}-1}\left(\mfr[\mu]{i}{n_{p}-1}-\mfr[\mu]{n_{c}}{n_{p}-1}\right) +  \nonumber \\
-   && \mfr[\Pi]{}{n_{p}-1}\mfr[\mu]{n_{c}}{n_{p}-1} + \summation_{i=1}^{n_{c}-1}\left[z_{i} - \summation_{j=1}^{n_{p}-1}\mfr[\Pi]{}{j}\mfr[w]{i}{j}\right]\left(\mfr[\mu]{i}{n_{p}}-\mfr[\mu]{n_{c}}{n_{p}}\right) + \mfr[\Pi]{}{n_{p}}\mfr[\mu]{n_{c}}{n_{p}}\nonumber
-\end{eqnarray}
-
-Rearranging
-\begin{eqnarray}
-g &=& \summation_{i=1}^{n_{c}}\mfr[\Pi]{}{1}\mfr[w]{i}{1}\left[\left(\mfr[\mu]{i}{1}-\mfr[\mu]{i}{n_{p}}\right) - \left(\mfr[\mu]{n_{c}}{1}-\mfr[\mu]{n_{c}}{n_{p}}\right)\right] + \cdots +  
-\nonumber \\
-&& \summation_{i=1}^{n_{c}}\mfr[\Pi]{}{n_{p}-1}\mfr[w]{i}{n_{p}-1}\left[\left(\mfr[\mu]{i}{n_{p}-1}-\mfr[\mu]{i}{n_{p}}\right) - \left(\mfr[\mu]{n_{c}}{n_{p}-1}-\mfr[\mu]{n_{c}}{n_{p}}\right)\right] + \summation_{j=1}^{n_{p}-1}\Pi^{(j)}\mfr[\mu]{n_{c}}{j} + \nonumber \\
-&& \summation_{i=1}^{n_{c}-1}z_{i}\left(\mfr[\mu]{i}{n_{p}}-\mfr[\mu]{n_{c}}{n_{p}}\right) +\left(1-\summation_{j=1}^{n_{p}-1}\Pi^{(j)}\right)\mfr[\mu]{n_{c}}{n_{p}} \nonumber
-\end{eqnarray}
-
-With a compressed notation:
-
-\begin{eqnarray}
-g &=& \summation_{i=1}^{n_{c}-1}\left\{\summation_{j=1}^{n_{p}-1}\Pi^{(j)}\mfr[w]{i}{j}\left[\left(\mfr[\mu]{i}{j}-\mfr[\mu]{i}{n_{p}}\right) - \left(\mfr[\mu]{n_{c}}{j}-\mfr[\mu]{n_{c}}{n_{p}}\right)\right]\right\} + \summation_{j=1}^{n_{p}-1}\Pi^{(j)}\left(\mfr[\mu]{n_{c}}{j}-\mfr[\mu]{n_{c}}{n_{p}}\right) +  \nonumber \\
-&& \hspace{3cm} \summation_{i=1}^{n_{c}-1} z_{i}\mfr[\mu]{i}{n_{p}} + \underbrace{\left(1-\summation_{i=1}^{n_{c}-1}z_{i}\right)}_{\red{z_{n_{c}}}}\mfr[\mu]{n_{c}}{n_{p}} \nonumber 
-\end{eqnarray}
-Thus
-\red{\begin{eqnarray}
-g &=& \summation_{i=1}^{n_{c}-1}\left\{\summation_{j=1}^{n_{p}-1}\Pi^{j}\mfr[w]{i}{j}\left[\left(\mfr[\mu]{i}{j}-\mfr[\mu]{i}{n_{p}}\right) - \left(\mfr[\mu]{n_{c}}{j}-\mfr[\mu]{n_{c}}{n_{p}}\right)\right]\right\} + \nonumber \\
-       && \summation_{j=1}^{n_{p}-1}\Pi^{(j)}\left(\mfr[\mu]{n_{c}}{j}-\mfr[\mu]{n_{c}}{n_{p}}\right) + \summation_{i=1}^{n_{c}}z_{i}\mfr[\mu]{i}{n_{p}}
-\end{eqnarray}}
-
-The chemical potential was defined as a functional (Eqn.~\ref{chempotential_functional}):
-\begin{eqnarray}
-&& \mfr[\mu]{i}{1} = \mfr[\mu]{i}{1}\left(\mfr[w]{1}{1},\mfr[w]{2}{1},\cdots,\mfr[w]{n_{c}}{1}\right) \nonumber \\
-&& \mfr[\mu]{i}{2} = \mfr[\mu]{i}{2}\left(\mfr[w]{1}{2},\mfr[w]{2}{2},\cdots,\mfr[w]{n_{c}}{2}\right) \nonumber \\
-&& \hspace{2cm}\vdots \nonumber \\
-&& \mfr[\mu]{i}{n_{p}} = \mfr[\mu]{i}{n_{p}}\left(\mfr[w]{1}{n_{p}},\mfr[w]{2}{n_{p}},\cdots,\mfr[w]{n_{c}}{n_{p}}\right) \label{ChemPotDef2}
-\end{eqnarray}
-with constraint Eqn.~\ref{Eqn_MassBalance_FeedMassFractionConstraint2} in Eqn.~\ref{ChemPotDef2},
-\begin{eqnarray}
-\mfr[\mu]{l}{k} &=& \mfr[\mu]{l}{k}\left(\mfr[w]{i}{j},\Pi^{(j)}\right) \nonumber \\
-           &=& \mfr[\mu]{l}{k}\left(\mfr[w]{1}{1},\cdots,\mfr[w]{n_{c}-1}{1},\mfr[w]{1}{2},\cdots,\mfr[w]{n_{c}-1}{2},\cdots,\mfr[w]{1}{n_{p}},\mfr[w]{2}{n_{p}},\cdots,\mfr[w]{n_{c}-1}{n_{p}},\Pi^{(1)},\cdots,\mfr[\Pi]{}{n_{p}}\right)\nonumber
-\end{eqnarray}
-with $i=1,2,\cdots,l,\cdots,n_{c}-1$ and $j = 1,2,\cdots,n_{p}$ and $j\neq k$
-
-
-%%% Section
-\section{Box Formulation}\label{Chapter:ThermodynamicFormulation:Section:BoxFormulation}
-The mass-based free Gibbs energy may be expressed a function of the mass fraction of each component at each phase, $\mfr[w]{i}{j}$ and the mass fraction of each individual phase, $\mfr[\Pi]{}{j}$, in equilibrium conditions,
+From Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:ChemPotDef2} and
 \begin{displaymath}
-   g = g\left(\mfr[w]{i}{j},\mfr[\Pi]{}{j}\right).
+   \mfr[\Pi]{}{k} = 1 - \summation_{j=1,j\ne k}{n_{p}} \mfr[\Pi]{}{j},
 \end{displaymath}
-From classical thermodynamic~\citep{Balmer_Book}, $\mfr[\mu]{i}{j}$ can be defined as a function of the fugacity coefficient, $\varphi_{i}^{j}$,
+for 2 phase systems $\left(\text{i.e., } \Pi = L, V\right)$, 
+\begin{displaymath}
+  \left \{
+  \begin{aligned}
+    & V = 1 - L && \\
+    & V\mfr[x]{i}{V} = z_{i} - L\mfr[x]{i}{L},
+  \end{aligned} \right.
+\end{displaymath} 
+and Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsMolar1} becomes
 \begin{equation}
-   \mfr[\mu]{i}{j}= R T\left[\ln{\mfr[\varphi]{i}{j}} + \ln{\left(P \mfr[x]{i}{j}\right)}\right] + \theta_{i}\left(T\right),\label{Chapter:ThermodynamicFormulation:Section:BoxFormulation:Eqn:ChemPot}
+  g = \summation_{i=1}^{n_{c}-1} L\mfr[x]{i}{L}\left[\left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right)-\left(\mfr[\mu]{n_{c}}{L}-\mfr[\mu]{n_{c}}{V}\right)\right] + L\left(\mfr[\mu]{n_{c}}{L}-\mfr[\mu]{n_{c}}{V}\right) +  \left(1 - \summation_{i=1}^{n_{c}-1}z_{i}\right)\mfr[\mu]{n_{c}}{V}
 \end{equation}
-where $\theta_{i}$ is an integration constant~\citep{SmithVanNess_Book}. The fugacity coefficient is defined as,
+However, as
+\begin{displaymath}
+   z_{n_{c}} = 1 - \summation_{i=1}^{n_{c}-1}z_{i},
+\end{displaymath}
+Thus,
+\begin{shaded}\noindent
+   \begin{equation}
+  g = \summation_{i=1}^{n_{c}-1} L\mfr[x]{i}{L}\left[\left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right)-\left(\mfr[\mu]{n_{c}}{L}-\mfr[\mu]{n_{c}}{V}\right)\right] + L\left(\mfr[\mu]{n_{c}}{L}-\mfr[\mu]{n_{c}}{V}\right) + \summation_{i=1}^{n_{c}}z_{i}\mfr[\mu]{i}{V}.\label{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal}
+   \end{equation}
+\end{shaded}
+
+The chemical potential may be expressed as a function of the fugacity, $f$,
 \begin{equation}
-   \mfr[\varphi]{i}{j} = \frc{\mfr[f]{i}{j}}{P \mfr[x]{i}{j}},\label{Chapter:ThermodynamicFormulation:Section:BoxFormulation:Eqn:FugacityCoeff}
+   \mfr[\mu]{i}{j} = RT\left[\ln{\mfr[f]{i}{j}}-\ln{\left(P\mfr[x]{i}{j}\right)}\right] + \mfr[\theta]{i}{j}(T),
 \end{equation}
-where $f$ and $x$ are the fugacity and molar fraction, respectively. The fugacity coefficient can be calculated for each component at each phase through an equation of state. In the term $\ln{\left(P\mfr[x]{i}{j}\right)}$ of Eqn.~\ref{Chapter:ThermodynamicFormulation:Section:BoxFormulation:Eqn:ChemPot}, the species are present in all phases. The mole and mass fractions $\left(\mfr[x]{i}{j}\text{ and }\mfr[w]{i}{j}\right)$ must not be equal to zero, otherwise this term would tend to infinity. Thus, the constraint
-  \begin{displaymath}
-    \summation_{i=1}^{n_{c}} \mfr[x]{i}{j} = 1 = \summation_{i=1}^{n_{c}} \mfr[w]{i}{j},
-  \end{displaymath}
-enforces that mass fractions must not be equal to unity, otherwise all other compositions would be zero. Therefore
-   \begin{displaymath}
-        0 < \mfr[w]{i}{j} < 1.
-   \end{displaymath}
+with
+\begin{displaymath}
+  \left \{
+  \begin{aligned}
+    & 0 < \mfr[x]{i}{j} < 1 &&  \\
+    & 0 < \mfr[\Pi]{}{j} < 1 && \text{ with }  i = 1, \cdots, n_{c},\;\; j = 1, \cdots, n_{p}
+  \end{aligned} \right.
+\end{displaymath} 
 
 %%% Section
 \section{Minimum Free Gibbs Energy}\label{Chapter:ThermodynamicFormulation:Section:MinimumGibbsEnergy}
@@ -195,24 +223,24 @@ In multiphase systems at constant pressure and temperature conditions, the conce
      {\bf Statement of the VLE Problem}
    \end{center}
 
-   Given $T$, $P$ and $z_{i}$ $\left(i=1,2,\cdots,n_{c}\right)$. Find the set of $\mfr[w]{1}{L},\cdots,\mfr[w]{n_{c}-1}{L}$ and $L$ that minimises
-   \begin{eqnarray}
-      g\left(\mfr[w]{1}{L},\cdots,\mfr[w]{n_{c}-1}{L}, L\right) &=& \summation_{i=1}^{n_{c}-1}L\mfr[w]{i}{L}\left[\left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right)-\left(\mfr[\mu]{n_{c}}{L}-\mfr[\mu]{n_{c}}{V}\right)\right] \nonumber\\
-         && + L\left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right) + \summation_{i}^{n_{c}}z_{i}\mfr[\mu]{i}{V} 
-   \end{eqnarray}
+   Given $T$, $P$ and $z_{i}$ $\left(i=1,2,\cdots,n_{c}\right)$. Find the set of $\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}$ and $L$ that minimises
+   \begin{displaymath}
+      g\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}, L\right) = \summation_{i=1}^{n_{c}-1}L\mfr[x]{i}{L}\left[\left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right)-\left(\mfr[\mu]{n_{c}}{L}-\mfr[\mu]{n_{c}}{V}\right)\right] + L\left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right) + \summation_{i}^{n_{c}}z_{i}\mfr[\mu]{i}{V} 
+   \end{displaymath}
    with the constraints:
 \[ 
 \left\{
   \begin{tabular}{l}
   $0 < L < 1$ \\
-  $0 < \mfr[w]{i}{L} < 1$, \hspace{1cm} $i=1,2,\cdots,n_{c}-1$\\
-  $\summation_{i=1}^{n_{c}}\mfr[w]{i}{L} < 1$\\ 
+  $0 < \mfr[x]{i}{L} < 1$, \hspace{1cm} $i=1,2,\cdots,n_{c}-1$\\
+  $\summation_{i=1}^{n_{c}}\mfr[x]{i}{L} < 1$\\ 
   \end{tabular}
 \right.
 \]
 where,
 \begin{displaymath}
-   \mfr[\mu]{i}{L}=\mfr[\mu]{i}{L}\left(\mfr[w]{1}{L},\cdots,\mfr[w]{n_{c}-1}{L}\right)\text{ and }\mfr[\mu]{i}{V}=\mfr[\mu]{i}{V}\left(\mfr[w]{1}{L},\cdots,\mfr[w]{n_{c}-1}{L}, L\right)
+   \mfr[\mu]{i}{L}=\mfr[\mu]{i}{L}\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}\right)\text{ and }\mfr[\mu]{i}{V}=\mfr[\mu]{i}{V}\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}, L\right)
 \end{displaymath}
 
 \end{shaded}
+%\end{comment}
