@@ -51,6 +51,12 @@ c = (1 / np.sqrt(2)) * np.log( np.sqrt(2)-1 )                    # c term from t
 print '  c = ', c
 print
 
+bm = q / ( 1 - d) 
+am = bm * d
+print '  bm = ', bm, ' am = ', am
+print
+
+
 
 
 
