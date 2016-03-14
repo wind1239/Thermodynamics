@@ -223,23 +223,24 @@ In multiphase systems at constant pressure and temperature conditions, the conce
      {\bf Statement of the VLE Problem}
    \end{center}
 
-   Given $T$, $P$ and $z_{i}$ $\left(i=1,2,\cdots,n_{c}\right)$. Find the set of $\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}$ and $L$ that minimises
+   Given $T$, $P$ and $z_{i}$ $\left(i=1,2,\cdots,n_{c}\right)$. \\
+   Find the set of \red{$\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}$} and \red{$L$} that \underline{minimises},
    \begin{displaymath}
       g\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}, L\right) = \summation_{i=1}^{n_{c}-1}L\mfr[x]{i}{L}\left[\left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right)-\left(\mfr[\mu]{n_{c}}{L}-\mfr[\mu]{n_{c}}{V}\right)\right] + L\left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right) + \summation_{i}^{n_{c}}z_{i}\mfr[\mu]{i}{V} 
    \end{displaymath}
-   with the constraints:
+   with $\mfr[x]{i}{V} = \frc{z_{i}-L\mfr[x]{i}{L}}{1-L}$ and the constraints:
 \[ 
 \left\{
   \begin{tabular}{l}
   $0 < L < 1$ \\
   $0 < \mfr[x]{i}{L} < 1$, \hspace{1cm} $i=1,2,\cdots,n_{c}-1$\\
-  $\summation_{i=1}^{n_{c}}\mfr[x]{i}{L} < 1$\\ 
+  $\summation_{i=1}^{n_{c}-1}\mfr[x]{i}{L} < 1$\\ 
   \end{tabular}
 \right.
 \]
 where,
 \begin{displaymath}
-   \mfr[\mu]{i}{L}=\mfr[\mu]{i}{L}\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}\right)\text{ and }\mfr[\mu]{i}{V}=\mfr[\mu]{i}{V}\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}, L\right)
+   \mfr[\mu]{i}{L}=\mfr[\mu]{i}{L}\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}\right)\text{ and }\mfr[\mu]{i}{V}=\mfr[\mu]{i}{V}\left(\mfr[x]{1}{V},\cdots,\mfr[x]{n_{c}-1}{V}, L\right)
 \end{displaymath}
 
 \end{shaded}
