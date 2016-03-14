@@ -19,27 +19,40 @@ MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
 
 
 
-# = = = = = = = = =  Gibbs energy in excess = Helmoltz energy in excess = = = = = = = = = =
-def Gibbs( MFrac): 
-    Gei = [ 0. for i in range( ThT.NComp ) ]
-    for j in range(ThT.NComp):
-        node = j * ThT.NComp + i
-        for i in range(ThT.NComp):
-            Gei = - ( Gei + MFrac[ j ] * ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ node ] ) ) ) 
-            print '  the Gibbs energy in excess for the component ', ThT.Species[i] ,' is Ge = ', Gei
-        print
-    return Ge
-
-
-
+bart = [0. for i in range(ThT.NComp**2) ]
+bm = 0
+am = 0
 
 bm_nom = 0
 bm_denom = 0
 for i in range(ThT.NComp):
-    bm_denom1 = 0
     for j in range(ThT.NComp):
         node = i * ThT.NComp + j
-        bm_nom = bm_nom + ( MFrac[ i ] * MFrac[ j ] ) * ( PR.PREoS_Calc_b( i ) - PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) / ThT.Rconst * ThT.T_System[ 0 ] )
-        bm_denom = 1 - 1 / ( ThT.Rconst * ThT.T_System[ 0 ] ) * ( MFrac[ i ] *  PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] ) / PR.PREoS_Calc_b( i )  )
-    print '  the bm_nom = ', bm_nom
+        k = 0.37464 + 1.5422 * ThT.Accentric_Factor[i] - 0.26992 * ThT.Accentric_Factor[i]**2
+        alpha = ( 1. + k * ( 1. - math.sqrt( ThT.T_System[ 0 ] / ThT.T_Crit[i] ) )) **2
+        a_i = 0.45724 * ( ThT.Rconst * ThT.T_Crit[i] )**2 / ThT.P_Crit[i] * alpha
+        b_i = 0.07780 * ThT.Rconst * ThT.T_Crit[i]  / ThT.P_Crit[i]
+        bart[ node ] = ( b_i - ( a_i / ThT.Rconst * ThT.T_Crit[i]) ) + ( b_i - ( a_i / ThT.Rconst * ThT.T_Crit[i]) ) * ( 1 - ThT.BinaryParameter[node] ) / 2
+        bm_nominator = MFrac[ i ] * MFrac[ j ] * ( bart[ node ] ) 
+        bm_denominator =  1 - 1 / ( ThT.Rconst * ThT.T_Crit[i] ) - lng.gibbs( MFrac ) + np.inner( MFrac , ( a_i/b_i ) )
+        bm = bm + bm_nominator / bm_denominator
+        am = bm * ( bm_denominator )
+        print '  the k = ', k,'  the alphai = ', alpha, '  the ai = ', a_i, '  the b_i = ', b_i  
+        print '  the bart = ', bart[ node ], ' the bm = ', bm, ' the am = ', am
+        print '  for the component ', ThT.Species[i],' with respect to' , ThT.Species[j]#,'  the Ge = ', Gei
+        print
+        print 
+
+def Q(MFrac):
+    Q = bm_nominator
+    print ' Q = ', Q
+    return Q
+
+def D(Mfrac):
+    D = bm_denominator
+    print ' D = ', D
+    return D
+
+c = (1 / np.sqrt(2)) * np.log( np.sqrt(2)-1 )                    # c term from the eq. 2.26
+print ' the c = ', c
         
