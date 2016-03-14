@@ -16,7 +16,7 @@ def ln_gamma( MFrac ):
         suma = 0                                               
         for i in range(ThT.NComp):                                      
             node = k * ThT.NComp + i
-            #print ' k, i, node:', k, i, node, x[i],l[node]
+            #print ' k, i, node:', k, i, node, 
             suma = suma + MFrac[i] * ThT.Lamda_wilson[node]
         #print '                               ln(suma) = ', np.log(suma) 
         sumcj = 0
@@ -40,14 +40,16 @@ def ln_gamma( MFrac ):
 
 
 # = = = = = = = = = Gibbs energy in excess = Helmoltz energy in excess = = = = = = = = = =
-def gibbs( MFrac): 
+def gibbs( MFrac ): 
     gibbs1 = [ 0. for i in range( ThT.NComp ) ]
     for j in range(ThT.NComp):
         node = j * ThT.NComp + i
+        #print ' the node out is = ', node
         for i in range(ThT.NComp):
-            Ge[j] = - ( ThT.Rconst * ThT.T_System[ 0 ] ) * ( Gei + MFrac[ j ] * ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ node ] ) ) ) 
-            print '  the Gibbs energy in excess for the component ', ThT.Species[j] ,' is Ge = ', Ge[j]
-        print
+            #print ' the node in is = ', node
+            gibbs1[ i ] = - ( ThT.Rconst * ThT.T_System[ 0 ] ) * ( gibbs1[ i ] + MFrac[ j ] * ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ node ] ) ) ) 
+        print '  the Gibbs energy in excess for the component ', ThT.Species[j] ,' is Ge = ', gibbs1[ i ]
+    print
     return gibbs1
 
 
@@ -58,10 +60,6 @@ ThT.ReadSet_Global_Variables()
 nc = ThT.NComp
 print '  the number of components = ', ThT.NComp
 
-sumc = 0
-sumc_nom = 0
-sumc_denom = 0
-
 
 MFrac = [ 0. for i in range( ThT.NComp ) ]
 print '  the initial molar fraction before reading from the input.dat is', MFrac
@@ -70,11 +68,14 @@ print '  the initial molar fraction before reading from the input.dat is', MFrac
 MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
 #MFrac[ 2 ] = 0.10; MFrac[ 3 ] = 0.10; # Liquid phase
 
+sumc = 0
+sumc_nom = 0
+sumc_denom = 0
 
 lng = [ 0. for i in range( ThT.NComp ) ]
 lng = ln_gamma( MFrac )
 print '  the lng =', lng 
 
-gibbs = [ 0. for i in range( ThT.NComp ) ]
-ge = gibbs( MFrac)
+ge = [ 0. for i in range( ThT.NComp ) ]
+ge = gibbs( MFrac )
 print ' the Gibbs or Helmholtz energy in excess = ', ge
