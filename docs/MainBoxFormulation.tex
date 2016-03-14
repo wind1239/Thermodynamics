@@ -201,9 +201,9 @@ Thus,
    \end{equation}
 \end{shaded}
 
-The chemical potential may be expressed as a function of the fugacity, $f$,
+The chemical potential may be expressed as a function of the fugacity coefficient, $\varphi$,
 \begin{equation}
-   \mfr[\mu]{i}{j} = RT\left[\ln{\mfr[f]{i}{j}}-\ln{\left(P\mfr[x]{i}{j}\right)}\right] + \mfr[\theta]{i}{j}(T),
+   \mfr[\mu]{i}{j} = RT\left[\ln{\mfr[\varphi]{i}{j}}-\ln{\left(P\mfr[x]{i}{j}\right)}\right] + \mfr[\theta]{i}{j}(T),
 \end{equation}
 with
 \begin{displaymath}
@@ -213,6 +213,7 @@ with
     & 0 < \mfr[\Pi]{}{j} < 1 && \text{ with }  i = 1, \cdots, n_{c},\;\; j = 1, \cdots, n_{p}
   \end{aligned} \right.
 \end{displaymath} 
+Procedure for fugacity coefficient calculation is described in Section~\ref{Chapter:EOSPR:Section:FugacityCoefficients}.
 
 %%% Section
 \section{Minimum Free Gibbs Energy}\label{Chapter:ThermodynamicFormulation:Section:MinimumGibbsEnergy}
@@ -224,8 +225,7 @@ In multiphase systems at constant pressure and temperature conditions, the conce
    \end{center}
 
    Given $T$, $P$ and $z_{i}$ $\left(i=1,2,\cdots,n_{c}\right)$. \\
-   Find the set of \red{$\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}$} and \red{$L$} that \underline{minimises},
-   \begin{displaymath}
+   Find the set of \red{$\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}$} and \red{$L$} that \underline{minimises},   \begin{displaymath}
       g\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}, L\right) = \summation_{i=1}^{n_{c}-1}L\mfr[x]{i}{L}\left[\left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right)-\left(\mfr[\mu]{n_{c}}{L}-\mfr[\mu]{n_{c}}{V}\right)\right] + L\left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right) + \summation_{i}^{n_{c}}z_{i}\mfr[\mu]{i}{V} 
    \end{displaymath}
    with $\mfr[x]{i}{V} = \frc{z_{i}-L\mfr[x]{i}{L}}{1-L}$ and the constraints:
