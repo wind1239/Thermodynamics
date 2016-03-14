@@ -48,9 +48,9 @@ def gibbs( MFrac ):
         for i in range(ThT.NComp):
             #print ' the node in is = ', node
             gibbs1[ i ] = - ( ThT.Rconst * ThT.T_System[ 0 ] ) * ( gibbs1[ i ] + MFrac[ j ] * ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ node ] ) ) ) 
-        print '  the Gibbs energy in excess for the component ', ThT.Species[j] ,' is Ge = ', gibbs1[ i ]
-    print
-    return gibbs1
+            #print '  the Gibbs energy in excess for the component ', ThT.Species[i] ,' is Ge = ', gibbs1[ i ]
+        print
+        return gibbs1
 
 
 
