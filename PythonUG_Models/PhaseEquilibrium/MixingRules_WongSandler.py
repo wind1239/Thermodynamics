@@ -69,7 +69,7 @@ def MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition ):
                  ( 1. / am * d_am[ i ] - 1. / bm * d_bm[ i ] ) * \
                  math.log( max( ThT.Residual, ( Z / Big_B + 1. - math.sqrt( 2. ) ) / \
                                 ( Z / Big_B + 1. + math.sqrt( 2. ) ) ) )
-        print 'Log', LogPhi
+
         FugCoeff[ i ] = math.exp( LogPhi )
 
         ChemPot[ i ] = ThT.RConst * Temp * LogPhi + math.log( max( ThT.Residual, Composition[ i ] * Press ) )

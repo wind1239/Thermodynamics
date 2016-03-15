@@ -7,6 +7,8 @@ import math
 import ThermoTools as ThT
 import GibbsFunction as GibbsF
 import PhaseStability as Michaelsen
+import pickle
+#import csv # Using csv (comma separated values) module
 
 
 ''' This is the main program that aims to calculate the vapour-liquid equilibrium
@@ -17,6 +19,8 @@ import PhaseStability as Michaelsen
 
 # Reading Input data from external file:
 ThT.ReadSet_Global_Variables()
+
+OutFile = open('output', 'w')
 
 ''' ====================================================================
        Printing the data from the input file 
@@ -48,49 +52,60 @@ Temp = ThT.T_System[ 0 ]
 Press = ThT.P_System[ 0 ] 
 
 
-'''
-===============================================================
-     MICHAELSEN'S STABILITY TEST: Decision of the Phases 
-===============================================================
-                                                            '''
-( Comp, Comp_Phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
+
+if ThT.NPhase > 2:
+    print 'This function was hacked to work only on a 2-phases system, it thus needs to be generalised.'
+    sys.exit()
+
+else:
+    # Loop for automatically generating composition
+    ThT.MFrac = 0. ; ThT.PhaseFrac = 0. ; inc = 0.1 ; zero = 0. ; Niter = 10
+    for iter in range( Niter + 1 ):
+        sum1 = 0.; PhaFrac = [ 0.05 for i in range( ThT.NPhase ) ]
+        for iphase in range( ThT.NPhase - 1 ):
+            PhaFrac[ iphase ] = PhaFrac[ iphase ] + float(iter) * 1./float(Niter)
+            sum1 = sum1 + PhaFrac[ iphase ]
+        PhaFrac[ ThT.NPhase - 1 ] = 1. - sum1
+        ThT.PhaseFrac = PhaFrac
+
+        sum2 = 0. ; MolFrac = [ 0.05 for i in range( ThT.NComp * ThT.NPhase ) ]
+        for iphase in range( ThT. NPhase - 1 ):
+            for icomp in range( ThT.NComp - 1 ):
+                node = iphase * ThT.NComp + icomp
+                MolFrac[ node ] = MolFrac[ node ] + float(iter) * 1./float(Niter)
+                sum2 = sum2 + MolFrac[ node ]
+            node2 = iphase * ThT.NComp + ThT.NComp -1
+            MolFrac[ node2 ] = 1. - sum2
+        MolFrac = GibbsF.CalcOtherPhase( MolFrac, PhaFrac[0] )
+        ThT.MFrac = MolFrac
+
+        '''
+           ===============================================================
+              MICHAELSEN'S STABILITY TEST: Decision of the Phases 
+           ===============================================================
+                                                                          '''
+        ( Comp, Comp_Phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
+        Michaelsen.CheckingPhases( Comp_Phase, GZero )
+
+        print 'GZero:', GZero, Comp_Phase
 
 
-print 'GZero:', GZero, Comp_Phase
+        InitialAssessment = False
+        Molar_Gibbs_Free = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
 
-# ########  Michaelsen.CheckingPhases( Comp_Phase, GZero )
-
-
-
-#Gibbs_Free = GibbsF.Calc_Gibbs( Temp, Press )
-
-#print 'Gibbs Free Energy:', Gibbs_Free
+        pickle.dump( Comp_Phase, OutFile )
 
 
-""" This Loop can be used later to obtain equilibrium composition in a 
-      a wide range of temperature and pressure
+        #print 'Comp_Phase:', Comp_Phase
+        #print 'Molar Gibbs Free Energy:', Molar_Gibbs_Free
 
-# Loop for temperature:
-while Temp <= ThT.T_System[ 1 ]:
+        print '  '
 
-    # Loop for pressure:
-    Press = ThT.P_System[ 0 ] # Initialising Pressure
-    while Press <= ThT.P_System[ 1 ]:
+    OutFile.close()
 
-       # Gibbs_Free = GibbsF.Gibbs_Function( Temp, Press, MFrac, PhaseFrac )
-        a = 1.
-        print Temp, Press
+    f = open("output")
+    data = pickle.load( f )
+    print data
 
 
-
- ###
-        Press = Press + ThT.P_System[ 2 ] # End of pressure loop
-
-
-###
-    Temp = Temp + ThT.T_System[ 2 ]+1.e-6 # End of temperature loop
-
-print 'Final Press:', Press
-
-"""
 

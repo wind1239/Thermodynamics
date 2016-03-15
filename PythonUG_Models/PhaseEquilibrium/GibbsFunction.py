@@ -20,7 +20,7 @@ def GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase ):
         print 'This function was hacked to work only on a 2-phases system, it thus needs to be generalised.'
         sys.exit()
 
-    Alpha = Michaelsen.AlphaPhases() # Phase distribution
+    Alpha_Phase = Michaelsen.AlphaPhases() # Phase distribution
     MolFrac = [ 0. for i in range( ThT.NComp ) ]
 
     if InitialAssessment:
@@ -71,7 +71,7 @@ def GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase ):
 
     sum2 = 0.
     for icomp in range( ThT.NComp - 1 ):
-        sum2 = sum2 + MolFrac[ icomp ] * ( ( ChemPot1[ icomp ] - ChemPot2[ icomp ] ) - /
+        sum2 = sum2 + MolFrac[ icomp ] * ( ( ChemPot1[ icomp ] - ChemPot2[ icomp ] ) - \
                                            DiffChemPot_N )
 
 
@@ -124,8 +124,8 @@ def Calculating_ChemPot( Temp, Press, Comp_Phase, iphase_in, iphase_out, *positi
                 MolFrac[ icomp ] = Comp_Phase[ icomp ]
                 sum1 = sum1 + Comp_Phase[ icomp ]
             MolFrac[ ThT.NComp - 1 ] = 1. - sum1
-            ThT.Sum2One( 'Mol Fraction', MolFrac ) """ Ensuring the sum is equal to one and
-                                                       that there is no null component.    """
+            ThT.Sum2One( 'Mol Fraction', MolFrac ) # Ensuring the sum is equal to one and 
+                                                   #     that there is no null component.   
 
         else:
             sum1 = 0. ; Phase = Comp_Phase[ ThT.NComp - 1 ]
@@ -133,14 +133,43 @@ def Calculating_ChemPot( Temp, Press, Comp_Phase, iphase_in, iphase_out, *positi
                 MolFrac[ icomp ] = ( ThT.Z_Feed[ icomp ] - Comp_Phase[ icomp ] * Phase ) / ( 1. - Phase )
                 sum1 = sum1 + MolFrac[ icomp ]
             MolFrac[ ThT.NComp - 1 ] = 1. - sum1
-            ThT.Sum2One( 'Mol Fraction', MolFrac ) """ Ensuring the sum is equal to one and
-                                                       that there is no null component.    """
+            ThT.Sum2One( 'Mol Fraction', MolFrac ) # Ensuring the sum is equal to one and
+                                                   #     that there is no null component.   
 
     ( FugCoef, ChemPot ) = MixRules.MixingRules_EoS( Temp, Press, iphase_out, MolFrac )
 
 
     return ChemPot
 
+#================
+#
+#================
+
+def CalcOtherPhase( Comp, Phase ):
+
+    if ThT.NPhase > 2:
+        print 'This function was hacked to work only on a 2-phases system, it thus needs to be generalised.'
+        sys.exit()
+    
+    CompOtherPhase = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
+    for iphase in range( ThT.NPhase - 1 ):
+        for icomp in range( ThT.NComp ):
+            node = iphase * ThT.NComp + icomp
+            CompOtherPhase[ node ] = Comp[ node ]
+
+    if abs( 1. - Phase ) >= ThT.Residual or abs( 1. - Comp[ 0 ] ) >= ThT.Residual :
+        iphase = 1 ;  sum = 0.
+        for icomp in range( ThT.NComp - 1 ):
+            node0 = ( iphase - 1 ) * ThT.NComp + icomp ; node1 = iphase * ThT.NComp + icomp 
+            if ( ThT.Z_Feed[ icomp ] - Phase * Comp[ node0 ] < 0. ):
+                CompOtherPhase[ node1 ] = 0.
+            else:
+                CompOtherPhase[ node1 ] = ( ThT.Z_Feed[ icomp ] - Phase * Comp[ node0 ] ) / \
+                    ( 1. - Phase )
+                sum = sum + CompOtherPhase[ node1 ]
+        CompOtherPhase[ iphase * ThT.NComp + ThT.NComp - 1 ] = 1. - sum
+
+    return CompOtherPhase
         
                                                    
     
