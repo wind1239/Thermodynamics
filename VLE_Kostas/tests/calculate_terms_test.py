@@ -16,13 +16,24 @@ def Q( MFrac ):
     print
     return Q1
 
-def D( Mfrac ):
+def D( MFrac ):
     c = (1 / np.sqrt(2)) * np.log( np.sqrt(2)-1 )
     D1 = [ 0. for i in range( ThT.NComp ) ]
     for i in range(ThT.NComp):
         D1 = D1 + MFrac[ i ] * ( PR.PREoS_Calc_b( i ) - PR.PREoS_Calc_a( i, ThT.T_Crit[i] ) / ThT.Rconst * ThT.T_System[ 0 ] ) + ( lng.gibbs( MFrac ) / c * ThT.Rconst * ThT.T_System[ 0 ] )
     print
     return D1
+
+def AM( MFrac ):
+    AM1 = ( ThT.Rconst * ThT.T_System[ 0 ] ) * Q( MFrac ) * D( MFrac ) / ( 1 - D( MFrac ) )
+    print
+    return AM1
+
+def BM( MFrac ):
+    BM1 = Q( MFrac ) / ( 1 - D( MFrac ) )
+    print
+    return BM1
+
 
 
 
