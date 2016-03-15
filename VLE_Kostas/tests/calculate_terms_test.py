@@ -16,7 +16,7 @@ def Q( MFrac ):
     print
     return Q1
 
-def D( MFrac ):
+def D( Mfrac ):
     c = (1 / np.sqrt(2)) * np.log( np.sqrt(2)-1 )
     D1 = [ 0. for i in range( ThT.NComp ) ]
     for i in range(ThT.NComp):
@@ -34,8 +34,20 @@ def BM( MFrac ):
     print
     return BM1
 
+def DQ( MFrac ):
+    DQ1 = [ 0. for i in range( ThT.NComp ) ]
+    for j in range(ThT.NComp):
+         DQ1 = DQ1 + MFrac[ j ] *( PR.PREoS_Calc_b( i ) - PR.PREoS_Calc_a( i, ThT.T_Crit[i] ) / ThT.Rconst * ThT.T_System[ 0 ] )
+    print
+    return DQ1
 
-
+def DD( MFrac ):
+    DD1 = [ 0. for i in range( ThT.NComp ) ]
+    for i in range(ThT.NComp):
+        DD1 = ( PR.PREoS_Calc_a( i, ThT.T_Crit[i] ) / ( PR.PREoS_Calc_b( i ) * ThT.Rconst * ThT.T_System[ 0 ] ) ) + lng.ln_gamma( MFrac ) / c
+    print
+    return DD1
+    
 
 # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = #
 Rconst = 8.314 # Gas constant [J/(gmol.K)]
@@ -64,8 +76,23 @@ print
 
 bm = q / ( 1 - d) 
 am = bm * d
-print '  bm = ', bm, ' am = ', am
+print '  bm = ', bm
+print '  am = ', am
 print
+
+dq = [ 0. for i in range( ThT.NComp ) ]
+dd = [ 0. for i in range( ThT.NComp ) ]
+dq = DQ( MFrac )
+dd = DD( MFrac ) 
+print '  dq = ', dq
+print '  dd = ', dd
+print
+
+
+
+
+
+        
 
 
 
