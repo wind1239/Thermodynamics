@@ -18,9 +18,10 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
     global Debug, RConst, NComp, NPhase, T_System, P_System, \
         T_Crit, P_Crit, MolarMass, Species, Accentric_Factor, \
         Z_Feed, BinaryParameter, EOS, EOS_K1, MixingRules, \
-        MFrac, PhaseFrac, Wilson_Lambda
+        MFrac, PhaseFrac, Wilson_Lambda, Residual
 
     RConst = 8.314 # Gas constant [J/(gmol.K)]
+    Residual = 1.e-10
     Debug = False
 
     ''' The first line MUST contain the number of components that will help to build up
@@ -68,7 +69,7 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
     #
                 elif row[ 0 ] == 'Feed_Composition':
                     Z_Feed = ReadingRows_Float( row )
-                    if ( abs( math.fsum( Z_Feed ) - 1. ) >= 1.e-5 ):
+                    if ( abs( math.fsum( Z_Feed ) - 1. ) >= Residual ):
                         print 'Summation of Compositions is ', math.fsum( Z_Feed ), \
                             ' and it should be 1.0'
                         sys.exit()
@@ -237,9 +238,15 @@ def ListOfCommentsStrings( row ):
 # This function checks if an normalised compositional array (e.g., mass, mole or volume fractions)
 #     sums up to one
 def Sum2One( ident, Array ):
-    if abs( math.fsum( Array ) - 1. ) >= 1.e-7:
+    if abs( math.fsum( Array ) - 1. ) >= Residual:
         print 'Array ', ident, ' is not normalised correctly:', math.fsum( Array )
         sys.exit()
+
+    nd = np.shape( Array )
+    for i in range( nd[ 0 ] ):
+        if abs( Array[i] - 0. ) <= Residual:
+            print 'Array ', ident, ' has null elements', Array
+            sys.exit() 
 
     return
 

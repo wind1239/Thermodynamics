@@ -64,15 +64,15 @@ def MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition ):
         d_am[ i ] = ThT.RConst * Temp * \
                     ( DPar * d_bm[ i ] + bm * d_DPar[ i ] )
 
-        LogPhi = -math.log( max( 1.e-5, Z - Big_B ) ) + 1. / bm * d_bm[ i ] * ( Z - 1 ) + \
+        LogPhi = -math.log( max( ThT.Residual, Z - Big_B ) ) + 1. / bm * d_bm[ i ] * ( Z - 1 ) + \
                  1. / ( 2. * math.sqrt( 2. ) ) * am / ( ThT.RConst * Temp * bm ) * \
                  ( 1. / am * d_am[ i ] - 1. / bm * d_bm[ i ] ) * \
-                 math.log( max( 1.e-5, ( Z / Big_B + 1. - math.sqrt( 2. ) ) / \
+                 math.log( max( ThT.Residual, ( Z / Big_B + 1. - math.sqrt( 2. ) ) / \
                                 ( Z / Big_B + 1. + math.sqrt( 2. ) ) ) )
         print 'Log', LogPhi
         FugCoeff[ i ] = math.exp( LogPhi )
 
-        ChemPot[ i ] = ThT.RConst * Temp * LogPhi + math.log( Composition[ i ] * Press )
+        ChemPot[ i ] = ThT.RConst * Temp * LogPhi + math.log( max( ThT.Residual, Composition[ i ] * Press ) )
                
     return FugCoeff, ChemPot
 
@@ -135,7 +135,8 @@ def Calc_DPar( Temp, X ):
     sum1 = 0.
     for i in range( ThT.NComp ):
         ai, bi = EoS.Cubic_EoS( i, Temp )
-        d_DPar[ i ] = ai / ( bi * ThT.RConst * Temp ) + math.log( max( 1.e-5, Gamma[ i ] ) )/ C_Par
+        d_DPar[ i ] = ai / ( bi * ThT.RConst * Temp ) + \
+                      math.log( max( ThT.Residual, Gamma[ i ] ) ) / C_Par
         sum1 = sum1 + X[ i ] * ai / ( bi * ThT.RConst * Temp ) # for DPar
 
     DPar = sum1 + AeRT / C_Par

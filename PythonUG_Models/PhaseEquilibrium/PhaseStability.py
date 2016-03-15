@@ -44,6 +44,7 @@ def Phase_Stability( Temp, Press ):
   
     Composition = [ 0. for i in range( ThT.NComp ) ]
     Comp_Phase = [ 0. for i in range( ThT.NComp ) ]
+
     for icomp in range( ThT.NComp ):
         Composition[ icomp ] = ThT.MFrac[ index_phase * ThT.NComp + icomp ]
         if icomp == ThT.NComp - 1:

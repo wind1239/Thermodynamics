@@ -37,12 +37,12 @@ def MixingRules_EoS( Temp, Press, iphase, Composition ):
         sys.exit()
             
     elif ThT.MixingRules[ 0 ] == "Wong-Sandler":
-        ( FugCoeff, ChemPotam ) =  Mix_WS.MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition )
+        ( FugCoeff, ChemPot ) =  Mix_WS.MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition )
         
     else:
         sys.exit( 'Mixing rules were not defined correctly!' )
 
-    return ( FugCoeff, ChemPotam )
+    return ( FugCoeff, ChemPot )
  
 
 '''
