@@ -60,6 +60,9 @@ if ThT.NPhase > 2:
 else:
     # Loop for automatically generating composition
     ThT.MFrac = 0. ; ThT.PhaseFrac = 0. ; inc = 0.1 ; zero = 0. ; Niter = 10
+    Molar_Gibbs_Free = [ 0. for i in range( Niter + 1 ) ]
+    Composition  = [ 0. for i in range( Niter + 1) ] 
+
     for iter in range( Niter + 1 ):
         sum1 = 0.; PhaFrac = [ 0.05 for i in range( ThT.NPhase ) ]
         for iphase in range( ThT.NPhase - 1 ):
@@ -69,7 +72,7 @@ else:
         ThT.PhaseFrac = PhaFrac
 
         sum2 = 0. ; MolFrac = [ 0.05 for i in range( ThT.NComp * ThT.NPhase ) ]
-        for iphase in range( ThT. NPhase - 1 ):
+        for iphase in range( ThT.NPhase - 1 ):
             for icomp in range( ThT.NComp - 1 ):
                 node = iphase * ThT.NComp + icomp
                 MolFrac[ node ] = MolFrac[ node ] + float(iter) * 1./float(Niter)
@@ -91,7 +94,8 @@ else:
 
 
         InitialAssessment = False
-        Molar_Gibbs_Free = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
+        Molar_Gibbs_Free[ iter ] = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
+        Composition[ iter ] = MolFrac[ 0 ]
 
         pickle.dump( Comp_Phase, OutFile )
 
@@ -106,6 +110,11 @@ else:
     f = open("output")
     data = pickle.load( f )
     print data
+
+
+    print ' ++++++++++++ '
+    for iter in range( Niter + 1 ):
+        print Composition[ iter ], Molar_Gibbs_Free[ iter ]
 
 
 
