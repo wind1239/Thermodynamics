@@ -8,6 +8,18 @@ import pylab
 import time
 
 
+
+def BART( MFrac ):
+    BART1 = [ 0. for i in range( ThT.NComp ) ]
+    for i in range(ThT.NComp):
+        for j in range(ThT.NComp):
+            node = i * ThT.NComp + j
+            BART1 = ( PR.PREoS_Calc_b(i) - ( PR.PREoS_Calc_a( i, ThT.T_Crit[ i ] ) / ThT.Rconst * ThT.T_System[ 0 ] ) ) + ( PR.PREoS_Calc_b(j) - ( PR.PREoS_Calc_a( j, ThT.T_Crit[ j ] ) / ThT.Rconst * ThT.T_System[ 0 ] ) ) / 2 * ( 1 -  ThT.BinaryParameter[node] )
+            #print '   bart = ', BART1, ThT.Rconst, ThT.T_System[ 0 ], ThT.BinaryParameter[node]
+    print
+    return BART1
+
+ 
 def Q( MFrac ):
     Q1 = [ 0. for i in range( ThT.NComp ) ]
     for i in range(ThT.NComp):
@@ -15,6 +27,7 @@ def Q( MFrac ):
             Q1[ i ] = Q1[ i ] + MFrac[ i ] * MFrac[ j ] * ( PR.PREoS_Calc_b( i ) - PR.PREoS_Calc_a( i, ThT.T_Crit[i] ) / ThT.Rconst * ThT.T_System[ 0 ] )
     print
     return Q1
+
 
 def D( Mfrac ):
     c = (1 / np.sqrt(2)) * np.log( np.sqrt(2)-1 )
@@ -24,15 +37,18 @@ def D( Mfrac ):
     print
     return D1
 
+
 def AM( MFrac ):
     AM1 = ( ThT.Rconst * ThT.T_System[ 0 ] ) * Q( MFrac ) * D( MFrac ) / ( 1 - D( MFrac ) )
     print
     return AM1
 
+
 def BM( MFrac ):
     BM1 = Q( MFrac ) / ( 1 - D( MFrac ) )
     print
     return BM1
+
 
 def DQ( MFrac ):
     DQ1 = [ 0. for i in range( ThT.NComp ) ]
@@ -40,6 +56,7 @@ def DQ( MFrac ):
          DQ1 = DQ1 + MFrac[ j ] *( PR.PREoS_Calc_b( i ) - PR.PREoS_Calc_a( i, ThT.T_Crit[i] ) / ThT.Rconst * ThT.T_System[ 0 ] )
     print
     return DQ1
+
 
 def DD( MFrac ):
     DD1 = [ 0. for i in range( ThT.NComp ) ]
@@ -50,6 +67,7 @@ def DD( MFrac ):
     
 
 # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = #
+'''
 Rconst = 8.314 # Gas constant [J/(gmol.K)]
 
 ThT.ReadSet_Global_Variables()
@@ -59,6 +77,12 @@ print '  the initial molar fraction before reading from the input.dat is ', MFra
 # declare a vector with MFrac values - molar fraction
 MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
 #MFrac[ 2 ] = 0.10; MFrac[ 3 ] = 0.10; # Liquid phase
+
+
+bart = [ 0. for i in range( ThT.NComp ) ]
+bart = BART( MFrac )
+print '   bart = ', bart
+print 
 
 q = [ 0. for i in range( ThT.NComp ) ]
 q = Q( MFrac )
@@ -86,7 +110,9 @@ dq = DQ( MFrac )
 dd = DD( MFrac ) 
 print '  dq = ', dq
 print '  dd = ', dd
-print
+print 
+ 
+'''
 
 
 
