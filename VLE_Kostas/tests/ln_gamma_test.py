@@ -47,14 +47,14 @@ def gibbs( MFrac ):
             node = j * ThT.NComp + i
             #print ' the node in is = ', node
             gibbs1 = - ( ThT.Rconst * ThT.T_System[ 0 ] ) * ( gibbs1 + MFrac[ j ] * ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ node ] ) ) ) 
-        print '  the Gibbs energy in excess for the mixture of ', ThT.Species[i] , ThT.Species[j], ' is Ge = ', gibbs1
-        print
-        return gibbs1
+    #print '  the Gibbs energy in excess for the mixture of ', ThT.Species[i] , ThT.Species[j], ' is Ge = ', gibbs1
+    print
+    return gibbs1
 
 
 
 # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = #
-
+'''
 ThT.ReadSet_Global_Variables()
 nc = ThT.NComp
 print '  the number of components = ', ThT.NComp
@@ -78,3 +78,4 @@ print '  the lng =', lng
 #ge = [ 0. for i in range( ThT.NComp ) ]  # cause ge is a number Kostas! a summation of a summations which is a number plus there is one Ge for the mixture for this feed.
 ge = gibbs( MFrac )
 print '  the Gibbs or Helmholtz energy in excess = ', ge
+'''
