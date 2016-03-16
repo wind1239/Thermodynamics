@@ -35,7 +35,7 @@ def Q( MFrac ):
     return Q1
 
 
-def D( Mfrac ):
+def D( MFrac ):
     c = (1 / np.sqrt(2)) * np.log( np.sqrt(2)-1 )
     D1 = 0
     for i in range(ThT.NComp):
@@ -75,7 +75,7 @@ def DD( MFrac ):
     return DD1
 
 def B( MFrac ):
-    B1 = ( BM( MFrac ) * ThT.P-System[0] ) / ( ThT.Rconst * ThT.T_System[ 0 ] )
+    B1 = ( BM( MFrac ) * ThT.P_System[0] ) / ( ThT.Rconst * ThT.T_System[ 0 ] )
     print 
     return B1
 
