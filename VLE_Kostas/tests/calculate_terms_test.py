@@ -8,9 +8,6 @@ import pylab
 import time
 
 
-
-
-
 '''def BART( MFrac ):
     BART1 = [ 0. for i in range( ThT.NComp ) ]
     for i in range(ThT.NComp):
