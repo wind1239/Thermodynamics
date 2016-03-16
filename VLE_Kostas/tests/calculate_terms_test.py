@@ -30,7 +30,7 @@ def Q( MFrac ):
     for i in range(ThT.NComp):
         for j in range(ThT.NComp):
             #Q1[ i ] = Q1[ i ] + MFrac[ i ] * MFrac[ j ] * F[ node ]     # Calculating the whole F first
-            Q1 = Q1 + MFrac[ i ] * MFrac[ j ] * BART2( i, j )  # Falculating F when we need 
+            Q1 = Q1 + MFrac[ i ] * MFrac[ j ] * BART2( i, j )            # Falculating F when we need 
     print
     return Q1
 
@@ -73,9 +73,17 @@ def DD( MFrac ):
         DD1 = ( PR.PREoS_Calc_a( i, ThT.T_System[0] ) / ( PR.PREoS_Calc_b( i ) * ThT.Rconst * ThT.T_System[ 0 ] ) ) + lng.ln_gamma( MFrac ) / c
     print
     return DD1
-    
+
+def B( MFrac ):
+    B1 = ( BM( MFrac ) * ThT.P-System[0] ) / ( ThT.Rconst * ThT.T_System[ 0 ] )
+    print 
+    return B1
+
+
+
 
 # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = #
+
 '''
 Rconst = 8.314 # Gas constant [J/(gmol.K)]
 
@@ -125,7 +133,18 @@ print '  dq = ', dq
 print '  dd = ', dd
 print 
  
+B = ( bm * ThT.P_System[0] ) / ( ThT.Rconst * ThT.T_System[ 0 ] )
+print '   B = ', B
+
+
+zmax , zmin = PR.Cubic_PR( ThT.T_System[0], ThT.P_System[0], am, bm )
+y = zmax
+x = zmin
+print ' zmax root for the vapour phase = ', y
+print ' zmin root for the liquid phase = ', x
+print
 '''
+
 
 
 
