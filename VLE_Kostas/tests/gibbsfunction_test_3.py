@@ -77,11 +77,11 @@ for iphase in range(ThT.NPhase):
             
             if i == j: 
                print '  for the component ', ThT.Species[i]
-               am = terms.am
-               bm = terms.bm
+               am = terms.AM
+               bm = terms.BM
                print '  am = ', am
                print '  bm = ', bm
-               zmax = PR.Cubic_PR( ThT.T_Crit[i], ThT.P_Crit[i], am, bm ); print '  zmax = ', zmax
+               
             else:                                                       # this is for the rest of the elements of the square matrix of the aij
                print '  for the component ', ThT.Species[i],' with respect to' , ThT.Species[j]
             print
