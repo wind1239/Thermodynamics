@@ -112,6 +112,8 @@ def Calculating_ChemPot( Temp, Press, Comp_Phase, iphase_in, iphase_out, *positi
         if keyword_parameters[ 'optional' ] == 'Feed':
             for icomp in range( ThT.NComp ):
                 MolFrac[ icomp ] = Comp_Phase[ icomp ]
+                itg = ThT.Sum2One( 'Mol Fraction', MolFrac, optional = 'NotNull' ) # Ensuring the sum is equal to one and 
+                                                                                   #     that there is no null component.   
 
         else:
             print 'Unknown Optional parameter in Function Calculating_ChemPot'
@@ -124,8 +126,8 @@ def Calculating_ChemPot( Temp, Press, Comp_Phase, iphase_in, iphase_out, *positi
                 MolFrac[ icomp ] = Comp_Phase[ icomp ]
                 sum1 = sum1 + Comp_Phase[ icomp ]
             MolFrac[ ThT.NComp - 1 ] = 1. - sum1
-            ThT.Sum2One( 'Mol Fraction', MolFrac ) # Ensuring the sum is equal to one and 
-                                                   #     that there is no null component.   
+            itg = ThT.Sum2One( 'Mol Fraction', MolFrac, optional = 'NotNull' ) # Ensuring the sum is equal to one and 
+                                                                               #     that there is no null component.   
 
         else:
             sum1 = 0. ; Phase = Comp_Phase[ ThT.NComp - 1 ]
@@ -133,10 +135,15 @@ def Calculating_ChemPot( Temp, Press, Comp_Phase, iphase_in, iphase_out, *positi
                 MolFrac[ icomp ] = ( ThT.Z_Feed[ icomp ] - Comp_Phase[ icomp ] * Phase ) / ( 1. - Phase )
                 sum1 = sum1 + MolFrac[ icomp ]
             MolFrac[ ThT.NComp - 1 ] = 1. - sum1
-            ThT.Sum2One( 'Mol Fraction', MolFrac ) # Ensuring the sum is equal to one and
-                                                   #     that there is no null component.   
+            itg = ThT.Sum2One( 'Mol Fraction', MolFrac, optional = 'NotNull' ) # Ensuring the sum is equal to one and
+                                                                               #     that there is no null component.
 
-    ( FugCoef, ChemPot ) = MixRules.MixingRules_EoS( Temp, Press, iphase_out, MolFrac )
+    if itg:
+        ( FugCoef, ChemPot ) = MixRules.MixingRules_EoS( Temp, Press, iphase_out, MolFrac )
+    else:
+        ChemPot = [ 0. for i in range( ThT.NComp ) ]
+        FugCoeff = [ 0. for i in range( ThT.NComp ) ]
+        
 
 
     return ChemPot
@@ -145,7 +152,7 @@ def Calculating_ChemPot( Temp, Press, Comp_Phase, iphase_in, iphase_out, *positi
 #
 #================
 
-def CalcOtherPhase( Comp, Phase ):
+def CalcOtherPhase2( Comp, Phase ):
 
     if ThT.NPhase > 2:
         print 'This function was hacked to work only on a 2-phases system, it thus needs to be generalised.'
@@ -172,8 +179,60 @@ def CalcOtherPhase( Comp, Phase ):
     return CompOtherPhase
         
                                                    
-    
+#================
+#
+#================
 
+def CalcOtherPhase( Frac, Phase, *args, **kwargs ):
+    ''' Frac is an array of length NComp X NPhase containing (NComp-1) mole/mass fraction +
+                 (1) Phase molar/mass fraction for each phase.
+        MFrac_OtherPhase is an array of length NComp X NPhase containing ONLY mole/mass
+                 fraction of each component at each phase.
+        PFrac_OtherPhase is an array of length NPhase containing only the phase molar/
+                 mass fraction of each phase.                                               '''
 
+    MFrac_OtherPhase = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
+    PFrac_OtherPhase = [ 0. for i in range( ThT.NPhase ) ]
+
+    for iphase in range( ThT.NPhase ):
+        sumcomp = 0.
+        for icomp in range( ThT.NComp ):
+            node = iphase * ThT.NComp + icomp
+            if icomp != ThT.NComp - 1 :
+                MFrac_OtherPhase[ node ] = Frac[ node ]
+                sumcomp = sumcomp + MFrac_OtherPhase[ node ]
+            else:
+                MFrac_OtherPhase[ node ] = 1. - sumcomp
+                PFrac_OtherPhase[ iphase ] = Frac[ node ]
+
+    kphase = Phase
+    for icomp in range( ThT.NComp ):
+        node_kphase = kphase * ThT.NComp + icomp
+        sumcomp = 0. ; sumphase = 0.
+        for iphase in range( ThT.NPhase ):
+            node_iphase = iphase * ThT.NComp + icomp
+            if iphase != kphase:
+                sumcomp = sumcomp + PFrac_OtherPhase[ iphase ] * MFrac_OtherPhase[ node_iphase ]
+                sumphase = sumphase + PFrac_OtherPhase[ iphase ]
+                
+        MFrac_OtherPhase[ node_kphase ] = max( ThT.Residual, ThT.Z_Feed[ icomp ] - sumcomp ) / max( ThT.Residual, 1. - sumphase )
+
+    if 'optional' in kwargs:
+        short = kwargs.get( 'optional', None )
+        if short == 'short': # This returns the mole/mass fraction of phase 'Phase'
+            Frac_OtherPhase = [ 0. for i in range( ThT.NComp ) ]
+            for icomp in range( ThT.NComp ):
+                node_kphase = kphase * ThT.NComp + icomp
+                Frac_OtherPhase[ icomp ] = MFrac_OtherPhase[ node_kphase ]
+            return Frac_OtherPhase
+
+        elif short
+
+    else:
+        return ( MFrac_OtherPhase, PFrac_OtherPhase )
+        #Frac_OtherPhase = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
+        #Frac_OtherPhase = MFrac_OtherPhase
+
+        
 
     

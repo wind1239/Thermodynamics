@@ -237,7 +237,9 @@ def ListOfCommentsStrings( row ):
 
 # This function checks if an normalised compositional array (e.g., mass, mole or volume fractions)
 #     sums up to one
-def Sum2One( ident, Array ):
+def Sum2One( ident, Array, *positional_parameters, **keyword_parameters ):
+
+    itg = True
     if abs( math.fsum( Array ) - 1. ) >= Residual:
         print 'Array ', ident, ' is not normalised correctly:', math.fsum( Array )
         sys.exit()
@@ -245,10 +247,14 @@ def Sum2One( ident, Array ):
     nd = np.shape( Array )
     for i in range( nd[ 0 ] ):
         if abs( Array[i] - 0. ) <= Residual:
-            print 'Array ', ident, ' has null elements', Array
-            sys.exit() 
+            if 'optional' in keyword_parameters:
+                if keyword_parameters[ 'optional' ] == 'NotNull':
+                    itg = False
+            else:
+                print 'Array ', ident, ' has null elements', Array
+                sys.exit() 
 
-    return
+    return itg
 
 # This function reads the mixing rules used for the equilibrium calculations
 def ReadingMixRules( row ):

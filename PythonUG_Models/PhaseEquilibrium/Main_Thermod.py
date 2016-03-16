@@ -60,18 +60,18 @@ if ThT.NPhase > 2:
 else:
     # Loop for automatically generating composition
     ThT.MFrac = 0. ; ThT.PhaseFrac = 0. ; inc = 0.1 ; zero = 0. ; Niter = 10
-    Molar_Gibbs_Free = [ 0. for i in range( Niter + 1 ) ]
-    Composition  = [ 0. for i in range( Niter + 1) ] 
+    Molar_Gibbs_Free = [ 0. for i in range( Niter ) ]
+    Composition  = [ 0. for i in range( Niter ) ] 
 
-    for iter in range( Niter + 1 ):
-        sum1 = 0.; PhaFrac = [ 0.05 for i in range( ThT.NPhase ) ]
+    for iter in range( Niter ):
+        sum1 = 0.; PhaFrac = [ ThT.Residual for i in range( ThT.NPhase ) ]
         for iphase in range( ThT.NPhase - 1 ):
             PhaFrac[ iphase ] = PhaFrac[ iphase ] + float(iter) * 1./float(Niter)
             sum1 = sum1 + PhaFrac[ iphase ]
         PhaFrac[ ThT.NPhase - 1 ] = 1. - sum1
         ThT.PhaseFrac = PhaFrac
 
-        sum2 = 0. ; MolFrac = [ 0.05 for i in range( ThT.NComp * ThT.NPhase ) ]
+        sum2 = 0. ; MolFrac = [ ThT.Residual for i in range( ThT.NComp * ThT.NPhase ) ]
         for iphase in range( ThT.NPhase - 1 ):
             for icomp in range( ThT.NComp - 1 ):
                 node = iphase * ThT.NComp + icomp
@@ -79,8 +79,11 @@ else:
                 sum2 = sum2 + MolFrac[ node ]
             node2 = iphase * ThT.NComp + ThT.NComp -1
             MolFrac[ node2 ] = 1. - sum2
-        MolFrac = GibbsF.CalcOtherPhase( MolFrac, PhaFrac[0] )
+        MolFrac = GibbsF.CalcOtherPhase( MolFrac, 0 )
+        #MolFrac = GibbsF.CalcOtherPhase( MolFrac, PhaFrac[0] )
+        print 'MolFrac::::', MolFrac
         ThT.MFrac = MolFrac
+        stop 
 
         '''
            ===============================================================
@@ -90,18 +93,18 @@ else:
         ( Comp, Comp_Phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
         Michaelsen.CheckingPhases( Comp_Phase, GZero )
 
-        print 'GZero:', GZero, Comp_Phase
+        #print 'GZero:', GZero, Comp_Phase
 
 
         InitialAssessment = False
         Molar_Gibbs_Free[ iter ] = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
-        Composition[ iter ] = MolFrac[ 0 ]
+        Composition[ iter ] = [ MolFrac[ 0 ], MolFrac[ 2 ] ]
 
         pickle.dump( Comp_Phase, OutFile )
 
 
-        #print 'Comp_Phase:', Comp_Phase
-        #print 'Molar Gibbs Free Energy:', Molar_Gibbs_Free
+        print 'Comp_Phase:', Comp_Phase
+        print 'Molar Gibbs Free Energy:', Molar_Gibbs_Free
 
         print '  '
 
