@@ -18,6 +18,7 @@ import time
     print
     return BART1'''
 
+
 def BART2( icomp, jcomp ):
     node = icomp * ThT.NComp + jcomp
     BART2 = 0.5 * (  PR.PREoS_Calc_b(icomp)  - PR.PREoS_Calc_a( icomp, ThT.T_System[0] ) / ( ThT.Rconst * ThT.T_System[ 0 ] ) +  PR.PREoS_Calc_b(jcomp)  - PR.PREoS_Calc_a( jcomp, ThT.T_System[0] ) / ( ThT.Rconst * ThT.T_System[ 0 ] ) ) * ( 1 -  ThT.BinaryParameter[node] )
