@@ -8,8 +8,6 @@ import EOS_PR_test as PR
     e = a + b + c + d
     return e '''
 
-
-
 # = = = = = = = = = calculate the ln_gamma = = = = = = = = =
 def ln_gamma( MFrac ):
     ln_gamma1 = [ 0. for i in range( ThT.NComp ) ]
