@@ -12,28 +12,34 @@ import calculate_terms_test as terms
 
 
 def CALC_FI( MFrac ):
-    #z = zmax
-    q = 1       #( 1 / ( 1 - terms.D( MFrac ) ) ) * terms.DQ( MFrac ) - terms.Q( MFrac ) / ( 1 - terms.D( MFrac ) **2  ) * ( 1 - terms.DD( MFrac ) )
+    z = zmax
+    q = 1 #( 1 / ( 1 - terms.D( MFrac ) ) ) * terms.DQ( MFrac ) - terms.Q( MFrac ) / ( 1 - terms.D( MFrac ) **2  ) * ( 1 - terms.DD( MFrac ) )
     d =  terms.D( MFrac ) * q + terms.BM( MFrac ) * ( 1 - terms.DD( MFrac ) )
     term1 = - np.log( zmax - terms.B( MFrac ) ) 
-    print ' term 1 = ', term1, zmax
-    #term2 = ( 1 / terms.BM(MFrac) ) * q * ( z - 1 )
-    #print ' term 2 =', term2
-    #term3 = ( 0.5 / np.sqrt(2) ) * ( ( 1/ terms.AM( MFrac ) ) * d * ThT.Rconst * ThT.T_System[ 0 ] ) - ( ( 1 / terms.BM( MFrac ) ) * q ) 
-    #print ' term 3 = ', term3 
-    #term4 = np.log( ( z / terms.B( MFrac )  + 1 - np.sqrt(2) ) / ( z / terms.B( MFrac )  + 1 + np.sqrt(2) ) )
-    #print ' term4 = ', term4
-    fi = term1 #+ term2 + term3 * term4
+    term2 = ( 1 / terms.BM(MFrac) ) * q * ( z - 1 )
+    term3 = ( 0.5 / np.sqrt(2) ) * ( ( 1/ terms.AM( MFrac ) ) * d * ThT.Rconst * ThT.T_System[ 0 ] ) - ( ( 1 / terms.BM( MFrac ) ) * q ) 
+    term4 = np.log( ( z / terms.B( MFrac )  + 1 - np.sqrt(2) ) / ( z / terms.B( MFrac )  + 1 + np.sqrt(2) ) )
+    print ' term1 = ', term1, zmax
+    print ' term2 = ', term2
+    print ' term3 = ', term3
+    print ' term4 = ', term4
+    fi = term1 + term2 + term3 * term4
     return fi
 
+
+#    ange(3) == [0, 1, 2].
+#    range([start], stop[, step])
+
+
 def CALC_CHEMPOT( MFrac ):
+    chempot = [ 0. for i in range( ThT.NComp ) ]
     for iphase in range( ThT.NPhase ): 
-        for i in range( iphase * ThT.NComp , iphase * ThT.NComp + ThT.NComp )  :
-            print ' iphase = ', iphase, ' i = ', i   
-            chempot =  ThT.Rconst * ThT.T_System[ 0 ] * CALC_FI( MFrac ) + np.log( ThT.P_System[ 0 ] * MFrac[ i ])
-            print ' iphase = ', iphase, ' i = ', i,' the chempot = ', chempot
-            print
-    return chempot
+        for i in range( ThT.NComp )  :
+            #print ' iphase = ', iphase, ' i = ', i   
+            chempot =  ThT.Rconst * ThT.T_System[ 0 ] * CALC_FI( MFrac ) + np.log( ThT.P_System[ 0 ] ) * MFrac[ i ]
+        print ' iphase = ', iphase, ' i = ', i,' the chempot = ', chempot 
+        print
+    return chempot  
 
 
 
@@ -57,7 +63,7 @@ phi = CALC_FI( MFrac )
 print ' fi = ', phi 
 
 chempot_mi = CALC_CHEMPOT( MFrac )
-print ' greek_mi = ', chempot_mi
+print ' greek_mi = ', chempot_mi 
 
 
 
