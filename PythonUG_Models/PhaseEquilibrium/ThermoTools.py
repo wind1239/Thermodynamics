@@ -256,6 +256,7 @@ def Sum2One( ident, Array, *positional_parameters, **keyword_parameters ):
 
     return itg
 
+
 # This function reads the mixing rules used for the equilibrium calculations
 def ReadingMixRules( row ):
     Array = []
