@@ -24,6 +24,7 @@ def CALC_FI( MFrac ):
     print ' term3 = ', term3
     print ' term4 = ', term4
     fi = term1 + term2 + term3 * term4
+    print '    fi = ', fi
     return fi
 
 
