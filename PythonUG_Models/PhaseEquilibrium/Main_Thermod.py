@@ -104,44 +104,43 @@ else:
                     else:
                         sumcomp = sumcomp + MolFrac[ node ]
 
-            print 'MFrac:', ThT.MFrac
+            #print 'MFrac:', ThT.MFrac
             #print 'PhaseFrac:', ThT.PhaseFrac
-    stop
-    """
+   
 
-        '''
-           ===============================================================
-              MICHAELSEN'S STABILITY TEST: Decision of the Phases 
-           ===============================================================
-                                                                          '''
-        ( Comp, Comp_Phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
-        Michaelsen.CheckingPhases( Comp_Phase, GZero )
+            '''
+               ===============================================================
+                  MICHAELSEN'S STABILITY TEST: Decision of the Phases 
+               ===============================================================
+                                                                              '''
+            ( Comp, Comp_Phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
+            Michaelsen.CheckingPhases( Comp_Phase, GZero )
 
-        #print 'GZero:', GZero, Comp_Phase
-
-
-        InitialAssessment = False
-        Molar_Gibbs_Free[ iter ] = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
-        Composition[ iter ] = [ MolFrac[ 0 ], MolFrac[ 2 ] ]
-
-        pickle.dump( Comp_Phase, OutFile )
+            #print 'GZero:', GZero, Comp_Phase
 
 
-        print 'Comp_Phase:', Comp_Phase
-        print 'Molar Gibbs Free Energy:', Molar_Gibbs_Free
+            InitialAssessment = False
+            Molar_Gibbs_Free[ iter ] = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
+            Composition[ iter ] = [ MolFrac[ 0 ], MolFrac[ 2 ] ]
 
-        print '  '
-
-    OutFile.close()
-
-    f = open("output")
-    data = pickle.load( f )
-    print data
+            pickle.dump( Comp_Phase, OutFile )
 
 
-    print ' ++++++++++++ '
-    for iter in range( Niter + 1 ):
-        print Composition[ iter ], Molar_Gibbs_Free[ iter ] """
+            print 'Comp_Phase:', Comp_Phase
+            print 'Molar Gibbs Free Energy:', Molar_Gibbs_Free
+
+            print '  '
+
+        OutFile.close()
+
+        f = open("output")
+        data = pickle.load( f )
+        print data
+
+
+        print ' ++++++++++++ '
+        for iter in range( Niter + 1 ):
+            print Composition[ iter ], Molar_Gibbs_Free[ iter ] """
 
 
 
