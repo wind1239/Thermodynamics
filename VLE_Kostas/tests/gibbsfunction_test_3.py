@@ -12,12 +12,6 @@ import pylab
 import time
 
 
-Rconst = 8.314 # Gas constant [J/(gmol.K)]
-
-aij = [0. for i in range(ThT.NComp**2) ]
-chempot = [0. for i in range(ThT.NComp**2) ]
-
-
 print
 print
 print ' = = = = = = = = = = = = = = = = = = = = = = = = = BEGIN OF THE GIBBS CALCULATIONS = = = = = = = = = = = = = = = = = = = = = = = = '
@@ -36,6 +30,10 @@ MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
 MFrac[ 2 ] = 0.30; MFrac[ 3 ] = 0.10; # Liquid phase
 print '  the MFrac = ', MFrac
 
+Rconst = 8.314 # Gas constant [J/(gmol.K)]
+
+aij = [0. for i in range(ThT.NComp**2) ]
+chempot = [0. for i in range(ThT.NComp**2) ]
 
 # = = = Claculate the condition that sais that Summations of MFrac = 1.0 = = = 
 MFrac_sum = 0
@@ -77,11 +75,9 @@ for iphase in range(ThT.NPhase):
             
             if i == j: 
                print '  for the component ', ThT.Species[i]
-               am = terms.AM
-               bm = terms.BM
-               print '  am = ', am
-               print '  bm = ', bm
-               
+               #chempot[ iphase ] = fi.calc_chempot( iphase, MFrac[ iphase * ThT.NComp : iphase * ThT.NComp + ThT.NComp ] )
+               #print '  the chemical potential is for the ',i , j, iphase, ' is ', chempot[ iphase ]  
+               print
             else:                                                       # this is for the rest of the elements of the square matrix of the aij
                print '  for the component ', ThT.Species[i],' with respect to' , ThT.Species[j]
             print
@@ -90,21 +86,11 @@ for iphase in range(ThT.NPhase):
 
 
 
-    
-            #ai = PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] )
-            #bi = PR.PREoS_Calc_b( i )
-            #aij[ node ] = PR.PREoS_Calc_a( i , ThT.T_System[ 0 ] )   # I am calling the EOS_PR
-            #ln_gamma[ node ] = lng.ln_gamma( MFrac )
-            #Ge[ node ] = terms.Gibbs( MFrac )
-            #print ' MFrac = ', MFrac[ i ], '  ai = ', ai, ' bi = ', bi, ' aij = ', aij[ node ], ' the ln_gamma = ', ln_gamma[ node ], ' the Ge = ', Ge[ node ]
-            #print
-            #print  
+      
             
 
-    # = = = calculate the chemical potential for each phase = = =
-    chempot[ iphase ] = fi.calc_chempot( iphase, MFrac[ iphase * ThT.NComp : iphase * ThT.NComp + ThT.NComp ] )
-    print '  the chemical potential is for the ',i , j, iphase, ' is ', chempot[ iphase ]  
-    print       
+    
+          
             
          
            
