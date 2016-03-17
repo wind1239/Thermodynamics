@@ -7,6 +7,7 @@ import math
 import ThermoTools as ThT
 import GibbsFunction as GibbsF
 import PhaseStability as Michaelsen
+import NormalisedConstraint as NC
 import pickle
 #import csv # Using csv (comma separated values) module
 
@@ -59,31 +60,54 @@ if ThT.NPhase > 2:
 
 else:
     # Loop for automatically generating composition
-    ThT.MFrac = 0. ; ThT.PhaseFrac = 0. ; inc = 0.1 ; zero = 0. ; Niter = 10
-    Molar_Gibbs_Free = [ 0. for i in range( Niter ) ]
-    Composition  = [ 0. for i in range( Niter ) ] 
+    ThT.MFrac = 0. ; ThT.PhaseFrac = 0. ; Inc_Phase = 0.25 ; Inc_Comp = 0.1
+    NearlyOne = 1. - ThT.Residual
 
-    for iter in range( Niter ):
-        sum1 = 0.; PhaFrac = [ ThT.Residual for i in range( ThT.NPhase ) ]
+    Niter_Phase = int( 1. / Inc_Phase ) + 1
+    Niter_Comp = int( 1. / Inc_Comp ) + 1
+    Molar_Gibbs_Free = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
+    Composition  = [ 0. for i in range( Niter_Phase * Niter_Comp ) ] 
+
+    for iter_phase in range( Niter_Phase ):
+
+        sumphase = 0.; PhaFrac = [ 0. for i in range( ThT.NPhase ) ]
         for iphase in range( ThT.NPhase - 1 ):
-            PhaFrac[ iphase ] = PhaFrac[ iphase ] + float(iter) * 1./float(Niter)
-            sum1 = sum1 + PhaFrac[ iphase ]
-        PhaFrac[ ThT.NPhase - 1 ] = 1. - sum1
+            PhaFrac[ iphase ] = min( NearlyOne, max( ThT.Residual, float( iter_phase ) * Inc_Phase ) )
+            sumphase = sumphase + PhaFrac[ iphase ] 
+        PhaFrac[ ThT.NPhase - 1 ] = 1. - sumphase
         ThT.PhaseFrac = PhaFrac
 
-        sum2 = 0. ; MolFrac = [ ThT.Residual for i in range( ThT.NComp * ThT.NPhase ) ]
-        for iphase in range( ThT.NPhase - 1 ):
-            for icomp in range( ThT.NComp - 1 ):
-                node = iphase * ThT.NComp + icomp
-                MolFrac[ node ] = MolFrac[ node ] + float(iter) * 1./float(Niter)
-                sum2 = sum2 + MolFrac[ node ]
-            node2 = iphase * ThT.NComp + ThT.NComp -1
-            MolFrac[ node2 ] = 1. - sum2
-        MolFrac = GibbsF.CalcOtherPhase( MolFrac, 0 )
-        #MolFrac = GibbsF.CalcOtherPhase( MolFrac, PhaFrac[0] )
-        print 'MolFrac::::', MolFrac
-        ThT.MFrac = MolFrac
-        stop 
+
+        for iter_comp in range( Niter_Comp ):
+
+            
+            sum2 = 0. ; MolFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
+            for iphase in range( ThT.NPhase - 1 ):
+                for icomp in range( ThT.NComp - 1 ):
+                    node = iphase * ThT.NComp + icomp
+                    MolFrac[ node ] = min( NearlyOne, max( ThT.Residual, float( iter_comp ) * Inc_Comp ) )
+                    sum2 = sum2 + MolFrac[ node ]
+                node2 = iphase * ThT.NComp + ThT.NComp -1
+                MolFrac[ node2 ] = PhaFrac[ iphase ]
+                #MolFrac[ node2 ] = 1. - sum2
+
+            MolFrac = NC.CalcOtherPhase( MolFrac, ThT.NPhase - 1 )
+            ThT.MFrac = MolFrac
+
+            for iphase in range( ThT.NPhase ):
+                sumcomp = 0.
+                for icomp in range( ThT. NComp ):
+                    node = iphase * ThT.NComp + icomp
+                    if icomp == ThT.NComp - 1:
+                        ThT.MFrac[ node ] = 1. - sumcomp
+                            
+                    else:
+                        sumcomp = sumcomp + MolFrac[ node ]
+
+            print 'MFrac:', ThT.MFrac
+            #print 'PhaseFrac:', ThT.PhaseFrac
+    stop
+    """
 
         '''
            ===============================================================
@@ -117,7 +141,7 @@ else:
 
     print ' ++++++++++++ '
     for iter in range( Niter + 1 ):
-        print Composition[ iter ], Molar_Gibbs_Free[ iter ]
+        print Composition[ iter ], Molar_Gibbs_Free[ iter ] """
 
 
 
