@@ -74,11 +74,10 @@ def PR_Cubic( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cu
 # Roots of a cubic equation can be either real or complex.  np.roots returns roots of format: a + bj, 
 # where 'a' is the real part and 'b' is the imaginary part. However, we are only interested on the real roots. 
 
-    smallvalue = -1.e15
-    Z_realroot = [smallvalue for i in range( 3 ) ] # Creating an array with very low values to receive the roots
+    Z_realroot = [ThT.Residual for i in range( 3 ) ] # Creating an array with very low values to receive the roots
 
     for i in range ( 3 ): 
-        if abs( Z_root.imag[ i ] ) <= 1.e-7: # Removing complex roots
+        if abs( Z_root.imag[ i ] ) <= ThT.Residual: # Removing complex roots
             Z_realroot[ i ] = Z_root.real[ i ] # Extracting the real
 
 
@@ -87,7 +86,7 @@ def PR_Cubic( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cu
 # algorithm (see quicksort and/or bubblesort) within Numpy (np.sort).
 
     Z_realroot = np.sort( Z_realroot ) # Quick-sort algorithm -- Largest/smallest real root: vapour / liquid
-    Zvapour = 1.e-6 ; Zliquid = 1.e6
+    Zvapour = ThT.Residual ; Zliquid = 1. / ThT.Residual
 
     for i in range( 3 ):
         Zvapour = max( Zvapour, Z_realroot[ i ] ) # Largest real root: vapour

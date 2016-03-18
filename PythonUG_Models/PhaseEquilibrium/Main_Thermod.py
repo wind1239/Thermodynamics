@@ -120,8 +120,9 @@ else:
 
 
             InitialAssessment = False
+            iter = iter_phase * Niter_Comp + iter_comp
             Molar_Gibbs_Free[ iter ] = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
-            Composition[ iter ] = [ MolFrac[ 0 ], MolFrac[ 2 ] ]
+            Composition[ iter ] = [ Comp_Phase[ 0 ], Comp_Phase[ 1 ] ] ##CHANGE HERE !!!!
 
             pickle.dump( Comp_Phase, OutFile )
 
@@ -131,16 +132,27 @@ else:
 
             print '  '
 
+            """
+
         OutFile.close()
 
         f = open("output")
         data = pickle.load( f )
-        print data
+        print data"""
 
 
-        print ' ++++++++++++ '
-        for iter in range( Niter + 1 ):
-            print Composition[ iter ], Molar_Gibbs_Free[ iter ] """
+    print ' ++++++++++++ '
+    for iter in range( Niter_Comp * Niter_Phase ):
+        print Composition[ iter ], Molar_Gibbs_Free[ iter ]
+
+    
+    Molar_Gibbs_Free_Sort = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
+    Sortindex = [ 0 for i in range( Niter_Phase * Niter_Comp ) ]
+    Molar_Gibbs_Free_Sort = np.sort( Molar_Gibbs_Free )
+    Sortindex = np.argsort( Molar_Gibbs_Free )
+    print '===>>>'
+    for i in range( Niter_Comp * Niter_Phase ):
+        print Sortindex[ i ]#, Composition[ i ][ 0 ], Molar_Gibbs_Free_Sort[ i ]
 
 
 

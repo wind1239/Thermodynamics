@@ -34,6 +34,10 @@ def MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition ):
 
     """ This is temporary hack. This is valid only for VLE systems.
         Calculating the Compressibility Factor (Z)                  """
+    if ThT.NPhase > 2:
+        print 'In MixingRules_EoS_WongSandler: This part was designed to NPhase<=2'
+        sys.exit()
+        
     Zvapour, Zliquid = EoS.PR_Cubic( Temp, Press, am, bm )
     if iphase == 0: # Vapour phase
         Z = Zvapour
@@ -69,6 +73,11 @@ def MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition ):
                  ( 1. / am * d_am[ i ] - 1. / bm * d_bm[ i ] ) * \
                  math.log( max( ThT.Residual, ( Z / Big_B + 1. - math.sqrt( 2. ) ) / \
                                 ( Z / Big_B + 1. + math.sqrt( 2. ) ) ) )
+
+        #print 'LogPhi1:', LogPhi, -math.log( max( ThT.Residual, Z - Big_B ) ) 
+        print 'LogPhi2:', 1. / bm * d_bm[ i ] * ( Z - 1 ), bm, d_bm[ i ], ( Z - 1 ) #, am / ( ThT.RConst * Temp * bm )
+        #print 'LogPhi3:', ( 1. / am * d_am[ i ] - 1. / bm * d_bm[ i ] )
+        print 'LogPhi4:', math.log( max( ThT.Residual, ( Z / Big_B + 1. - math.sqrt( 2. ) ) / ( Z / Big_B + 1. + math.sqrt( 2. ) ) ) )
 
         FugCoeff[ i ] = math.exp( LogPhi )
 
