@@ -107,7 +107,7 @@ else:
             #print 'MFrac:', ThT.MFrac
             #print 'PhaseFrac:', ThT.PhaseFrac
    
-
+    
             '''
                ===============================================================
                   MICHAELSEN'S STABILITY TEST: Decision of the Phases 
