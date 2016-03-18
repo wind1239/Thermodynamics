@@ -16,7 +16,7 @@ def CALC_FI( MFrac ):
     zmax , zmin = PR.Cubic_PR( ThT.T_System[0], ThT.P_System[0], terms.AM( MFrac ), terms.BM( MFrac ) )
     for iphase in range( ThT.NPhase ):
         for i in range( ThT.NComp )  :
-            node = i * ThT.NComp + iphase
+            node = iphase * ThT.NPhase + i 
             print ' MFrac =', MFrac[ node ]
             if iphase == 0:
                 z = zmax
@@ -69,6 +69,7 @@ print ' zmax root for the vapour phase = ', y
 print ' zmin root for the liquid phase = ', x
 print
 '''
+
 
 phi = CALC_FI( MFrac )
 print 'ln_phi = ', phi 
