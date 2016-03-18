@@ -116,10 +116,10 @@ else:
             ( Comp, Comp_Phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
             Michaelsen.CheckingPhases( Comp_Phase, GZero )
 
-            #print 'GZero:', GZero, Comp_Phase
+            print 'GZero:', GZero, Comp_Phase
 
 
-            InitialAssessment = False
+            InitialAssessment = True
             iter = iter_phase * Niter_Comp + iter_comp
             Molar_Gibbs_Free[ iter ] = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
             Composition[ iter ] = [ Comp_Phase[ 0 ], Comp_Phase[ 1 ] ] ##CHANGE HERE !!!!
@@ -141,7 +141,7 @@ else:
         print data"""
 
 
-    print ' ++++++++++++ '
+    """print ' ++++++++++++ '
     for iter in range( Niter_Comp * Niter_Phase ):
         print Composition[ iter ], Molar_Gibbs_Free[ iter ]
 
@@ -152,7 +152,7 @@ else:
     Sortindex = np.argsort( Molar_Gibbs_Free )
     print '===>>>'
     for i in range( Niter_Comp * Niter_Phase ):
-        print Sortindex[ i ]#, Composition[ i ][ 0 ], Molar_Gibbs_Free_Sort[ i ]
+        print Sortindex[ i ]#, Composition[ i ][ 0 ], Molar_Gibbs_Free_Sort[ i ]"""
 
 
 

@@ -71,10 +71,12 @@ def AlphaPhases():
     '''
     Alpha_Phase = [ 0. for i in range( ThT.NPhase ) ]
     for iphase in range( ThT.NPhase ):
+        sum = 0.
         for icomp in range( ThT.NComp ):
             node = iphase * ThT.NComp + icomp
-            Alpha_Phase[ iphase ] = Alpha_Phase[ iphase ] + ( ThT.Z_Feed[ icomp ]  - ThT.MFrac[ node ] )**2
-        Alpha_Phase[ iphase ] = math.sqrt( Alpha_Phase[ iphase ] )
+            sum = sum + ( ThT.Z_Feed[ icomp ]  - ThT.MFrac[ node ] )**2
+            
+        Alpha_Phase[ iphase ] = math.sqrt( sum )
         
     return Alpha_Phase
 

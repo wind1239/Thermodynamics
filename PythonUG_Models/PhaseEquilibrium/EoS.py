@@ -57,6 +57,8 @@ def PR_Cubic( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cu
     Big_A = am * P / ( ThT.RConst * T )**2
     Big_B = bm * P / ( ThT.RConst * T )
 
+    print 'Big:', am, bm
+
 # For a polynomial of order n:
 #  c[0]*Z**n + c[1]*Z**(n-1) + ... + c[n] = 0
 # We can use the Numpy internal function -- np.roots -- to calculate the root of the polynomial.  For a cubic polynomial:
@@ -79,6 +81,10 @@ def PR_Cubic( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cu
     for i in range ( 3 ): 
         if abs( Z_root.imag[ i ] ) <= ThT.Residual: # Removing complex roots
             Z_realroot[ i ] = Z_root.real[ i ] # Extracting the real
+
+
+    print 'Z:', Z_root, Z_realroot
+
 
 
 # In VLE problems the largest real root refers to the vapour phase, whereas the smallest real root is related
