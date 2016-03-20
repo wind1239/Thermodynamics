@@ -77,7 +77,6 @@ else:
         for iter_comp in range( Niter_Comp ):
 
             """ Generating arrays of mole/mass fraction of each component at all phase. """
-
             MolFrac =  NC.Generate_MoleFraction( PhaFrac, iter_comp, Inc_Comp )
             ThT.MFrac = MolFrac
 
@@ -109,8 +108,12 @@ else:
                   MICHAELSEN'S STABILITY TEST: Decision of the Phases 
                ===============================================================
                                                                               '''
-            ( Comp, Comp_Phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
+            ( Comp, Comp_Phase, index_phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
             Michaelsen.CheckingPhases( Comp_Phase, GZero )
+
+            """ COMP_PHASE is an array that contains (NComp - 1) mole/mass fraction of
+                           components + (1) molar/mass fraction of the INDEX_PHASE by
+                           the CHECKINGPHASES function.                                 """
 
             if ThT.Debug:
                 print 'GZero:', GZero, Comp_Phase
@@ -119,7 +122,7 @@ else:
             InitialAssessment = True
             iter = iter_phase * Niter_Comp + iter_comp
             Molar_Gibbs_Free[ iter ] = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
-            Composition[ iter ] = [ Comp_Phase[ 0 ], Comp_Phase[ 1 ] ] ##CHANGE HERE !!!!
+            Composition[ iter ] = [ Comp_Phase[ 0 ], Comp_Phase[ ThT.NComp - 1 ] ] 
 
             pickle.dump( Comp_Phase, OutFile )
 

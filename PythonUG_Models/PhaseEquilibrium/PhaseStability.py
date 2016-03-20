@@ -65,7 +65,7 @@ def Phase_Stability( Temp, Press ):
     for icomp in range( ThT.NComp ):
         GZero = GZero + ThT.Z_Feed[ icomp ] * G_Phase[ icomp ]
         
-    return ( Composition, Comp_Phase, GZero )
+    return ( Composition, Comp_Phase, index_phase, GZero )
 
 #==============
 #
