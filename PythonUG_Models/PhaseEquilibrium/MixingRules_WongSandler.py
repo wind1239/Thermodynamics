@@ -14,6 +14,7 @@ import ActivityCoeffModels as ActMod
        Wong-Sandler mixing rule
 """
 def MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition ):
+    """ Composition has dimension NComp. """
 
     """ Q Parameter:
             Q = SUMi[ SUMj ( Xi * Xj * (b-a/R*T)ij ) ]
@@ -115,6 +116,8 @@ def SecondVirialCoeff( icomp, jcomp, Temp ):
 #
 #=================
 def Calc_QPar( Temp, X ):
+    """ X (composition) has dimension NComp. """
+    
     d_QPar = [ 0. for i in range( ThT.NComp ) ] ; QPar = 0.
 
     # Calculating QPar and d_QPar
@@ -125,7 +128,7 @@ def Calc_QPar( Temp, X ):
             sum1 = sum1 + X[ i ] * X[ j ] * abRT # for QPar
             sum2 = sum2 + X[ j ] * abRT          # for d_QPar
         QPar = QPar + sum1
-        d_QPar[ i ] = d_QPar[ i ] + sum2
+        d_QPar[ i ] = 2. * sum2
 
     return QPar, d_QPar
 
@@ -133,18 +136,20 @@ def Calc_QPar( Temp, X ):
 #
 #=================
 def Calc_DPar( Temp, X ):
+    """ X (composition) has dimension NComp. """
+    
     d_DPar = [ 0. for i in range( ThT.NComp ) ] ; DPar = 0
 
     """  C Parameter:
             C = ln[sqrt(2.)-1]/sqrt(2.) """
-    C_Par = math.log( math.sqrt(2.) - 1. ) / math.sqrt(2.)
+    C_Par = math.log( math.sqrt( 2. ) - 1. ) / math.sqrt( 2. )
 
 
-    """ Calculating Gibbs free energy in excess (which is
-        the same as the Helmholtz free energy in excess
-        (Ae/RT = Ge/RT) for the mixture and the activity
-        coefficient (Gamma) for each component.            """
-    AeRT, Gamma = ActMod.Activity_WilsonModel( X )
+    """ Calculating Gibbs free energy in excess (which is the same as the 
+        Helmholtz free energy in excess (Ae/RT = Ge/RT) for the mixture
+        and the activity coefficient (Gamma) for each component.
+                                                                           """
+    AeRT, Gamma = ActMod.Activity_Models( X )
 
     sum1 = 0.
     for i in range( ThT.NComp ):

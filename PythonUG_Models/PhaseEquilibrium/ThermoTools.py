@@ -14,11 +14,28 @@ import sys
 
 def ReadSet_Global_Variables(): # Read variables from a external file called 'input.dat'
     import csv # Using csv (comma separated values) module
- 
-    global Debug, RConst, NComp, NPhase, T_System, P_System, \
-        T_Crit, P_Crit, MolarMass, Species, Accentric_Factor, \
-        Z_Feed, BinaryParameter, EOS, EOS_K1, MixingRules, \
-        MFrac, PhaseFrac, Wilson_Lambda, Residual
+
+    """ ===========================================================
+            Set up Global variables used throughout the code
+        ===========================================================  """
+
+    # System variables:
+    global NComp, NPhase, T_System, P_System,  MolarMass, Species
+
+    # Concentration-based variables:  
+    global Z_Feed, MFrac, PhaseFrac
+
+    # Variables for the Equations of State 
+    global EOS, EOS_K1, T_Crit, P_Crit, Accentric_Factor
+
+    # Variables for the Mixing Rules:    
+    global MixingRules, BinaryParameter
+
+    # Variables for the Activity model:
+    global Activity_Model, Wilson_Lambda
+
+    # Extra variables:
+    global Debug, RConst, Residual
 
     RConst = 8.314 # Gas constant [J/(gmol.K)]
     Residual = 1.e-10
@@ -106,8 +123,14 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                     Sum2One( 'Phase Fraction', PhaseFrac )
     #
                 elif row[ 0 ] == 'ActivityModel':
-                    if row[ 1 ] == 'Wilson_Model':
-                        Wilson_Lambda = ReadingRealMatrix( reader )
+                    if row[ 1 ] == 'All':
+                        Activity_Model = []
+                        Activity_Model.append( row[ 2 ] )
+                        if Activity_Model[ 0 ] == 'Wilson_Model':
+                            Wilson_Lambda = ReadingRealMatrix( reader )
+                        else:
+                            print 'Activity Model not implemented yet'
+                            sys,exit()
                     else:
                         print 'Activity Model not implemented yet'
                         sys,exit()

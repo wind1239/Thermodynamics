@@ -17,6 +17,7 @@ import MixingRules_WongSandler as Mix_WS
 # Given component, pressure and temperature, this function will return
 #    the mixture attractive and repulsive parameters:
 def MixingRules_EoS( Temp, Press, iphase, Composition ):
+    """ Composition has dimension NComp. """
     if ThT.MixingRules[ 0 ] == "Classic":
         ChemPot = [ 0. for i in range( ThT.NComp ) ]
         FugCoeff = [ 0. for i in range( ThT.NComp ) ]

@@ -7,10 +7,24 @@ import sys
 import ThermoTools as ThT
 
 
+def Activity_Models( X ):
+    """ X (composition) has dimension NComp. """
+    
+    if ThT.Activity_Model[ 0 ] == 'Wilson_Model':
+        AeRT, Gamma = Activity_WilsonModel( X )
+
+    else:
+        print 'Activity model is not available yet.'
+        sys.exit()
+
+    return GeRT, Gamma
+
+
 def Activity_WilsonModel( X ):
-    """ This function calculates the activity coeficient of each component in
-        a mixture and the resulting Gibbs free energy in excess (Ge/RT).
-    """
+    """ X (composition) has dimension NComp. 
+        This function calculates the activity coeficient of each component in
+             a mixture and the resulting Gibbs free energy in excess (Ge/RT).
+                                                                               """
     # Creating a temporary array that will store Gamma for each component
     Gamma = [ 0. for i in range( ThT.NComp ) ]
 
@@ -21,7 +35,7 @@ def Activity_WilsonModel( X ):
         for i in range( ThT.NComp ):
             node1g = j * ThT.NComp + i
             sumg2 = sumg2 + X[ i ] *  ThT.Wilson_Lambda[ node1g ]
-        GeRT = GeRT - X[ j ] * math.log( max( 1.e-7, sumg2 ) )
+        GeRT = GeRT - X[ j ] * math.log( max( ThT.Residual, sumg2 ) )
 
     # Calculating the Activity Coefficient (Gamms)
     for k in range( ThT.NComp ):
@@ -39,6 +53,6 @@ def Activity_WilsonModel( X ):
             node2 = j * ThT.NComp + k
             sum2 = sum2 + X[ j ] * ThT.Wilson_Lambda[ node2 ] / max( 1.e-7, sum3 )
 
-        Gamma[ k ] = math.log( max( 1.e-7, 1. - math.log( max( 1.e-7, sum1 ) ) - sum2 ) )
+        Gamma[ k ] = math.log( max( ThT.Residual, 1. - math.log( max( ThT.Residual, sum1 ) ) - sum2 ) )
 
     return GeRT, Gamma
