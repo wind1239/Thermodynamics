@@ -70,28 +70,15 @@ else:
 
     for iter_phase in range( Niter_Phase ):
 
-        sumphase = 0.; PhaFrac = [ 0. for i in range( ThT.NPhase ) ]
-        for iphase in range( ThT.NPhase - 1 ):
-            PhaFrac[ iphase ] = min( NearlyOne, max( ThT.Residual, float( iter_phase ) * Inc_Phase ) )
-            sumphase = sumphase + PhaFrac[ iphase ] 
-        PhaFrac[ ThT.NPhase - 1 ] = 1. - sumphase
+        """ Generating arrays of molar/mass fraction of all phase. """
+        PhaFrac = NC.Generate_PhaseFraction( iter_phase, Inc_Phase )
         ThT.PhaseFrac = PhaFrac
-
 
         for iter_comp in range( Niter_Comp ):
 
-            
-            sum2 = 0. ; MolFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
-            for iphase in range( ThT.NPhase - 1 ):
-                for icomp in range( ThT.NComp - 1 ):
-                    node = iphase * ThT.NComp + icomp
-                    MolFrac[ node ] = min( NearlyOne, max( ThT.Residual, float( iter_comp ) * Inc_Comp ) )
-                    sum2 = sum2 + MolFrac[ node ]
-                node2 = iphase * ThT.NComp + ThT.NComp -1
-                MolFrac[ node2 ] = PhaFrac[ iphase ]
-                #MolFrac[ node2 ] = 1. - sum2
+            """ Generating arrays of mole/mass fraction of each component at all phase. """
 
-            MolFrac = NC.CalcOtherPhase( MolFrac, ThT.NPhase - 1 )
+            MolFrac =  NC.Generate_MoleFraction( PhaFrac, iter_comp, Inc_Comp )
             ThT.MFrac = MolFrac
 
             for iphase in range( ThT.NPhase ):
@@ -104,8 +91,17 @@ else:
                     else:
                         sumcomp = sumcomp + MolFrac[ node ]
 
-            #print 'MFrac:', ThT.MFrac
-            #print 'PhaseFrac:', ThT.PhaseFrac
+            if ThT.Debug:
+                print ' ===================================='
+                print '    Composition of components in all phases: '
+                print '      ThT.MFrac:', ThT.MFrac
+                print ' '
+                print ' '
+                print '    Composition of both phases: '
+                print '      ThT.PhaseFrac:', ThT.PhaseFrac
+                print ' '
+                print ' ===================================='
+                print ' '
    
     
             '''
@@ -116,7 +112,8 @@ else:
             ( Comp, Comp_Phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
             Michaelsen.CheckingPhases( Comp_Phase, GZero )
 
-            print 'GZero:', GZero, Comp_Phase
+            if ThT.Debug:
+                print 'GZero:', GZero, Comp_Phase
 
 
             InitialAssessment = True

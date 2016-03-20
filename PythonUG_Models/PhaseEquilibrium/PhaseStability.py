@@ -14,7 +14,15 @@ def Phase_Stability( Temp, Press ):
           Let's choose an initial configuration (i.e., composition)
             for the free Gibbs energy of liquid and vapour phases
         ==============================================================
-    '''
+
+        Output:
+                 Composition is an array containing the mole/mass fraction of
+                        all components in phase INDEX_PHASE;
+                 Comp_Phase is an array that contains (NComp - 1) mole/mass
+                        fraction + ( 1 ) molar/mass fraction of the phase;
+                 GZero contains the molar Gibbs energy based on the feed mole/
+                        mass fraction.
+                                                                               '''
     Alpha = AlphaPhases()
     if ThT.Debug:
         print 'Alpha ( V / L ):', Alpha
@@ -86,6 +94,7 @@ def AlphaPhases():
 #==============
 
 def CheckingPhases( Comp_Phase, GibbsPhase ):
+    """ Comp_Phase has dimension NComp. """
 
     """ Assessing the results of the VLE calculation and identifying the
         phase and compositions (mol fractions).

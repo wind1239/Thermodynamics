@@ -9,12 +9,12 @@ import ThermoTools as ThT
 
 def Activity_Models( X ):
     """ X (composition) has dimension NComp. """
-    
+
     if ThT.Activity_Model[ 0 ] == 'Wilson_Model':
-        AeRT, Gamma = Activity_WilsonModel( X )
+        GeRT, Gamma = Activity_WilsonModel( X )
 
     else:
-        print 'Activity model is not available yet.'
+        print 'Activity model', ThT.Activity_Model[ 0 ], 'is not available yet.'
         sys.exit()
 
     return GeRT, Gamma
@@ -51,7 +51,7 @@ def Activity_WilsonModel( X ):
                 node3 = j * ThT.NComp + i
                 sum3 = sum3 + X[ i ] * ThT.Wilson_Lambda[ node3 ]
             node2 = j * ThT.NComp + k
-            sum2 = sum2 + X[ j ] * ThT.Wilson_Lambda[ node2 ] / max( 1.e-7, sum3 )
+            sum2 = sum2 + X[ j ] * ThT.Wilson_Lambda[ node2 ] / max( ThT.Residual, sum3 )
 
         Gamma[ k ] = math.log( max( ThT.Residual, 1. - math.log( max( ThT.Residual, sum1 ) ) - sum2 ) )
 

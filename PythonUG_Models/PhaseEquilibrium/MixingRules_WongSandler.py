@@ -32,10 +32,11 @@ def MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition ):
             bm = Q/(1-D)    &     am = bm*R*T*D """
     bm = QPar / ( 1. - DPar ) ; am = bm * DPar * ThT.RConst * Temp
 
-    print 'Composition:', Composition
-    print 'b4 am,bm:', am, bm
-    print 'b4 Q:', QPar, d_QPar
-    print 'b4 D:', DPar, d_DPar
+    if ThT.Debug:
+        print 'Composition:', Composition
+        print 'b4 am,bm:', am, bm
+        print 'b4 Q:', QPar, d_QPar
+        print 'b4 D:', DPar, d_DPar
 
 
     """ This is temporary hack. This is valid only for VLE systems.
