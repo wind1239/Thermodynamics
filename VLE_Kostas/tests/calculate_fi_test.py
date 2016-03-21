@@ -21,7 +21,7 @@ def CALC_FI( MFrac ):
             if iphase == 0:
                 z = zmax
             else:
-                 z = zmin
+                z = zmin
             q = ( 1 / ( 1 - terms.D( MFrac ) ) ) * terms.DQ( MFrac[ node ] ) - terms.Q( MFrac ) / ( 1 - terms.D( MFrac ) **2  ) * ( 1 - terms.DD( MFrac ) )
             d =  terms.D( MFrac ) * q + terms.BM( MFrac ) * ( 1 - terms.DD( MFrac ) )
             term1 = - np.log( z - terms.B( MFrac ) ) 
