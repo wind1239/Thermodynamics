@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import numpy as np
 import math
 import sys
@@ -18,17 +19,19 @@ def Calc_ChemPot( NPhase, frac ):
     #sz = np.shape(MFrac)[0]
     print ' now i am in the chempot function ' 
     
-    chempot = ThT.Rconst * ThT.T_System[ 0 ] * ( np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
+    chempot = np.log( 1 * frac )
+    print ' the chempot = ', chempot
 
-Calc_ChemPot( phase, mfrac )
+    return chempot
+
 print ' - - - - back to the main chem_pot program - - - - '
 
 
 
 # main code
 NComp = 2 ;  NPhase = 3
-Frac = [ 0. for i in range( NComp * NPhase ) ]
-
+MFrac = [ 1. for i in range( NComp * NPhase ) ]
+ChemPot = [ 0 for i in range( NComp * NPhase ) ]
 
 """ Loop over phases: """
 for iphase in range( NPhase ):
@@ -37,12 +40,12 @@ for iphase in range( NPhase ):
 
 
 
-
+'''
 # Main code:
 NComp = 2 ;  NPhase = 3
 Frac = [ 0. for i in range( NComp * NPhase ) ]
 
-'''
+
 for iphase in range( NPhase ):
     for icomp in range( NComp ):
         node = iphase * NComp + icomp
