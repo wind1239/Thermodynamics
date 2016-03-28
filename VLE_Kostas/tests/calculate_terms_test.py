@@ -58,7 +58,6 @@ def BM( MFrac ):
 
 def DQ( MFrac ):
     DQ1 = [ 0. for i in range( ThT.NComp ) ]
-    #print MFrac, np.shape( MFrac )[0]
     for i in range(ThT.NComp):
         for j in range(ThT.NComp):
             node = i * ThT.NComp + j
@@ -69,13 +68,12 @@ def DQ( MFrac ):
 
 def DD( MFrac ):
     DD1 = [ 0. for i in range( ThT.NComp ) ]
-
     c = (1 / np.sqrt(2)) * np.log( np.sqrt(2)-1 )
     for i in range(ThT.NComp):
-        DD1[ i ] = ( PR.PREoS_Calc_a( i, ThT.T_System[0] ) / ( PR.PREoS_Calc_b( i ) * ThT.Rconst * ThT.T_System[ 0 ] ) ) + lng.ln_gamma( MFrac )[i] / c #print ' the ', lng.ln_gamma( MFrac )[i]
+        DD1 = ( PR.PREoS_Calc_a( i, ThT.T_System[0] ) / ( PR.PREoS_Calc_b( i ) * ThT.Rconst * ThT.T_System[ 0 ] ) ) + lng.ln_gamma( MFrac ) / c
     print
     return DD1
-    
+
 def B( MFrac ):
     B1 = ( BM( MFrac ) * ThT.P_System[0] ) / ( ThT.Rconst * ThT.T_System[ 0 ] )
     print 
@@ -86,16 +84,16 @@ def B( MFrac ):
 
 # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = #
 
-'''
+
 Rconst = 8.314 # Gas constant [J/(gmol.K)]
 
 ThT.ReadSet_Global_Variables()
 
-MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
+MFrac = [ 0. for i in range( ThT.NComp ) ]
 print '  the initial molar fraction before reading from the input.dat is ', MFrac
 # declare a vector with MFrac values - molar fraction
 MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
-MFrac[ 2 ] = 0.10; MFrac[ 3 ] = 0.10; # Liquid phase
+#MFrac[ 2 ] = 0.10; MFrac[ 3 ] = 0.10; # Liquid phase
 
 
 bart_temp = [ 0. for i in range( ThT.NComp * ThT.NComp ) ]
@@ -104,13 +102,14 @@ for i in range(ThT.NComp):
           node = i * ThT.NComp + j
           bart_temp[ node ] = BART2( i, j )
 
-print '   bart_temp = ', bart_temp
-print 
+print
+print '  bart_temp = ', bart_temp
+ 
 
 q = [ 0. for i in range( ThT.NComp ) ]
 q = Q( MFrac )
 print '  Q = ', q
-print
+
 
 d = [ 0. for i in range( ThT.NComp ) ]
 d = D( MFrac )
@@ -129,14 +128,10 @@ print
 
 dq = [ 0. for i in range( ThT.NComp ) ]
 dd = [ 0. for i in range( ThT.NComp ) ]
-for iphase in range(ThT.NPhase):
-    node_init = iphase * ThT.NComp ; print ' init', node_init
-    node_final = iphase * ThT.NComp + ThT.NComp   ; print ' final', node_final
-    dq = DQ( MFrac[ node_init: node_final ] )
-    #dq = DQ( MFrac, iphase)
-    dd = DD( MFrac[ node_init: node_final ] ) 
-    print '  dq = ', iphase, dq
-    print '  dd = ', iphase, dd
+dq = DQ( MFrac )
+dd = DD( MFrac ) 
+print '  dq = ', dq
+print '  dd = ', dd
 print 
  
 B = ( bm * ThT.P_System[0] ) / ( ThT.Rconst * ThT.T_System[ 0 ] )
@@ -149,7 +144,6 @@ x = zmin
 print ' zmax root for the vapour phase = ', y
 print ' zmin root for the liquid phase = ', x
 print
-'''
 
 
 
