@@ -17,12 +17,12 @@ def CALC_FI( MFrac ):
     for iphase in range( ThT.NPhase ):
         for i in range( ThT.NComp )  :
             node = iphase * ThT.NPhase + i 
-            print ' MFrac =', MFrac[ i ]
+            print ' MFrac =', MFrac[ node ]
             if iphase == 0:
                 z = zmax
             else:
                 z = zmin
-            q = ( 1 / ( 1 - terms.D( MFrac ) ) ) * terms.DQ( MFrac[ node ] ) - terms.Q( MFrac ) / ( 1 - terms.D( MFrac ) **2  ) * ( 1 - terms.DD( MFrac ) )
+            q = 1 #( 1 / ( 1 - terms.D( node ) ) ) #* terms.DQ( MFrac ) - terms.Q( MFrac ) / ( 1 - terms.D( MFrac ) **2  ) * ( 1 - terms.DD( MFrac ) )
             d =  terms.D( MFrac ) * q + terms.BM( MFrac ) * ( 1 - terms.DD( MFrac ) )
             term1 = - np.log( z - terms.B( MFrac ) ) 
             term2 = ( 1 / terms.BM(MFrac) ) * q * ( z - 1 )
@@ -36,8 +36,6 @@ def CALC_FI( MFrac ):
     print '    fi = ', fi[ node ], ' for the MFrac = ', MFrac[ node ]
     return fi
 
-#    ange(3) == [0, 1, 2].
-#    range([start], stop[, step])
 
 '''
 def CALC_CHEMPOT( MFrac ):
@@ -55,11 +53,21 @@ def CALC_CHEMPOT( MFrac ):
 
 ThT.ReadSet_Global_Variables()
 
-MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
+MFrac = [ 0. for i in range( ThT.NComp ) ]
 print '  the initial molar fraction before reading from the input.dat is ', MFrac
 # declare a vector with MFrac values - molar fraction
 MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
-MFrac[ 2 ] = 0.10; MFrac[ 3 ] = 0.10; # Liquid phase
+#MFrac[ 2 ] = 0.10; MFrac[ 3 ] = 0.10; # Liquid phase
+
+'''
+zmax , zmin = PR.Cubic_PR( ThT.T_System[0], ThT.P_System[0], terms.AM( MFrac ), terms.BM( MFrac ) )
+y = zmax
+x = zmin
+print ' zmax root for the vapour phase = ', y
+print ' zmin root for the liquid phase = ', x
+print
+'''
+
 
 phi = CALC_FI( MFrac )
 print 'ln_phi = ', phi 
