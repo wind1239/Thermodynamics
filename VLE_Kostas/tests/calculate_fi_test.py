@@ -22,7 +22,7 @@ def CALC_FI( MFrac ):
                 z = zmax
             else:
                 z = zmin
-            q = 1 #( 1 / ( 1 - terms.D( node ) ) ) #* terms.DQ( MFrac ) - terms.Q( MFrac ) / ( 1 - terms.D( MFrac ) **2  ) * ( 1 - terms.DD( MFrac ) )
+            q = 1 #( 1 / ( 1 - terms.D( node ) ) * terms.DQ( MFrac ) - terms.Q( MFrac ) / ( 1 - terms.D( MFrac ) **2  ) * ( 1 - terms.DD( MFrac ) )
             d =  terms.D( MFrac ) * q + terms.BM( MFrac ) * ( 1 - terms.DD( MFrac ) )
             term1 = - np.log( z - terms.B( MFrac ) ) 
             term2 = ( 1 / terms.BM(MFrac) ) * q * ( z - 1 )

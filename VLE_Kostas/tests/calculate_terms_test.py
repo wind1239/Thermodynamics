@@ -67,7 +67,7 @@ def DQ( MFrac ):
 
 
 def DD( MFrac ):
-    DD1 = [ 0. for i in range( ThT.NComp ) ]
+    #DD1 = [ 0. for i in range( ThT.NComp ) ]
     c = (1 / np.sqrt(2)) * np.log( np.sqrt(2)-1 )
     for i in range(ThT.NComp):
         DD1 = ( PR.PREoS_Calc_a( i, ThT.T_System[0] ) / ( PR.PREoS_Calc_b( i ) * ThT.Rconst * ThT.T_System[ 0 ] ) ) + lng.ln_gamma( MFrac ) / c
@@ -145,6 +145,7 @@ print ' zmax root for the vapour phase = ', y
 print ' zmin root for the liquid phase = ', x
 print
 '''
+
 
 
 
