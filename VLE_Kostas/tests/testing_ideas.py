@@ -17,7 +17,6 @@ def Whot( Fred ):
 
 
 
-
 # Main code:
 NComp = 2 ;  NPhase = 3
 Frac = [ 0. for i in range( NComp * NPhase ) ]
