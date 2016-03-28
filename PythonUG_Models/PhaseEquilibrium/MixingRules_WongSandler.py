@@ -82,9 +82,9 @@ def MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition ):
                                 ( Z / Big_B + 1. + math.sqrt( 2. ) ) ) )
 
         #print 'LogPhi1:', LogPhi, -math.log( max( ThT.Residual, Z - Big_B ) ) 
-        print 'LogPhi2:', 1. / bm * d_bm[ i ] * ( Z - 1 ), bm, d_bm[ i ], ( Z - 1 ) #, am / ( ThT.RConst * Temp * bm )
+        #print 'LogPhi2:', 1. / bm * d_bm[ i ] * ( Z - 1 ), bm, d_bm[ i ], ( Z - 1 ) #, am / ( ThT.RConst * Temp * bm )
         #print 'LogPhi3:', ( 1. / am * d_am[ i ] - 1. / bm * d_bm[ i ] )
-        print 'LogPhi4:', math.log( max( ThT.Residual, ( Z / Big_B + 1. - math.sqrt( 2. ) ) / ( Z / Big_B + 1. + math.sqrt( 2. ) ) ) )
+        #print 'LogPhi4:', math.log( max( ThT.Residual, ( Z / Big_B + 1. - math.sqrt( 2. ) ) / ( Z / Big_B + 1. + math.sqrt( 2. ) ) ) )
 
         FugCoeff[ i ] = math.exp( LogPhi )
 

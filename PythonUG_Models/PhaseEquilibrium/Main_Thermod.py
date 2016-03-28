@@ -67,6 +67,7 @@ else:
     Niter_Comp = int( 1. / Inc_Comp ) + 1
     Molar_Gibbs_Free = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
     Composition  = [ 0. for i in range( Niter_Phase * Niter_Comp ) ] 
+    Phase = [ 0. for i in range( Niter_Phase * Niter_Comp ) ] 
 
     for iter_phase in range( Niter_Phase ):
 
@@ -119,20 +120,33 @@ else:
                 print 'GZero:', GZero, Comp_Phase
 
 
-            InitialAssessment = True
+            InitialAssessment = False #True
             iter = iter_phase * Niter_Comp + iter_comp
             Molar_Gibbs_Free[ iter ] = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
-            Composition[ iter ] = [ Comp_Phase[ 0 ], Comp_Phase[ ThT.NComp - 1 ] ] 
+            Composition[ iter ] = Comp_Phase[ 0 ]
+            Phase[ iter ] = Comp_Phase[ ThT.NComp - 1 ] 
 
             pickle.dump( Comp_Phase, OutFile )
 
+            print 'Comp_Phase:', Comp_Phase[ 0 ], Comp_Phase[ ThT.NComp - 1 ] 
+            print 'Molar Gibbs Free Energy:', Molar_Gibbs_Free[ iter ]
 
-            print 'Comp_Phase:', Comp_Phase
-            print 'Molar Gibbs Free Energy:', Molar_Gibbs_Free
+    for iter in range( Niter_Phase * Niter_Comp ):
+        print Composition[ iter ], Molar_Gibbs_Free[ iter ], Phase[ iter ]
 
-            print '  '
 
-            """
+
+    Molar_Gibbs_Free_Sort = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
+    Sortindex = [ 0 for i in range( Niter_Phase * Niter_Comp ) ]
+    Molar_Gibbs_Free_Sort = np.sort( Molar_Gibbs_Free )
+    Sortindex = np.argsort( Molar_Gibbs_Free )
+    print '===>>>'
+    for i in range( Niter_Comp * Niter_Phase ):
+        print Sortindex[ i ], Composition[ Sortindex[i] ], Molar_Gibbs_Free[ Sortindex[i] ]
+
+
+
+    """
 
         OutFile.close()
 

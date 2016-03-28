@@ -57,7 +57,8 @@ def PR_Cubic( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cu
     Big_A = am * P / ( ThT.RConst * T )**2
     Big_B = bm * P / ( ThT.RConst * T )
 
-    print 'Big:', am, bm
+    if ThT.Debug:
+        print 'Big A and B:', Big_A, Big_B
 
 # For a polynomial of order n:
 #  c[0]*Z**n + c[1]*Z**(n-1) + ... + c[n] = 0
@@ -82,8 +83,8 @@ def PR_Cubic( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cu
         if abs( Z_root.imag[ i ] ) <= ThT.Residual: # Removing complex roots
             Z_realroot[ i ] = Z_root.real[ i ] # Extracting the real
 
-
-    print 'Z:', Z_root, Z_realroot
+    if ThT.Debug:
+        print 'Real roots of Z:', Z_realroot
 
 
 

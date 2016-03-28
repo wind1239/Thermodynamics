@@ -82,7 +82,8 @@ def SetBox( Array,  *args, **kwargs ):
 
 
         elif length == 'MolePhaseFrac_Only' or length == 'MassPhaseFrac_Only':
-            """ Array contains (NComp - 1) mole/mass fraction + phase molar/mass fraction for ONE phase """
+            """ Output: Array contains (NComp - 1) mole/mass fraction +
+                        phase molar/mass fraction for ONE phase            """
             temp = BoxSummation( Array )
             temp[ ThT.NComp - 1 ] = Array[ ThT.NComp - 1 ]
             
@@ -112,7 +113,7 @@ def SetBox( Array,  *args, **kwargs ):
             
 def BoxSummation( Array, *args, **kwargs ):
 
-    ndim = np.shape( Array )[ 0 ]
+    ndim = np.shape( Array )[ 0 ] ; NearlyOne = 1. - ThT.Residual
     if 'Number_Phases' in kwargs:
         NPhase = kwargs.get( 'Number_Phases', None )
     else:

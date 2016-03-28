@@ -7,6 +7,7 @@ import sys
 import ThermoTools as ThT
 import PhaseStability as Michaelsen
 import MixingRules as MixRules
+import NormalisedConstraint as NC
 
 
 def GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase ):
@@ -95,7 +96,7 @@ def GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase ):
 
     """ Adding all terms:
                           """
-    GibbsEnergyMolar = LSum2 + LMuNc + Sum_ZMuV
+    GibbsEnergyMolar = ( LSum2 + LMuNc + Sum_ZMuV )
 
     
     return GibbsEnergyMolar
@@ -107,13 +108,10 @@ def GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase ):
 
 def Calculating_ChemPot( Temp, Press, Comp_Phase, iphase_in, iphase_out, *positional_parameters, **keyword_parameters ):
 
-    MolFrac = [ 0. for i in range( ThT.NComp ) ]
+    NearlyOne = 1. - ThT.Residual
     if 'optional' in keyword_parameters:
         if keyword_parameters[ 'optional' ] == 'Feed':
-            for icomp in range( ThT.NComp ):
-                MolFrac[ icomp ] = Comp_Phase[ icomp ]
-                itg = ThT.Sum2One( 'Mol Fraction', MolFrac, optional = 'NotNull' ) # Ensuring the sum is equal to one and 
-                                                                                   #     that there is no null component.   
+            MolFrac = NC.SetBox( Comp_Phase, Length = 'MoleFrac_Only' )
 
         else:
             print 'Unknown Optional parameter in Function Calculating_ChemPot'
@@ -121,30 +119,28 @@ def Calculating_ChemPot( Temp, Press, Comp_Phase, iphase_in, iphase_out, *positi
             
     else:
         if iphase_in == iphase_out:
-            sum1 = 0.
-            for icomp in range( ThT.NComp - 1 ):
-                MolFrac[ icomp ] = Comp_Phase[ icomp ]
-                sum1 = sum1 + Comp_Phase[ icomp ]
-            MolFrac[ ThT.NComp - 1 ] = 1. - sum1
-            itg = ThT.Sum2One( 'Mol Fraction', MolFrac, optional = 'NotNull' ) # Ensuring the sum is equal to one and 
-                                                                               #     that there is no null component.   
+            MolFrac = NC.SetBox( Comp_Phase, Length = 'MoleFrac_Only' )
 
         else:
             sum1 = 0. ; Phase = Comp_Phase[ ThT.NComp - 1 ]
+            MolFrac_temp = [ 0. for i in range( ThT.NComp ) ]
             for icomp in range( ThT.NComp - 1 ):
-                MolFrac[ icomp ] = ( ThT.Z_Feed[ icomp ] - Comp_Phase[ icomp ] * Phase ) / ( 1. - Phase )
-                sum1 = sum1 + MolFrac[ icomp ]
-            MolFrac[ ThT.NComp - 1 ] = 1. - sum1
-            itg = ThT.Sum2One( 'Mol Fraction', MolFrac, optional = 'NotNull' ) # Ensuring the sum is equal to one and
-                                                                               #     that there is no null component.
+                MolFrac_temp[ icomp ] = ( ThT.Z_Feed[ icomp ] - Comp_Phase[ icomp ] * Phase ) / max( ThT.Residual,  1. - Phase )
+                MolFrac_temp[ icomp ] = max( ThT.Residual, MolFrac_temp[ icomp ] )
+                sum1 = sum1 + MolFrac_temp[ icomp ]
+            MolFrac_temp[ ThT.NComp - 1 ] = 1. - sum1
+            MolFrac = NC.SetBox( MolFrac_temp, Length = 'MoleFrac_Only' )
 
-    if itg:
-        ( FugCoef, ChemPot ) = MixRules.MixingRules_EoS( Temp, Press, iphase_out, MolFrac )
-    else:
-        ChemPot = [ 0. for i in range( ThT.NComp ) ]
-        FugCoeff = [ 0. for i in range( ThT.NComp ) ]
-        
-
+    """ If the concentration (mole/mass fraction) of any component is close to either
+            zero or one, than assume that the chemical potential (i.e., molar Gibbs free
+            energy is null.                                                              """
+    for icomp in range( ThT.NComp ):
+        if MolFrac[ icomp ] <= 1.e-6 or MolFrac[ icomp ] >= 1. - 1.e-6 :
+            ChemPot = [ 0. for i in range( ThT.NComp ) ]
+            FugCoeff = [ 0. for i in range( ThT.NComp ) ]
+            break
+        else:
+            ( FugCoef, ChemPot ) = MixRules.MixingRules_EoS( Temp, Press, iphase_out, MolFrac )
 
     return ChemPot
 
