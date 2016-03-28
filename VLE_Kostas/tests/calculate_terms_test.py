@@ -84,7 +84,7 @@ def B( MFrac ):
 
 # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = #
 
-
+'''
 Rconst = 8.314 # Gas constant [J/(gmol.K)]
 
 ThT.ReadSet_Global_Variables()
@@ -144,7 +144,7 @@ x = zmin
 print ' zmax root for the vapour phase = ', y
 print ' zmin root for the liquid phase = ', x
 print
-
+'''
 
 
 
