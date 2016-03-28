@@ -14,6 +14,27 @@ def Whot( Fred ):
 
 
 
+def Calc_ChemPot( NPhase, frac ):
+    #sz = np.shape(MFrac)[0]
+    print ' now i am in the chempot function ' 
+    
+    chempot = ThT.Rconst * ThT.T_System[ 0 ] * ( np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
+
+Calc_ChemPot( phase, mfrac )
+print ' - - - - back to the main chem_pot program - - - - '
+
+
+
+# main code
+NComp = 2 ;  NPhase = 3
+Frac = [ 0. for i in range( NComp * NPhase ) ]
+
+
+""" Loop over phases: """
+for iphase in range( NPhase ):
+    node_init = iphase * NComp ; node_final = iphase * NComp + NComp - 1
+    ChemPot[ node_init:node_final ] = Calc_ChemPot( iphase, MFrac[ node_init:node_final ] )      
+
 
 
 
@@ -21,6 +42,7 @@ def Whot( Fred ):
 NComp = 2 ;  NPhase = 3
 Frac = [ 0. for i in range( NComp * NPhase ) ]
 
+'''
 for iphase in range( NPhase ):
     for icomp in range( NComp ):
         node = iphase * NComp + icomp
@@ -37,3 +59,4 @@ print '###################BACK TO THE MAIN PROGRAM'
 
 
 Whot(Frac[2:5])
+'''
