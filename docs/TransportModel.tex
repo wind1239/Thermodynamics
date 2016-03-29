@@ -1,0 +1,95 @@
+
+%%%
+%%% CHAPTER
+%%%
+\chapter{Transport Model}\label{Chapter:TransportModel}
+
+%%% SECTION
+\section{Introduction}\label{Chapter:TransportModel:Section:Introduction}
+In traditional multi-component (also called compositional when dealing with oil and gas applications) flow models, an arbitrary number of components exist in a large number of phases (e.g., gas, oil and water), with mass/mole fraction $\mfr[y]{i}{j}$ and density $\mfr[\rho]{i}{j}$, where $i = 1, 2, \cdots, \mathcal{N}_{c}$ and $j=1, 2, \cdots, \mathcal{N}_{p}$ $\left(\mathcal{N}_{c}\right.$ and $\mathcal{N}_{p}$ are number of components and phases, respectively$\left.\right)$. The main constraint is,
+   \begin{displaymath}
+      \summation_{i=1}^{\mathcal{N}_{c}} \mfr[y]{i}{j} = 1,
+   \end{displaymath}
+also, most traditional models usually assume that there is {\bf no} mass interchange between phases (e.g., between water and hydrocarbon phases). Thus the mass conservation equation for oil-gas system can be written as,
+   \begin{eqnarray}
+      &&\phi \frc{\partial}{\partial t}\left( \mfr[y]{i}{o} \mfr[\rho]{i}{o} \mfr[S]{}{o} + \mfr[y]{i}{g} \mfr[\rho]{i}{g} \mfr[S]{}{g} +  \mfr[y]{i}{w} \mfr[\rho]{i}{w} \mfr[S]{}{w}\right) + \nonumber \\
+        &&\;\;\;\; \nabla \cdot \left(\mfr[y]{i}{o} \mfr[\rho]{i}{o}\mfr[S]{}{o}  \mfr[\mathbf{u}]{}{o} + \mfr[y]{i}{g}\mfr[\rho]{i}{g}\mfr[S]{}{g} \mfr[\mathbf{u}]{}{g} + \mfr[y]{i}{w} \mfr[\rho]{i}{w}\mfr[S]{}{w} \mfr[\mathbf{u}]{}{w} \right) - Q_i = 0, \label{Chapter:TransportModel:Eqn:saturation_comp_old}
+   \end{eqnarray}
+where $S$ and $\mathbf{u}$ are saturation and velocity vector fields, respectively. The force balance is expressed as:
+   \begin{equation}
+       \mfr[\underline{\underline{\sigma}}]{}{j} \mfr[\mathbf u]{}{j} = - \nabla \mfr[p]{}{j} + \mfr[\mathcal{S}]{}{j}, ~~~~~ j = o,g,w .\label{Chapter:TransportModel:Eqn:ForceBalance}
+   \end{equation}
+The capillary pressures are set to zero and thus $\mfr[p]{}{o} = \mfr[p]{}{g} = \mfr[p]{}{w}  = p $, and $\summation_{j}\mfr[S]{}{j} = 1$. Conservation equations for phases can be expressed (based on Eqn. \ref{Chapter:TransportModel:Eqn:saturation_comp_old}) as 
+   \begin{equation}
+       \displaystyle\frac{\partial}{\partial t}\left(\phi\mfr[\rho]{}{j}\mfr[S]{}{j}\right) + \nabla\cdot\left(\mfr[\rho]{}{j}\mfr[S]{}{j}\mfr[\mathbf{u}]{}{j}\right) -\mfr[m]{}{j} = 0, 
+              \label{saturation_compositional_1}
+   \end{equation}
+where $\mfr[m]{}{j}$ are the mass source terms,
+   \begin{displaymath}
+      \summation_{j=1}^{{\cal N}_p} \mfr[m]{}{j}=\mfr[m]{}{w}+\mfr[m]{}{o}+\mfr[m]{}{g}=0. 
+   \end{displaymath}
+
+%%% SECTION
+\section{New Multi-Component Model Formulation}\label{Chapter:TransportModel:Section:MultiComponentFormulation}
+
+%%% Subsection
+\subsection{Two-Phase System}\label{Chapter:TransportModel:Section:MultiComponentFormulation:Section:2PhaseSystem}
+
+We can lump the conservative saturation equations as
+    \begin{equation}
+              \phi \displaystyle\frac{\partial}{\partial t}\left(\summation_{j=1}^{{\cal N}_p}\mfr[y]{i}{j}\mfr[\rho]{i}{j}\mfr[S]{}{j}\right) + \nabla\cdot\left(\summation_{j=1}^{{\cal N}_p}\mfr[y]{i}{j}\mfr[\rho]{i}{j}\mfr[S]{}{j}\mfr[\mathbf{u}]{}{j}\right) - Q_{i} = 0, \label{saturation_compositional_4}
+    \end{equation} 
+where $i = 1, 2, \cdots, \mathcal{N}_{c}$. For 2-phases systems (e.g., oil and water), the mass conservation equation for component $i$ is,  
+     \begin{eqnarray}
+             &&\phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o} +  \mfr[y]{i}{w}\mfr[\rho]{i}{w}\mfr[S]{}{w}\right) + \nonumber \\
+             && \nabla\cdot\left(\mfr[y]{i}{o} \mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o} + \mfr[y]{i}{w}\mfr[\rho]{i}{w}\mfr[S]{}{w}\mfr[\mathbf{u}]{}{w} \right) - Q_{i} = 0 \nonumber
+    \end{eqnarray}
+We can decouple the conservative equation into two equations (for simplicity let's neglect the source/sink terms): 
+          \begin{eqnarray}
+             && \phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o} \right) + \nabla\cdot\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o}  \right) - K_i  = 0, \nonumber \\
+             && \phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{w}\mfr[\rho]{i}{w}\mfr[S]{}{w}  \right) + \nabla\cdot\left(\mfr[y]{i}{w}\mfr[\rho]{i}{w}\mfr[S]{}{w}\mfr[\mathbf{u}]{}{w} \right) + K_i = 0.  \nonumber
+          \end{eqnarray}
+
+The term $K_{i}$ is selected as \red{$K_{i}=\alpha_i \left(\mfr[y]{i}{w} - E_{i} \mfr[y]{i}{o}\right)$} (for positive $\alpha_{i}$), in an attempt to enforce the Equation of State (EoS),  $\mfr[y]{i}{w} - E_i \mfr[y]{i}{o}=0$.  The final form of the mass conservation equations for each component $i$ is 
+           \begin{eqnarray}
+               && \phi  \displaystyle\frac{\partial}{\partial t}\left(y_{i}^{o}\rho_i^{o}S^{o} \right) + \nabla\cdot\left(y_{i}^{o}\rho_i^{o}S^{o}\mathbf{u}^{o}  \right) - \alpha_i (y_i^w - E_i y_i^o)  = 0, \label{oil-comp-i} \nonumber\\
+               && \phi \displaystyle\frac{\partial}{\partial t}\left(y_{i}^{w}\rho_i^{w}S^{w}  \right) +  \nabla\cdot\left( y_{i}^{w}\rho_i^{w}S^{w}\mathbf{u}^{w}  \right) + \alpha_i (y_i^w - E_i y_i^o) = 0. \label{water-comp-i} \nonumber\label{Chapter:TransportModel:Section:MultiComponentFormulation:Section:2PhaseSystem:Eqn:MassConservationSaturation}
+           \end{eqnarray}
+
+These coupled equations are solved for $\mfr[y]{i}{o}$ and $\mfr[y]{i}{w}$ and for each $i$ component in {\it oil} phase, 
+           \begin{equation}
+              \summation_{i=1}^{{\cal N}_{c}} \bigg(\phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o} \right) + \nabla\cdot\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o}  \right) - \alpha_i (\mfr[y]{i}{w} - E_i \mfr[y]{i}{o})\bigg)  = 0, 
+           \end{equation}
+Resulting in:
+           \begin{eqnarray}
+              \phi \displaystyle\frac{\partial}{\partial t}\left( \mfr[\rho]{i}{o}\mfr[S]{}{o} \right) + \nabla\cdot\left(\mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o}  \right) = \mfr[m]{}{o}, \nonumber \\
+              \phi \displaystyle\frac{\partial}{\partial t}\left( \mfr[\rho]{i}{w}\mfr[S]{}{w} \right) + \nabla\cdot\left(\mfr[\rho]{i}{w}\mfr[S]{}{w}\mfr[\mathbf{u}]{}{w}  \right) = \mfr[m]{}{w}, \nonumber 
+           \end{eqnarray}
+where $\mfr[\rho]{i}{j}$ is the phase-weighted density. With the equal and opposite mass flow rate between the phases: 
+           \begin{displaymath}
+                -\mfr[m]{}{w} = \mfr[m]{}{o}= \summation_{i=1}^{{\cal N}_{c}}\alpha_i \left(\mfr[y]{i}{w} - E_i \mfr[y]{i}{o}\right), 
+           \end{displaymath}
+thus preserving mass.
+
+
+Equations~\ref{Chapter:TransportModel:Section:MultiComponentFormulation:Section:2PhaseSystem:Eqn:MassConservationSaturation} are well-posed independent of their corresponding saturation due to the presence of the inter-phase coupling terms involving $\alpha$. This relaxation coefficient \blue{$\alpha$} must be chosen such that on the time scale of the time-step size $\Delta t$ the EoS $\mfr[y]{i}{w} - E_i \mfr[y]{i}{o}=0$ is strictly enforced. Based on dimensional arguments this leads to: 
+            \begin{equation}
+               \alpha_{i}= \beta \frc{\phi \left(\mfr[\rho]{i}{o}\mfr[S]{}{o} \frc{1}{E_i} +\mfr[\rho]{i}{w}\mfr[S]{}{w} \right)}{\Delta t} ,
+            \end{equation}
+in which $\beta$ is an order one scalar, e.g., $\beta=1$.
+
+
+%%% Subsection
+\subsection{Three-Phase System}\label{Chapter:TransportModel:Section:MultiComponentFormulation:Section:3PhaseSystem}
+
+The formulation for 2 phases can be easily extended to 3 (or more) phases, e.g., oil, gas and water, and the global saturation equation can be rewritten as 
+     \begin{eqnarray}
+               \phi  \frc{\partial}{\partial t}\left(\mfr[y]{i}{1}\mfr[\rho]{i}{1}\mfr[S]{}{1} \right) &+& \nabla\cdot\left(\mfr[y]{i}{1}\mfr[\rho]{i}{1}\mfr[S]{}{1}\mfr[\mathbf{u}]{}{1}  \right) - \mfr[\alpha]{i}{1\;2} \left(\mfr[y]{i}{2} - \mfr[E]{i}{1\;2}\mfr[y]{i}{1}\right)  = \mfr[Q]{i}{1} ,\nonumber \label{phase1-comp-i} \\
+               \phi \frc{\partial}{\partial t}\left(\mfr[y]{i}{2}\mfr[\rho]{i}{2}\mfr[S]{}{2} \right) &+&  \nabla\cdot\left( \mfr[y]{i}{2}\mfr[\rho]{i}{2}\mfr[S]{}{2}\mfr[\mathbf{u}]{}{2} \right) + \mfr[\alpha]{i}{1\;2} \left(\mfr[y]{i}{2} - \mfr[E]{i}{1\;2} \mfr[y]{i}{1}\right)   - \nonumber \\
+              &&  \mfr[\alpha]{i}{2\;3} \left(\mfr[y]{i}{3} - \mfr[E]{i}{2\;3} \mfr[y]{i}{2}\right) = \mfr[Q]{i}{2} , \nonumber \label{phase2-comp-i} \\
+               \phi \frc{\partial}{\partial t}\left(\mfr[y]{i}{3}\mfr[\rho]{i}{3}\mfr[S]{}{3} \right) &+&  \nabla\cdot\left( \mfr[y]{i}{3}\mfr[\rho]{i}{3}\mfr[S]{}{3}\mfr[\mathbf{u}]{}{3}  \right) +  \mfr[\alpha]{i}{2\;3} \left(\mfr[y]{i}{3} - \mfr[E]{i}{2\;3} \mfr[y]{i}{2}\right) = \mfr[Q]{i}{3}, \nonumber\label{phase3-comp-i}
+    \end{eqnarray}
+with $\mfr[\alpha]{i}{j\;k} = \beta \frc{\phi \left(\mfr[\rho]{i}{j}\mfr[S]{}{j}  \frc{1}{\mfr[E]{i}{j\;k}} +\mfr[\rho]{i}{k}\mfr[S]{}{k} \right)}{\Delta t} $.
+
+
+$\mfr[Q]{i}{j}$ is the component $i$ source for phase $j$ and the overall component $i$ source is given by $Q_i=\summation_{j=1}^{{\cal N}_p} \mfr[Q]{i}{j}$.  The resulting constraint is the intersection of the lines $\mfr[y]{i}{2} - \mfr[E]{i}{1\;2} \mfr[y]{i}{1}=0$ and $\mfr[y]{i}{3} - \mfr[E]{i}{2\;3}\mfr[y]{i}{2}= 0$ on the phase diagram represented as a triangle with $\mfr[y]{i}{j}, \; j =1,2,3$ at each of the three corners of the triangle. The three $\mfr[y]{i}{j}, \; j =1,2,3$ for a given component $i$ represents a point (in area coordinates) on this diagram.
