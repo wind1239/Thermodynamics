@@ -45,7 +45,7 @@ def CALC_FI( iphase, frac ):
     
     return lnfi
 
-
+'''
 ThT.ReadSet_Global_Variables()
 
 MFrac = [ 0. for i in range( ThT.NComp ) ]
@@ -59,3 +59,4 @@ iphase = 0
 phi = CALC_FI( iphase, MFrac )
 print 'ln_phi = ', phi 
 
+'''
