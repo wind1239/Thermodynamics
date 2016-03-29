@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# a function that contains the variables to calculate the greek_fi
+# a function that contains the variables to calculate the ln_greek_fi
 
 import numpy as np
 import math
@@ -20,17 +20,18 @@ def CALC_FI( iphase, frac ):
     DQ_KC = [ 0. for i in range( ThT.NComp ) ]
     DQ_KC = terms.DQ( frac )
     
-    #for iphase in range( ThT.NPhase ):
+    # for iphase in range( ThT.NPhase ):
     for i in range( ThT.NComp )  :
-        print ' MFrac = ', frac[ i ]
+       # print ' MFrac = ', frac[ i ]
         if iphase == 0:
            z = zmax
         else:
            z = zmin
-     #   q = ( ( 1 / ( 1 - terms.D( frac ) ) * terms.DQ( frac ) - terms.Q( frac ) / ( 1 - terms.D( frac ) **2  ) * ( 1 - terms.DD( frac ) )
-      #  q = ( ( 1 / ( 1 - terms.D( frac ) ) * terms.DQ( frac )[i] - terms.Q( frac ) / ( 1 - terms.D( frac ) **2  ) * ( 1 - terms.DD( frac )[i] )
-        q = ( ( 1 / ( 1 - terms.D( frac ) ) * DQ_KC[i] - terms.Q( frac ) / ( 1 - terms.D( frac ) **2  ) * ( 1 - DD_KC[i] )
-        d =  terms.D( frac ) * q + terms.BM( frac ) * ( 1 - terms.DD( frac ) )
+      # wrong syntax  q = ( ( 1 / ( 1 - terms.D( frac ) ) * terms.DQ( frac ) - terms.Q( frac ) / ( 1 - terms.D( frac ) **2  ) * ( 1 - terms.DD( frac ) )
+      # through this syntax we read all over again and again the arrays, no need to 
+      # q = ( ( 1 / ( 1 - terms.D( frac ) ) * terms.DQ( frac )[i] - terms.Q( frac ) / ( 1 - terms.D( frac ) **2  ) * ( 1 - terms.DD( frac )[i] )
+        q =  ( 1 / ( 1 - terms.D( frac ) ) * DQ_KC[i] - terms.Q( frac ) / ( 1 - terms.D( frac ) **2  ) * ( 1 - DD_KC[i] ) )
+        d =  terms.D( frac ) * q + terms.BM( frac ) * ( 1 - DD_KC[i] )
         term1 = - np.log( z - terms.B( frac ) ) 
         term2 = ( 1 / terms.BM( frac ) ) * q * ( z - 1 )
         term3 = ( 0.5 / np.sqrt(2) ) * ( ( 1/ terms.AM( frac ) ) * d * ThT.Rconst * ThT.T_System[ 0 ] ) - ( ( 1 / terms.BM( frac ) ) * q ) 
@@ -45,20 +46,6 @@ def CALC_FI( iphase, frac ):
     return lnfi
 
 
-'''
-def CALC_CHEMPOT( MFrac ):
-    chempot = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
-    for iphase in range( ThT.NPhase ): 
-        for i in range( ThT.NComp )  :
-            #print ' iphase = ', iphase, ' i = ', i   
-            chempot[ i ] =  ThT.Rconst * ThT.T_System[ 0 ] * ( CALC_FI( MFrac[ i ] ) + np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
-        print ' iphase = ', iphase, ' i = ', i,' the chempot = ', chempot[ i ]
-        print
-    return chempot  
-'''
-
-
-
 ThT.ReadSet_Global_Variables()
 
 MFrac = [ 0. for i in range( ThT.NComp ) ]
@@ -69,29 +56,6 @@ MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
 
 iphase = 0
 
-'''
-zmax , zmin = PR.Cubic_PR( ThT.T_System[0], ThT.P_System[0], terms.AM( MFrac ), terms.BM( MFrac ) )
-y = zmax
-x = zmin
-print ' zmax root for the vapour phase = ', y
-print ' zmin root for the liquid phase = ', x
-print
-'''
-
-
 phi = CALC_FI( iphase, MFrac )
 print 'ln_phi = ', phi 
 
-'''
-chempot_mi = CALC_CHEMPOT( MFrac )
-print ' greek_mi = ', chempot_mi 
-'''
-
-
-
- 
-
-
-
-
-    
