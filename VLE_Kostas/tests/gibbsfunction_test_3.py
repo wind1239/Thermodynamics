@@ -54,13 +54,13 @@ print '  -----------------------------------------------------------------------
 print
 
 for iphase in range(ThT.NPhase):
-    print
-    print '                                                                                               you are at the iphase ', iphase 
-    print
+    print '                                                                                               ############################### '
+    print '                                                                                                   you are at the iphase ', iphase 
+    print '                                                                                               ############################### '
     for i in range(ThT.NComp):
         for j in range(ThT.NComp):
             node = i * ThT.NComp + j
-            print '  ===================================================================================================================== '
+            print '  -------------------------------------------------------------------------------------------------------------------- '
     	    print '  you are at the component ' , i, j, ' at the node = ', node, 'at the ', iphase,' phase'
             print 
             print '  for the  ', ThT.Species[i] 
@@ -85,6 +85,19 @@ for iphase in range(ThT.NPhase):
             time.sleep(0)
 
 
+def Calc_ChemPot( iphase, MFrac ):
+    sz = np.shape(MFrac)[0]
+    print ' now i am in the chempot function ' 
+    
+    chempot = ThT.Rconst * ThT.T_System[ 0 ] * ( np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
+
+
+
+
+
+
+
+
 
 # Set up an array of chemical potential for each component at each phase (dimension NComp * NPhase )
 ChemPot = [0. for i in range(ThT.NComp * ThT.NPhase) ] 
@@ -92,8 +105,10 @@ ChemPot = [0. for i in range(ThT.NComp * ThT.NPhase) ]
 """ Loop over phases: """
 for iphase in range( ThT.NPhase ):
     node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp - 1
-    ChemPot[ node_init:node_final ] = Calc_ChemPot( iphase, MFrac[ node_init:node_final ] ) """ This function will return the chemical potential of phase IPHASE for all components and then it can be be 
-                                                                                                    operated to obtain the molar Gibbs energy. """
+    ChemPot[ node_init:node_final ] = Calc_ChemPot( iphase, MFrac[ node_init:node_final ] )      # This function will return the chemical potential of phase IPhase 
+                                                                                                 # components and then it can be be operated to obtain the molar Gibbs energy.
+
+
 
 """ Calculating Gibbs molar """
 PhaseFrac = [0. for i in range(ThT.NPhase) ] 
