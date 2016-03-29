@@ -88,8 +88,10 @@ for iphase in range(ThT.NPhase):
 def Calc_ChemPot( iphase, MFrac ):
     sz = np.shape(MFrac)[0]
     print ' now i am in the chempot function ' 
+    chempot = ThT.Rconst * ThT.T_System[ 0 ] #* ( np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
+    print ' the chempot = ', chempot 
     
-    chempot = ThT.Rconst * ThT.T_System[ 0 ] * ( np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
+    return chempot
 
 
 
