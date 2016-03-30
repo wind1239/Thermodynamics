@@ -58,5 +58,4 @@ iphase = 0
 
 phi = CALC_FI( iphase, MFrac )
 print 'ln_phi = ', phi 
-
 '''
