@@ -35,8 +35,6 @@ def ln_gamma( MFrac ):
         #print
     return ln_gamma1
 
-    
-
 
 # = = = = = = = = = Gibbs energy in excess = Helmoltz energy in excess = = = = = = = = = =
 def gibbs( MFrac ): 
@@ -49,7 +47,6 @@ def gibbs( MFrac ):
     #print '  the Gibbs energy in excess for the mixture of ', ThT.Species[i] , ThT.Species[j], ' is Ge = ', gibbs1
     print
     return gibbs1
-
 
 
 # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = #
