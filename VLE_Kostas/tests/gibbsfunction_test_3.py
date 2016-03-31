@@ -128,7 +128,6 @@ for icomp in range( ThT.NComp ):
 
 MolarGibbs = sumGibbs + sumfeed
     
-
       
             
 
