@@ -31,3 +31,18 @@ def Calc_ChemPot( iphase, MFrac ):
     
     return chempot
 '''
+
+'''
+ThT.ReadSet_Global_Variables()
+
+MFrac = [ 0. for i in range( ThT.NComp ) ]
+print '  the initial molar fraction before reading from the input.dat is ', MFrac
+# declare a vector with MFrac values - molar fraction
+MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
+#MFrac[ 2 ] = 0.10; MFrac[ 3 ] = 0.10; # Liquid phase
+
+iphase = 0
+
+phi = CALC_FI( iphase, MFrac )
+print 'ln_phi = ', phi 
+'''
