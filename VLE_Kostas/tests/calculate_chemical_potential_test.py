@@ -9,6 +9,7 @@ import calculate_fi_test as fi
 
 
 def Calc_ChemPot( iphase, MFrac ):
+    print ' i am not here '
 
     ChemPot = [0. for i in range(ThT.NComp) ] 
     lnPXi = [0. for i in range(ThT.NComp) ] 
@@ -18,7 +19,7 @@ def Calc_ChemPot( iphase, MFrac ):
     # Calculating second-term of the rhs
     for icomp in range( ThT.NComp ):
          lnPXi[ icomp ] = math.log( ThT.P_System[ 0 ] * MFrac[ icomp ] )
-         ChemPot[ icomp ] = ThT.RConst * ThT.T_System[0] * ( lnphi[ icomp ] - lnPxi[ icomp ] )
+         ChemPot[ icomp ] = ThT.Rconst * ThT.T_System[0] * ( lnphi[ icomp ] - lnPXi[ icomp ] )
          print ' the chempot = ', ChemPot[ icomp ]
     return ChemPot
 
@@ -43,6 +44,7 @@ MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
 
 iphase = 0
 
-phi = CALC_FI( iphase, MFrac )
+phi = Calc_ChemPot( iphase, MFrac )
 print 'ln_phi = ', phi 
 '''
+

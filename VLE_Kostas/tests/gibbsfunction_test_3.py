@@ -98,14 +98,14 @@ def Calc_ChemPot( iphase, MFrac ):
 '''
 
 
-
 # Set up an array of chemical potential for each component at each phase (dimension NComp * NPhase )
 ChemPot = [0. for i in range(ThT.NComp * ThT.NPhase) ] 
 
 """ Loop over phases: """
 for iphase in range( ThT.NPhase ):
-    node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp - 1
-    ChemPot[ node_init:node_final ] = chempot.Calc_ChemPot( iphase, MFrac[ node_init:node_final ] )      # This function will return the chemical potential of phase IPhase 
+    node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp 
+    print MFrac[ node_init:node_final ], node_init, node_final
+    ChemPot[ node_init:node_final ] = chempot.Calc_ChemPot( iphase, MFrac[ 1 : node_final ] )      # This function will return the chemical potential of phase IPhase 
     print ' the ChemPot = ', ChemPot[ node_init:node_final ]                                                                                          # components and then it can be be operated to obtain the molar Gibbs energy.
 
 
@@ -122,7 +122,7 @@ for icomp in range( ThT.NComp ):
        sumGibbs = sumGibbs + ( PhaseFrac[ Lphase ] * MFrac[ nodeL ]  * ( ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) - ( ChemPot[ nodeLfinal ]  - ChemPot[ nodeVfinal ] ) ) + \
                      PhaseFrac[ Lphase ] * ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) )
     sumfeed = sumfeed + ThT.Z_Feed[icomp] * ChemPot[ nodeV ]
-    print ' the sumGibbs = ', sumGibbs , ' and the sumfeed = '. sumfeed 
+    print ' the sumGibbs = ', sumGibbs , ' and the sumfeed = ', sumfeed 
 
 MolarGibbs = sumGibbs + sumfeed
 print ' the Molar Gibbs = ', MolarGibbs    
