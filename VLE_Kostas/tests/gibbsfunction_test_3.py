@@ -109,7 +109,6 @@ for iphase in range( ThT.NPhase ):
     print ' the ChemPot = ', ChemPot[ node_init:node_final ]                                                                                          # components and then it can be be operated to obtain the molar Gibbs energy.
 
 
-
 """ Calculating Gibbs molar """
 PhaseFrac = [0. for i in range(ThT.NPhase) ] 
 PhaseFrac[ 0 ] = 0.35 ;  PhaseFrac[ 1 ] = 1. - PhaseFrac[ 0 ]
