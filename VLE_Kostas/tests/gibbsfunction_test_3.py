@@ -8,6 +8,7 @@ import EOS_PR_test as PR
 import ln_gamma_test as lng
 import calculate_fi_test as fi
 import calculate_terms_test as terms
+import calculate_chemical_potential_test as chempot
 import pylab 
 import time
 
@@ -53,6 +54,7 @@ print '     The number of Species is: ', ThT.NComp , ' while the Species are : '
 print '  --------------------------------------------------------------------------------------------------------------'
 print
 
+'''
 for iphase in range(ThT.NPhase):
     print '                                                                                               ############################### '
     print '                                                                                                   you are at the iphase ', iphase 
@@ -85,6 +87,7 @@ for iphase in range(ThT.NPhase):
             time.sleep(0)
 
 
+
 def Calc_ChemPot( iphase, MFrac ):
     sz = np.shape(MFrac)[0]
     print ' now i am in the chempot function ' 
@@ -92,12 +95,7 @@ def Calc_ChemPot( iphase, MFrac ):
     print ' the chempot = ', chempot 
     
     return chempot
-
-
-
-
-
-
+'''
 
 
 
@@ -107,8 +105,8 @@ ChemPot = [0. for i in range(ThT.NComp * ThT.NPhase) ]
 """ Loop over phases: """
 for iphase in range( ThT.NPhase ):
     node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp - 1
-    ChemPot[ node_init:node_final ] = Calc_ChemPot( iphase, MFrac[ node_init:node_final ] )      # This function will return the chemical potential of phase IPhase 
-                                                                                                 # components and then it can be be operated to obtain the molar Gibbs energy.
+    ChemPot[ node_init:node_final ] = chempot.Calc_ChemPot( iphase, MFrac[ node_init:node_final ] )      # This function will return the chemical potential of phase IPhase 
+    print ' the ChemPot = ', ChemPot[ node_init:node_final ]                                                                                          # components and then it can be be operated to obtain the molar Gibbs energy.
 
 
 
@@ -118,16 +116,17 @@ PhaseFrac[ 0 ] = 0.35 ;  PhaseFrac[ 1 ] = 1. - PhaseFrac[ 0 ]
 sumGibbs = 0. ;  sumfeed = 0.
 for icomp in range( ThT.NComp ):
     Vphase = 0 ; Lphase = 1 
-    nodeV = Vphase * ThT.NComp + icomp ; nodeL = Lphase * ThT.NComp + icomp
+    nodeV = Vphase * ThT.NComp + icomp ; nodeL = Lphase * ThT.NComp + icomp             # a clever way to describe the nodes for Vapour and liquid phases
     nodeVfinal = Vphase * ThT.NComp + ThT.NComp - 1; nodeLfinal = Lphase * ThT.NComp + ThT.NComp - 1; 
     if icomp <= ThT.NComp - 2:
        sumGibbs = sumGibbs + ( PhaseFrac[ Lphase ] * MFrac[ nodeL ]  * ( ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) - ( ChemPot[ nodeLfinal ]  - ChemPot[ nodeVfinal ] ) ) + \
                      PhaseFrac[ Lphase ] * ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) )
     sumfeed = sumfeed + ThT.Z_Feed[icomp] * ChemPot[ nodeV ]
-
+    print ' the sumGibbs = ', sumGibbs , ' and the sumfeed = '. sumfeed 
 
 MolarGibbs = sumGibbs + sumfeed
-    
+print ' the Molar Gibbs = ', MolarGibbs    
+
       
             
 
