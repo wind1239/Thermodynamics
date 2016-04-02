@@ -8,7 +8,7 @@ import EOS_PR_test as PR
 import ln_gamma_test as lng
 import calculate_fi_test as fi
 import calculate_terms_test as terms
-import calculate_chemical_potential_test as chempot
+import calculate_chemical_potential_test as chemp
 import pylab 
 import time
 
@@ -54,7 +54,7 @@ print '     The number of Species is: ', ThT.NComp , ' while the Species are : '
 print '  --------------------------------------------------------------------------------------------------------------'
 print
 
-'''
+
 for iphase in range(ThT.NPhase):
     print '                                                                                               ############################### '
     print '                                                                                                   you are at the iphase ', iphase 
@@ -87,15 +87,16 @@ for iphase in range(ThT.NPhase):
             time.sleep(0)
 
 
-
+'''
 def Calc_ChemPot( iphase, MFrac ):
     sz = np.shape(MFrac)[0]
     print ' now i am in the chempot function ' 
-    chempot = ThT.Rconst * ThT.T_System[ 0 ] #* ( np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
+    chempot = ThT.Rconst * ThT.T_System[ 0 ] * ( np.log( ThT.P_System[ 0 ] * MFrac[ i ] ) )
     print ' the chempot = ', chempot 
     
     return chempot
 '''
+
 
 
 # Set up an array of chemical potential for each component at each phase (dimension NComp * NPhase )
@@ -103,10 +104,11 @@ ChemPot = [0. for i in range(ThT.NComp * ThT.NPhase) ]
 
 """ Loop over phases: """
 for iphase in range( ThT.NPhase ):
-    node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp 
+    node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp  
     print MFrac[ node_init:node_final ], node_init, node_final
-    ChemPot[ node_init:node_final ] = chempot.Calc_ChemPot( iphase, MFrac[ 1 : node_final ] )      # This function will return the chemical potential of phase IPhase 
+    ChemPot[ node_init:node_final ] = chemp.Calc_ChemPot( iphase, MFrac[ node_init : node_final ] )      # This function will return the chemical potential of phase IPhase 
     print ' the ChemPot = ', ChemPot[ node_init:node_final ]                                                                                          # components and then it can be be operated to obtain the molar Gibbs energy.
+
 
 
 """ Calculating Gibbs molar """
