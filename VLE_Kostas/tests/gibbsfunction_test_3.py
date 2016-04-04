@@ -28,13 +28,15 @@ print '  the initial molar fraction before reading from the input.dat is', MFrac
 
 # = = = A vector with MFrac values - molar fraction = = =
 MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase
-MFrac[ 2 ] = 0.30; MFrac[ 3 ] = 0.10; # Liquid phase
+#MFrac[ 2 ] = 0.30; MFrac[ 3 ] = 0.10; # Liquid phase
 print '  the MFrac = ', MFrac
 
 Rconst = 8.314 # Gas constant [J/(gmol.K)]
 
 aij = [0. for i in range(ThT.NComp**2) ]
 chempot = [0. for i in range(ThT.NComp**2) ]
+
+
 
 # = = = Claculate the condition that sais that Summations of MFrac = 1.0 = = = 
 MFrac_sum = 0
@@ -75,14 +77,20 @@ for iphase in range(ThT.NPhase):
     	    print '  zi     = ', ThT.Z_Feed[i]                 # overall feed mass fraction of the component 
     	    print ''
             
+            ChemPot = [0. for i in range(ThT.NComp * ThT.NPhase) ]  # Set up an array of chemical potential for each component at each phase (dimension NComp * NPhase )       
+            
             if i == j: 
                print '  for the component ', ThT.Species[i]
-               #chempot[ iphase ] = fi.calc_chempot( iphase, MFrac[ iphase * ThT.NComp : iphase * ThT.NComp + ThT.NComp ] )
-               #print '  the chemical potential is for the ',i , j, iphase, ' is ', chempot[ iphase ]  
+               """ Loop over phases: """
+               for iphase in range( ThT.NPhase ):
+                   node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp  
+                   print MFrac[ node_init:node_final ], node_init, node_final
+                   ChemPot[ node_init:node_final ] = chemp.Calc_ChemPot( iphase, MFrac[ node_init : node_final ] )      # This function will return the chemical potential of phase IPhase 
+               print ' the ChemPot = ', ChemPot[ node_init:node_final ]                                                                                          # components and then it can be be operated to obtain the molar Gibbs energy.
                print
             else:                                                       # this is for the rest of the elements of the square matrix of the aij
                print '  for the component ', ThT.Species[i],' with respect to' , ThT.Species[j]
-            print
+               print
             print 
             time.sleep(0)
 
@@ -98,7 +106,7 @@ def Calc_ChemPot( iphase, MFrac ):
 '''
 
 
-
+'''
 # Set up an array of chemical potential for each component at each phase (dimension NComp * NPhase )
 ChemPot = [0. for i in range(ThT.NComp * ThT.NPhase) ] 
 
@@ -108,7 +116,7 @@ for iphase in range( ThT.NPhase ):
     print MFrac[ node_init:node_final ], node_init, node_final
     ChemPot[ node_init:node_final ] = chemp.Calc_ChemPot( iphase, MFrac[ node_init : node_final ] )      # This function will return the chemical potential of phase IPhase 
     print ' the ChemPot = ', ChemPot[ node_init:node_final ]                                                                                          # components and then it can be be operated to obtain the molar Gibbs energy.
-
+'''
 
 
 """ Calculating Gibbs molar """
