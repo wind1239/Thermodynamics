@@ -1,0 +1,47 @@
+###  
+### Input file for this test case
+###
+
+# Number of Components: 
+Number_Components          2
+
+# Number of Phases:
+Number_Phases              2
+
+# Temperature in Kelvin (initial, final, increment)
+System_Temperature         298.15      298.15         0.0
+
+# Pressure in bar  (initial, final, increment)
+System_Pressure              1.15e5     2.42e5         .50e4
+
+# Chemical species in the mixture
+Components                 "CH4"       "H2O"            
+
+# Critical temperature in Kelvin
+Crit_Temp                  34.0       234.9            
+
+# Critical pressure in bar
+Crit_Pres                  12.e6       12.08           
+
+# Molar mass in g/gmol
+Molar_Mass                 90.09      222.00           
+
+# Accentric factor (dimensionless)
+Accentric_Factor            0.45        0.51        
+
+# Composition of the feeding stream (z, dimensionless)
+Feed_Composition            0.45        0.55
+
+# Binary interaction parameter
+# Component_i Component_j Value
+BinaryInteraction
+1      2       0.50
+2      1       0.50
+
+# Wilson equation parameters
+# Component_i Component_j Value
+Lamda_wilson 
+1      1       1
+1      2       0.25
+2      1       0.25
+2      2       1
