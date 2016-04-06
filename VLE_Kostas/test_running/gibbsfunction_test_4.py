@@ -5,7 +5,7 @@ import math
 import sys
 import thermotools_test as ThT
 import EOS_PR_test as PR
-import ln_gamma_test as lng
+import calculate_ln_gamma_test as lng
 import calculate_fi_test as fi
 import calculate_terms_test as terms
 import calculate_chemical_potential_test as chemp
