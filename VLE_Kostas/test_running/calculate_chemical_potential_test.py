@@ -6,8 +6,6 @@ import sys
 import thermotools_test as ThT
 import calculate_fi_test as fi
 
-
-
 def Calc_ChemPot( iphase, MFrac ):
     print ' i am finally in the chemical potetnial function '
 
