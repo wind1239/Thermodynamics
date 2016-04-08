@@ -6,7 +6,7 @@ import numpy as np
 import math
 import sys
 import thermotools_test as ThT
-import EOS_PR_test as PR
+import calculate_EOS_PR_test as PR
 import ln_gamma_test as lng
 import calculate_terms_test as terms
 
