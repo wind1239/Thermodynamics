@@ -77,7 +77,7 @@ for iphase in range(ThT.NPhase):
 
             node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp; 
             #print node_init , node_final            
-            ChemPot = [0. for i in range(ThT.NComp * ThT.NPhase) ]  # Set up an array of chemical potential for each component at each phase (dimension NComp * NPhase )       
+            ChemPot = [0. for z in range(ThT.NComp * ThT.NPhase) ]  # Set up an array of chemical potential for each component at each phase (dimension NComp * NPhase )       
             
             if i == j: 
                print '  for the component ', ThT.Species[i]
