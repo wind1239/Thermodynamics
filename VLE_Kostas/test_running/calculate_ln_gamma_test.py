@@ -2,7 +2,7 @@ import numpy as np
 import math
 import sys
 import thermotools_test as ThT
-import EOS_PR_test as PR
+import calculate_EOS_PR_test as PR
 
 '''def kostas( a, b, c, d):
     e = a + b + c + d
