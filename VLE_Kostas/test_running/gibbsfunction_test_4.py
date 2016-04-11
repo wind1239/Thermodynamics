@@ -18,7 +18,7 @@ print ' = = = = = = = = = = = = = = = = = = = = = = = = = BEGIN OF THE GIBBS CAL
 print
 print
 
-                                                  
+                                                
 ThT.ReadSet_Global_Variables()  # reading the external file 
 
 Rconst = 8.314                  # Gas constant [J/(gmol.K)]
