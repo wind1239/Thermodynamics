@@ -12,7 +12,7 @@ Number_Phases              2
 System_Temperature         313.15      313.15         0.0
 
 # Pressure in bar  (initial, final, increment)
-System_Pressure              6.9     56         .50e4
+System_Pressure              6.9        6.9           0.0
 
 # Chemical species in the mixture
 Components                 "CH3OH - methanol "       "CO2 - carbon diox "            
@@ -30,7 +30,7 @@ Molar_Mass                 32.04      44.01
 Accentric_Factor            0.559        0.24        
 
 # Composition of the feeding stream (z, dimensionless)
-Feed_Composition            0.0424        0.55
+Feed_Composition            0.0424        0.9576
 
 # Binary interaction parameter
 # Component_i Component_j Value
