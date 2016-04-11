@@ -9,34 +9,34 @@ Number_Components          2
 Number_Phases              2
 
 # Temperature in Kelvin (initial, final, increment)
-System_Temperature         313.15      313.15         0.0
+System_Temperature         126.01      126.01         0.0
 
 # Pressure in bar  (initial, final, increment)
-System_Pressure              6.9        6.9           0.0
+System_Pressure              1.9162      1.9162           0.0
 
 # Chemical species in the mixture
-Components                 "CH3OH - methanol "       "CO2 - carbon diox "            
+Components                 " CH4-methane "       "C2H6-ethane "            
 
 # Critical temperature in Kelvin
-Crit_Temp                  512.6       304.1            
+Crit_Temp                  190.56       305.33            
 
 # Critical pressure in bar
-Crit_Pres                  81       12.08           
+Crit_Pres                   46.40        48.81           
 
 # Molar mass in g/gmol
-Molar_Mass                 32.04      44.01           
+Molar_Mass                  16.04        30.07           
 
 # Accentric factor (dimensionless)
-Accentric_Factor            0.559        0.24        
+Accentric_Factor            0.01          0.1        
 
 # Composition of the feeding stream (z, dimensionless)
-Feed_Composition            0.0424        0.9576
+Feed_Composition            0.2           0.8
 
 # Binary interaction parameter
 # Component_i Component_j Value
 BinaryInteraction
-1      2       0.0734
-2      1       0.0734
+1      2       -0.0020
+2      1       -0.0020
 
 # Wilson equation parameters
 # Component_i Component_j Value
