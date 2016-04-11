@@ -12,14 +12,13 @@ import calculate_chemical_potential_test as chemp
 import pylab 
 import time
 
-
 print
 print
 print ' = = = = = = = = = = = = = = = = = = = = = = = = = BEGIN OF THE GIBBS CALCULATIONS = = = = = = = = = = = = = = = = = = = = = = = = '
 print
 print
 
-                                                
+                                                  
 ThT.ReadSet_Global_Variables()  # reading the external file 
 
 Rconst = 8.314                  # Gas constant [J/(gmol.K)]
@@ -28,7 +27,8 @@ MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]          # setting up th
 print '  the initial molar fraction before reading from the input.dat is', MFrac
 
 
-MFrac[ 0 ] = 0.40; MFrac[ 1 ] = 0.20; # Vapour phase             # 2 components in 2 phases means an array of size 4 
+MFrac[ 0 ] = 0.20; MFrac[ 1 ] = 0.8  ; # Vapour phase             # 2 components in 2 phases means an array of size 4
+                                                                  # concentration range from mole fractions of 0.2 - 1 of methane 
 #MFrac[ 2 ] = 0.30; MFrac[ 3 ] = 0.10; # Liquid phase             # the first 2 for the Vapour, the second 2 for the Liquid 
 print '  the MFrac = ', MFrac
 
