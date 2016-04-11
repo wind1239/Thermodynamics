@@ -12,6 +12,7 @@ import calculate_chemical_potential_test as chemp
 import pylab 
 import time
 
+
 print
 print
 print ' = = = = = = = = = = = = = = = = = = = = = = = = = BEGIN OF THE GIBBS CALCULATIONS = = = = = = = = = = = = = = = = = = = = = = = = '
