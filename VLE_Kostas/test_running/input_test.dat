@@ -27,7 +27,7 @@ Crit_Pres                   46.40        48.81
 Molar_Mass                  16.04        30.07           
 
 # Accentric factor (dimensionless)
-Accentric_Factor            0.01          0.1        
+Accentric_Factor            0.01          0.09        
 
 # Composition of the feeding stream (z, dimensionless)
 Feed_Composition            0.2           0.8
