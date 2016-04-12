@@ -35,13 +35,13 @@ Feed_Composition            0.2           0.8
 # Binary interaction parameter
 # Component_i Component_j Value
 BinaryInteraction
-1      2       -0.0020
-2      1       -0.0020
+1      2       -0.0026
+2      1       -0.0026
 
 # Wilson equation parameters
 # Component_i Component_j Value
 Lamda_wilson 
 1      1       1
-1      2       0.25
-2      1       0.25
+1      2       1.097727
+2      1       0.638676
 2      2       1
