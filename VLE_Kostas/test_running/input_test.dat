@@ -15,7 +15,10 @@ System_Temperature         126.01      126.01         0.0
 System_Pressure              1.9162      1.9162           0.0
 
 # Chemical species in the mixture
-Components                 " CH4-methane "       "C2H6-ethane "            
+Components                 " CH4-methane "       "C2H6-ethane " 
+
+# Molar_fraction of the species 
+Molar_fraction               0.5922       0.4078           
 
 # Critical temperature in Kelvin
 Crit_Temp                  190.56       305.33            
