@@ -59,6 +59,9 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                 elif row[ 0 ] == 'Components':
                     Species = ReadingRows_String( row )
     #
+                elif row[ 0 ] == 'Molar_fraction':
+                    Molar_fraction = ReadingMolar_fraction( row )
+    #
                 elif row[ 0 ] == 'Accentric_Factor':
                     Accentric_Factor = ReadingRows_Float( row )
     #
@@ -74,7 +77,6 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
     #
                 elif row[ 0 ] == 'Lamda_wilson':
                     Lamda_wilson = ReadingLamda_wilson( reader )
-                    
     #
             else:
                 print 'Number_components was not defined in the FIRST line'
