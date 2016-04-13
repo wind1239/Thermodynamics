@@ -21,13 +21,13 @@ print
                                                   
 ThT.ReadSet_Global_Variables()  # reading the external file 
 
-Rconst = 8.314                  # Gas constant [J/(gmol.K)]
+#Rconst = 8.314                  # Gas constant [J/(gmol.K)]
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]          # setting up the size of the array/vector of the molar fractions
 print '  the initial molar fraction before reading from the input.dat is', MFrac
 
 
-MFrac[ 0 ] = 0.20; MFrac[ 1 ] = 0.8  ; # Vapour phase             # 2 components in 2 phases means an array of size 4
+#MFrac[ 0 ] = 0.5922; MFrac[ 1 ] = 0.4078  ; # Vapour phase       # 2 components in 2 phases means an array of size 4
                                                                   # concentration range from mole fractions of 0.2 - 1 of methane 
 #MFrac[ 2 ] = 0.30; MFrac[ 3 ] = 0.10; # Liquid phase             # the first 2 for the Vapour, the second 2 for the Liquid 
 print '  the MFrac = ', MFrac
@@ -38,16 +38,16 @@ chempot = [0. for i in range(ThT.NComp**2) ]                    # the size of th
 
 
 # = = = Claculate the condition that sais that Summations of MFrac = 1.0 = = = 
-MFrac_sum = 0
-for i in range(ThT.NComp*ThT.NPhase):
-    MFrac_sum = MFrac_sum + MFrac[ i ]
-print '  the MFrac_sum = ', MFrac_sum 
+#MFrac_sum = 0
+#for i in range(ThT.NComp*ThT.NPhase):
+#    MFrac_sum = MFrac_sum + MFrac[ i ]
+#print '  the MFrac_sum = ', MFrac_sum 
 
-if MFrac_sum == 1:
-   print'  we meet the condition so below we list the species'
-   pass
-else:
-   exit
+#if MFrac_sum == 1:
+#   print'  we meet the condition so below we list the species'
+#   pass
+#else:
+#   exit
 
 print
 print '  --------------------------------------------------------------------------------------------------------------'
@@ -85,7 +85,7 @@ for iphase in range(ThT.NPhase):
                #for iphase in range( ThT.NPhase ):
                print MFrac[ node_init:node_final ], node_init, node_final
                ChemPot[ node_init:node_final ] = chemp.Calc_ChemPot( iphase, MFrac[ node_init : node_final ] )   # This function will return the chemical potential of phase IPhase 
-               print ' the ChemPot = ', ChemPot[ node_init:node_final ]                                          # components and then it can be be operated to obtain the molar Gibbs energy.
+               print ' finally the ChemPot = ', ChemPot[ node_init:node_final ]                                          # components and then it can be be operated to obtain the molar Gibbs energy.
                print
             else:                                                       # this is for the rest of the elements of the square matrix of the aij
                print '  i am in the else case ' #' for the component ', ThT.Species[i],' with respect to' , ThT.Species[j]
