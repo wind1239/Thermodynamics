@@ -2,8 +2,8 @@ import numpy as np
 import math
 import sys
 import thermotools_test as ThT
-import calculate_EOS_PR_test as PR
-import calculate_ln_gamma_test as lng
+import EOS_PR_test as PR
+import ln_gamma_test as lng
 import pylab 
 import time
 
@@ -25,12 +25,15 @@ def BART2( icomp, jcomp ):
 
  
 def Q( MFrac ):
+    print ' MFrac = ', MFrac
     Q1 = 0
     #F = BART( MFrac )
     for i in range(ThT.NComp):
         for j in range(ThT.NComp):
+            #print ' j = ', j
             #Q1[ i ] = Q1[ i ] + MFrac[ i ] * MFrac[ j ] * F[ node ]     # Calculating the whole F first
-            Q1 = Q1 + MFrac[ i ] * MFrac[ j ] * BART2( i, j )            # Falculating F when we need 
+            Q1 = Q1 + MFrac[ i ] * MFrac[ j ] * BART2( i, j )            # Falculating F when we need
+            print ' ** the Q1 = ', Q1, ' the MFrac i and j are ', MFrac[ i ], MFrac[ j ],  
     print
     return Q1
 
@@ -45,6 +48,8 @@ def D( MFrac ):
 
 
 def AM( MFrac ):
+    print ' ** i am at the AM( MFrac ) function ', ThT.Rconst, ThT.T_System[ 0 ]
+    print ' ** ', Q( MFrac )
     AM1 = ( ThT.Rconst * ThT.T_System[ 0 ] ) * Q( MFrac ) * D( MFrac ) / ( 1 - D( MFrac ) )
     print
     return AM1
