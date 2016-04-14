@@ -11,7 +11,9 @@ import calculate_ln_gamma_test as lng
 import calculate_terms_test as terms
 
 
+
 def CALC_FI( iphase, frac ):
+    print ' AM( frac ) = ', terms.AM( frac )
     lnfi = [ 0. for i in range( ThT.NComp ) ]
     zmax , zmin = PR.Cubic_PR( ThT.T_System[0], ThT.P_System[0], terms.AM( frac ), terms.BM( frac ) )
 

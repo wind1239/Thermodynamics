@@ -28,8 +28,8 @@ print '  the initial molar fraction before reading from the input.dat is', MFrac
 
 
 #MFrac[ 0 ] = 0.5922; MFrac[ 1 ] = 0.4078  ; # Vapour phase       # 2 components in 2 phases means an array of size 4
-                                                                  # concentration range from mole fractions of 0.2 - 1 of methane 
-#MFrac[ 2 ] = 0.30; MFrac[ 3 ] = 0.10; # Liquid phase             # the first 2 for the Vapour, the second 2 for the Liquid 
+MFrac[ 0 ] = 0.4; MFrac[ 1 ] = 0.2  ;                                                                 # concentration range from mole fractions of 0.2 - 1 of methane 
+MFrac[ 2 ] = 0.30; MFrac[ 3 ] = 0.10; # Liquid phase             # the first 2 for the Vapour, the second 2 for the Liquid 
 print '  the MFrac = ', MFrac
 
 
@@ -38,16 +38,16 @@ chempot = [0. for i in range(ThT.NComp**2) ]                    # the size of th
 
 
 # = = = Claculate the condition that sais that Summations of MFrac = 1.0 = = = 
-#MFrac_sum = 0
-#for i in range(ThT.NComp*ThT.NPhase):
-#    MFrac_sum = MFrac_sum + MFrac[ i ]
-#print '  the MFrac_sum = ', MFrac_sum 
+MFrac_sum = 0
+for i in range(ThT.NComp*ThT.NPhase):
+    MFrac_sum = MFrac_sum + MFrac[ i ]
+print '  the MFrac_sum = ', MFrac_sum 
 
-#if MFrac_sum == 1:
-#   print'  we meet the condition so below we list the species'
-#   pass
-#else:
-#   exit
+if MFrac_sum == 1:
+   print'  we meet the condition so below we list the species'
+   pass
+else:
+   sys.exit('  over n out ' )
 
 print
 print '  --------------------------------------------------------------------------------------------------------------'
