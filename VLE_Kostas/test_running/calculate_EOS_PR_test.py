@@ -47,7 +47,9 @@ def Cubic_PR( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cu
     coeffs[ 0 ] = 1.
     coeffs[ 1 ] = - ( 1. - Big_B )
     coeffs[ 2 ] = Big_A - 2. * Big_B - 3. * Big_B**2
-    coeffs[ 3 ] = - ( Big_A * Big_B - Big_B**3 - Big_B**2 ); print coeffs, am, bm
+    coeffs[ 3 ] = - ( Big_A * Big_B - Big_B**3 - Big_B**2 )
+    #print ' * the coeffs from the polynomial are =', coeffs 
+    #print
     Z_root = np.roots( coeffs ) # Calculating the roots of the cubic eqn
 
 # Roots of a cubic equation can be either real or complex.  np.roots returns roots of format: a + bj, 
@@ -57,7 +59,7 @@ def Cubic_PR( T, P, am, bm ):#, Zvapour, Zliquid ): # Building up and solving cu
     Z_realroot = [smallvalue for i in range( 3 ) ] # Creating an array with very low values to receive the roots
 
     for i in range ( 3 ): 
-        if abs( Z_root.imag[ i ] ) <= 1.e-7: # Removing complex roots
+        if abs( Z_root.imag[ i ] ) <= 1.e-7:   # Removing complex roots
             Z_realroot[ i ] = Z_root.real[ i ] # Extracting the real
 
 
