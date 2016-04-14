@@ -20,7 +20,7 @@ def Calc_ChemPot( iphase, MFrac ):
     for icomp in range( ThT.NComp ):
          lnPXi[ icomp ] = math.log( ThT.P_System[ 0 ] * MFrac[ icomp ] )
          ChemPot[ icomp ] = ThT.Rconst * ThT.T_System[0] * ( lnphi[ icomp ] - lnPXi[ icomp ] )
-         print '  I am in the chempot function --- the chempot = ', ChemPot[ icomp ]
+         #print '  I am in the chempot function --- the chempot = ', ChemPot[ icomp ]
     return ChemPot
 
 '''
