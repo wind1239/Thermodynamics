@@ -11,10 +11,12 @@ import calculate_ln_gamma_test as lng
 import calculate_terms_test as terms
 
 
-
 def CALC_FI( iphase, frac ):
-    print ' AM( frac ) = ', terms.AM( frac )
     lnfi = [ 0. for i in range( ThT.NComp ) ]
+    print
+    print ' * TSystem, PSystem = ', ThT.T_System[0], ThT.P_System[0]
+    print ' * the terms.AM( frac ), terms.BM( frac ) = ', terms.AM( frac ), terms.BM( frac )
+    print 
     zmax , zmin = PR.Cubic_PR( ThT.T_System[0], ThT.P_System[0], terms.AM( frac ), terms.BM( frac ) )
 
     DD_KC = [ 0. for i in range( ThT.NComp ) ]
@@ -38,10 +40,10 @@ def CALC_FI( iphase, frac ):
         term2 = ( 1 / terms.BM( frac ) ) * q * ( z - 1 )
         term3 = ( 0.5 / np.sqrt(2) ) * ( ( 1/ terms.AM( frac ) ) * d * ThT.Rconst * ThT.T_System[ 0 ] ) - ( ( 1 / terms.BM( frac ) ) * q ) 
         term4 = np.log( ( z / terms.B( frac )  + 1 - np.sqrt(2) ) / ( z / terms.B( frac )  + 1 + np.sqrt(2) ) )
-        print ' term1 = ', term1, z, frac[ i ]
-        print ' term2 = ', term2
-        print ' term3 = ', term3
-        print ' term4 = ', term4
+        #print ' term1 = ', term1, z, frac[ i ]
+        #print ' term2 = ', term2
+        #print ' term3 = ', term3
+        #print ' term4 = ', term4
         lnfi[ i ] = term1 + term2 + term3 * term4
         print '    fi = ', lnfi[ i ], ' for the MFrac = ', frac[ i ] 
     
