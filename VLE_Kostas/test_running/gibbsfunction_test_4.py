@@ -9,8 +9,8 @@ import calculate_ln_gamma_test as lng
 import calculate_fi_test as fi
 import calculate_terms_test as terms
 import calculate_chemical_potential_test as chemp
-import pylab 
-import time
+import pylab as pl 
+import time 
 
 print
 print
@@ -27,9 +27,9 @@ MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]          # setting up th
 print '  the initial molar fraction before reading from the input.dat is', MFrac
 
 
-#MFrac[ 0 ] = 0.5922; MFrac[ 1 ] = 0.4078  ; # Vapour phase       # 2 components in 2 phases means an array of size 4
-MFrac[ 0 ] = 0.4; MFrac[ 1 ] = 0.2  ;                                                                 # concentration range from mole fractions of 0.2 - 1 of methane 
-MFrac[ 2 ] = 0.30; MFrac[ 3 ] = 0.10; # Liquid phase             # the first 2 for the Vapour, the second 2 for the Liquid 
+MFrac[ 0 ] = 0.5922; MFrac[ 1 ] = 0.4078  ; # Vapour phase       # 2 components in 2 phases means an array of size 4
+#MFrac[ 0 ] = 0.4; MFrac[ 1 ] = 0.2  ;                                                                 # concentration range from mole fractions of 0.2 - 1 of methane 
+MFrac[ 2 ] = 0.55; MFrac[ 3 ] = 0.45; # Liquid phase             # the first 2 for the Vapour, the second 2 for the Liquid 
 print '  the MFrac = ', MFrac
 
 
@@ -38,16 +38,16 @@ chempot = [0. for i in range(ThT.NComp**2) ]                    # the size of th
 
 
 # = = = Claculate the condition that sais that Summations of MFrac = 1.0 = = = 
-MFrac_sum = 0
-for i in range(ThT.NComp*ThT.NPhase):
-    MFrac_sum = MFrac_sum + MFrac[ i ]
-print '  the MFrac_sum = ', MFrac_sum 
+#MFrac_sum = 0
+#for i in range(ThT.NComp*ThT.NPhase):
+#    MFrac_sum = MFrac_sum + MFrac[ i ]
+#print '  the MFrac_sum = ', MFrac_sum 
 
-if MFrac_sum == 1:
-   print'  we meet the condition so below we list the species'
-   pass
-else:
-   sys.exit('  over n out ' )
+#if MFrac_sum == 1:
+#   print'  we meet the condition so below we list the species'
+#   pass
+#else:
+#   sys.exit('  over n out ' )
 
 print
 print '  --------------------------------------------------------------------------------------------------------------'
@@ -85,7 +85,7 @@ for iphase in range(ThT.NPhase):
                #for iphase in range( ThT.NPhase ):
                print MFrac[ node_init:node_final ], node_init, node_final
                ChemPot[ node_init:node_final ] = chemp.Calc_ChemPot( iphase, MFrac[ node_init : node_final ] )   # This function will return the chemical potential of phase IPhase 
-               print ' finally the ChemPot = ', ChemPot[ node_init:node_final ]                                          # components and then it can be be operated to obtain the molar Gibbs energy.
+               print '  Finally the ChemPot = ', ChemPot[ node_init:node_final ]                                          # components and then it can be be operated to obtain the molar Gibbs energy.
                print
             else:                                                       # this is for the rest of the elements of the square matrix of the aij
                print '  i am in the else case ' #' for the component ', ThT.Species[i],' with respect to' , ThT.Species[j]
@@ -113,7 +113,46 @@ for icomp in range( ThT.NComp ):
     print ' the sumGibbs = ', sumGibbs , ' and the sumfeed = ', sumfeed 
 
 MolarGibbs = sumGibbs + sumfeed
-print ' the Molar Gibbs = ', MolarGibbs    
+print ' the Molar Gibbs = ', MolarGibbs   
+
+############################################
+s1 = np.linspace(0,1,100)
+s2 = []
+for x in s1:
+    s2.append(1.0-x)
+
+s2 = np.array(s2)
+print ' the species 1 = ', s1
+print
+print ' the species 2 = ', s2
+
+#def sumGibbs(Vals,Vals2):
+#    return sumGibbs + ( PhaseFrac[ Lphase ] * MFrac[ nodeL ]  * ( ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) - ( ChemPot[ nodeLfinal ]  - ChemPot[ nodeVfinal ] ) ) + \
+#                     PhaseFrac[ Lphase ] * ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) )
+
+Gval = []
+
+for i in range (len(s1)):
+    Gval.append(sumGibbs(s1[i],s2[i]))
+    
+pl.plot(s1,Gval)
+
+
+# make axis labels
+pl.xlabel('x axis - molar fraction/components')
+pl.ylabel('y axis - Gibbs')
+
+# set axis limits
+#pl.xlim(0.0, 1.0)
+#pl.ylim(0.0, 30.)
+
+pl.grid()
+
+# show the plot on the screen
+pl.show() 
+
+
+
 
       
             
