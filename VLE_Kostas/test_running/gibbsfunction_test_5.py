@@ -23,7 +23,7 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(0.25,0.35,100)
+c1 = np.linspace(0.25,0.35,10)
 c2 = []
 for x in c1:
     c2.append(1.0-x)
@@ -93,9 +93,10 @@ for k in range( nk ):
         finalGibbsk[k] = - MolarGibbsk[k]
         
 
-print ' the Molar Gibbs = ', finalGibbsk 
+#print ' the Molar Gibbs = ', finalGibbsk 
 print ' Gibbs sorted = ', np.sort(finalGibbsk)
-
+print
+'''
 gmin = min(finalGibbsk)
 print ' Gmin = ', gmin
 print
@@ -107,8 +108,25 @@ c2min = min(c2)
 print ' c2 min = ', c2min
 print ' c2 sorted = ', np.sort(c2)
 print
+'''
 
+#print zip( c1, c2, finalGibbsk )
+#print
+minvalold = finalGibbsk
+minvaln = 0
+for i,(c1, c2, finalGibbsk) in enumerate(zip(c1, c2, finalGibbsk)):
+    if minvaln < minvalold :
+       print ' the min is ', finalGibbsk , i
+    else : 
+       minvalold = minvaln
 
+  
+print ' ' , i, c1, c2, finalGibbsk
+print
+
+ 
+
+'''
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 
@@ -125,7 +143,7 @@ pl.plot(c1min, gmin, 'o' )
 pl.legend( [component1, component2], ('component1', 'component2') )
 pl.grid()
 pl.show() 
-
+'''
 
 
 
