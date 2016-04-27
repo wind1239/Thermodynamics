@@ -23,8 +23,15 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(0.8971, 0.9999, 10)
-c2 = np.linspace(0.53298, 0.6514, 10 )
+#c1 = np.linspace(0.8971, 0.9999, 10)    # 191.62 kPa = 1.9162, 126.01 K
+#c2 = np.linspace(0.53298, 0.6514, 10 )
+
+#c1 = np.linspace(0.89397, 0.9999, 10)   # 148.12 kPa = 1.4812, 130.02 K
+#c2 = np.linspace(0.31743, 0.38797, 10 )
+
+c1 = np.linspace(0.89199, 0.9999, 10)    # 188.70 kPa = 1.8870, 199.98 K
+c2 = np.linspace(0.30312, 0.37048, 10 )
+
 #for x in c1:
 #    c2.append(1.0-x)
 
@@ -98,8 +105,8 @@ print ' Gibbs sorted = ', np.sort(finalGibbsk)
 print
 
 m = [ 0. for k in range( nk ) ]
-m[ i ] = np.argsort(finalGibbsk)
-print ' m[ i ] = ', m[ i ] 
+m = np.argsort(finalGibbsk)
+#print ' m[ i ] = ', m 
 
 s1min = [ 0. for k in range( nk ) ]
 s2min = [ 0. for k in range( nk ) ]
@@ -108,8 +115,8 @@ for i in range( nk ):
     GMIN[ i ] =  finalGibbsk[ m[i] ]
     s1min[ i ] = c1[ m[ i ] ]
     s2min[ i ] = c2[ m[ i ] ]
-print s1min[ i ]
-print s2min[ i ] 
+print ' the c1 = ', s1min[ i ], ' the c2 = ', s2min[ i ], ' for the Gibss min = ', GMIN[ i ]
+print  
 
 
 
@@ -149,19 +156,18 @@ print ' ' , i, c1, c2, finalGibbsk
 print
 '''
 
-'''
+
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 # make axis labels
 pl.xlabel('x axis - molar fraction/components')
 pl.ylabel('y axis - Gibbs')
-component1 = pl.plot(c1,finalGibbsk, '-' )
-component2 = pl.plot(c2,finalGibbsk, '--')
-pl.plot(c1min, gmin, 'o' )
+component1 = pl.plot(s1min, finalGibbsk, '-' )
+component2 = pl.plot(s2min, finalGibbsk, '--')
+pl.plot(s1min[ i ], s1min[ i ], GMIN[ i ], 'o' )
 # set axis limits
 #pl.xlim(0.0, 1.0)
 #pl.ylim(0.0, 30.)
 pl.legend( [component1, component2], ('component1', 'component2') )
 pl.grid()
 pl.show() 
-'''
