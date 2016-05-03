@@ -156,13 +156,14 @@ print ' ' , i, c1, c2, finalGibbsk
 print
 '''
 
+
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 # make axis labels
 pl.xlabel('x axis - molar fraction/components')
 pl.ylabel('y axis - Gibbs')
-pl.plot(s1min, s2min, finalGibbsk, '-', label = "Comp1" )
-#pl.plot(c2, finalGibbsk, 'x', label = "Comp2")
+pl.plot(s1min, 1 - s1min, finalGibbsk, '-', label = "Comp1" )
+pl.plot(s2min, 1 - s2min, finalGibbsk, '*', label = "Comp2")
 pl.plot(c1, c2, GMIN[ i ], 'o' )
 # set axis limits
 #pl.xlim(0.0, 1.0)
