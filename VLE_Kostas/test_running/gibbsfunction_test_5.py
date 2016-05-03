@@ -138,8 +138,6 @@ print ' - - - - - - - - - - - - - - - '
 print
 '''
 
-
-
 '''
 #print zip( c1, c2, finalGibbsk )
 #print
