@@ -156,7 +156,6 @@ print ' ' , i, c1, c2, finalGibbsk
 print
 '''
 
-
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 # make axis labels
