@@ -116,21 +116,44 @@ print ' Gibbs sorted = ', np.sort(finalGibbsk)
 print ' Gibbs argsort : ' , np.argsort(finalGibbsk), len(np.argsort(finalGibbsk))
 print
 
-
+'''
 m = [ 0. for k in range( nk ) ]
 m = np.argsort(finalGibbsk)
-#print ' m[ i ] = ', m 
+print ' m = ', m 
 
 s1min = [ 0. for k in range( nk ) ]
 s2min = [ 0. for k in range( nk ) ]
 GMIN  = [ 0. for k in range( nk ) ]
 for i in range( nk ):
-    GMIN[ i ] =  finalGibbsk[ m[i] ]
-    #print GMIN[ i ]
+    #GMIN =  np.argsort( finalGibbsk[ m[i] ] )
     s1min = c1[ m[ i ] ]; print ' c1 ', c1[ m[ i ] ]
-    s2min = c2[ m[ i ] ]; print ' c2 ', c2[ m[ i ] ]
-print ' the c1 = ', s1min, ' the c2 = ', s2min, ' for the Gibss min = ', GMIN[ i ]
+    s2min = c2[ m[ i ] ]; print ' c2 ', c2[ m[ i ] ]; print ' ', m[ i ]; print ' ',  m; print ' ' # np.argmax(GMIN[ i ]) 
+print ' for the m = ', m,' the c1 = ', s1min, ' the c2 = ', s2min, ' for the Gibss min = ', GMIN
 print 
+'''
+
+#list=[1.1412, 4.3453, 5.8709, 0.1314]
+#print ' the list = ', list.index(min(list)) # Will give you first index of minimum.
+
+#print ' - - - - - - - - - - - - - - - - - - - - - - '
+#my_indexed_list = zip(list, range(len(list)))
+#print ' my_indexed_list = ', my_indexed_list
+
+#min_value, min_index = min(my_indexed_list); print ' min_value, min_index = ', min_value, min_index 
+#max_value, max_index = max(my_indexed_list); print ' max_value, max_index = ', max_value, max_index
+#print ' - - - - - - - - - - - - - - - - - - - - - - '
+
+
+
+print ' - - - - - - - - - - - - - - - - - - - - - - '
+my_indexed_gibbs_list = zip(np.argsort(finalGibbsk), range(len(np.argsort(finalGibbsk))))
+print ' my_indexed_gibbs_list = ', my_indexed_gibbs_list
+
+min_value, min_index = min(my_indexed_gibbs_list); print ' min_value, min_index = ', min_value, min_index ; print ' for the c1 = ', c1[ min_value ], min_index
+#max_value, max_index = max(my_indexed_list); print ' max_value, max_index = ', max_value, max_index ; print ' for the c1 = ', c1[ max_value ], max_index
+#min_value, min_index = min(my_indexed_gibbs_list); print ' min_value, min_index = ', min_value, min_index ; print ' for the c2 = ', c2[ min_value ], min_index
+
+print ' - - - - - - - - - - - - - - - - - - - - - - '
 
 
 
@@ -153,6 +176,8 @@ pl.grid()
 pl.show() 
 
 
+
+
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 
@@ -170,6 +195,7 @@ pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
 '''
+
 
 
 
