@@ -10,6 +10,8 @@ import calculate_fi_test as fi
 import calculate_terms_test as terms
 import calculate_chemical_potential_test as chemp
 import pylab as pl 
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
 import time 
 
 print
@@ -23,13 +25,13 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(0.8971, 0.9999, 5)
-#c2 = []
-c2 = np.linspace(0.53298, 0.6514, 5 )
-#for x in c1:
-#    c2.append(1.0-x)
+c1 = np.linspace(0.8971, 0.9999, 10) #0.8971, 0.9999, 10
+c2 = []
+#c2 = np.linspace(0.53298, 0.6514, 10 ) 0.53298, 0.6514, 10
+for x in c1:
+    c2.append(1.0-x)
 
-#c2 = np.array(c2)
+c2 = np.array(c2)
 
 print ' component 1 = ', c1
 print
@@ -95,7 +97,7 @@ for k in range( nk ):
         
 
 #print ' the Molar Gibbs = ', finalGibbsk 
-'''
+
 gmin = min(finalGibbsk)
 print ' Gmin = ', gmin
 print
@@ -107,13 +109,14 @@ c2min = min(c2)
 print ' c2 min = ', c2min
 print ' c2 sorted = ', np.sort(c2)
 print
-'''
+
 
 #print ' the Molar Gibbs = ', finalGibbsk 
 print ' Gibbs sorted = ', np.sort(finalGibbsk)
 #print ' the argsort command ' , np.argsort(finalGibbsk), len(np.argsort(finalGibbsk))
 print
 
+'''
 m = [ 0. for k in range( nk ) ]
 m = np.argsort(finalGibbsk)
 #print ' m[ i ] = ', m 
@@ -147,8 +150,8 @@ pl.plot(s1min, gmin, 'o' )
 pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
-
 '''
+
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 
@@ -165,7 +168,7 @@ pl.plot(c1min, gmin, 'o' )
 pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
-'''
+
 
 
 
