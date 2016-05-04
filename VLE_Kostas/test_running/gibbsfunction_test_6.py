@@ -25,9 +25,9 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(0.8971, 0.9999, 10) #0.8971, 0.9999, 10
+c1 = np.linspace(0.8971, 0.9999, 10)   #0.8971, 0.9999, 10
 c2 = []
-#c2 = np.linspace(0.53298, 0.6514, 10 ) 0.53298, 0.6514, 10
+#c2 = np.linspace(0.53298, 0.6514, 10 ) #0.53298, 0.6514, 10
 for x in c1:
     c2.append(1.0-x)
 
