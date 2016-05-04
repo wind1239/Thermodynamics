@@ -25,9 +25,9 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(0.8971, 0.9999, 10)   #0.8971, 0.9999, 10
+c1 = np.linspace(0.7476, 0.9999, 10)   # + - 25%
 c2 = []
-#c2 = np.linspace(0.53298, 0.6514, 10 ) #0.53298, 0.6514, 10
+#c2 = np.linspace(0.53298, 0.6514, 10 ) 
 for x in c1:
     c2.append(1.0-x)
 
@@ -103,20 +103,20 @@ print ' Gmin = ', gmin
 print
 c1min = min(c1) 
 print ' c1 min = ', c1min, 
-print ' c1 sorted = ', np.sort(c1)
+print ' c1 sorted = ', np.sort(c1), np.argsort(c1)
 print 
 c2min = min(c2)
 print ' c2 min = ', c2min
-print ' c2 sorted = ', np.sort(c2)
+print ' c2 sorted = ', np.sort(c2), np.argsort(c2)
 print
 
 
 #print ' the Molar Gibbs = ', finalGibbsk 
 print ' Gibbs sorted = ', np.sort(finalGibbsk)
-#print ' the argsort command ' , np.argsort(finalGibbsk), len(np.argsort(finalGibbsk))
+print ' Gibbs argsort : ' , np.argsort(finalGibbsk), len(np.argsort(finalGibbsk))
 print
 
-'''
+
 m = [ 0. for k in range( nk ) ]
 m = np.argsort(finalGibbsk)
 #print ' m[ i ] = ', m 
@@ -126,14 +126,15 @@ s2min = [ 0. for k in range( nk ) ]
 GMIN  = [ 0. for k in range( nk ) ]
 for i in range( nk ):
     GMIN[ i ] =  finalGibbsk[ m[i] ]
-    s1min = c1[ m[ i ] ]
-    s2min = c2[ m[ i ] ]
+    #print GMIN[ i ]
+    s1min = c1[ m[ i ] ]; print ' c1 ', c1[ m[ i ] ]
+    s2min = c2[ m[ i ] ]; print ' c2 ', c2[ m[ i ] ]
 print ' the c1 = ', s1min, ' the c2 = ', s2min, ' for the Gibss min = ', GMIN[ i ]
 print 
 
 
 
-
+'''
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 
@@ -150,7 +151,7 @@ pl.plot(s1min, gmin, 'o' )
 pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
-'''
+
 
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
@@ -168,7 +169,7 @@ pl.plot(c1min, gmin, 'o' )
 pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
-
+'''
 
 
 
