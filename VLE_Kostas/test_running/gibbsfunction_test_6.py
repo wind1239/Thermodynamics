@@ -207,6 +207,7 @@ pl.grid()
 pl.show() 
 '''
 
+'''
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 s1min2, s2min2, gmin2 = axes3d.get_test_data(0.05)
@@ -223,7 +224,21 @@ ax.set_zlabel('Gibbs')
 ax.set_zlim(-10000, 10000)
 
 plt.show()
+'''
 
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+s1min2, s2min2, gmin2 = axes3d.get_test_data(0.05)
+ax.plot_wireframe(s1min2, s2min2, gmin2)
+
+ax.set_xlabel('s1min2 - component 1 ')
+ax.set_xlim(0, 1)
+ax.set_ylabel('s2min2 - component 2')
+ax.set_ylim(0, 1)
+ax.set_zlabel('Gibbs')
+ax.set_zlim(-10000, 10000)
+
+plt.show()
 
 
 
