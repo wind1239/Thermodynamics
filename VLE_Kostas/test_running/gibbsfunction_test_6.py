@@ -27,8 +27,12 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
 c1 = np.linspace(0.7476, 0.9999, 10)   # + - 25%
+#c1 = np.linspace(0.7478, 0.9999, 10)
+#c1 = np.linspace(0.7487, 0.9999, 10)
+#c1 = np.linspace(0.7499, 0.9999, 10)
+
 c2 = []
-#c2 = np.linspace(0.53298, 0.6514, 10 ) 
+#c2 = np.linspace(0.5891, 0.9818, 5 ) 
 for x in c1:
     c2.append(1.0-x)
 
@@ -104,11 +108,11 @@ print ' Gmin = ', gmin
 print
 c1min = min(c1) 
 print ' c1 min = ', c1min, 
-print ' c1 sorted = ', np.sort(c1), np.argsort(c1)
+print ' c1 sorted = ', np.sort(c1), np.argsort(c1), c1[np.argsort(0)]
 print 
 c2min = min(c2)
 print ' c2 min = ', c2min
-print ' c2 sorted = ', np.sort(c2), np.argsort(c2)
+print ' c2 sorted = ', np.sort(c2), np.argsort(c2), c2[np.argsort(0)] 
 print
 
 
@@ -137,7 +141,7 @@ print
 
 
 s1min2 = c1[m[0]] ; s2min2 = c2[m[0]] ; gmin2 = finalGibbsk[m[0]]
-print 'c1 and c2:', s1min2, s2min2, 'for min Gibbs of:', gmin2
+print ' '; print ' c1 and c2:', s1min2, s2min2, 'for min Gibbs of:', gmin2
 
 
 
@@ -187,7 +191,7 @@ pl.show()
 '''
 
 
-'''
+
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 
@@ -205,7 +209,8 @@ pl.plot(s2min2, gmin2, 'o' )
 pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
-'''
+
+
 
 '''
 fig = plt.figure()
@@ -224,7 +229,7 @@ ax.set_zlabel('Gibbs')
 ax.set_zlim(-10000, 10000)
 
 plt.show()
-'''
+
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
@@ -239,7 +244,7 @@ ax.set_zlabel('Gibbs')
 ax.set_zlim(-10000, 10000)
 
 plt.show()
-
+'''
 
 
 
