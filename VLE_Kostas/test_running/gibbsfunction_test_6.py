@@ -26,7 +26,7 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(0.7476, 0.9999, 10)   # + - 25%
+c1 = np.linspace(0.74805, 0.99999, 10)   # + - 25%
 #c1 = np.linspace(0.7478, 0.9999, 10)
 #c1 = np.linspace(0.7487, 0.9999, 10)
 #c1 = np.linspace(0.7499, 0.9999, 10)
@@ -102,7 +102,7 @@ for k in range( nk ):
         
 
 #print ' the Molar Gibbs = ', finalGibbsk 
-
+'''
 gmin = min(finalGibbsk)
 print ' Gmin = ', gmin
 print
@@ -120,7 +120,7 @@ print
 print ' Gibbs sorted = ', np.sort(finalGibbsk)
 print ' Gibbs argsort : ' , np.argsort(finalGibbsk), len(np.argsort(finalGibbsk))
 print
-
+'''
 
 m = [ 0. for k in range( nk ) ]
 m = np.argsort(finalGibbsk)
@@ -142,6 +142,15 @@ print
 
 s1min2 = c1[m[0]] ; s2min2 = c2[m[0]] ; gmin2 = finalGibbsk[m[0]]
 print ' '; print ' c1 and c2:', s1min2, s2min2, 'for min Gibbs of:', gmin2
+
+exp_value_c1 = raw_input(' exp_value_c1 ? ')
+exp_value_c1 = float(exp_value_c1)
+
+exp_value_c2 = raw_input(' exp_value_c2 ? ')
+exp_value_c2 = float(exp_value_c2)
+ 
+print ' error 1 = ', ( exp_value_c1 - c1[m[0]] / exp_value_c1 ) * 100 , ' % '
+print ' error 2 = ', ( exp_value_c2 - c2[m[0]] / exp_value_c2 ) * 100 , ' % '
 
 
 
@@ -191,7 +200,7 @@ pl.show()
 '''
 
 
-
+'''
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 
@@ -209,27 +218,10 @@ pl.plot(s2min2, gmin2, 'o' )
 pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
-
-
+'''
 
 '''
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-s1min2, s2min2, gmin2 = axes3d.get_test_data(0.05)
-ax.plot_surface(s1min2, s2min2, gmin2, rstride=8, cstride=8, alpha=0.3)
-cset = ax.contour(s1min2, s2min2, gmin2, zdir='z', offset=-100, cmap=cm.coolwarm)
-cset = ax.contour(s1min2, s2min2, gmin2, zdir='x', offset=-40, cmap=cm.coolwarm)
-cset = ax.contour(s1min2, s2min2, gmin2, zdir='y', offset=40, cmap=cm.coolwarm)
-
-ax.set_xlabel('s1min2 - component 1 ')
-ax.set_xlim(0, 1)
-ax.set_ylabel('s2min2 - component 2')
-ax.set_ylim(0, 1)
-ax.set_zlabel('Gibbs')
-ax.set_zlim(-10000, 10000)
-
-plt.show()
-
+#s1min2, s2min2, gmin2
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
