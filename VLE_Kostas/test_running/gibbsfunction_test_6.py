@@ -10,8 +10,9 @@ import calculate_fi_test as fi
 import calculate_terms_test as terms
 import calculate_chemical_potential_test as chemp
 import pylab as pl 
-from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
+from matplotlib import cm
 import time 
 
 print
@@ -116,11 +117,12 @@ print ' Gibbs sorted = ', np.sort(finalGibbsk)
 print ' Gibbs argsort : ' , np.argsort(finalGibbsk), len(np.argsort(finalGibbsk))
 print
 
-'''
+
 m = [ 0. for k in range( nk ) ]
 m = np.argsort(finalGibbsk)
 print ' m = ', m 
 
+'''
 s1min = [ 0. for k in range( nk ) ]
 s2min = [ 0. for k in range( nk ) ]
 GMIN  = [ 0. for k in range( nk ) ]
@@ -132,6 +134,14 @@ print ' for the m = ', m,' the c1 = ', s1min, ' the c2 = ', s2min, ' for the Gib
 print 
 '''
 
+
+
+s1min2 = c1[m[0]] ; s2min2 = c2[m[0]] ; gmin2 = finalGibbsk[m[0]]
+print 'c1 and c2:', s1min2, s2min2, 'for min Gibbs of:', gmin2
+
+
+
+'''
 #list=[1.1412, 4.3453, 5.8709, 0.1314]
 #print ' the list = ', list.index(min(list)) # Will give you first index of minimum.
 
@@ -154,7 +164,7 @@ min_value, min_index = min(my_indexed_gibbs_list); print ' min_value, min_index 
 #min_value, min_index = min(my_indexed_gibbs_list); print ' min_value, min_index = ', min_value, min_index ; print ' for the c2 = ', c2[ min_value ], min_index
 
 print ' - - - - - - - - - - - - - - - - - - - - - - '
-
+'''
 
 
 '''
@@ -174,10 +184,10 @@ pl.plot(s1min, gmin, 'o' )
 pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
+'''
 
 
-
-
+'''
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 
@@ -187,7 +197,8 @@ pl.ylabel('y axis - Gibbs')
 
 component1 = pl.plot(c1,finalGibbsk, '-', label = 'comp1' )
 component2 = pl.plot(c2,finalGibbsk, '--', label = 'comp2')
-pl.plot(c1min, gmin, 'o' )
+pl.plot(s1min2, gmin2, 'o' )
+pl.plot(s2min2, gmin2, 'o' )
 # set axis limits
 #pl.xlim(0.0, 1.0)
 #pl.ylim(0.0, 30.)
@@ -195,6 +206,24 @@ pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
 '''
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+s1min2, s2min2, gmin2 = axes3d.get_test_data(0.05)
+ax.plot_surface(s1min2, s2min2, gmin2, rstride=8, cstride=8, alpha=0.3)
+cset = ax.contour(s1min2, s2min2, gmin2, zdir='z', offset=-100, cmap=cm.coolwarm)
+cset = ax.contour(s1min2, s2min2, gmin2, zdir='x', offset=-40, cmap=cm.coolwarm)
+cset = ax.contour(s1min2, s2min2, gmin2, zdir='y', offset=40, cmap=cm.coolwarm)
+
+ax.set_xlabel('s1min2 - component 1 ')
+ax.set_xlim(0, 1)
+ax.set_ylabel('s2min2 - component 2')
+ax.set_ylim(0, 1)
+ax.set_zlabel('Gibbs')
+ax.set_zlim(-10000, 10000)
+
+plt.show()
+
 
 
 
