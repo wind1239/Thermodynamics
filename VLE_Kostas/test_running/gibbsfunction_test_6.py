@@ -26,7 +26,7 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(0.74805, 0.99999, 10)   # + - 25%
+c1 = np.linspace(0.74535, 0.9999, 100)   # + - 25%
 #c1 = np.linspace(0.7478, 0.9999, 10)
 #c1 = np.linspace(0.7487, 0.9999, 10)
 #c1 = np.linspace(0.7499, 0.9999, 10)
@@ -143,6 +143,9 @@ print
 s1min2 = c1[m[0]] ; s2min2 = c2[m[0]] ; gmin2 = finalGibbsk[m[0]]
 print ' '; print ' c1 and c2:', s1min2, s2min2, 'for min Gibbs of:', gmin2
 
+
+
+'''
 exp_value_c1 = raw_input(' exp_value_c1 ? ')
 exp_value_c1 = float(exp_value_c1)
 
@@ -151,6 +154,7 @@ exp_value_c2 = float(exp_value_c2)
  
 print ' error 1 = ', ( exp_value_c1 - c1[m[0]] / exp_value_c1 ) * 100 , ' % '
 print ' error 2 = ', ( exp_value_c2 - c2[m[0]] / exp_value_c2 ) * 100 , ' % '
+'''
 
 
 
@@ -200,7 +204,8 @@ pl.show()
 '''
 
 
-'''
+
+
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 
@@ -218,26 +223,26 @@ pl.plot(s2min2, gmin2, 'o' )
 pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
-'''
+
+
 
 '''
-#s1min2, s2min2, gmin2
-
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-s1min2, s2min2, gmin2 = axes3d.get_test_data(0.05)
-ax.plot_wireframe(s1min2, s2min2, gmin2)
 
-ax.set_xlabel('s1min2 - component 1 ')
-ax.set_xlim(0, 1)
-ax.set_ylabel('s2min2 - component 2')
-ax.set_ylim(0, 1)
+c1 =[0.9146, 0.887, 0.7811, 0.888, 0.887]
+c2 =[0.0854, 0.11, 0.218, 0.111, 0.112]
+G  =[-1153.01, -663.84, -610.50, -330.41, -330.40]
+
+
+ax.scatter(c1, c2, G, c='r', marker='o')
+
+ax.set_xlabel('c1')
+ax.set_ylabel('c2')
 ax.set_zlabel('Gibbs')
-ax.set_zlim(-10000, 10000)
 
 plt.show()
 '''
-
 
 
       
