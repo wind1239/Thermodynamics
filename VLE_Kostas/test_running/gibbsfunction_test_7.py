@@ -26,7 +26,7 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(10e-5, 0.9999, 5)   # + - 25%
+c1 = np.linspace(0.7478, 0.9999, 10)   # + - 25%
 #c1 = np.linspace(0.7478, 0.9999, 10)
 #c1 = np.linspace(0.7487, 0.9999, 10)
 #c1 = np.linspace(0.7499, 0.9999, 10)
@@ -38,21 +38,22 @@ for x in c1:
 
 c2 = np.array(c2)
 
-print ' component 1 = ', c1
-print
-print ' component 2 = ', c2
-print
+#print ' component 1 = ', c1
+#print
+#print ' component 2 = ', c2
+#print
 
 nk = len(c1)
 
 c1b = [ 0. for k in range( nk*nk ) ] #; print ' c1b = ', c1b
 c2b = [ 0. for k in range( nk*nk ) ] #; print ' c1b = ', c1b
+gmix = [ 0. for k in range( nk*nk ) ]
 
 for i in range( nk ):
     for j in range( nk ):
         node = i * nk + j
         c1b[ node ] = c1[ i ] #; print c1b[ node ]  
-        c2b[ node ] = c2[ i ] #; print c2b[ node ]
+        c2b[ node ] = c2[ j ] #; print c2b[ node ]
 
 Gibbsk = [ 0. for k in range( nk ) ]
 sumfeedk = [ 0. for k in range( nk ) ]
@@ -60,38 +61,44 @@ MolarGibbsk = [ 0. for k in range( nk ) ]
 finalGibbsk = [ 0. for k in range( nk ) ]
 gmix = [ 0. for k in range( nk*nk ) ]
 
-for k in range( nk ):
-    MFrac = [ 0.01 for i in range( ThT.NComp * ThT.NPhase ) ]
-    
-    MFrac[0] = c1[k];     #print ' the MFrac[0] = ', MFrac[0]
-    MFrac[1] = 1 - c1[k]; #print ' the MFrac[1] = ', MFrac[1]
-    MFrac[2] = c2[k];     #print ' the MFrac[2] = ', MFrac[2]
-    MFrac[3] = 1 - c2[k]; #print ' the MFrac[3] = ', MFrac[3]
-    #print ' ------------------------------- '
-    
-    for iphase in range(ThT.NPhase):
-        if iphase == 0:
-           print
-           print '  you are at the Vapor phase '
-        
-           chempot = [0. for i in range(ThT.NComp**2) ]
-           for i in range(ThT.NComp):
-               for j in range(ThT.NComp):
-                   node = i * ThT.NComp + j
-                   node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp; 
-                   #print ' you are at the node ', node_init , node_final            
-                   ChemPot = [0. for z in range(ThT.NComp * ThT.NPhase) ]  # Set up an array of chemical potential for each component at each phase (dimension NComp * NPhase )
-                   #print ' ChemPot = ', ChemPot
-                   if i == j: 
-                      print '  for the component ', ThT.Species[i]
-                      print MFrac[ node_init:node_final ], node_init, node_final
-                      ChemPot[ node_init:node_final ] = chemp.Calc_ChemPot( iphase, MFrac[ node_init : node_final ] )   
-                   else:                                                       
-                      print '  i am in the else case ' #' for the component ', ThT.Species[i],' with respect to' , ThT.Species[j]
-                      ChemPot[ node_init:node_final ] = chemp.Calc_ChemPot( iphase, MFrac[ node_init : node_final ] )
-                   print 
-                   time.sleep(0)   
+#for k in range( nk ):
+MFrac = [ 0.01 for i in range( ThT.NComp * ThT.NPhase ) ]
 
+for iphase in range(ThT.NPhase):
+    if iphase == 0:
+       print
+       print ' you are at the Vapor phase '
+    else:  
+       print
+       print ' you are at the Liquid phase ' 
+        
+    chempot = [0. for i in range(ThT.NComp**2) ]
+    #print chempot
+    
+    for i in range(nk):
+        for j in range(nk):
+            node = i * nk + j
+            for k in range(ThT.NComp):
+                MFrac[0] = c1b[node];     #print ' the MFrac[0] = ', MFrac[0]
+                MFrac[1] = 1 - c1b[node]; #print ' the MFrac[1] = ', MFrac[1]
+                MFrac[2] = c2b[node];     #print ' the MFrac[2] = ', MFrac[2]
+                MFrac[3] = 1 - c2b[node]; #print ' the MFrac[3] = ', MFrac[3]
+                #print ' ------------------------------- '
+
+                node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp;
+                print 
+                print ' you are at the node ', node, node_init , node_final            
+                ChemPot = [0. for z in range(ThT.NComp * ThT.NPhase) ]  # Set up an array of chemical potential for each component at each phase (dimension NComp * NPhase )
+                print ' ChemPot = ', ChemPot
+                if i == j: 
+                   print '  for the component ', i
+                   #print MFrac[ node_init:node_final ], node_init, node_final
+                   ChemPot[ node_init:node_final ] = chemp.Calc_ChemPot( iphase, MFrac[ node_init : node_final ] )   
+                else:                                                       
+                   print '  i am in the else case for the component ', i ,' with respect to' , j
+                   ChemPot[ node_init:node_final ] = chemp.Calc_ChemPot( iphase, MFrac[ node_init : node_final ] )
+                   print 
+                   #time.sleep(0)   
 
     """ Calculating Gibbs molar """
     PhaseFrac = [0. for i in range(ThT.NPhase) ] 
@@ -102,19 +109,18 @@ for k in range( nk ):
         Vphase = 0 ; Lphase = 1 
         nodeV = Vphase * ThT.NComp + icomp ; nodeL = Lphase * ThT.NComp + icomp             # a clever way to describe the nodes for Vapour and liquid phases
         nodeVfinal = Vphase * ThT.NComp + ThT.NComp - 1; nodeLfinal = Lphase * ThT.NComp + ThT.NComp - 1; 
-        if icomp <= ThT.NComp - 2:
-           Gibbsk[k] = sumGibbs + ( PhaseFrac[ Lphase ] * MFrac[ nodeL ]  * ( ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) - ( ChemPot[ nodeLfinal ]  - ChemPot[ nodeVfinal ] ) ) + \
+        if icomp <= nk - 2:
+            Gibbsk[k] = sumGibbs + ( PhaseFrac[ Lphase ] * MFrac[ nodeL ]  * ( ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) - ( ChemPot[ nodeLfinal ]  - ChemPot[ nodeVfinal ] ) ) + \
                      PhaseFrac[ Lphase ] * ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) )
-           sumfeedk[k] = sumfeed + ThT.Z_Feed[icomp] * ChemPot[ nodeV ]
-        #print ' the sumGibbs = ', Gibbsk[k] , ' and the sumfeed = ', sumfeed 
+            sumfeedk[k] = sumfeed + ThT.Z_Feed[icomp] * ChemPot[ nodeV ]
+            #print ' the sumGibbs = ', Gibbsk[k] , ' and the sumfeed = ', sumfeed 
 
-        MolarGibbsk[k] = Gibbsk[k] + sumfeedk[k]
-        finalGibbsk[k] = - MolarGibbsk[k]
-
-gmix[node] = -MolarGibbsk[k]#; print ' the gmix = ', gmix[ node ]       
+            MolarGibbsk[k] = Gibbsk[k] + sumfeedk[k]
+            finalGibbsk[k] = - MolarGibbsk[k]
+            
+    gmix[node] = -MolarGibbsk[k] ; print ' the gmix = ', gmix[ node ]       
 
 #print ' the Molar Gibbs = ', finalGibbsk 
-
 
 
 
@@ -139,7 +145,7 @@ print
 
 m = [ 0. for k in range( nk ) ]
 m = np.argsort(finalGibbsk)
-#print ' m = ', m 
+print ' m = ', m 
 
 '''
 s1min = [ 0. for k in range( nk ) ]
@@ -152,8 +158,6 @@ for i in range( nk ):
 print ' for the m = ', m,' the c1 = ', s1min, ' the c2 = ', s2min, ' for the Gibss min = ', GMIN
 print 
 '''
-
-
 
 s1min2 = c1[m[0]] ; s2min2 = c2[m[0]] ; gmin2 = finalGibbsk[m[0]]
 print ' '; print ' c1 and c2:', s1min2, s2min2, 'for min Gibbs of:', gmin2
@@ -199,36 +203,33 @@ print ' - - - - - - - - - - - - - - - - - - - - - - '
 '''
 
 
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
-import matplotlib.pyplot as plt
-import numpy as np
 
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-c1 = np.arange(10e-5, 0.9999, 0.25)
-c2 = np.arange(10e-5, 0.9999, 0.25)
-c1, c2 = np.meshgrid(c1, c2)
-#R = np.sqrt(X**2 + Y**2)
-#Z = np.sin(R)
-surf = ax.plot_surface(c1b[node], c2b[node], gmix[node], rstride=1, cstride=1, cmap=cm.coolwarm,
-                       linewidth=0, antialiased=False)
-ax.set_zlim(-10e5, 10e5)
+'''
+#####################################################################
+pl.title(' Gibbs vs. molar fraction of componenets A and B ')
 
-ax.zaxis.set_major_locator(LinearLocator(10))
-ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
+# make axis labels
+pl.xlabel('x axis - molar fraction/components')
+pl.ylabel('y axis - Gibbs')
 
-fig.colorbar(surf, shrink=0.5, aspect=5)
-
-plt.show()
+component1 = pl.plot(c1,finalGibbsk, '-', label = 'comp1' )
+component2 = pl.plot(c2,finalGibbsk, '--', label = 'comp2')
+pl.plot(s1min2, gmin2, 'o' )
+pl.plot(s2min2, gmin2, 'o' )
+# set axis limits
+#pl.xlim(0.0, 1.0)
+#pl.ylim(0.0, 30.)
+pl.legend( loc = "best" )
+pl.grid()
+pl.show()
+'''
 
 
-for i in range( nk ):
-    for j in range( nk ):
-        node = i * nk + j 
-        Mfrac[0] = c1b[ node ]
-        Mfrac[2] = c2b[ node ]
+
+
+
+
+
         
 
 
