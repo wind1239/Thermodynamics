@@ -9,10 +9,10 @@ import calculate_ln_gamma_test as lng
 import calculate_fi_test as fi
 import calculate_terms_test as terms
 import calculate_chemical_potential_test as chemp
-import pylab as pl 
-from mpl_toolkits.mplot3d import axes3d
-import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
+import matplotlib.pyplot as plt
 import time 
 
 print
@@ -26,22 +26,22 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(7e-1, 0.9999, 100)   # + - 25%
+c1 = np.linspace(0.74535, 0.9999, 10)   # + - 25%
 #c1 = np.linspace(0.7478, 0.9999, 10)
 #c1 = np.linspace(0.7487, 0.9999, 10)
 #c1 = np.linspace(0.7499, 0.9999, 10)
 
 c2 = []
-#c2 = np.linspace(10e-5, 0.9999, 10) 
+#c2 = np.linspace(0.5891, 0.9818, 5 ) 
 for x in c1:
     c2.append(1.0-x)
 
 c2 = np.array(c2)
 
-#print ' component 1 = ', c1
-#print
-#print ' component 2 = ', c2
-#print
+print ' component 1 = ', c1
+print
+print ' component 2 = ', c2
+print
 
 nk = len(c1)
 
@@ -55,10 +55,11 @@ for i in range( nk ):
         c1b[ node ] = c1[ i ] #; print c1b[ node ]  
         c2b[ node ] = c2[ j ] #; print c2b[ node ]
 
-Gibbs = [ 0. for k in range( nk ) ]
-sumfeed = [ 0. for k in range( nk ) ]
-MolarGibbs = [ 0. for k in range( nk ) ]
-finalGibbs = [ 0. for k in range( nk ) ]
+Gibbsk = [ 0. for k in range( nk ) ]
+sumfeedk = [ 0. for k in range( nk ) ]
+MolarGibbsk = [ 0. for k in range( nk ) ]
+finalGibbsk = [ 0. for k in range( nk ) ]
+
 for k in range( nk ):
     MFrac = [ 0.01 for i in range( ThT.NComp * ThT.NPhase ) ]
     
@@ -102,66 +103,32 @@ for k in range( nk ):
         nodeV = Vphase * ThT.NComp + icomp ; nodeL = Lphase * ThT.NComp + icomp             # a clever way to describe the nodes for Vapour and liquid phases
         nodeVfinal = Vphase * ThT.NComp + ThT.NComp - 1; nodeLfinal = Lphase * ThT.NComp + ThT.NComp - 1; 
         if icomp <= ThT.NComp - 2:
-           Gibbs[node] = sumGibbs + ( PhaseFrac[ Lphase ] * MFrac[ nodeL ]  * ( ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) - ( ChemPot[ nodeLfinal ]  - ChemPot[ nodeVfinal ] ) ) + \
+           Gibbsk[k] = sumGibbs + ( PhaseFrac[ Lphase ] * MFrac[ nodeL ]  * ( ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) - ( ChemPot[ nodeLfinal ]  - ChemPot[ nodeVfinal ] ) ) + \
                      PhaseFrac[ Lphase ] * ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) )
-           sumfeed[node] = sumfeed + ThT.Z_Feed[icomp] * ChemPot[ nodeV ]
-        #print ' the sumGibbs = ', Gibbs[node] , ' and the sumfeed = ', sumfeed 
+           sumfeedk[k] = sumfeed + ThT.Z_Feed[icomp] * ChemPot[ nodeV ]
+        #print ' the sumGibbs = ', Gibbsk[k] , ' and the sumfeed = ', sumfeed 
 
-        MolarGibbs[node] = Gibbs[node] + sumfeed[node]
-        finalGibbs[node] = - MolarGibbs[node]
+        MolarGibbsk[k] = Gibbsk[k] + sumfeedk[k]
+        finalGibbsk[k] = - MolarGibbsk[k]
         
 
-print ' the Molar Gibbs = ', finalGibbs 
-
-c1, c2 = np.meshgrid( c1, c2 )
-#print ' the ci - c2 matrix : ' , c1, c2 , 
-
-finalGibbsMatrix = np.zeros(nk, nk)
-for i in range( nk ):
-    for j in range( nk):
-        node = i * nk + j
-        finalGibbsMatrix[i][j] = finalGibbs[node]
-
-print ' finalGibbsMatrix[i][j] ', finalGibbsMatrix
-
-
-'''
-gmin = min(finalGibbsk)
-print ' Gmin = ', gmin
-print
-c1min = min(c1) 
-print ' c1 min = ', c1min, 
-print ' c1 sorted = ', np.sort(c1), np.argsort(c1), c1[np.argsort(0)]
-print 
-c2min = min(c2)
-print ' c2 min = ', c2min
-print ' c2 sorted = ', np.sort(c2), np.argsort(c2), c2[np.argsort(0)] 
-print
-
-
 #print ' the Molar Gibbs = ', finalGibbsk 
-print ' Gibbs sorted = ', np.sort(finalGibbsk)
-print ' Gibbs argsort : ' , np.argsort(finalGibbsk), len(np.argsort(finalGibbsk))
-print
-'''
+
+for i in range( nk ):
+    for j in range( nk ):
+        node = i * nk + j
+        gmix[ node ] = finalGibbsk[k]
+        #print gmix[ node ]
+
+print ' =====> ', gmix
+
+
+
+
 
 m = [ 0. for k in range( nk ) ]
 m = np.argsort(finalGibbsk)
 #print ' m = ', m 
-
-'''
-s1min = [ 0. for k in range( nk ) ]
-s2min = [ 0. for k in range( nk ) ]
-GMIN  = [ 0. for k in range( nk ) ]
-for i in range( nk ):
-    #GMIN =  np.argsort( finalGibbsk[ m[i] ] )
-    s1min = c1[ m[ i ] ]; print ' c1 ', c1[ m[ i ] ]
-    s2min = c2[ m[ i ] ]; print ' c2 ', c2[ m[ i ] ]; print ' ', m[ i ]; print ' ',  m; print ' ' # np.argmax(GMIN[ i ]) 
-print ' for the m = ', m,' the c1 = ', s1min, ' the c2 = ', s2min, ' for the Gibss min = ', GMIN
-print 
-'''
-
-
 
 s1min2 = c1[m[0]] ; s2min2 = c2[m[0]] ; gmin2 = finalGibbsk[m[0]]
 print ' '; print ' c1 and c2:', s1min2, s2min2, 'for min Gibbs of:', gmin2
@@ -181,95 +148,6 @@ print ' error 2 = ', ( exp_value_c2 - c2[m[0]] / exp_value_c2 ) * 100 , ' % '
 
 
 
-'''
-#list=[1.1412, 4.3453, 5.8709, 0.1314]
-#print ' the list = ', list.index(min(list)) # Will give you first index of minimum.
-
-#print ' - - - - - - - - - - - - - - - - - - - - - - '
-#my_indexed_list = zip(list, range(len(list)))
-#print ' my_indexed_list = ', my_indexed_list
-
-#min_value, min_index = min(my_indexed_list); print ' min_value, min_index = ', min_value, min_index 
-#max_value, max_index = max(my_indexed_list); print ' max_value, max_index = ', max_value, max_index
-#print ' - - - - - - - - - - - - - - - - - - - - - - '
-
-
-
-print ' - - - - - - - - - - - - - - - - - - - - - - '
-my_indexed_gibbs_list = zip(np.argsort(finalGibbsk), range(len(np.argsort(finalGibbsk))))
-print ' my_indexed_gibbs_list = ', my_indexed_gibbs_list
-
-min_value, min_index = min(my_indexed_gibbs_list); print ' min_value, min_index = ', min_value, min_index ; print ' for the c1 = ', c1[ min_value ], min_index
-#max_value, max_index = max(my_indexed_list); print ' max_value, max_index = ', max_value, max_index ; print ' for the c1 = ', c1[ max_value ], max_index
-#min_value, min_index = min(my_indexed_gibbs_list); print ' min_value, min_index = ', min_value, min_index ; print ' for the c2 = ', c2[ min_value ], min_index
-
-print ' - - - - - - - - - - - - - - - - - - - - - - '
-'''
-
-
-'''
-#####################################################################
-pl.title(' Gibbs vs. molar fraction of componenets A and B ')
-
-# make axis labels
-pl.xlabel('x axis - molar fraction/components')
-pl.ylabel('y axis - Gibbs')
-
-component1 = pl.plot(s1min,finalGibbsk, '-', label = 'comp1' )
-component2 = pl.plot(s2min,finalGibbsk, '--', label = 'comp2')
-pl.plot(s1min, gmin, 'o' )
-# set axis limits
-#pl.xlim(0.0, 1.0)
-#pl.ylim(0.0, 30.)
-pl.legend( loc = "best" )
-pl.grid()
-pl.show() 
-'''
-
-
-
-'''
-#####################################################################
-pl.title(' Gibbs vs. molar fraction of componenets A and B ')
-
-# make axis labels
-pl.xlabel('x axis - molar fraction/components')
-pl.ylabel('y axis - Gibbs')
-
-component1 = pl.plot(c1,finalGibbsk, '-', label = 'comp1' )
-component2 = pl.plot(c2,finalGibbsk, '--', label = 'comp2')
-pl.plot(s1min2, gmin2, 'o' )
-pl.plot(s2min2, gmin2, 'o' )
-# set axis limits
-#pl.xlim(0.0, 1.0)
-#pl.ylim(0.0, 30.)
-pl.legend( loc = "best" )
-pl.grid()
-pl.show() 
-'''
-
-
-
-'''
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-
-c1 =[0.9146, 0.887, 0.7811, 0.888, 0.887]
-c2 =[0.0854, 0.11, 0.218, 0.111, 0.112]
-G  =[-1153.01, -663.84, -610.50, -330.41, -330.40]
-
-
-ax.scatter(c1, c2, G, c='r', marker='o')
-
-ax.set_xlabel('c1')
-ax.set_ylabel('c2')
-ax.set_zlabel('Gibbs')
-
-plt.show()
-'''
-
-
-#####################################################################
 ###
 ### Script for Plotting
 ###
@@ -280,33 +158,24 @@ fig = plt.figure()
 ax = fig.gca(projection='3d')
 ContourPlot = False
 if ContourPlot:
-    ax.plot_surface( c1, c2, finalGibbsMatrix, rstride=8, cstride=8, alpha=0.3 )
-    cset = ax.contourf( c1, c2, finalGibbsMatrix, zdir='z', offset=-10000, cmap=cm.coolwarm)
-    cset = ax.contourf( c1, c2, finalGibbsMatrix, zdir='x', offset=-40, cmap=cm.coolwarm)
-    cset = ax.contourf( c1, c2, finalGibbsMatrix, zdir='y', offset=40, cmap=cm.coolwarm)
-    ax.set_xlabel( 'x' )
-    ax.set_xlim( -1 , 0 )
-    ax.set_ylabel( 'Y' )
-    ax.set_ylim( -1 , 0 )
-    ax.set_zlabel( 'Z' )
-    ax.set_zlim( min(finalGibbsMatrix), max(finalGibbsMatrix) )
+    ax.plot_surface( c1, c2, gmix, rstride=8, cstride=8, alpha=0.3 )
+    cset = ax.contourf( c1, c2, gmix, zdir='z', offset=-10000, cmap=cm.coolwarm)
+    cset = ax.contourf( c1, c2, gmix, Rub, zdir='x', offset=-40, cmap=cm.coolwarm)
+    cset = ax.contourf( c1, c2, gmix, zdir='y', offset=40, cmap=cm.coolwarm)
+    ax.set_xlabel('X')
+    ax.set_xlim( 0, 1)
+    ax.set_ylabel('Y')
+    ax.set_ylim( 0, 1)
+    ax.set_zlabel('Z')
+    ax.set_zlim(-1000, 1000)
 else:
-    surf = ax.plot_surface( c1, c2, finalGibbsMatrix, rstride=1, cstride=1, cmap=cm.coolwarm,linewidth=0, antialiased=False )
-    ax.set_zlim(-1.e-7, 1.5e5)
+    surf = ax.plot_surface( c1, c2, gmix, rstride=1, cstride=1, cmap=cm.coolwarm,linewidth=0, antialiased=False )
+    ax.set_zlim(-1000, 1000)
     ax.zaxis.set_major_locator(LinearLocator(10))
     ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
     fig.colorbar(surf, shrink=0.5, aspect=5)
 
-
 plt.show()
-
-
-
-
-
-
-
-        
 
 
       
