@@ -26,7 +26,7 @@ ThT.ReadSet_Global_Variables()                             # reading the externa
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(0.74535, 0.9999, 10)   # + - 25%
+c1 = np.linspace(0.74535, 0.9999, 5)   # + - 25%
 #c1 = np.linspace(0.7478, 0.9999, 10)
 #c1 = np.linspace(0.7487, 0.9999, 10)
 #c1 = np.linspace(0.7499, 0.9999, 10)
@@ -63,10 +63,10 @@ finalGibbsk = [ 0. for k in range( nk ) ]
 for k in range( nk ):
     MFrac = [ 0.01 for i in range( ThT.NComp * ThT.NPhase ) ]
     
-    MFrac[0] = c1[k];     #print ' the MFrac[0] = ', MFrac[0]
-    MFrac[1] = 1 - c1[k]; #print ' the MFrac[1] = ', MFrac[1]
-    MFrac[2] = c2[k];     #print ' the MFrac[2] = ', MFrac[2]
-    MFrac[3] = 1 - c2[k]; #print ' the MFrac[3] = ', MFrac[3]
+    MFrac[0] = c1b[k];     #print ' the MFrac[0] = ', MFrac[0]
+    MFrac[1] = 1 - c1b[k]; #print ' the MFrac[1] = ', MFrac[1]
+    MFrac[2] = c2b[k];     #print ' the MFrac[2] = ', MFrac[2]
+    MFrac[3] = 1 - c2b[k]; #print ' the MFrac[3] = ', MFrac[3]
     #print ' ------------------------------- '
     
     for iphase in range(ThT.NPhase):
@@ -114,13 +114,13 @@ for k in range( nk ):
 
 #print ' the Molar Gibbs = ', finalGibbsk 
 
-for i in range( nk ):
-    for j in range( nk ):
-        node = i * nk + j
-        gmix[ node ] = finalGibbsk[k]
-        #print gmix[ node ]
+    for i in range( nk ):
+        for j in range( nk ):
+            node = i * nk + j
+            gmix[ node ] = finalGibbsk
+            #print gmix[ node ]
 
-print ' =====> ', gmix
+#print ' =====> ', gmix
 
 
 
@@ -160,7 +160,7 @@ ContourPlot = False
 if ContourPlot:
     ax.plot_surface( c1, c2, gmix, rstride=8, cstride=8, alpha=0.3 )
     cset = ax.contourf( c1, c2, gmix, zdir='z', offset=-10000, cmap=cm.coolwarm)
-    cset = ax.contourf( c1, c2, gmix, Rub, zdir='x', offset=-40, cmap=cm.coolwarm)
+    cset = ax.contourf( c1, c2, gmix, zdir='x', offset=-40, cmap=cm.coolwarm)
     cset = ax.contourf( c1, c2, gmix, zdir='y', offset=40, cmap=cm.coolwarm)
     ax.set_xlabel('X')
     ax.set_xlim( 0, 1)
