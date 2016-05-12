@@ -109,6 +109,9 @@ for i in range(nk):
 
             MolarGibbsk[node] = Gibbsk[node] + sumfeedk[node]
         finalGibbsk[node] = - MolarGibbsk[node]
+
+
+print ' =>', finalGibbsk[node]
        
 
 
