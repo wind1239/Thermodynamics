@@ -160,7 +160,7 @@ print ' error 2 = ', ( exp_value_c2 - c2[m[0]] / exp_value_c2 ) * 100 , ' % '
 '''
 
 
-'''
+
 ###
 ### Script for Plotting
 ###
@@ -188,7 +188,7 @@ else:
     fig.colorbar(surf, shrink=0.5, aspect=5)
 
 plt.show()
-'''
+
 
       
             
