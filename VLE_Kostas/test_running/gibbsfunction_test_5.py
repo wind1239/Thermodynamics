@@ -19,16 +19,23 @@ print
 print
 
                                                   
-ThT.ReadSet_Global_Variables()                             # reading the external file 
+ThT.ReadSet_Global_Variables()                          # reading the external file 
 
 MFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]    # create an a array with 0 values for the MFrac    
 
-c1 = np.linspace(0.25,0.35,10)
-c2 = []
-for x in c1:
-    c2.append(1.0-x)
+c1 = np.linspace(0.8971, 0.9999, 100)    # 191.62 kPa = 1.9162, 126.01 K
+c2 = np.linspace(0.53298, 0.6514, 100 )
 
-c2 = np.array(c2)
+#c1 = np.linspace(0.89397, 0.9999, 10)   # 148.12 kPa = 1.4812, 130.02 K
+#c2 = np.linspace(0.31743, 0.38797, 10 )
+
+#c1 = np.linspace(0.89199, 0.9999, 100)    # 188.70 kPa = 1.8870, 199.98 K
+#c2 = np.linspace(0.30312, 0.37048, 100 )
+
+#for x in c1:
+#    c2.append(1.0-x)
+
+#c2 = np.array(c2)
 
 print ' component 1 = ', c1
 print
@@ -84,18 +91,35 @@ for k in range( nk ):
         nodeV = Vphase * ThT.NComp + icomp ; nodeL = Lphase * ThT.NComp + icomp             # a clever way to describe the nodes for Vapour and liquid phases
         nodeVfinal = Vphase * ThT.NComp + ThT.NComp - 1; nodeLfinal = Lphase * ThT.NComp + ThT.NComp - 1; 
         if icomp <= ThT.NComp - 2:
-           Gibbsk[k] = sumGibbs + ( PhaseFrac[ Lphase ] * MFrac[ nodeL ]  * ( ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) - ( ChemPot[ nodeLfinal ]  - ChemPot[ nodeVfinal ] ) ) + \
-                     PhaseFrac[ Lphase ] * ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) )
+           Gibbsk[k] = sumGibbs + ( PhaseFrac[ Lphase ] * MFrac[ nodeL ]  * ( ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) - ( ChemPot[ nodeLfinal ]  - ChemPot[ nodeVfinal ] ) ) + PhaseFrac[ Lphase ] * ( ChemPot[ nodeL ]  - ChemPot[ nodeV ] ) )
            sumfeedk[k] = sumfeed + ThT.Z_Feed[icomp] * ChemPot[ nodeV ]
         #print ' the sumGibbs = ', Gibbsk[k] , ' and the sumfeed = ', sumfeed 
 
         MolarGibbsk[k] = Gibbsk[k] + sumfeedk[k]
-        finalGibbsk[k] = - MolarGibbsk[k]
+        finalGibbsk[k] = -MolarGibbsk[k]
         
 
 #print ' the Molar Gibbs = ', finalGibbsk 
 print ' Gibbs sorted = ', np.sort(finalGibbsk)
+#print ' the argsort command ' , np.argsort(finalGibbsk), len(np.argsort(finalGibbsk))
 print
+
+m = [ 0. for k in range( nk ) ]
+m = np.argsort(finalGibbsk)
+#print ' m[ i ] = ', m 
+
+s1min = [ 0. for k in range( nk ) ]
+s2min = [ 0. for k in range( nk ) ]
+GMIN  = [ 0. for k in range( nk ) ]
+for i in range( nk ):
+    GMIN[ i ] =  finalGibbsk[ m[i] ]
+    s1min = c1[ m[ i ] ]
+    s2min = c2[ m[ i ] ]
+print ' the c1 = ', s1min, ' the c2 = ', s2min, ' for the Gibss min = ', GMIN[ i ]
+print  
+
+
+
 '''
 gmin = min(finalGibbsk)
 print ' Gmin = ', gmin
@@ -108,8 +132,13 @@ c2min = min(c2)
 print ' c2 min = ', c2min
 print ' c2 sorted = ', np.sort(c2)
 print
+print ' - - - - - - - - - - - - - - - '
+print ' i should list the min values  '
+print ' - - - - - - - - - - - - - - - '
+print
 '''
 
+'''
 #print zip( c1, c2, finalGibbsk )
 #print
 minvalold = finalGibbsk
@@ -123,38 +152,20 @@ for i,(c1, c2, finalGibbsk) in enumerate(zip(c1, c2, finalGibbsk)):
   
 print ' ' , i, c1, c2, finalGibbsk
 print
-
- 
-
 '''
+
+
 #####################################################################
 pl.title(' Gibbs vs. molar fraction of componenets A and B ')
-
 # make axis labels
 pl.xlabel('x axis - molar fraction/components')
 pl.ylabel('y axis - Gibbs')
-
-component1 = pl.plot(c1,finalGibbsk, '-' )
-component2 = pl.plot(c2,finalGibbsk, '--')
-pl.plot(c1min, gmin, 'o' )
+pl.plot(s1min, 1 - s1min, finalGibbsk, '-', label = "Comp1" )
+pl.plot(s2min, 1 - s2min, finalGibbsk, '*', label = "Comp2")
+pl.plot(c1, c2, GMIN[ i ], 'o' )
 # set axis limits
 #pl.xlim(0.0, 1.0)
 #pl.ylim(0.0, 30.)
-pl.legend( [component1, component2], ('component1', 'component2') )
+pl.legend( loc = "best" )
 pl.grid()
 pl.show() 
-'''
-
-
-
-      
-            
-
-
-          
-            
-         
-           
-  
-
-          
