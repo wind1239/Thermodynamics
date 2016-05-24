@@ -59,114 +59,41 @@ if ThT.NPhase > 2:
     sys.exit()
 
 else:
-    # Loop for automatically generating composition
-    ThT.MFrac = 0. ; ThT.PhaseFrac = 0. ; Inc_Phase = 0.25 ; Inc_Comp = 0.1
+    # Preparing loop for automatically generating composition
+    ThT.MFrac = 0. ; ThT.PhaseFrac = 0.
+    Inc_Phase = 0.25 ; Inc_Comp = 0.1
     NearlyOne = 1. - ThT.Residual
 
-    Niter_Phase = int( 1. / Inc_Phase ) + 1
-    Niter_Comp = int( 1. / Inc_Comp ) + 1
+    Niter_Phase = int( 1. / Inc_Phase ) + 1 ; Niter_Comp = int( 1. / Inc_Comp ) + 1
+    
     Molar_Gibbs_Free = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
     Composition  = [ 0. for i in range( Niter_Phase * Niter_Comp ) ] 
-    Phase = [ 0. for i in range( Niter_Phase * Niter_Comp ) ] 
+    Phase = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
 
+
+
+    """ This is a temporary hack to generate (on-the-fly) molar phase (mole/mass 
+             fraction): Vapour (PhaFrac[0]) and Liquid (PhaFrac[1]).             """
     for iter_phase in range( Niter_Phase ):
+        ThT.PhaseFrac = NC.Generate_PhaseFraction( iter_phase, Inc_Phase )
+        print 'Phase Molar Fraction:', ThT.PhaseFrac
 
-        """ Generating arrays of molar/mass fraction of all phase. """
-        PhaFrac = NC.Generate_PhaseFraction( iter_phase, Inc_Phase )
-        ThT.PhaseFrac = PhaFrac
 
+        """ This is a temporary hack to generate (on-the-fly) molar composition
+                 of all phases.                                                  """
         for iter_comp in range( Niter_Comp ):
+            MolFrac =  NC.Generate_MoleFraction( iter_comp, Inc_Comp )
+            print 'Composition:', MolFrac
 
-            """ Generating arrays of mole/mass fraction of each component at all phase. """
-            MolFrac =  NC.Generate_MoleFraction( PhaFrac, iter_comp, Inc_Comp )
-            ThT.MFrac = MolFrac
+        print ' '
+        print ' '
 
-            for iphase in range( ThT.NPhase ):
-                sumcomp = 0.
-                for icomp in range( ThT. NComp ):
-                    node = iphase * ThT.NComp + icomp
-                    if icomp == ThT.NComp - 1:
-                        ThT.MFrac[ node ] = 1. - sumcomp
-                            
-                    else:
-                        sumcomp = sumcomp + MolFrac[ node ]
+        
 
-            if ThT.Debug:
-                print ' ===================================='
-                print '    Composition of components in all phases: '
-                print '      ThT.MFrac:', ThT.MFrac
-                print ' '
-                print ' '
-                print '    Composition of both phases: '
-                print '      ThT.PhaseFrac:', ThT.PhaseFrac
-                print ' '
-                print ' ===================================='
-                print ' '
-   
-    
-            '''
-               ===============================================================
-                  MICHAELSEN'S STABILITY TEST: Decision of the Phases 
-               ===============================================================
-                                                                              '''
-            ( Comp, Comp_Phase, index_phase, GZero ) = Michaelsen.Phase_Stability( Temp, Press )
-            Michaelsen.CheckingPhases( Comp_Phase, GZero )
-
-            """ COMP_PHASE is an array that contains (NComp - 1) mole/mass fraction of
-                           components + (1) molar/mass fraction of the INDEX_PHASE by
-                           the CHECKINGPHASES function.                                 """
-
-            if ThT.Debug:
-                print 'GZero:', GZero, Comp_Phase
-
-
-            InitialAssessment = False #True
-            iter = iter_phase * Niter_Comp + iter_comp
-            Molar_Gibbs_Free[ iter ] = GibbsF.GibbsObjectiveFunction( InitialAssessment, Temp, Press, Comp_Phase )
-            Composition[ iter ] = Comp_Phase[ 0 ]
-            Phase[ iter ] = Comp_Phase[ ThT.NComp - 1 ] 
-
-            pickle.dump( Comp_Phase, OutFile )
-
-            print 'Comp_Phase:', Comp_Phase[ 0 ], Comp_Phase[ ThT.NComp - 1 ] 
-            print 'Molar Gibbs Free Energy:', Molar_Gibbs_Free[ iter ]
-
-    for iter in range( Niter_Phase * Niter_Comp ):
-        print Composition[ iter ], Molar_Gibbs_Free[ iter ], Phase[ iter ]
-
-
-
-    Molar_Gibbs_Free_Sort = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
-    Sortindex = [ 0 for i in range( Niter_Phase * Niter_Comp ) ]
-    Molar_Gibbs_Free_Sort = np.sort( Molar_Gibbs_Free )
-    Sortindex = np.argsort( Molar_Gibbs_Free )
-    print '===>>>'
-    for i in range( Niter_Comp * Niter_Phase ):
-        print Sortindex[ i ], Composition[ Sortindex[i] ], Molar_Gibbs_Free[ Sortindex[i] ]
-
-
-
-    """
-
-        OutFile.close()
-
-        f = open("output")
-        data = pickle.load( f )
-        print data"""
-
-
-    """print ' ++++++++++++ '
-    for iter in range( Niter_Comp * Niter_Phase ):
-        print Composition[ iter ], Molar_Gibbs_Free[ iter ]
 
     
-    Molar_Gibbs_Free_Sort = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
-    Sortindex = [ 0 for i in range( Niter_Phase * Niter_Comp ) ]
-    Molar_Gibbs_Free_Sort = np.sort( Molar_Gibbs_Free )
-    Sortindex = np.argsort( Molar_Gibbs_Free )
-    print '===>>>'
-    for i in range( Niter_Comp * Niter_Phase ):
-        print Sortindex[ i ]#, Composition[ i ][ 0 ], Molar_Gibbs_Free_Sort[ i ]"""
+
+
 
 
 

@@ -16,7 +16,7 @@ def CalcOtherPhase( Array, kphase ):#, *args, **kwargs ):
                   ( 1 - Summation_{j=1,j!/k}^{NPhase} \Pi^{j} )
            Input:
                    Array: an array containing [ NPhase*(NComp-1) ] mole/mass fraction of
-                             individual components and (NPhase) molar/mass fraction of
+                             individual components and [NPhase] molar/mass fraction of
                              individual phases ( NPhase x NComp );
                    kphase: Phase in hich the components that we want to calculate are
                              contained;
@@ -147,7 +147,8 @@ def BoxSummation( Array, *args, **kwargs ):
 #=======================================
 
 def Generate_PhaseFraction( iter_phase, Inc_Phase ):
-    """ PhaFrac has dimension NPhase """
+    """ PhaFrac has dimension NPhase.
+        PhaFrac[0] = Vapour and PhaFrac[1] = Liquid    """
 
     PhaFrac = [ 0. for i in range( ThT.NPhase ) ] ; NearlyOne = 1. - ThT.Residual
 
@@ -164,7 +165,7 @@ def Generate_PhaseFraction( iter_phase, Inc_Phase ):
 #
 #=======================================
 
-def Generate_MoleFraction( PhaFrac, iter_comp, Inc_Comp ):
+def Generate_MoleFraction( iter_comp, Inc_Comp ):
     """ MolFrac has dimension NPhase * NComp """
 
     MolFrac = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ] ; NearlyOne = 1. - ThT.Residual
@@ -176,9 +177,23 @@ def Generate_MoleFraction( PhaFrac, iter_comp, Inc_Comp ):
             MolFrac[ node ] = min( NearlyOne, max( ThT.Residual, float( iter_comp ) * Inc_Comp ) )
             sum = sum + MolFrac[ node ]
         node2 = iphase * ThT.NComp + ThT.NComp - 1
-        MolFrac[ node2 ] = PhaFrac[ iphase ]
+        MolFrac[ node2 ] = ThT.PhaseFrac[ iphase ]
 
-    MolFrac = CalcOtherPhase( MolFrac, ThT.NPhase - 1 ) # Calculating the mole/mass fraction
+    print '===>', MolFrac
+
+    """ No calculating the composition of phase 2 (Liquid)"""
+    sum = 0.
+    for icomp in range( ThT.NComp - 1):
+        node = ( ThT.NPhase - 1 ) * ThT.NComp + icomp
+        MolFrac[ node ] = ( ThT.Z_Feed[ icomp ] - ThT.PhaseFrac[ 0 ] * MolFrac[ icomp ] ) / ThT.PhaseFrac[ 1 ]
+        sum = sum + MolFrac[ node ]
+
+    node2 = ( ThT.NPhase - 1 ) * ThT.NComp + ThT.NComp - 1
+    MolFrac[ node2 ] = ThT.PhaseFrac[ ThT.NPhase - 1 ]
+
+    #print 'MolFrac:', MolFrac
+
+    #MolFrac = CalcOtherPhase( MolFrac, ThT.NPhase - 1 ) # Calculating the mole/mass fraction
                                                         # of the ThT.NPhase phase
 
     return MolFrac

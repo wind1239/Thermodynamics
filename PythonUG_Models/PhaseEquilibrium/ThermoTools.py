@@ -123,7 +123,6 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                     Sum2One( 'Phase Fraction', PhaseFrac )
     #
                 elif row[ 0 ] == 'ActivityModel':
-                    print row
                     if row[ 1 ] == 'All':
                         Activity_Model = []
                         Activity_Model.append( row[ 2 ] )
@@ -133,7 +132,7 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                             print 'Activity Model not implemented yet'
                             sys,exit()
                     else:
-                        print 'Activity Model not implemented yet'
+                        print 'Activity Model not implemented yet++'
                         sys,exit()
     #
                 elif row[ 0 ] == 'Debugging':
