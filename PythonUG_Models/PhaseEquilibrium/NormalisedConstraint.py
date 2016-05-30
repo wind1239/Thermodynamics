@@ -179,13 +179,12 @@ def Generate_MoleFraction( iter_comp, Inc_Comp ):
         node2 = iphase * ThT.NComp + ThT.NComp - 1
         MolFrac[ node2 ] = ThT.PhaseFrac[ iphase ]
 
-    print '===>', MolFrac
 
-    """ No calculating the composition of phase 2 (Liquid)"""
+    """ Now calculating the composition of phase 2 (Liquid)"""
     sum = 0.
     for icomp in range( ThT.NComp - 1):
         node = ( ThT.NPhase - 1 ) * ThT.NComp + icomp
-        MolFrac[ node ] = ( ThT.Z_Feed[ icomp ] - ThT.PhaseFrac[ 0 ] * MolFrac[ icomp ] ) / ThT.PhaseFrac[ 1 ]
+        MolFrac[ node ] = max( ThT.Residual, min( 1. - ThT.Residual, ( ThT.Z_Feed[ icomp ] - ThT.PhaseFrac[ 0 ] * MolFrac[ icomp ] ) / ThT.PhaseFrac[ 1 ] ))
         sum = sum + MolFrac[ node ]
 
     node2 = ( ThT.NPhase - 1 ) * ThT.NComp + ThT.NComp - 1

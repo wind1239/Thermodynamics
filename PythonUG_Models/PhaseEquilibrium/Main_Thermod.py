@@ -76,17 +76,24 @@ else:
              fraction): Vapour (PhaFrac[0]) and Liquid (PhaFrac[1]).             """
     for iter_phase in range( Niter_Phase ):
         ThT.PhaseFrac = NC.Generate_PhaseFraction( iter_phase, Inc_Phase )
-        print 'Phase Molar Fraction:', ThT.PhaseFrac
 
 
         """ This is a temporary hack to generate (on-the-fly) molar composition
                  of all phases.                                                  """
         for iter_comp in range( Niter_Comp ):
-            MolFrac =  NC.Generate_MoleFraction( iter_comp, Inc_Comp )
-            print 'Composition:', MolFrac
+            ThT.MFrac = NC.Generate_MoleFraction( iter_comp, Inc_Comp )
 
-        print ' '
-        print ' '
+            if ThT.Debug:
+                print ' ===================================='
+                print '    Composition of components in all phases: '
+                print '      ThT.MFrac:', ThT.MFrac
+                print ' '
+                print ' '
+                print '    Composition of both phases: '
+                print '      ThT.PhaseFrac:', ThT.PhaseFrac
+                print ' '
+                print ' ===================================='
+                print ' '
 
         
 
