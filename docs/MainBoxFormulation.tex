@@ -3,10 +3,12 @@
 %%% CHAPTER
 %%%
 \chapter{Thermodynamic Formulation}\label{Chapter:ThermodynamicFormulation}
- 
+
+%%%
 %%% SECTION
+%%%
 \section{Mass Balance}\label{Chapter:ThermodynamicFormulation:Section:MassBalance}
-Given a closed system at constant pressure and temperature conditions with $n_{c}$ components contained in $n_{p}$ phases. We can define a normalised concentration, i.e., mole fraction $\left(\mfr[x]{i}{j}\right)$ based on the relationship between the number of moles of component $i$ at phase $j$ with the total number of moles contained in the same phase, 
+Given a closed system at constant pressure and temperature conditions with $n_{c}$ components contained in $n_{p}$ phases. We can define a normalised concentration, \ie mole fraction $\left(\mfr[x]{i}{j}\right)$ based on the relationship between the number of moles of component $i$ at phase $j$ with the total number of moles contained in the same phase, 
 \begin{equation}
     \mfr[x]{i}{j} = \frc{\mfr[n]{i}{j}}{\mfr[n]{}{j}} = \frc{\frc{\mfr[m]{i}{j}}{MW_{i}}}{\frc{\mfr[m]{}{j}}{\mfr[\overline{MW}]{}{j}}}, \hfill \text{ with } i=1, \cdots, n_{c} \text{ and } j=1, \cdots, n_{p}
 \label{Chapter:ThermodynamicFormulation:Eqn:MoleFractionDef}
@@ -16,7 +18,7 @@ where $MW$ is the molar mass, $n$ is the number of moles and $m$ is the mass. In
     z_{i} = \frc{n_{i}}{n} &=& \frc{\frc{m_{i}}{MW_{i}}}{\frc{m}{\overline{MW}}}\label{Chapter:ThermodynamicFormulation:Eqn:FeedFractionDef} \\
     \mfr[\Pi]{}{j} = \frc{\mfr[n]{}{j}}{n} &=& \frc{\frc{\mfr[m]{}{j}}{\mfr[\overline{MW}]{}{j}}}{\frc{m}{\overline{MW}}},\label{Chapter:ThermodynamicFormulation:Eqn:PhaseFractionDef} 
 \end{eqnarray}
-where $z_{i}$ is the overall feed mass fraction of component $i$, and $\Pi$ is the mole fraction of phase $j$. The relations above are subject to the following constraints:
+where $z_{i}$ is the overall feed molar fraction of component $i$, and $\Pi$ is the mole fraction of phase $j$. The relations above are subject to the following constraints:
 \begin{equation}
     \summation_{i=1}^{n_{c}}\mfr[x]{i}{j} = 1 \;\;\;,\;\;\; \summation_{i=1}^{n_{c}}z_{i} = 1 \;\;\;,\;\;\; \summation_{j=1}^{n_{p}}\mfr[\Pi]{}{j} = 1. \label{Chapter:ThermodynamicFormulation:Eqn:FractionConstraints1}
 \end{equation}
@@ -57,8 +59,13 @@ Equation~\ref{Chapter:ThermodynamicFormulation:Eqn:FeedFractionDef2} may be rewr
         \end{displaymath}
 \end{shaded}
 
-%% SECTION
-\section{Free Gibbs Energy}\label{Chapter:ThermodynamicFormulation:Section:GibbsEnergy}
+%%%
+%%% SECTION
+%%%
+\section{Gibbs Free Energy}\label{Chapter:ThermodynamicFormulation:Section:GibbsEnergy}
+
+%%%  SUBSECTION
+\subsection{General Formulation}
 By definition the chemical potential, $\mu$ is defined as
 \begin{equation}
    \mu_{i} \equiv \Partial[G]{n_{i}}{T,P,n_{j\ne i}},
@@ -119,7 +126,7 @@ Therefore,
   \end{aligned} \right.
 \end{equation} 
 
-We can use the property of homogeneity of first order to describe a thermodynamic potential as (for $\forall\lambda > 0$),
+We can use the property of homogeneity of first order of a function to describe a thermodynamic potential as ($\forall\lambda > 0$),
 \begin{displaymath}
    U\left(\lambda\cdot S, \lambda\cdot V,  \lambda\cdot n_{1}, \cdots, \lambda\cdot n_{n_{c}}\right) = \lambda U\left(S, V, n_{1}, \cdots, n_{n_{c}}\right),
 \end{displaymath}
@@ -128,11 +135,11 @@ where $U$, $S$ and $V$ are internal energy, entropy and volume, respectively
 If we differentiate both sides with respect to $\lambda$ and using the {\it chain rule} in the left-hand side,
 \begin{eqnarray}
   &&\frc{\partial}{\partial S} U\left(\lambda\cdot S, \lambda\cdot V,  \lambda\cdot n_{1}, \cdots, \lambda\cdot n_{n_{c}}\right)S + \frc{\partial}{\partial V} U\left(\lambda\cdot S, \lambda\cdot V,  \lambda\cdot n_{1}, \cdots, \lambda\cdot n_{n_{c}}\right)V + \nonumber \\
- && \hfill \summation_{i=1}^{n_{c}} \frc{\partial}{\partial n_{i}} U\left(\lambda\cdot S, \lambda\cdot V,  \lambda\cdot n_{1}, \cdots, \lambda\cdot n_{n_{c}}\right)n_{i} = U\left(S, V, n_{1}, \cdots, n_{n_{c}}\right) \nonumber 
+ && \hfill \summation_{i=1}^{n_{c}} \frc{\partial}{\partial n_{j}} U\left(\lambda\cdot S, \lambda\cdot V,  \lambda\cdot n_{1}, \cdots, \lambda\cdot n_{n_{c}}\right)n_{i} = U\left(S, V, n_{1}, \cdots, n_{n_{c}}\right) \nonumber 
 \end{eqnarray}
 Assuming $\lambda=1$,
 \begin{displaymath}
-   \Partial[U]{S}{V,n_{i}}S + \Partial[U]{V}{S,n_{i}}V + \summation_{i=1}^{n_{c}}\Partial[U]{n_{i}}{V,S,n_{j\ne i}}n_{i} = U,
+   \Partial[U]{S}{V,n_{i}}S + \Partial[U]{V}{S,n_{i}}V + \summation_{i=1}^{n_{c}}\Partial[U]{n_{j}}{V,S,n_{j\ne i}}n_{i} = U,
 \end{displaymath}
 and using the Maxwell relations to replace the differential quantities
 \begin{equation}
@@ -160,7 +167,7 @@ The total Gibbs free energy can be then rewritten as
    G = \summation_{j=1}^{n_{p}} \mfr[G]{}{j} = \summation_{j=1}^{n_{p}}\summation_{i=1}^{n_{c}} \mfr[\mu]{i}{j}\mfr[n]{i}{j}.\label{Chapter:ThermodynamicFormulation:Eqn:GibbsTotal}
  \end{equation}
 
-Assuming that we are dealing with closed system(i.e., $n$ is constant) and replacing Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsTotal} in,
+Assuming that we are dealing with closed system(\ie $n$ is constant) and replacing Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsTotal} in,
 \begin{eqnarray}
      g = \frc{G}{n} &=& \frc{\summation_{i=1}^{n_{c}}\mfr[\mu]{i}{1}\mfr[n]{i}{1}}{n} +  \cdots +  \frc{\summation_{i=1}^{n_{c}}\mfr[\mu]{i}{n_{p}}\mfr[n]{i}{n_{p}}}{n} \nonumber \\
        &=& \summation_{i=1}^{n_{c}} \underbrace{\frc{\mfr[n]{i}{1}}{\mfr[n]{}{1}}}_{\red{\mfr[x]{i}{1}}} \cdot\underbrace{\frc{\mfr[n]{}{1}}{n}}_{\red{\mfr[\Pi]{}{1}}}\mfr[\mu]{i}{1} + \cdots + \summation_{i=1}^{n_{c}} \underbrace{\frc{\mfr[n]{i}{n_{p}}}{\mfr[n]{}{n_{p}}}}_{\red{\mfr[x]{i}{n_{p}}}} \cdot\underbrace{\frc{\mfr[n]{}{n_{p}}}{n}}_{\red{\mfr[\Pi]{}{n_{p}}}}\mfr[\mu]{i}{n_{p}} \nonumber \\
@@ -176,9 +183,9 @@ Using the linear constraint (Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:Frac
 
 From Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:ChemPotDef2} and
 \begin{displaymath}
-   \mfr[\Pi]{}{k} = 1 - \summation_{j=1,j\ne k}{n_{p}} \mfr[\Pi]{}{j},
+   \mfr[\Pi]{}{k} = 1 - \summation_{j=1,j\ne k}^{n_{p}} \mfr[\Pi]{}{j},
 \end{displaymath}
-for 2 phase systems $\left(\text{i.e., } \Pi = L, V\right)$, 
+for 2 phase systems $\left(\text{\ie} \Pi = L, V\right)$, 
 \begin{displaymath}
   \left \{
   \begin{aligned}
@@ -213,12 +220,13 @@ with
     & 0 < \mfr[\Pi]{}{j} < 1 && \text{ with }  i = 1, \cdots, n_{c},\;\; j = 1, \cdots, n_{p}
   \end{aligned} \right.
 \end{displaymath} 
-Procedure for fugacity coefficient calculation is described in Section~\ref{Chapter:EOSPR:Section:FugacityCoefficients}.
+Procedures for fugacity coefficient calculation is described in Section~\ref{Chapter:EOSPR:Section:FugacityCoefficients}.
 
-%%% Section
-\section{Minimum Free Gibbs Energy}\label{Chapter:ThermodynamicFormulation:Section:MinimumGibbsEnergy}
-In multiphase systems at constant pressure and temperature conditions, the concentration of all $n_{c}$ species in equilibrium are unknown. The minimum energy principle states that at equilibrium, the extensive parameters result in the minimum Gibbs free energy at constant pressure and temperature~\citep{Callen_Book}. Therefore,  
+%%%  SUBSECTION
+\subsection{Minimum Molar Gibbs Free Energy}\label{Chapter:ThermodynamicFormulation:Section:MinimumGibbsEnergy}
+In multiphase systems at constant pressure and temperature conditions, the concentration of all $n_{c}$ species in equilibrium are unknown. The minimum energy principle states that at equilibrium, the extensive parameters result in the minimum Gibbs free energy at constant pressure and temperature~\citep{Callen_Book}. Therefore, the VLE problem can be stated as,
 
+\begin{algorithm}
 \begin{shaded}
    \begin{center}
      {\bf Statement of the VLE Problem}
@@ -244,4 +252,169 @@ where,
 \end{displaymath}
 
 \end{shaded}
-%\end{comment}
+\label{VLE_Problem:Algorithm}\caption{Vapour-liquid equibrium problem.}
+\end{algorithm}
+
+The calculation of components and phases compositions (Algorithm~\ref{VLE_Problem:Algorithm}) is a global minimisation problem that can be solved by any optimisation method. %The problem shown in Algorithm~\ref{VLE_Problem:Algorithm} is expressed in terms of the liquid phase variables, however, one can readily rewrite the problem as a function of the vapour phase variables.
+
+
+%%%  SUBSECTION
+\subsection{Gibbs-Duhen Relation}\label{Chapter:ThermodynamicFormulation:Section:GibbsDuhen}
+In this section, a general relation for liquid and vapour phases will be developed based on the Gibbs-Duhen Relation. We can start by defining the internal energy in the functional form,
+\begin{displaymath}
+   U = U\left(S, V, n_{1}, \cdots, n_{c}\right),
+\end{displaymath} 
+as a function of entropy, volume and the number of mols of all species. If we differentiate this functional,
+\begin{displaymath}
+   \d U = \left(\frc{\partial U}{\partial S}\right)_{V,n_{1},\cdots,n_{c}}\d S + \left(\frc{\partial U}{\partial V}\right)_{S,n_{1},\cdots,n_{c}}\d V + \summation_{i=1}^{n_{c}} \left(\frc{\partial U}{\partial n_{i}}\right)_{V,S,n_{j\ne i}}\d n_{i},
+\end{displaymath}
+where the differential terms in this equation are (from the Maxwell relations):
+\begin{displaymath}
+    \left(\frc{\partial U}{\partial S}\right) \equiv T, \hspace{.5cm} -\left(\frc{\partial U}{\partial V}\right) \equiv P \hspace{.1cm}\text{ and }\hspace{.4cm}  \left(\frc{\partial U}{\partial n_{i}}\right) \equiv \mu_{i},
+\end{displaymath}
+leading to the following thermodynamic relation,
+\begin{equation}
+     \d U = T\d S - P\d V + \summation_{i=1}^{n_{c}}\mu_{i}\d n_{i}.\label{Chapter:ThermodynamicFormulation:Eqn:U_FundamentalThermodRelation}
+\end{equation}
+
+If we differentiate the {\it Euler relation}, Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:EulerRelation},
+\begin{displaymath}
+  \d U = T\d S + S\d T - P\d V - V\d P + \summation_{i=1}^{n_{c}}\mu_{i}\d n_{i} + \summation_{i=1}^{n_{c}} n_{i}\d\mu_{i},
+\end{displaymath}
+and replacing Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:U_FundamentalThermodRelation} in the equation above, we obtain the {\it Gibbs-Duhen relation},
+\begin{equation}
+   S\d T -V\d P + \summation_{i=1}^{n_{c}} n_{i}\d\mu_{i} = 0.\label{Chapter:ThermodynamicFormulation:Eqn:GibbsDuhenRelation}
+\end{equation}
+
+\bigskip
+
+Let's consider a closed two-phase system with $n_{c}$ non-reactive chemical species, in which both phases are at the same temperature and pressure. If a mass transfer between phases is imposed without changing temperature and pressure conditions (\ie $\d T$ = $\d P$ = 0), Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsDuhenRelation} for the liquid phase becomes,
+\begin{displaymath}
+   \summation_{i=1}^{n_{c}} \mfr[n]{i}{L}\d\mfr[\mu]{i}{L} = 0.
+\end{displaymath}
+Dividing this equation by $\mfr[n]{}{L}=\summation_{i=1}^{n_{c}}\mfr[n]{i}{L}$ we obtain,
+\begin{displaymath}
+   \summation_{i=1}^{n_{c}} \mfr[x]{i}{L}\d\mfr[\mu]{i}{L} = 0.
+\end{displaymath}
+We should also differentiate $\mfr[\mu]{i}{L} = \mfr[\mu]{i}{L}\left(\mfr[x]{1}{L}, \cdots, \mfr[x]{n_{c}-1}{L}\right)$,
+\begin{displaymath}
+   \d\mfr[\mu]{i}{L} = \summation_{j=1}^{n_{c}-1} \frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}}\d\mfr[x]{j}{L}.
+\end{displaymath}
+Then replacing it in the previous equation,
+\begin{displaymath}
+   \summation_{j=1}^{n_{c}-1}\left[\summation_{i=1}^{n_{c}} \mfr[x]{i}{L}\frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}}\right]\d\mfr[x]{j}{L} = 0.
+\end{displaymath}
+\blue{ As the $\left[n_{c}-1\right]$ mole fraction, $\mfr[x]{1}{L}, \cdots, \mfr[x]{n_{c}-1}{L}$, are independent variables, hence all $\left[n_{c}-1\right]$ differencials, $\d\mfr[x]{i}{L}$, are \underline{linearly independents}.} Therefore, the equilibrium state can then be expressed as,
+\begin{equation}
+   \summation_{i=1}^{n_{c}} \mfr[x]{i}{L}\frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}} = 0 \hspace{.1cm}\text{ and }\hspace{.4cm} \summation_{i=1}^{n_{c}} \mfr[x]{i}{V}\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}} = 0 \hspace{.5cm} j=1, \cdots, n_{c}-1\label{Chapter:ThermodynamicFormulation:Eqn:GibbsDuhenRelation_2}
+\end{equation}
+This relation is called {\it Gibbs-Duhen relation} in the form of the intensive properties.
+
+
+%%%  SUBSECTION
+\subsection{Molar Gibbs Free Energy Gradient}\label{Chapter:ThermodynamicFormulation:Section:GradientGibbs}
+The Gibbs-Duhen relation can be used to calculate the molar Gibbs free energy gradient. From Algorithm~\ref{VLE_Problem:Algorithm}, the molar Gibbs free energy, $g=g\left(\mfr[x]{1}{L}, \mfr[x]{2}{L}, \cdots, \mfr[x]{n_{c}-1}{L}, L\right)$, Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal}, can be written as,
+\begin{equation}
+   g = \summation_{i=1}^{n_{c}-1} L\mfr[x]{i}{L}\left(\Lambda_{i}-\Lambda_{n_{c}}\right) + L\Lambda_{n_{c}} + \summation_{i=1}^{n_{c}} z_{i}\mfr[\mu]{i}{V},\label{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2}
+\end{equation}
+where
+\begin{displaymath}
+   \Lambda_{i} \equiv \mfr[\mu]{i}{L} - \mfr[\mu]{i}{V}, \hspace{.5cm} i=1, \cdots, n_{c}.
+\end{displaymath}
+If we differentiate $\Lambda$ \wrt $L$,
+\begin{displaymath}
+    \frc{\partial\Lambda_{i}}{\partial L} = \frc{\partial\mfr[\mu]{i}{L}}{\partial L} - \frc{\partial\mfr[\mu]{i}{V}}{\partial L} = - \frc{\partial\mfr[\mu]{i}{V}}{\partial L}, \hspace{.5cm} i=1, \cdots, n_{c},
+\end{displaymath}
+as $\mfr[\mu]{i}{L} = \mfr[\mu]{i}{L}\left(\mfr[x]{1}{L}, \cdots, \mfr[x]{n_{c}-1}{L}\right)$ does not depend on $L$. Therefore, from the chain rule
+\begin{equation}
+    \frc{\partial\Lambda_{i}}{\partial L} = - \frc{\partial\mfr[\mu]{i}{V}}{\partial L} = - \summation_{j=1}^{n_{c}-1} \frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}}\frc{\partial\mfr[x]{j}{V}}{\partial L}.\label{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2_a1}
+\end{equation}
+However, as  $\mfr[x]{i}{V} = \frc{z_{i} - L\mfr[x]{i}{L}}{V} = \frc{z_{i} - L\mfr[x]{i}{L}}{1-L}$,
+\begin{equation}
+   \frc{\partial\mfr[x]{i}{V}}{\partial L} = \frc{\mfr[x]{i}{V}-\mfr[x]{i}{L}}{V},\label{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2_a2}
+\end{equation}
+now replacing EQn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2_a2} in Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2_a1},
+\begin{equation}
+   \frc{\partial\Lambda_{i}}{\partial L} = -\frc{1}{V}\summation_{j=1}^{n_{c}-1}\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}}\left(\mfr[x]{j}{V}-\mfr[x]{j}{L}\right).\label{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2_a3}
+\end{equation}
+
+\medskip
+Now, for $j=1, \cdots, n_{c}-1$, we can obtain
+\begin{eqnarray}
+   \frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{L}} &=& \frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}} \frc{\partial\mfr[x]{j}{V}}{\partial\mfr[x]{j}{L}} \nonumber \\
+                                                        &=& \frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}} \frc{\partial\left(\frc{z_{j}-L\mfr[x]{j}{L}}{V}\right)}{\partial\mfr[x]{j}{L}} \nonumber \\
+                                                        &=& -\frc{L}{V}\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}}, \hspace{.2cm} i=1, \cdots, n_{c} \hspace{.1cm} \text{ and } j=1, \cdots, n_{c}-1 \label{Chapter:ThermodynamicFormulation:Eqn:PartialMuWRTXL}
+\end{eqnarray}
+In addition, using $\frc{\partial\Lambda_{i}}{\partial\mfr[x]{i}{L}} = \frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}} - \frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{L}}$
+\begin{equation}
+   \frc{\partial\Lambda_{i}}{\partial\mfr[x]{i}{L}} = \frc{L}{V}\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}} + \frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}}\label{Chapter:ThermodynamicFormulation:Eqn:PartialLambdaWRTXL}
+\end{equation}
+Now differentiating Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2} \wrt $L$, and using $\mfr[x]{n}{L}=1-\summation_{i=1}^{n_{c}-1}$ and $\frc{\partial\Lambda_{i}}{\partial L} = - \frc{\partial\mfr[\mu]{i}{V}}{\partial L}$,
+\begin{eqnarray}
+  \frc{\partial g}{\partial L} &=& \summation_{i=1}^{n_{c}-1}\left[L\mfr[x]{i}{L}\frc{\partial\Lambda_{i}}{\partial L} + \cancel{L\Lambda_{i}\frc{\partial\mfr[x]{i}{L}}{\partial L}} + \mfr[x]{i}{L}\Lambda_{i} - L\mfr[x]{i}{L}\frc{\partial\Lambda_{n_{c}}}{\partial L} - \cancel{L\Lambda_{n_{c}}\frc{\partial\mfr[x]{i}{L}}{\partial L}} - \mfr[x]{i}{L}\Lambda_{n_{c}} \right] +\nonumber \\
+                               && \hspace{1cm} L\frc{\partial\Lambda_{n_{c}}}{\partial L} + \Lambda_{n_{c}} + \summation_{i=1}^{n_{c}} \mfr[\mu]{i}{V}\cancelto{0}{\frc{\partial z_{i}}{\partial L}} + z_{i}\cancelto{-\frc{\partial\Lambda_{i}}{\partial L}}{\frc{\partial\mfr[\mu]{i}{V}}{\partial L}} \nonumber \\
+                              &=& \summation_{i=1}^{n_{c}-1}\left\{\left[L\mfr[x]{i}{L}\frc{\partial\Lambda_{i}}{\partial L} - L\mfr[x]{i}{L}\frc{\partial\Lambda_{n_{c}}}{\partial L}\right] + \left[\mfr[x]{i}{L}\Lambda_{i} - \mfr[x]{i}{L}\Lambda_{n_{c}}\right]\right\} + \left(L\frc{\partial\Lambda_{n_{c}}}{\partial L} + \Lambda_{n_{c}}\right) -\summation_{i=1}^{n_{c}} z_{i}\frc{\partial\Lambda_{i}}{\partial L} \nonumber \\
+                              &=& \summation_{i=1}^{n_{c}} L\mfr[x]{i}{L}\frc{\partial\Lambda_{i}}{\partial L} \cancel{-L\frc{\partial\Lambda_{n_{c}}}{\partial L}} + \summation_{i=1}^{n_{c}} \mfr[x]{i}{L}\Lambda_{i} -\cancel{\Lambda_{n_{c}}} + \left(\cancel{L\frc{\partial\Lambda_{n_{c}}}{\partial L}} + \cancel{\Lambda_{n_{c}}}\right) -\summation_{i=1}^{n_{c}} z_{i}\frc{\partial\Lambda_{i}}{\partial L} \nonumber \\
+                              &=& \summation_{i=1}^{n_{c}}\mfr[x]{i}{L}\Lambda_{i} - \summation_{i=1}^{n_{c}}\left(z_{i}-L\mfr[x]{i}{L}\right)\frc{\partial\Lambda_{i}}{\partial L} = \summation_{i=1}^{n_{c}}\mfr[x]{i}{L}\Lambda_{i} - V\summation_{i=1}^{n_{c}}\mfr[x]{i}{V}\frc{\partial\Lambda_{i}}{\partial L}\label{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarwrtL}
+\end{eqnarray}
+Replacing Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2_a3} in Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarwrtL}, we can obtain,
+\begin{displaymath}
+   \frc{\partial g}{\partial L} = \summation_{i=1}^{n_{c}}\mfr[x]{i}{L}\Lambda_{i} + \summation_{j=1}^{n_{c}-1}\left[\summation_{i=1}^{n_{c}}\mfr[x]{i}{V}\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}}\right]\left[\mfr[x]{j}{V} - \mfr[x]{j}{L}\right].
+\end{displaymath}
+Finally, replacing the Gibbs-Duhen relations, Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsDuhenRelation_2}, in the equation above leads to the following relation
+   \begin{equation}
+       \frc{\partial g}{\partial L} = \summation_{i=1}^{n_{c}} \mfr[x]{i}{L}\Lambda_{i} = \summation_{i=1}^{n_{c}} \mfr[x]{i}{L} \left(\mfr[\mu]{i}{L}-\mfr[\mu]{i}{V}\right)\label{Chapter:ThermodynamicFormulation:Eqn:PartialGibbsMolarWRTLiquidMolar}
+   \end{equation}
+
+\medskip
+
+
+In order to calculate $\frc{\partial g}{\partial\mfr[x]{j}{L}}\text{ for } j=1, \cdots, n_{c}-1$, we first need to rewrite Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2} as,
+\begin{equation}
+   g = \summation_{i=1,\\ i\ne j}^{n_{c}-1} L\mfr[x]{i}{L}\left(\Lambda_{i}-\Lambda_{n_{c}}\right) + L\mfr[x]{j}{L}\left(\Lambda_{j}-\Lambda_{n_{c}}\right) + L\Lambda_{n_{c}} + \summation_{i=1}^{n_{c}} z_{i}\mfr[\mu]{i}{V}.\label{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2b}
+\end{equation}
+Differentiating Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal2b} \wrt $\mfr[x]{j}{L}$, we may obtain
+\begin{equation}
+   \frc{\partial g}{\partial\mfr[x]{j}{L}} = \summation_{i=1,\\ i\ne j}^{n_{c}-1} L\mfr[x]{i}{L}\frc{\partial\left(\Lambda_{i}-\Lambda_{n_{c}}\right)}{\partial\mfr[x]{j}{L}} + L\left(\Lambda_{j}-\Lambda_{n_{c}}\right) + L\frc{\partial\Lambda_{n_{c}}}{\partial\mfr[x]{j}{L}} + \summation_{i=1}^{n_{c}} z_{i}\frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}}\label{Chapter:ThermodynamicFormulation:Eqn:PartialGibbsMolarWRTXL}
+\end{equation}
+From Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:PartialLambdaWRTXL}, for all $j=1, \cdots, n_{c}-1$,
+\begin{displaymath}
+    \frc{\partial\left(\Lambda_{i}-\Lambda_{n_{c}}\right)}{\partial\mfr[x]{j}{L}} = \frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}} - \frc{\partial\mfr[\mu]{n_{c}}{L}}{\partial\mfr[x]{j}{L}} + \frc{L}{V}\left(\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}} - \frc{\partial\mfr[\mu]{n_{c}}{V}}{\partial\mfr[x]{j}{V}}\right),
+\end{displaymath}
+and 
+\begin{displaymath}
+    \frc{\partial\Lambda_{n_{c}}}{\partial\mfr[x]{j}{L}} = \frc{\partial\mfr[\mu]{n_{c}}{L}}{\partial\mfr[x]{j}{L}} + \frc{L}{V}\frc{\partial\mfr[\mu]{n_{c}}{V}}{\partial\mfr[x]{j}{V}},
+\end{displaymath}
+and from Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:PartialMuWRTXL},
+\begin{displaymath}
+   \summation_{i=1}^{n_{c}} z_{i}\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{L}} = -\frc{L}{V}\summation_{i=1}{n_{c}} z_{i}\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}}
+\end{displaymath}
+Replacing these 3 expressions in Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:PartialGibbsMolarWRTXL} we may obtain
+\begin{equation}
+    \frc{\partial g}{\partial\mfr[x]{j}{L}} = L\left[\left(\Lambda_{j}-\Lambda_{n_{c}}\right) + \summation_{i=1}^{n_{c}}\mfr[x]{i}{L}\frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}} - \summation_{i=1}{n_{c}}\mfr[x]{i}{V}\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[\mu]{j}{V}}\right].
+\end{equation}
+Finally, replacing the Gibbs-Duhen relations, Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsDuhenRelation_2}, in the equation above leads to
+   \begin{equation}
+        \frc{\partial g}{\partial\mfr[x]{j}{L}} = L\left(\Lambda_{j}-\Lambda_{n_{c}}\right), \hspace{.5cm} \forall j=1, \cdots, n_{c} \label{Chapter:ThermodynamicFormulation:Eqn:PartialGibbsMolarWRTXL_2}
+   \end{equation}
+
+In summary, from the Gibbs-Duhen relations, Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsDuhenRelation_2}, gradient quantities in Algorithm~\ref{VLE_Problem:Algorithm} may be expressed as,
+
+\begin{shaded}
+
+\begin{displaymath}
+ \frc{\partial g}{\partial\mfr[x]{j}{L}} = L\left(\Lambda_{j}-\Lambda_{n_{c}}\right), \hspace{0.5cm} \forall j=1, \cdots, n_{c}
+\end{displaymath}
+and
+\begin{displaymath}
+ \frc{\partial g}{\partial L} = \summation_{i=1}^{n_{c}}\mfr[x]{i}{L}\Lambda_{i}
+\end{displaymath}
+where
+\begin{displaymath}
+   \Lambda_{i} \equiv \mfr[\mu]{i}{L} - \mfr[\mu]{i}{V}, \hspace{.5cm} \forall i=1, \cdots, n_{c}
+\end{displaymath}
+
+\end{shaded}
+
+
+
