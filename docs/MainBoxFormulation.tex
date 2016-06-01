@@ -508,13 +508,14 @@ Since $\mfr[\varepsilon]{}{L}>0$, from Eqn.~\ref{Chapter:ThermodynamicFormulatio
      \d = \summation_{i=1}^{n_{c}}\mfr[x]{i}{L} \left[\mfr[\mu]{i}{L}\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right) - \mfr[\mu]{i}{V}\left(z_{1}, \cdots, z_{n_{c}}\right)\right] \ge 0 \label{Chapter:ThermodynamicFormulation:Eqn:Stability_Main}
   \end{equation}
 \end{shaded}
-In other words, if $\d=\d\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right)\ge 0\;\;\forall\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right)$ in the vector-space domain,
+In other words, 
+\begin{shaded}
+if $\d=\d\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right)\ge 0\;\;\forall\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right)$ in the vector-space domain,
 \begin{displaymath}
    \begin{cases}
     0 < \mfr[x]{i}{L} < 1 & i=1,\cdots,n_{c} \text{ and }\\
-    \summation_{i=1}^{n_{c}}\mfr[x]{i}{L} = 1
+    \summation_{i=1}^{n_{c}}\mfr[x]{i}{L} = 1,
    \end{cases}
 \end{displaymath}
-
-\citet{michelsen_1984} 
-\citep[see also][]{michelsen_2007}
+thus the mixture with overall composition $z_{1},\cdots,z_{n{c}}$ is stable and must remain in the homogeneous state, otherwise the mixture is assumed unstable and will split into two phases -- liquid and vapour \citep[see][for further details of stability criteria]{michelsen_1984,michelsen_2007}.
+\end{shaded}
