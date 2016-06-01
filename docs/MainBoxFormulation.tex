@@ -65,7 +65,7 @@ Equation~\ref{Chapter:ThermodynamicFormulation:Eqn:FeedFractionDef2} may be rewr
 \section{Gibbs Free Energy}\label{Chapter:ThermodynamicFormulation:Section:GibbsEnergy}
 
 %%%  SUBSECTION
-\subsection{General Formulation}
+\subsection{General Formulation}\label{Chapter:ThermodynamicFormulation:Section:GeneralFormulation}
 By definition the chemical potential, $\mu$ is defined as
 \begin{equation}
    \mu_{i} \equiv \Partial[G]{n_{i}}{T,P,n_{j\ne i}},
@@ -259,7 +259,7 @@ The calculation of components and phases compositions (Algorithm~\ref{VLE_Proble
 
 
 %%%  SUBSECTION
-\subsection{Gibbs-Duhen Relation}\label{Chapter:ThermodynamicFormulation:Section:GibbsDuhen}
+\subsection{Gibbs-Duhen Relation}\label{Chapter:ThermodynamicFormulation:Section:GibbsDuhen}\footnote{Sections~\ref{Chapter:ThermodynamicFormulation:Section:GibbsDuhen}-\ref{Chapter:ThermodynamicFormulation:Section:PhaseStabilityAnalysis} were obtained from \citet{Henderson_Thesis,Henderson_2001}.}
 In this section, a general relation for liquid and vapour phases will be developed based on the Gibbs-Duhen Relation. We can start by defining the internal energy in the functional form,
 \begin{displaymath}
    U = U\left(S, V, n_{1}, \cdots, n_{c}\right),
@@ -508,14 +508,50 @@ Since $\mfr[\varepsilon]{}{L}>0$, from Eqn.~\ref{Chapter:ThermodynamicFormulatio
      \d = \summation_{i=1}^{n_{c}}\mfr[x]{i}{L} \left[\mfr[\mu]{i}{L}\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right) - \mfr[\mu]{i}{V}\left(z_{1}, \cdots, z_{n_{c}}\right)\right] \ge 0 \label{Chapter:ThermodynamicFormulation:Eqn:Stability_Main}
   \end{equation}
 \end{shaded}
-In other words, 
+In other words: 
 \begin{shaded}
-if $\d=\d\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right)\ge 0\;\;\forall\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right)$ in the vector-space domain,
+If $\d=\d\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right)\ge 0\;\;\forall\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right)$ in the vector-space domain,
 \begin{displaymath}
    \begin{cases}
     0 < \mfr[x]{i}{L} < 1 & i=1,\cdots,n_{c} \text{ and }\\
     \summation_{i=1}^{n_{c}}\mfr[x]{i}{L} = 1,
    \end{cases}
 \end{displaymath}
-thus the mixture with overall composition $z_{1},\cdots,z_{n{c}}$ is stable and must remain in the homogeneous state, otherwise the mixture is assumed unstable and will split into two phases -- liquid and vapour \citep[see][for further details of stability criteria]{michelsen_1984,michelsen_2007}.
+thus the mixture with overall composition $z_{1},\cdots,z_{n{c}}$ is stable and must remain in the homogeneous state, otherwise the mixture is assumed unstable and will split into two phases -- liquid and vapour \citep[see][for further details of stability criteria]{michelsen_2007}.
 \end{shaded}
+
+Consider that $n$ is the total number of moles of the system and $G$ is the associated Gibbs free energy. Graphically, $\d\left(\mfr[x]{1}{L}, \cdots, \mfr[x]{n_{c}}{L}\right) \ge 0$ with $0 < \mfr[x]{i}{L} < 1$ and $\summation_{i=1}^{n_{c}}\mfr[x]{i}{L} = 1$ means that the surface of the molar Gibbs free energy function $\left(g=G/n\right)$ is \underline{always above the tangent plane at $\left(z,g(z)\right)$ coordinates}, Fig.~\ref{Chapter:ThermodynamicFormulation:Fig:PhaseStabilityCriteria} (left). If the mixture is unstable, part of $g$'s surface is below the tangent plane, Fig.~\ref{Chapter:ThermodynamicFormulation:Fig:PhaseStabilityCriteria} (right). Such phase split geometrical assessment is called {\it tangent plane criteria} \citep[see][]{michelsen_1984,baker_1982}.
+%%% Figure
+\begin{figure}[h]\label{Chapter:ThermodynamicFormulation:Fig:PhaseStabilityCriteria}
+        \begin{center}
+          \includegraphics[width=\columnwidth,clip]{./Figs/StabilityCriteria2}\vspace{-0.5cm}
+           \caption{Graphical example of two mixtures at different stability condition.} 
+        \end{center}
+\end{figure}
+%%% Figure
+
+\citet{michelsen_1984} used Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:Stability_Main} to develop traditional stability tests and the reader should refer to his seminal work. Here \citep[see][]{Henderson_Thesis}, a modified stability test is used that take into account the formulation developed in Sections~\ref{Chapter:ThermodynamicFormulation:Section:MassBalance} and ~\ref{Chapter:ThermodynamicFormulation:Section:GeneralFormulation}.  Replacing $\mfr[x]{i}{L} = 1 - \summation_{i=1}^{n_{c}-1}\mfr[x]{i}{L}$ in the relation $\d=\d\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}}{L}\right)$,
+\begin{equation}
+   \d\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}-1}{L}\right) = \summation_{i=1}^{n_{c}-1}\mfr[x]{i}{L}\left[\left(\mfr[\mu]{n_{c}}{V}-\mfr[\mu]{n_{c}}{L}\right)-\left(\mfr[\mu]{i}{V}-\mfr[\mu]{i}{L}\right)\right] - \left(\mfr[\mu]{n_{c}}{V}-\mfr[\mu]{n_{c}}{L}\right).
+\end{equation}
+From this function we can design an optimisation problem that effectively represents the stability test, Algorithm~\ref{Stability_Test:Algorithm}. This algorithm describes the VLE problem as a function of several intensive properties in the liquid phase.  
+\begin{algorithm}[h]
+\begin{shaded}
+   \begin{center}
+     {\bf Stability Test for the VLE Problem}
+   \end{center}
+
+   Given $T$, $P$ and $z_{i}$ $\left(i=1,2,\cdots,n_{c}\right)$. \\
+   Find the set of \red{$\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}$} that \underline{minimises}
+   \begin{displaymath}
+        \d\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}-1}{L}\right) = \summation_{i=1}^{n_{c}-1}\mfr[x]{i}{L}\left[\left(\mfr[\mu]{n_{c}}{V}-\mfr[\mu]{n_{c}}{L}\right)-\left(\mfr[\mu]{i}{V}-\mfr[\mu]{i}{L}\right)\right] - \left(\mfr[\mu]{n_{c}}{V}-\mfr[\mu]{n_{c}}{L}\right)
+   \end{displaymath} 
+   with $0<\mfr[x]{i}{L}<1,\hspace{.2cm} \forall i=1,\cdots,n_{c}-1$. \\
+   Where
+   \begin{displaymath}
+      \mfr[\mu]{i}{L} = \mfr[\mu]{i}{L} \left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}\right)\text{ and } \mfr[\mu]{i}{V} = \mfr[\mu]{i}{V} \left(z_{1},\cdots, z_{n_{c}}\right)
+   \end{displaymath}
+
+\end{shaded}
+\label{Stability_Test:Algorithm}\caption{Modified stability test for the VLE problem.}
+\end{algorithm}
