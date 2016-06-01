@@ -225,7 +225,9 @@ Procedures for fugacity coefficient calculation is described in Section~\ref{Cha
 %%%  SUBSECTION
 \subsection{Minimum Molar Gibbs Free Energy}\label{Chapter:ThermodynamicFormulation:Section:MinimumGibbsEnergy}
 In multiphase systems at constant pressure and temperature conditions, the concentration of all $n_{c}$ species in equilibrium are unknown. The minimum energy principle states that at equilibrium, the extensive parameters result in the minimum Gibbs free energy at constant pressure and temperature~\citep{Callen_Book}. Therefore, the VLE problem can be stated as,
-
+%%%               %%%
+%%%   ALGORITHM   %%%
+%%%               %%%
 \begin{algorithm}
 \begin{shaded}
    \begin{center}
@@ -254,7 +256,9 @@ where,
 \end{shaded}
 \label{VLE_Problem:Algorithm}\caption{Vapour-liquid equibrium problem.}
 \end{algorithm}
-
+%%%               %%%
+%%%   ALGORITHM   %%%
+%%%               %%%
 The calculation of components and phases compositions (Algorithm~\ref{VLE_Problem:Algorithm}) is a global minimisation problem that can be solved by any optimisation method. %The problem shown in Algorithm~\ref{VLE_Problem:Algorithm} is expressed in terms of the liquid phase variables, however, one can readily rewrite the problem as a function of the vapour phase variables.
 
 
@@ -534,7 +538,10 @@ Consider that $n$ is the total number of moles of the system and $G$ is the asso
 \begin{equation}
    \d\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}-1}{L}\right) = \summation_{i=1}^{n_{c}-1}\mfr[x]{i}{L}\left[\left(\mfr[\mu]{n_{c}}{V}-\mfr[\mu]{n_{c}}{L}\right)-\left(\mfr[\mu]{i}{V}-\mfr[\mu]{i}{L}\right)\right] - \left(\mfr[\mu]{n_{c}}{V}-\mfr[\mu]{n_{c}}{L}\right).
 \end{equation}
-From this function we can design an optimisation problem that effectively represents the stability test, Algorithm~\ref{Stability_Test:Algorithm}. This algorithm describes the VLE problem as a function of several intensive properties in the liquid phase.  
+From this function we can design an optimisation problem that effectively represents the stability test, Algorithm~\ref{Stability_Test:Algorithm}. This algorithm describes the VLE problem as a function of several intensive properties in the liquid phase.  Thus, during the minimisation algorithm, if the relation $\d\ge 0$ is met then system is assumed stable and there is only one phase, otherwise the mixture is assumed unstable and the system has two phases. 
+%%%               %%%
+%%%   ALGORITHM   %%%
+%%%               %%%
 \begin{algorithm}[h]
 \begin{shaded}
    \begin{center}
@@ -551,7 +558,22 @@ From this function we can design an optimisation problem that effectively repres
    \begin{displaymath}
       \mfr[\mu]{i}{L} = \mfr[\mu]{i}{L} \left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}\right)\text{ and } \mfr[\mu]{i}{V} = \mfr[\mu]{i}{V} \left(z_{1},\cdots, z_{n_{c}}\right)
    \end{displaymath}
-
 \end{shaded}
 \label{Stability_Test:Algorithm}\caption{Modified stability test for the VLE problem.}
 \end{algorithm}
+%%%               %%%
+%%%   ALGORITHM   %%%
+%%%               %%%
+
+The use of the stability test as it is in Algorithm~\ref{Stability_Test:Algorithm} is convenient to make use of the derived Gibbs-Duhem relations (see Sections~\ref{Chapter:ThermodynamicFormulation:Section:GibbsDuhen}-\ref{Chapter:ThermodynamicFormulation:Section:HessianGibbs}). By differentiating $\d=\d\left(\mfr[x]{i}{L}, \cdots, \mfr[x]{n_{c}-1}{L}\right)$ \wrt $\mfr[x]{j}{k}$ with $j=1,\cdots,n_{c}-1$ and $k=L,V$,
+\begin{equation}
+   \frc{\partial\d}{\partial\mfr[x]{j}{L}} = \left(\mfr[\mu]{j}{L}-\mfr[\mu]{j}{V}\right) - \left(\mfr[\mu]{n_{c}}{L}-\mfr[\mu]{n_{c}}{V}\right) + \summation_{i=1}^{n_{c}}\mfr[x]{i}{L}\frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}},
+\end{equation}
+and replacing Eqn.\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsDuhenRelation_2} in Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:Stability_Main} results in the elements of the gradient vector of the function $d$ with $j=1,\cdots,n_{c}-1$,
+\begin{equation}
+   \frc{\partial\d}{\partial\mfr[x]{j}{L}} = \left[\mfr[\mu]{j}{L}\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}\right) - \mfr[\mu]{j}{V}\left(z_{1},\cdots,z_{n_{c}}\right)\right] - \left[\mfr[\mu]{n_{c}}{L}\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}\right) \mfr[\mu]{n_{c}}{V}\left(z_{1},\cdots,z_{n_{c}}\right)\right].
+\end{equation}
+Therefore the Hessian matrix of the function $d$ is,
+\begin{equation}
+   \frc{\partial^{2}\d}{\partial x_{j}\partial x_{i}} =  \frc{\partial^{2}\d}{\partial x_{i}\partial x_{j}} = \frc{\partial\mfr[\mu]{j}{L}}{\partial\mfr[x]{i}{L}} - \frc{\partial\mfr[\mu]{n_{c}}{L}}{\partial\mfr[x]{i}{L}}, \hspace{.5cm} (i,j)=1,\cdots,n_{c}-1
+\end{equation}
