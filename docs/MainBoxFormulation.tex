@@ -423,7 +423,7 @@ where
 
 %%%  SUBSECTION
 \subsection{Hessian of the Molar Gibbs Free Energy}\label{Chapter:ThermodynamicFormulation:Section:HessianGibbs}
-Since the Gibbs free energy is a function twice differentiable, the Hessian\footnote{For a review on partial derivatives and Hessian matrix, see \href{https://www.math.vt.edu/people/dlr/m2k_svb11_hesian.pdf}{https://www.math.vt.edu/people/dlr/m2k$\_$svb11$\_$hesian.pdf}.} of the molar Gibbs free energy, $g=G/n_{c}$, is a symmetric matrix. In addition, $\forall (i,j)=1, \cdots, n_{c}-1$ and using the relations from Sections~\ref{Chapter:ThermodynamicFormulation:Section:GibbsDuhen} and ~\ref{Chapter:ThermodynamicFormulation:Section:GradientGibbs} we can obtain the elements of the Hessian matrix:
+Since the Gibbs free energy is a function twice differentiable, the Hessian\footnote{For a review on partial derivatives and Hessian matrix (definitions and applications in non-linear optimisation, see \href{https://www.math.vt.edu/people/dlr/m2k_svb11_hesian.pdf}{https://www.math.vt.edu/people/dlr/m2k$\_$svb11$\_$hesian.pdf}.} of the molar Gibbs free energy, $g=G/n_{c}$, is a symmetric matrix. In addition, $\forall (i,j)=1, \cdots, n_{c}-1$ and using the relations from Sections~\ref{Chapter:ThermodynamicFormulation:Section:GibbsDuhen} and ~\ref{Chapter:ThermodynamicFormulation:Section:GradientGibbs} we can obtain the elements of the Hessian matrix:
 \begin{eqnarray}
    \frc{\partial^{2}g}{\partial\mfr[x]{i}{L}\partial\mfr[x]{j}{L}} &=& \frc{\partial^{2}g}{\partial\mfr[x]{j}{L}\partial\mfr[x]{i}{L}} = L\left[\left(\frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}} - \frc{\partial\mfr[\mu]{n_{c}}{L}}{\partial\mfr[x]{j}{L}}\right) + \frc{L}{V}\left(\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}} - \frc{\partial\mfr[\mu]{n_{c}}{V}}{\partial\mfr[x]{j}{V}}\right)\right], \\
               && \nonumber \\
@@ -431,7 +431,7 @@ Since the Gibbs free energy is a function twice differentiable, the Hessian\foot
               && \nonumber \\
     \frc{\partial^{2}g}{\partial L^{2}} &=& \frc{1}{V}\summation_{i=1}^{n_{c}}\summation_{j=1}^{n_{c}-1}\mfr[x]{i}{L}\left(\mfr[x]{j}{L}-\mfr[x]{j}{V}\right)\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}}.
 \end{eqnarray}
-It is clear that in order to calculate the elements of the Hessian of the molar Gibbs free energy we still need to obtain $\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}}$ and $\frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}}$ with $i=1, \cdots, n_{c}$ and $j=1, \cdots, n_{c}-1$. This quantities can be obtained from equations of state. In summary, from the fundamental relation of the chemical potential,
+It is clear that in order to calculate the elements of the Hessian of the molar Gibbs free energy we still need to obtain $\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}}$ and $\frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}}$ with $i=1, \cdots, n_{c}$ and $j=1, \cdots, n_{c}-1$. These quantities can be obtained from equations of state. In summary, from the fundamental relation of the chemical potential,
 \begin{equation}
    \mu_{i} = RT\ln\left(f_{i}\right) + \theta_{i}(T) = RT\left[\ln\varphi_{i} + \ln\left(x_{i}P\right)\right] + \theta_{i}(T)
 \end{equation}
@@ -575,5 +575,7 @@ and replacing Eqn.\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsDuhenRelation_2
 \end{equation}
 Therefore the Hessian matrix of the function $d$ is,
 \begin{equation}
-   \frc{\partial^{2}\d}{\partial x_{j}\partial x_{i}} =  \frc{\partial^{2}\d}{\partial x_{i}\partial x_{j}} = \frc{\partial\mfr[\mu]{j}{L}}{\partial\mfr[x]{i}{L}} - \frc{\partial\mfr[\mu]{n_{c}}{L}}{\partial\mfr[x]{i}{L}}, \hspace{.5cm} (i,j)=1,\cdots,n_{c}-1
+   \frc{\partial^{2}\d}{\partial x_{j}\partial x_{i}} =  \frc{\partial^{2}\d}{\partial x_{i}\partial x_{j}} = \frc{\partial\mfr[\mu]{j}{L}}{\partial\mfr[x]{i}{L}} - \frc{\partial\mfr[\mu]{n_{c}}{L}}{\partial\mfr[x]{i}{L}}, \hspace{.5cm} (i,j)=1,\cdots,n_{c}-1.
 \end{equation}
+
+The Hessian matrix is used in the calculation of $\d$ using Newton-based methods as briefly demonstrated in Section~\ref{Chapter:GlobalOpt:Section:NewtonMethods}.
