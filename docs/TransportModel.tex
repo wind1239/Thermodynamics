@@ -16,16 +16,15 @@ also, most traditional models usually assume that there is {\bf no} mass interch
       &&\phi \frc{\partial}{\partial t}\left( \mfr[y]{i}{o} \mfr[\rho]{i}{o} \mfr[S]{}{o} + \mfr[y]{i}{g} \mfr[\rho]{i}{g} \mfr[S]{}{g} +  \mfr[y]{i}{w} \mfr[\rho]{i}{w} \mfr[S]{}{w}\right) + \nonumber \\
         &&\;\;\;\; \nabla \cdot \left(\mfr[y]{i}{o} \mfr[\rho]{i}{o}\mfr[S]{}{o}  \mfr[\mathbf{u}]{}{o} + \mfr[y]{i}{g}\mfr[\rho]{i}{g}\mfr[S]{}{g} \mfr[\mathbf{u}]{}{g} + \mfr[y]{i}{w} \mfr[\rho]{i}{w}\mfr[S]{}{w} \mfr[\mathbf{u}]{}{w} \right) - Q_i = 0, \label{Chapter:CompositionalModel:Eqn:saturation_comp_old}
    \end{eqnarray}
-where $\phi$, $S$ and $\mathbf{u}$ are porosity, saturation and velocity vector fields, respectively. The force balance is expressed as:
+where $\phi$, $S$ and $\mathbf{u}$ are porosity, saturation and velocity vector fields, respectively. The force balance equation, Eqn.~\ref{force-bal}, can be expressed as:
    \begin{equation}
        \mfr[\underline{\underline{\sigma}}]{}{j} \mfr[\mathbf u]{}{j} = - \nabla \mfr[p]{}{j} + \mfr[\mathcal{S}]{}{j}, ~~~~~ j = o,g,w .\label{Chapter:CompositionalModel:Eqn:ForceBalance}
    \end{equation}
-The capillary pressures are set to zero and thus $\mfr[p]{}{o} = \mfr[p]{}{g} = \mfr[p]{}{w}  = p $, and $\summation_{j}\mfr[S]{}{j} = 1$. Conservation equations for phases can be expressed (based on Eqn. \ref{Chapter:CompositionalModel:Eqn:saturation_comp_old}) as 
+The capillary pressures are set to zero and thus $\mfr[p]{}{o} = \mfr[p]{}{g} = \mfr[p]{}{w}  = p $, and $\summation_{j}\mfr[S]{}{j} = 1$. Conservation equations for phases can be expressed (based on Eqn. \ref{Chapter:CompositionalModel:Eqn:saturation_comp_old} -- see also Eqn.~\ref{saturation_equation}) as 
    \begin{equation}
-       \displaystyle\frac{\partial}{\partial t}\left(\phi\mfr[\rho]{}{j}\mfr[S]{}{j}\right) + \nabla\cdot\left(\mfr[\rho]{}{j}\mfr[S]{}{j}\mfr[\mathbf{u}]{}{j}\right) -\mfr[m]{}{j} = 0, 
-              \label{saturation_compositional_1}
+       \displaystyle\frac{\partial}{\partial t}\left(\phi\mfr[\rho]{}{j}\mfr[S]{}{j}\right) + \nabla\cdot\left(\mfr[\rho]{}{j}\mfr[S]{}{j}\mfr[\mathbf{u}]{}{j}\right) -\mfr[m]{}{j} = 0, \label{saturation_compositional_1}
    \end{equation}
-where $\mfr[m]{}{j}$ are the mass source terms,
+where $\mfr[m]{}{j}$ are mass source/sink terms with the following constraint,
    \begin{displaymath}
       \summation_{j=1}^{{\cal N}_p} \mfr[m]{}{j}=\mfr[m]{}{w}+\mfr[m]{}{o}+\mfr[m]{}{g}=0. 
    \end{displaymath}
@@ -38,44 +37,42 @@ where $\mfr[m]{}{j}$ are the mass source terms,
 
 We can lump the conservative saturation equations as
     \begin{equation}
-              \phi \displaystyle\frac{\partial}{\partial t}\left(\summation_{j=1}^{{\cal N}_p}\mfr[y]{i}{j}\mfr[\rho]{i}{j}\mfr[S]{}{j}\right) + \nabla\cdot\left(\summation_{j=1}^{{\cal N}_p}\mfr[y]{i}{j}\mfr[\rho]{i}{j}\mfr[S]{}{j}\mfr[\mathbf{u}]{}{j}\right) - Q_{i} = 0, \label{saturation_compositional_4}
+              \phi \displaystyle\frac{\partial}{\partial t}\left[\summation_{j=1}^{{\cal N}_p}\mfr[y]{i}{j}\mfr[\rho]{i}{j}\mfr[S]{}{j}\right] + \nabla\cdot\left[\summation_{j=1}^{{\cal N}_p}\mfr[y]{i}{j}\mfr[\rho]{i}{j}\mfr[S]{}{j}\mfr[\mathbf{u}]{}{j}\right] - Q_{i} = 0, \hspace{.5cm} i = 1, \cdots, \mathcal{N}_{c}. \label{saturation_compositional_4}
     \end{equation} 
-where $i = 1, 2, \cdots, \mathcal{N}_{c}$. For 2-phases systems (e.g., oil and water), the mass conservation equation for component $i$ is,  
-     \begin{eqnarray}
-             &&\phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o} +  \mfr[y]{i}{w}\mfr[\rho]{i}{w}\mfr[S]{}{w}\right) + \nonumber \\
-             && \nabla\cdot\left(\mfr[y]{i}{o} \mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o} + \mfr[y]{i}{w}\mfr[\rho]{i}{w}\mfr[S]{}{w}\mfr[\mathbf{u}]{}{w} \right) - Q_{i} = 0 \nonumber
-    \end{eqnarray}
+For 2-phases systems (e.g., oil and gas), the mass conservation equation for component $i$ is,  
+     \begin{displaymath}
+             \phi \displaystyle\frac{\partial}{\partial t}\left[\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o} +  \mfr[y]{i}{g}\mfr[\rho]{i}{g}\mfr[S]{}{g}\right] + \nabla\cdot\left[\mfr[y]{i}{o} \mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o} + \mfr[y]{i}{g}\mfr[\rho]{i}{g}\mfr[S]{}{g}\mfr[\mathbf{u}]{}{g} \right] - Q_{i} = 0
+    \end{displaymath}
 We can decouple the conservative equation into two equations (for simplicity let's neglect the source/sink terms): 
           \begin{eqnarray}
-             && \phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o} \right) + \nabla\cdot\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o}  \right) - K_i  = 0, \nonumber \\
-             && \phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{w}\mfr[\rho]{i}{w}\mfr[S]{}{w}  \right) + \nabla\cdot\left(\mfr[y]{i}{w}\mfr[\rho]{i}{w}\mfr[S]{}{w}\mfr[\mathbf{u}]{}{w} \right) + K_i = 0.  \nonumber
+             && \phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o} \right) + \nabla\cdot\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o}  \right) - K_{i}  = 0, \nonumber \\
+             && \phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{g}\mfr[\rho]{i}{g}\mfr[S]{}{g}  \right) + \nabla\cdot\left(\mfr[y]{i}{g}\mfr[\rho]{i}{g}\mfr[S]{}{g}\mfr[\mathbf{u}]{}{g} \right) + K_{i} = 0.  \nonumber
           \end{eqnarray}
-
-The term $K_{i}$ is selected as \red{$K_{i}=\alpha_i \left(\mfr[y]{i}{w} - E_{i} \mfr[y]{i}{o}\right)$} (for positive $\alpha_{i}$), in an attempt to enforce the Equation of State (EoS),  $\mfr[y]{i}{w} - E_i \mfr[y]{i}{o}=0$.  The final form of the mass conservation equations for each component $i$ is 
+The term $K_{i}$ is selected as $K_{i}=\alpha_i \left(\mfr[y]{i}{g} - E_{i} \mfr[y]{i}{o}\right)$ (for positive $\alpha_{i}$), in an attempt to enforce a parameterisd equation of state, $\mfr[y]{i}{g} - E_{i} \mfr[y]{i}{o}=0 \Longrightarrow E_{i}=\frc{\mfr[y]{i}{g}}{\mfr[y]{i}{o}}$
            \begin{eqnarray}
-               && \phi  \displaystyle\frac{\partial}{\partial t}\left(y_{i}^{o}\rho_i^{o}S^{o} \right) + \nabla\cdot\left(y_{i}^{o}\rho_i^{o}S^{o}\mathbf{u}^{o}  \right) - \alpha_i (y_i^w - E_i y_i^o)  = 0, \label{oil-comp-i} \nonumber\\
-               && \phi \displaystyle\frac{\partial}{\partial t}\left(y_{i}^{w}\rho_i^{w}S^{w}  \right) +  \nabla\cdot\left( y_{i}^{w}\rho_i^{w}S^{w}\mathbf{u}^{w}  \right) + \alpha_i (y_i^w - E_i y_i^o) = 0. \label{water-comp-i} \nonumber\label{Chapter:CompositionalModel:Section:MultiComponentFormulation:Section:2PhaseSystem:Eqn:MassConservationSaturation}
+               && \phi  \displaystyle\frac{\partial}{\partial t}\left(y_{i}^{o}\rho_i^{o}S^{o} \right) + \nabla\cdot\left(y_{i}^{o}\rho_i^{o}S^{o}\mathbf{u}^{o}  \right) - \alpha_i (y_i^g - E_i y_i^o)  = 0, \label{oil-comp-i} \nonumber\\
+               && \phi \displaystyle\frac{\partial}{\partial t}\left(y_{i}^{g}\rho_i^{g}S^{g}  \right) +  \nabla\cdot\left( y_{i}^{g}\rho_i^{g}S^{g}\mathbf{u}^{g}  \right) + \alpha_i (y_i^g - E_i y_i^o) = 0. \label{water-comp-i} \nonumber\label{Chapter:CompositionalModel:Section:MultiComponentFormulation:Section:2PhaseSystem:Eqn:MassConservationSaturation}
            \end{eqnarray}
 
-These coupled equations are solved for $\mfr[y]{i}{o}$ and $\mfr[y]{i}{w}$ and for each $i$ component in {\it oil} phase, 
+These coupled equations are solved for $\mfr[y]{i}{o}$ and $\mfr[y]{i}{g}$ and for each $i$ component in {\it oil} phase, 
            \begin{equation}
-              \summation_{i=1}^{{\cal N}_{c}} \bigg(\phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o} \right) + \nabla\cdot\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o}  \right) - \alpha_i (\mfr[y]{i}{w} - E_i \mfr[y]{i}{o})\bigg)  = 0, 
+              \summation_{i=1}^{{\cal N}_{c}} \bigg(\phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o} \right) + \nabla\cdot\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o}  \right) - \alpha_i (\mfr[y]{i}{g} - E_i \mfr[y]{i}{o})\bigg)  = 0, 
            \end{equation}
 Resulting in:
            \begin{eqnarray}
               \phi \displaystyle\frac{\partial}{\partial t}\left( \mfr[\rho]{i}{o}\mfr[S]{}{o} \right) + \nabla\cdot\left(\mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o}  \right) = \mfr[m]{}{o}, \nonumber \\
-              \phi \displaystyle\frac{\partial}{\partial t}\left( \mfr[\rho]{i}{w}\mfr[S]{}{w} \right) + \nabla\cdot\left(\mfr[\rho]{i}{w}\mfr[S]{}{w}\mfr[\mathbf{u}]{}{w}  \right) = \mfr[m]{}{w}, \nonumber 
+              \phi \displaystyle\frac{\partial}{\partial t}\left( \mfr[\rho]{i}{g}\mfr[S]{}{g} \right) + \nabla\cdot\left(\mfr[\rho]{i}{g}\mfr[S]{}{g}\mfr[\mathbf{u}]{}{g}  \right) = \mfr[m]{}{g}, \nonumber 
            \end{eqnarray}
 where $\mfr[\rho]{i}{j}$ is the phase-weighted density. With the equal and opposite mass flow rate between the phases: 
            \begin{displaymath}
-                -\mfr[m]{}{w} = \mfr[m]{}{o}= \summation_{i=1}^{{\cal N}_{c}}\alpha_i \left(\mfr[y]{i}{w} - E_i \mfr[y]{i}{o}\right), 
+                -\mfr[m]{}{g} = \mfr[m]{}{o}= \summation_{i=1}^{{\cal N}_{c}}\alpha_i \left(\mfr[y]{i}{g} - E_i \mfr[y]{i}{o}\right), 
            \end{displaymath}
 thus preserving mass.
 
 
-Equations~\ref{Chapter:CompositionalModel:Section:MultiComponentFormulation:Section:2PhaseSystem:Eqn:MassConservationSaturation} are well-posed independent of their corresponding saturation due to the presence of the inter-phase coupling terms involving $\alpha$. This relaxation coefficient \blue{$\alpha$} must be chosen such that on the time scale of the time-step size $\Delta t$ the EoS $\mfr[y]{i}{w} - E_i \mfr[y]{i}{o}=0$ is strictly enforced. Based on dimensional arguments this leads to: 
+Equations~\ref{Chapter:CompositionalModel:Section:MultiComponentFormulation:Section:2PhaseSystem:Eqn:MassConservationSaturation} are well-posed independent of their corresponding saturation due to the presence of the inter-phase coupling terms involving $\alpha$. This relaxation coefficient \blue{$\alpha$} must be chosen such that on the time scale of the time-step size $\Delta t$ the EoS $\mfr[y]{i}{g} - E_i \mfr[y]{i}{o}=0$ is strictly enforced. Based on dimensional arguments this leads to: 
             \begin{equation}
-               \alpha_{i}= \beta \frc{\phi \left(\mfr[\rho]{i}{o}\mfr[S]{}{o} \frc{1}{E_i} +\mfr[\rho]{i}{w}\mfr[S]{}{w} \right)}{\Delta t} ,
+               \alpha_{i}= \beta \frc{\phi \left(\mfr[\rho]{i}{o}\mfr[S]{}{o} \frc{1}{E_i} +\mfr[\rho]{i}{g}\mfr[S]{}{g} \right)}{\Delta t} ,
             \end{equation}
 in which $\beta$ is an order one scalar, e.g., $\beta=1$.
 
