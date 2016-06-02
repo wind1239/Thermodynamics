@@ -1,0 +1,177 @@
+
+%%%
+%%% CHAPTER
+%%%
+\chapter{Multi-Fluids Porous Media Flow Model}\label{ChapterMultiFluidsModel}
+
+%%% SECTION
+\section{Numerical Formulation: Force Balance Model}\label{ChapterMultiFluidsModel:Section:overlapping_method_section}
+This section was taken from the paper XXX by Gomes {\it et al.}
+
+\subsection{A novel representation of multi-phase Darcy flows}\label{ChapterMultiFluidsModel:Section:DarcyModel}
+Darcy's law for immiscible multi-phase flow may be written in the form:
+\begin{equation}\label{e:darcy_eqn}
+  \mathbf{q}_{\alpha} = -\frac{\mathcal{K}_{{r}_\alpha}\mathbf{K}}{\mu_{\alpha}}\left(\nabla p_{\alpha} - {\mathbf{s}_{u}}_{\alpha} \right),
+\end{equation}
+where $\mathbf{q}_{\alpha}$ is the $\alpha$-th phase Darcy velocity, $\mathbf{K}$ is the absolute permeability tensor of the porous medium, $\mathcal{K}_{{r}_\alpha}\left(S_{\alpha}\right)$ is the phase relative permeability, which is a function of the phase saturation $S_{\alpha}\left(\mathbf{r},t\right)$. $\mu_{\alpha}$, $p_{\alpha}$, $\rho_{\alpha}$, and $\mathbf{s}_{{u}_\alpha}$ are the phase dynamic viscosity, pressure, density and source term, which may include gravity and/or capillarity, respectively. 
+
+Introducing a saturation-weighted Darcy velocity defined as $\mathbf{u}_\alpha= \mathbf{q}_\alpha/S_\alpha$, then Eqn.~\ref{e:darcy_eqn} may be rewritten as:
+\begin{equation}
+  \mathbf{v}_\alpha={\underline {\underline \sigma}}_{\alpha} \mathbf{u}_{\alpha} = - \nabla p_{\alpha} + {\mathbf{s}_{u}}_{\alpha},
+  \label{force-bal}
+\end{equation}
+where ${\underline {\underline \sigma}}_{\alpha}=\mu_\alpha S_\alpha \left(\mathcal{K}_{{r}_\alpha}\mathbf{K}\right)^{-1}$ represents the implicit linearisation of the viscous frictional forces. The force per unit volume $\mathbf{v}_\alpha$, defined as ${\underline {\underline \sigma}}_{\alpha} \mathbf{u}_\alpha$, is used as a prognostic variable in this approach, as explained in Section~\ref{ChapterMultiFluidsModel:Section:Force_density}.
+
+In order to discretise Eqn.~\ref{force-bal}, a finite element representation for $\mathbf{v}_\alpha$ and $p$ is assumed, expressed in terms of their FE basis functions $Q_{j}$ and $P_{j}$, respectively, as:
+\begin{equation}
+  \mathbf{v}_\alpha(\bm{r},t) = \sum\limits_{j=1}^{\mathcal{N}_u} Q_{j}(\bm{r})\mathbf{v}_{\alpha,j}(t) \;\;\;\;\text{ and } \;\;\;\; p(\bm{r},t) = \sum\limits_{j=1}^{\mathcal{N}_p} P_{j}(\bm{r})p_{j}(t).
+\end{equation} 
+Here $\mathcal{N}_{u}$ and $\mathcal{N}_{p}$ are the total number of degrees of freedom for the FE force and pressure representations. Each component of the weak form of the force balance (Eqn.~\ref{force-bal}) is tested with the $\mathbf{v}_\alpha$ basis function space to obtain:
+\begin{displaymath}
+  \sum\limits_{E} \left. \int\limits_{\Omega_E} { {Q}}_i \left({\mathbf v}_\alpha + \nabla p  -{\mathbf s}_{u_\alpha}\right) \d V \right. + \displaystyle \oint_{\Gamma_{E}} {Q}_i {\mathbf n} \left(p - \tilde{p}\right) \d\Gamma + \oint_{\Gamma_{\Omega}} {Q}_i {\mathbf n} \left(p - p_\text{bc}\right) \d\Gamma = \bm{0},\nonumber \label{force-semi-disc} 
+\end{displaymath} 
+where $\Omega_E$ and $\Gamma_{E}$ are the volume and boundary of element $E$, respectively, and $\Gamma_{\Omega}$ is the boundary of the computational domain. The numerical pressure $\tilde{p}$ appearing in the jump condition (second term in Eqn.~\ref{force-semi-disc}) is the arithmetic mean of the potentially discontinuous pressure across the element $E$. This term vanishes when a continuous formulation is used to discretise the pressure field. The last term in Eqn.~\ref{force-semi-disc} is used to weakly enforce the pressure level to $p_\text{bc}$ on a computational domain boundary.
+
+In matrix form, Eqn.~\ref{force-semi-disc} is: 
+\begin{equation}
+  {\mathbf M} \underline {\mathbf v} = -{\mathbf C} \underline{\mathbf p} + \underline {\mathbf s}_{u}, \label{force-balance-matrix-form}
+\end{equation}
+where $\underline{\bf v}$ and $\underline{\bf p}$ solution-vectors are defined as:
+\begin{eqnarray}
+    &&\underline{{\bf v}} = \left( \left( {v_x},{v_y},{v_z} \right)_{1,1}, \left( {v_x},{v_y},{v_z} \right)  _{2,1},\ldots, \left( {v_x},{v_y},{v_z} \right)_{\mathcal{N}_\alpha,\mathcal{N}_u} \right)^{T} \;\text{and} \nonumber \\ 
+    && \underline{{\bf p}} = \left(p_1, p_2, p_3, \cdots, p_{\mathcal{N}_p}\right)^T. \nonumber% \nonumber
+\end{eqnarray}
+$\mathcal{N}_{\alpha}$ is the number of phases and $v_x$, $v_y$ and $v_z$ are the components associated with the $x$, $y$ and $z$ dimensions, respectively. Finally, the mass matrix ${\mathbf M}$, gradient matrix ${\mathbf C}$ and source vector $\underline {\mathbf s}_{u}$ are defined as:
+\begin{eqnarray}
+     && \left[{\mathbf M}^{(i,j)}\right]_{k,l} = \int_{\Omega} Q_{k} \left[\underline{\underline{\sigma}}_{\alpha}\right]_{i,j} {Q}_{l} \d V, \nonumber \\ 
+     && {\left[\bm{C}^{(i,i)}\right]_{k,l} = \int_{\Omega} Q_{k} \frac{\partial P_{l}}{\partial r_i} \d V - \oint_{\Gamma_{E}} \displaystyle\frac{1}{2} Q_{k} n_i^{(E,l)} P_{l} d\Gamma - \oint_{\Gamma_{\Omega}} \displaystyle Q_{k} n_i P_{l} \d\Gamma}, \nonumber \\ 
+     && {\left[\bm{s}_{u}^{(i,i)}\right]_{k} = \int_{\Omega} Q_k}\left[{\mathbf s}_{u_\alpha} \right]_i \d V - \oint_{\Gamma_{\Omega}}\displaystyle Q_{k} n_i p_\text{bc} \d\Gamma, \nonumber
+\end{eqnarray}
+where $i$ and $j$ are dimensions and $k$ and $l$ are the degrees of freedom of element $E$. Here, $\bm{n} = \left(n_{1}, n_{2}, n_{3}\right)^{T}$ is the outward-pointing normal vector of the domain $\Omega$. $\bm{n}^{(E,l)}$ is the normal to the boundary of element $E$ and is outward-pointing if $P_{l}$ takes support on $E$, and inward-pointing otherwise.
+
+\medskip
+
+The saturations are computed in CV space, whereas the permeability tensor $\left(\mathbf{K}\right)$ is assumed piece-wise constant in FE space. Thus the viscous-friction damping tensor $ {\underline {\underline \sigma}}_{\alpha}$ is piece-wise constant within the sub-control volumes defined through intersections between the elements and control volumes (see Fig.~\ref{fem_cv_represent_a}).
+
+
+
+\subsection{Control Volume Finite Element types}\label{ChapterMultiFluidsModel:Section:Element_Types}
+In the formulation presented here, pressure, velocity, permeability and porosity are represented FE-wise, however saturation, relative permeability and fluid properties such as viscosity and density are represented CV-wise. Figure~\ref{fem_cv_represent_a} displays the two families of element types presented in this paper: Fig.~\ref{fem_cv_represent_a} (a) shows the P$_{n}$DG-P$_{n+1}$ element type, with $n = 1$, in two dimensions (2D). Here, the velocity field is linear and discontinuous (between elements) whilst pressure has a quadratic and continuous (between elements) representation with the CV's span various elements. Figure~\ref{fem_cv_represent_a} (b) shows the P$_{n+1}$DG-P$_{n}$DG element type, with $n = 1$ (also in 2D). Here, the velocity field is quadratic and discontinuous (between elements) whereas pressure has a linear and discontinuous (between elements) representation and the CV's do not span elements.
+\begin{figure}[h]
+   \vbox{
+       \hbox{\includegraphics[width=.5\textwidth]{./Figs/p1dgp2-cont-sat.pdf}
+             \includegraphics[width=.5\textwidth]{./Figs/p2dgp1-dg-sat.pdf}}
+       \hbox{\hspace{3cm}(a) \PN[1]{2} \hspace{5.cm} (b)\PNDG[2]{1}}}
+\caption{2D representation of the element pairs presented in this work. Shaded areas denote control volumes (in which saturation is   stored), black points represent the pressure nodes and white points the velocity nodes. Note that in (b) velocity and pressure nodes overlap in the triangles' vertices.}
+    \label{fem_cv_represent_a}
+\end{figure} 
+
+\subsection{Finite element representation of velocity}\label{ChapterMultiFluidsModel:Section:Force_density}
+From Eqn.~\ref{e:darcy_eqn}, it can be seen that the velocity field depends, among other fields, on the absolute permeability which is FE-wise, and the relative permeability which is CV-wise. This means that the velocity representation is different in each CV. However, the quantity $\mathbf{v}_\alpha$ is homogeneous within an element and this is stored using FE representation. To obtain the velocity $\mathbf{u}_{\alpha}$ in a particular CV within a FE, Eqn.~\ref{force-bal} is used.
+
+
+\section{Saturation and Global Mass Conservative Equations} \label{ChapterMultiFluidsModel:Section:Saturation_Global}
+Here, the saturation conservation equations are discretised and the global mass balance equation is derived. In this work, fluids are assumed incompressible. The saturation equation can be written as:
+\begin{equation}
+  \phi\displaystyle\frac{\partial S_{\alpha} }{\partial t} + \nabla \cdot \left( {\mathbf u}_{\alpha} S_{\alpha}\right) = s_{cty,\alpha}, \label{saturation_equation}
+\end{equation}
+where $\phi$ is the porosity and $s_{cty}$ is a source term. Eqn.~\ref{saturation_equation} is discretised in space by testing with CV basis functions $M_{i}$ and with the $\theta$-method in time \citep[see][]{gomes_book_2012}:
+\begin{eqnarray}
+     \int_{\Omega} M_{i} \displaystyle\frac{\phi \left({S_{\alpha i}^{n+1}}-{S_{\alpha i}^{n}}\right)}{\Delta t} \d V + \nonumber  \\ 
+     \oint_{\Gamma_{CV_{i}}} \left[\theta^{n+\frac{1}{2}} {\mathbf n}  \cdot {\mathbf u}_{\alpha}^{n+1} S_{\alpha}^{n+1} + \left(1-\theta^{n+\frac{1}{2}}\right) {\mathbf n} \cdot {\mathbf u}_{\alpha}^{n} S_{\alpha}^{n} \right]d\Gamma = \int_{\Omega}  M_{i} {s_{cty,\alpha}^{n+\theta}} \d V, \label{detail-sat-eqn-k}
+\end{eqnarray}
+where $\mathbf{n}$ is the outward-pointing unit normal vector to the surface ($\Gamma_{CV_{i}}$) of the control volume $i$ and $n$ is the current time level. More details on the numerical methods used to solve Eqn.~\ref{detail-sat-eqn-k} can be found in \cite{pavlidis_2013b}.
+
+The global continuity equation is obtained by summing Eqn.~\ref{detail-sat-eqn-k} over all phases:
+\begin{eqnarray}
+     \sum\limits_{\alpha=1}^{\mathcal{N}_{\alpha}} \left\lbrace \int_{\Omega} M_{i} \displaystyle\frac{\phi\left({S_{\alpha i}^{n+1}}-{S_{\alpha i}^{n}}\right) } {\Delta t} \d V + \right. \nonumber \\ 
+     \left. \displaystyle\oint_{{\Gamma_{CV}}_{i}} \left[\theta^{n+\frac{1}{2}} {\mathbf n} \cdot {\mathbf u}_{\alpha}^{n+1} S_{\alpha}^{n+1} + \left(1-\theta^{n+\frac{1}{2}}\right) {\mathbf n} \cdot {\mathbf u}_{\alpha}^{n} S_{\alpha}^{n} \right] \,\d\Gamma - \right. \nonumber \\ 
+     \left. \displaystyle\int_{\Omega} M_{i} s_{cty,\alpha}^{n+\theta}\, \d V \right\rbrace = 0. \label{detail-sat-eqn-k-sum}
+\end{eqnarray}
+Equation~\ref{detail-sat-eqn-k-sum} is also bounded by the constraint:
+\begin{equation}
+  \sum\limits_{\alpha=1}^{\mathcal{N}_{\alpha}} {S_{\alpha}^{n}}_{i} = 1, \quad \forall n.
+\end{equation}
+Solving for ${\mathbf u}^{n+1}$ in matrix form, Eqn.~\ref{detail-sat-eqn-k-sum} becomes:
+\begin{equation}
+  {\mathbf B}^T \underline{\bf v}^{n+1} = \underline{\bf s}_{p}.   \label{glob-cty-matrix}
+\end{equation}
+
+
+\section{Velocity at Control Volume Interfaces} \label{ChapterMultiFluidsModel:Section:opt-up} 
+The velocity to be used at the interface between CV's in the saturation conservation (Eqn.~\ref{detail-sat-eqn-k}) and global continuity (Eqn.~\ref{detail-sat-eqn-k-sum}) equations needs to be determined. On the CV faces, there is no information about the flow direction as the velocity is discontinuous at the CV boundaries. The discontinuities occur between (a) control volumes within each FE and (b) between elements when using the \PNDG[n+1]{n} element pair.
+
+In order to calculate the velocity across CV's within a FE, an average velocity at the interface of control volumes {\it i} and {\it j} is defined as:
+\begin{equation}
+  {\tilde{\bf u}}_\alpha = \frac{1}{2} \left[ {{\bf u}_\alpha}_i + {{\bf u}_\alpha}_j \right].
+\end{equation} 
+From this, the interface velocities at either side of the interface can be obtained from:
+%\begin{equation}
+%  {\tilde{\bf u}}_{\alpha k} = \underline{\underline{\sigma}}_{\alpha
+%    k}^{-1}{\tilde{{\bf u}}}_{\alpha}, \;\;\;\; k=\{i,j\}.
+%  \label{two-vels}
+%\end{equation} 
+\begin{equation}
+  {\tilde{\bf u}}_{\alpha k} = \underline{\underline{\sigma}}_{\alpha k}^{-1}{{\bf \tilde{v}}}_{\alpha}, \;\;\;\; k=\{i,j\}. 
+  \label{two-vels}
+\end{equation} 
+
+These velocities have the same direction and differ only in magnitude, so using them to define an upwind direction is not ambiguous. If an upwind method for calculating the interface velocity is applied then,
+\begin{equation}
+  {\tilde{\bf u}}_{\alpha} = \tilde{\bf u}_{\alpha k},\label{interface_velocity_upwind}
+\end{equation}
+where $k=i$ if ${\bf n}\cdot{\bf u}_{\alpha}>0$ (CV {\it i} outgoing information), and $k=j$ if ${\bf n}\cdot{\bf u}_{\alpha}<0$ (CV {\it i} incoming information). 
+
+However, upwind methods yield dissipative solutions therefore, in order to obtain a high-order approximation of the velocity at the interface, the saturation at the interface $\tilde{S}_{\alpha}$ is calculated using a finite element representation of the saturation following the upwind direction. $\tilde \sigma_{\alpha}$ can then be calculated using second-order Taylor series:
+%\begin{small}
+\begin{equation}
+    \underline{\underline{\tilde{\sigma}}}_{\alpha} = \underline{\underline{\sigma}}_{\alpha k} + \left(\tilde{S}_{\alpha}-S_{\alpha k}\right) \left(\frc{\partial \underline{\underline{\sigma}}_{\alpha}}{\partial S_{\alpha}}\right)_{k} + \frc{1}{2}\left(\tilde{S}_{\alpha}-S_{\alpha k}\right)^{2} \left[ \frc{ \left(\frc{\partial \underline{\underline{\sigma}}_{\alpha}}{\partial S_{\alpha}}\right)_{k} - \left(\frc{\partial \underline{\underline{\sigma}}_{\alpha}}{\partial S_{\alpha}}\right)_{l} } { \left(S_{\alpha k}-S_{\alpha l}\right) } \right], \label{sigma-out}
+\end{equation}
+%\end{small}
+where $k=i$ and $l=j$ if ${\bf n}\cdot{\bf u}_{\alpha}>0$ and, $k=j$ and $l=i$ if ${\bf n}\cdot{\bf u}_{\alpha}<0$. Therefore, the final interface velocity (Eqn.~\ref{interface_velocity_upwind}) can be obtained from:
+%\begin{equation}
+%  {\tilde{\bf u}_{\alpha}} = \underline{\underline{\tilde{\sigma}}}_{\alpha}^{-1} \left[\displaystyle\frac{1}{2} \left( {{\bf u}_\alpha}_i + {{\bf u}_\alpha}_j \right)\right], \label{mean_int_vel}  
+%\end{equation} 
+\begin{equation}
+  {\tilde{\bf u}_{\alpha}} = \underline{\underline{\tilde{\sigma}}}_{\alpha}^{-1} \left[\displaystyle\frac{1}{2} \left( {{\bf v}_\alpha}_i + {{\bf v}_\alpha}_j \right)\right], \label{mean_int_vel}  
+\end{equation} 
+%The interface velocity obtained from Eqn.~\ref{mean_int_vel} is bounded to ensure that its normal component ${\tilde{\bf u}_\alpha}\cdot {\bf n}$ lies between ${\tilde{\bf u}_{\alpha i}}\cdot {\bf n}$ and ${\tilde{\bf u}_{\alpha j}}\cdot {\bf n}$. The result of this is also bounded between the velocities ${{\bf u}_\alpha}_i\cdot {\bf n}$ and ${{\bf u}_\alpha}_j\cdot {\bf n}$.
+The interface velocity obtained from Eqn.~\ref{mean_int_vel} is bounded to ensure that its normal component ${\tilde{\bf u}_\alpha}\cdot {\bf n}$ lies between ${\tilde{\bf u}_{\alpha i}}\cdot {\bf n}$ and ${\tilde{\bf u}_{\alpha j}}\cdot {\bf n}$. The result of this is also bounded between the velocities ${{\bf v}_\alpha}_i\cdot {\bf n}$ and ${{\bf v}_\alpha}_j\cdot {\bf n}$.
+
+\medskip
+
+In a fully discontinuous formulation with \PNDG[n+1]{n} element pairs, the interface velocity (now between neighbour elements) can not be calculated using Eqn.~\ref{mean_int_vel} due the elliptic nature of the discretised non-symmetric pressure equation, Eqn.~\ref{force-balance-matrix-form}. This means that information is propagated in all directions across the (discontinuous) domain and hence, taking the upwind velocity as commonly done within an element is not an adequate strategy.
+ 
+For two neighbouring CV's $i$ and $j$ with common FE interface ({\it e.g.}, see Fig.~\ref{fem_cv_represent_a}b for \PNDG[2]{1} element pair), $\tilde{\bf u}_\alpha$ can be calculated by using a volume-weighted harmonic mean. However, the volume $\mathcal{V}$ of the control volume and $\underline{\underline{\sigma}}_{\alpha}$ act on the velocity in a very similar way. Hence, the velocity at the interface is expressed as,
+\begin{equation} 
+  {\tilde{\bf u}_\alpha} =  \left(\mathcal{V}_{j} \underline{\underline{\sigma}}_{\alpha j} \, {\bf u}_{\alpha i} + \mathcal{V}_{i} \underline{\underline{\sigma}}_{\alpha i}\, {\bf u}_{\alpha j} \right) \left(  \mathcal{V}_{i} \underline{\underline{\sigma}}_{\alpha i} + \mathcal{V}_{j}  \underline{\underline{\sigma}}_{\alpha j} \right)^{-1}.
+\end{equation} 
+
+
+\section{Weak Enforcement of Boundary Conditions}\label{ChapterMultiFluidsModel:Section:bcs-rel-perm} 
+Suitable boundary conditions for velocity can be applied by the discontinuous formulation above as well as by the upwinding in the continuous formulation. In fact, exactly the same boundary condition implementations, as used in the discontinuous formulation, can be applied across the boundaries of the domain by taking information from `just outside' the domain rather than from the neighbouring elements.
+
+Saturation boundary conditions are relatively straightforward. One typically takes the saturation from `just outside' the domain ($S_{\alpha, \text{bc}}$) and the flux becomes $\left({\bf n}\cdot {\bf u}_{\alpha}\right)S_{\alpha,\text{bc}}$, if ${\bf n}\cdot {\bf u}_{\alpha} < 0$. If the velocity is also specified (${\bf u}_{\alpha,\text{bc}}$) then this becomes part of the incoming flux $\left({\bf n}\cdot {\bf u}_{\alpha,\text{bc}}\right)S_{\alpha,\text{bc}}$.
+
+In case of specified pressure for outflow boundaries $\left(\right.{\bf n}\cdot {\bf u}_\alpha>0\left.\right)$ the flux is ${\bf n}\cdot {\bf u}_\alpha {S_\alpha}$, in which neither ${\bf u}_\alpha$ nor ${S_\alpha}$ are specified. 
+
+However, for inflow boundaries with specified pressure $\left(\right.{\bf n}\cdot {\bf u}_\alpha<0\left.\right)$ the flux is ${\bf n}\cdot {\bf u}_{\alpha,\text{bc}} S_{\alpha,\text{bc}}$, in which ${\bf u}_{\alpha,\text{bc}}$ is calculated using:
+\begin{equation}
+  {\bf u}_{\alpha,\text{bc}} =  \underline{\underline{\sigma}}_{\alpha,\text{bc}} ^{-1}  \underline{\underline{\sigma}}_{\alpha} {\bf u}_{\alpha},
+\end{equation}
+where $\underline{\underline{\sigma}}_{\alpha,\text{bc}}$ is calculated using $S_{\alpha,\text{bc}}$. Ut should be noted that this flux condition must be used in both the discretised saturation and global continuity equations, since the latter is a summation of the former. The specified pressure condition becomes a surface flux condition in the force balance equation (Eqn.~\ref{force-semi-disc}), which effectively relaxes the pressure $p$ to its face value counterpart $p_\text{bc}$ at the boundaries.
+
+
+\section{Solving the linear equations}\label{ChapterMultiFluidsModel:Section:SolvingLinearEqns}
+The global mass balance equation (Eqn.~\ref{glob-cty-matrix}) and force balance equations (Eqn.~\ref{force-balance-matrix-form}) are solved by substituting $\underline{\mathbf v}$ and solving the system of equations for pressure. At time level $n+1$, Eqns.~\ref{force-balance-matrix-form} and ~\ref{glob-cty-matrix} can be rewritten as:
+\begin{displaymath}
+  \begin{cases}
+      \mathbf{M} \underline{\bf v}^{n+1} = \mathbf{C}\underline{\bf p}^{n+1} + \underline{\bf s}_{u}^{n+1} \\ 
+      \mathbf{B}^{T} \underline{\bf v}^{n+1} = \underline{\bf s}_{p}^{n+1},
+  \end{cases}
+\end{displaymath}
+respectively. Application of a discontinuous FEM for $\mathbf{v}$ leads to a block-diagonal $\mathbf{M}$ matrix that can be readily inverted, each block being local to an element. Multiplying Eqn.~\ref{force-balance-matrix-form} by $\mathbf{B}^{T}\mathbf{M}^{-1}$ and summing up with Eqn.~\ref{glob-cty-matrix}, $\underline{\mathbf v}^{n+1}$ vanishes and the pressure equation is obtained:
+\begin{equation}
+    \mathbf{B}^{T}\mathbf{M}^{-1} \mathbf{C} \underline{\bf p}^{n+1} =  \underline{\bf s}_{p}^{n+1} - \mathbf{B}^{T} \mathbf{M}^{-1}  \underline{\bf s}_{u}^{n+1}. \label{final_projection}
+\end{equation}
+Equation~\ref{final_projection} is solved for pressure and then the velocity is obtained via Eqn.~\ref{force-balance-matrix-form}. The computationally demanding effort to solve the pressure matrix equation arising from the fully discontinuous FEM formulation is achieved using a multigrid-like approach \citep[see][]{Brandt}. In this case the `fine' mesh is the one obtained by the discontinuous system, whereas the `coarse' mesh is obtained by creating a continuous system (from the discontinuous system) by collapsing the pressure nodes. As in multigrid, the coarse mesh solution is used to accelerate the convergence of the fine mesh solution by calculating the error of the current approximation.

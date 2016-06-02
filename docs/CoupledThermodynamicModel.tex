@@ -243,21 +243,6 @@
 \newcommand{\DDtt}[2][t]{\frac{\D^2#2}{\D#1^2}}
 % Norms
 \newcommand{\Ltwo}{\ensuremath{L_2} }
-% Basis functions
-\newcommand{\Qone}{\ensuremath{Q_1} }
-\newcommand{\Qtwo}{\ensuremath{Q_2} }
-\newcommand{\Qthree}{\ensuremath{Q_3} }
-\newcommand{\QN}{\ensuremath{Q_N} }
-\newcommand{\Pzero}{\ensuremath{P_0} }
-\newcommand{\Pone}{\ensuremath{P_1} }
-\newcommand{\Ptwo}{\ensuremath{P_2} }
-\newcommand{\Pthree}{\ensuremath{P_3} }
-\newcommand{\PN}{\ensuremath{P_N} }
-\newcommand{\Poo}{\ensuremath{P_1P_1} }
-\newcommand{\PoDGPt}{\ensuremath{P_{-1}P_2} }
-
-\newcommand{\metric}{\tensor{M}}
-\newcommand{\configureflag}[1]{\texttt{#1}}
 
 % Units
 \newcommand{\m}[1][]{\unit[#1]{m}}
@@ -305,10 +290,13 @@
 \newcommand{\blue}{\textcolor{blue}}
 \newcommand{\green}{\textcolor{green}}
 \newcommand{\purple}{\textcolor{purple}}
-\newcommand{\PNDG}[3][error]{P$_{#1}$DG-P$_{#2}$DG$_{#3}$}
+\newcommand{\PN}[2][error]{P$_{#1}$DG-P$_{#2}$}
+\newcommand{\PNDG}[2][error]{P$_{#1}$DG-P$_{#2}$DG}
+%\newcommand{\PNDG}[3][error]{P$_{#1}$DG-P$_{#2}$DG$_{#3}$}
 \newcommand{\Partial}[3][error]{\left(\frc{\partial #1}{\partial #2}\right)_{#3}}
 \newcommand{\mfr}[3][error]{#1_{#2}^{\left(#3\right)}}
 %{P$_{#1}$DG-P$_{#2}$DG}%$_{#3}$}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%                              %%%%%%%
@@ -337,7 +325,7 @@
    %  \includegraphics[width=15cm,clip]{./FigBanner/UoAHorizBanner}
 \vspace{3.5cm}
 
-       {\bf{\Huge Integrated Multi-Fluid Flows Transport and Thermodynamic Models}}
+       {\bf{\Huge Integrated Multi-Fluid Flows and Thermodynamic Models}}
 
 \bigskip
        {\bf{\huge Model Documentation}}
@@ -383,7 +371,7 @@
 %\listoffigures
 %\vfill
 %\pagebreak
-
+\input{MultiphaseModel}
 \input{TransportModel}
 \input{MainBoxFormulation}
 \input{EOS_PR} % Simple Hydrate Model
