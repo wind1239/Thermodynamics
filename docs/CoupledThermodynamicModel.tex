@@ -94,21 +94,31 @@
 \usepackage{color}
 
 \theoremstyle{definition}
-\newtheorem{exmp}{Example}[chapter]
+%\newtheorem{exmp}{Example}[chapter]
 
 \newenvironment{fminipage}%
 {\fbox{\begin{minipage}}%
 {\end{minipage}}}
-%\newenvironment{fminipage}%
-%{\begin{Sbox}\begin{minipage}}%
-%{\end{minipage}\end{Sbox}\fbox{\TheSbox}}
+
+% For theorems, lemma, proposition and corollary
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{cor}{Corollary}
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{conj}{Conjecture}[section]
+\newtheorem{exmp}{Example}[section]
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\newtheorem*{note}{Note}
 
 
 
-% For theorems
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{corollary}{Corollary}[theorem]
+%\newtheorem{lemma}[theorem]{Lemma}
 
 \usepackage{makeidx}
 \makeindex

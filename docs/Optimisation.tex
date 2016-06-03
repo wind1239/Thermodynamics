@@ -4,6 +4,192 @@
 %%%
 \chapter{Global Optimisation Methods}\label{Chapter:GlobalOpt}
 
+
+%%%
+%%% Section
+%%%
+\section{Introduction}\label{Chapter:GlobalOpt:Section:Introduction}
+
+%%% Subsection
+\subsection{Main Definitions}\label{Chapter:GlobalOpt:Section:Definitions}
+The main aim of optimisation methods is to find the {\it global optimum} (maximum or minimum) of a function. However, global optimum are often difficult to obtain except in a few problems. 
+
+A \underline{constrained minimisation problem} is defined as,
+\begin{shaded}
+   Given an {\it objective function} $f\left(\cdot\right):\mathcal{S}\subset\mathcal{R}^{n}\rightarrow\mathcal{R}$, where $\mathcal{S}$ is either the constraints or the solutions set of the optimisation problem $\mathcal{P}$,
+\begin{displaymath}
+   \mathcal{P}: \text{ Minimise }\; f(x)\; \text{ such that }\; x\in\mathcal{S}, 
+\end{displaymath}
+where $x=\left(x_{1},\cdots,x_{n}\right)$.
+\end{shaded}
+
+However, if $\mathcal{S}=\mathcal{R}^{n}$ then the problem is called  \underline{non-constrained minimisation problem}, i.e., the objective function $f$ must be minimised without explicit constraints,
+\begin{shaded}
+   Given an {\it objective function} $f\left(\cdot\right):\mathcal{S}\subseteq\mathcal{R}^{n}\rightarrow\mathcal{R}$, where $\mathcal{S}$ is either the constraints or the solutions set of the optimisation problem $\mathcal{P}$.
+\begin{displaymath}
+    \mathcal{P}: \text{ Minimise }\; f(x)\; \text{ such that }\; x\in\mathcal{R}^{n}. 
+\end{displaymath}
+where $x=\left(x_{1},\cdots,x_{n}\right)$.
+\end{shaded}
+Indeed, for such problems we need to obtain first- and second-order necessary and sufficient conditions for optimality, defined by the following theorems\footnote{Proof of these theorems and definitions can be found in any fundamental and/or advanced linear algebra and optimisation text books.}:
+
+%%% Theorem:
+\begin{thm}[First-Order Optimality Conditions]\label{Chapter:GlobalOpt:TheoremFirstOrder}
+Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}$ be differentiable at a solution coordinate $x^{\ast}\in\mathcal{R}^{n}$. If $x^{\ast}$ is a local solution of problem $\mathcal{P}$, then $\nabla f\left(x^{\ast}\right)=0$.
+\end{thm}
+
+%%% Theorem:
+\begin{thm}[Second-Order Optimality Conditions]\label{Chapter:GlobalOpt:TheoremSecondOrder}
+Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}$ be twice differentiable at a solution coordinate $x^{\ast}\in\mathcal{R}^{n}$. 
+   \begin{enumerate}
+       \item If $x^{\ast}$ is a local solution of problem $\mathcal{P}$, then $\nabla f\left(x^{\ast}\right)=0$ and $\nabla^{2}f\left(x^{\ast}\right)$ is positive semi-definite (necessary condition).
+       \item If $\nabla f\left(x^{\ast}\right)=0$ and $\nabla^{2}f\left(x^{\ast}\right)$ is positive definite, then there is an $\alpha > 0$ such that $f\left(x\right)\ge\left(x^{\ast}\right)+\alpha\left\|x+\alpha\right\|^{2}$ for all $x$ near $x^{\ast}$ (sufficient condition).
+   \end{enumerate}
+\end{thm}
+Theorem~\ref{Chapter:GlobalOpt:TheoremSecondOrder} establishes both 2$^{\text{nd}}$-order necessary and sufficient conditions for a problem whereas Theorem~\ref{Chapter:GlobalOpt:TheoremFirstOrder} describes 1$^{\text{st}}$-order necessary conditions. The sufficiency conditions is given by the following definitions:
+
+%%% Definition:
+\begin{defn}[Convex Sets and Functions] For
+   \begin{enumerate}
+       \item A subset $\mathcal{C}\subset\mathcal{R}^{n}$ is assumed convex if for every pair $x$ and $y$ taken from $\mathcal{C}$, the entire line segment connecting $x$ and $y$ is also contained in $\mathcal{C}$,
+           \begin{displaymath}
+              \left[x,\right]\subset\mathcal{C}\;\;\;\text{ where }\;\;\; \left[x,y\right]=\left\{\left(1-\lambda\right)x +\lambda y : 0\le\lambda\le 1\right\}
+           \end{displaymath}
+       \item A function $f:\mathcal{R}^{n}\rightarrow \mathcal{R}\cup\left\{\pm\infty\right\}$ is assumed convex if the set
+           \begin{displaymath}
+              \text{epi}(f) = \left\{\left(\mu,x\right): f(x)\le \mu\right\}
+           \end{displaymath}
+           is a convex subset of $\mathcal{R}^{n+1}$. We can also define the set 
+           \begin{displaymath}
+              \text{dom}(f) = \left\{x\in\mathcal{R}^{n} : f(x) < +\infty\right\}
+           \end{displaymath}
+   \end{enumerate}
+\end{defn}
+
+%%% Lemma:
+\begin{lem}
+    The function $f : \mathcal{R}^{n}\rightarrow\mathcal{R}$ is convex \underline{if and only if} for every two solution coordinates, $x_{1},x_{2}\in\text{ dom}(f)$ and $\lambda\in\left[0,1\right]$ there is
+       \begin{displaymath}
+          f\left(\lambda x_{1} +\left(1-\lambda\right)x_{2}\right) \le \lambda f\left(x_{1}\right) + \left(1 - \lambda\right)f\left(x_{2}\right),
+       \end{displaymath}
+i.e., the secant line connecting $\left(x_{1},f\left(x_{1}\right)\right)$ and $\left(x_{2},f\left(x_{2}\right)\right)$ lies above the graph of $f$.
+\end{lem}
+
+
+%%% Theorem:
+\begin{thm}\label{Theorem_Convex1}
+   Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}\cup\left\{\pm\infty\right\}$ be convex. If $x^{\ast}\in\text{dom}(f)$ is a local solution to problem $\mathcal{P}$, then $x^{\ast}$ is a global solution to the problem $\mathcal{P}$.
+\end{thm}
+
+If $f$ is a differentiable convex function then a better solution can be obtained, thus this solution can be obtained from the following lemma.
+%%% Lemma:
+\begin{lem}\label{Lemma_Convex}
+    Let $f : \mathcal{R}^{n}\rightarrow\mathcal{R}\cup\left\{+\infty\right\}$ be convex:
+       \begin{enumerate}
+          \item Given  $x\in\text{ dom}(f)$ and $d\in\mathcal{R}^{n}$, the ratio
+             \begin{displaymath}
+                 \frc{f(x+td)-f(x)}{t}
+             \end{displaymath}
+             is a monotonically increasing function of $t\in\left(0,+\infty\right)$.
+          \item For every $x\in\text{ dom}(f)$ and $d\in\mathcal{R}^{n}$, the directive derivative $f^{\prime}\left(x;d\right)$ always exist and is given by
+             \begin{displaymath}
+                 f^{\prime}\left(x;d\right) = \displaystyle\inf_{t>0} \frc{f(x+td)-f(x)}{t}.
+             \end{displaymath}
+          \item For every $x\in\text{ dom}(f)$, the function $f^{\prime}\left(x;\cdot\right)$ is positively homogeneous,
+             \begin{displaymath}
+                 f^{\prime}\left(x;\alpha d\right) = \alpha f^{\prime}\left(x;d\right) \hspace{.5cm} \forall d\in\mathcal{R}^{n},\; \alpha > 0,
+             \end{displaymath}
+              and subadditive,
+             \begin{displaymath}
+                 f^{\prime}\left(x;u+v\right) \le f^{\prime}\left(x;u\right) + f^{\prime}\left(x;v\right).
+             \end{displaymath}
+       \end{enumerate}
+\end{lem}
+From {\it Lemma}~\ref{Lemma_Convex},
+%%% Theorem:
+\begin{thm}\label{Theorem_Convex2}
+   Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}\cup\left\{+\infty\right\}$ be convex and also let's suppose that $x^{\ast}\in\mathcal{R}^{n}$ is a solution coordinate at which $f$ is differentiable. Then $x^{\ast}$ is a global solution to the problem $\mathcal{P}$ if and only if $\nabla f\left(x^{\ast}\right)=0$.
+\end{thm}
+
+%%% Theorem:
+\begin{thm}\label{Theorem_Convex3}
+   Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}$:
+     \begin{enumerate}
+        \item If $f$ is differentiable on $\mathcal{R}^{n}$, then the following statements are equivalent:
+             \begin{enumerate}
+                 \item $f$ is convex;
+                 \item $f(y)\ge f(x)+\nabla f(x)^{\text{T}}\left(y-x\right)$ for all $[x,y]\in\mathcal{R}^{n}$;
+                 \item $\left(\nabla f(x)-\nabla f(y)\right)^{\text{T}}(x-y) \ge 0$ for all $[x,y]\in\mathcal{R}^{n}$;
+             \end{enumerate}
+        \item If $f$ is twice differentiable then$f$ is convex if and only if $f$ is positive semi-definite for all $x\in\mathcal{R}^{n}$.
+     \end{enumerate}
+\end{thm}
+
+This establishes that $f^{\prime}\left(x;d\right)$ exists for all $x\in\text{ dom}(f)$ and $d\in\mathcal{R}^{n}$. For a brief discussion of the continuity properties of this function is available in the following lemma:
+%%% Lemma:
+\begin{lem}
+    Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}\cup\left\{+\infty\right\}$ be convex. Then, $f$ is bounded in a neighbourhood of a solution coordinate $x^{\ast}$ if and only if $f$ is Lipschitz\footnote{
+Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}^{n}$, the Lipschitz-continuous function is defined by:
+    \begin{enumerate}[(a)]
+       \item Given an open set $\mathcal{B}\subseteq\mathcal{R}^{n}$, a function $f$ is called Lipschitz-continuous on the open subset $\mathcal{B}$ is there is a constant $\Lambda\in\mathcal{R}_{0}^{+}$ such that,
+           \begin{displaymath}
+               \left\|f(x)-f(y)\right\| \le  \Lambda\left\|x-y\right\|, \hspace{.5cm} \forall[x,y]\in\mathcal{B}.
+           \end{displaymath}
+       \item The function $f$ is called locally Lipschitz-continuous, if for each $z\in\mathcal{R}^{n}$ there is an $L>0$ such that $f$ is Lipschitz-continuous on the open sphere of center $z$ and radius $L$,
+           \begin{displaymath}
+              \mathcal{B}_{L}(z) = \left\{y\in\mathcal{R}^{n} :\left\|y-z\right\| < L\right\}.
+           \end{displaymath}
+       \item If $f$ is Lipschitz-continuous on all $\mathcal{R}^{n}$ space $\left(\text{i.e., }\mathcal{B}=\mathcal{R}^{n}\text{ in (a) above}\right)$, then $f$ is called globally Lipschitz-continuous.
+
+    \end{enumerate}}
+ in a neighbourhood of $x^{\ast}$.
+\end{lem}
+
+
+
+
+
+%%% Definition:
+\begin{defn}[Local Minima]
+   A solution coordinate $x^{\ast}$ is a local solution of a problem if there is a neighbourhood 
+   \begin{displaymath}
+           \Omega\left(x^{\ast},\Omega\right) = \left\{ z \left|\;\;\left|z-x^{\ast}\right| < \delta ; \delta > 0\right.\right\},
+   \end{displaymath}
+   such that $f\left(x^{\ast}\right)\leq f\left(x\right)\;\;\forall x\in\Omega\left(x^{\ast},\Omega\right) \cap \mathcal{S}$.
+\end{defn}
+
+%%% Definition:
+\begin{defn}[Global Minima]
+   A solution coordinate $x^{\ast}\in\mathcal{S}$ is a global solution of a problem if $f\left(x^{\ast}\right)\leq f\left(x\right)\;\;\forall x\in\mathcal{S}$.
+\end{defn}
+
+\bigskip
+Optimisation methods are often based on iterative methods, in which after an initial solution $\left(\text{or estimate}, x^{\circ}\right)$ is chosen, a sequence of points $\left\{x^{k}\right\}$ is obtained through a prescribed algorithm. The sequence must converge to the solution $x^{\ast}$ of the problem.
+%%% Definition:
+\begin{defn}[Local Covergence]
+   An algorithm is locally convergent if there is a positive scalar $\sigma$ such that for any initial solution coordinate $x^{\circ}\in\mathcal{R}^{n}$ $\left(\text{or } x^{\circ}\in\mathcal{S}\right)$, with $\left|x^{\circ}-x^{\ast}\right|\leq\sigma$, the algorithm generates a sequence of solutions that converges to the solution $x^{\ast}$.
+\end{defn}
+
+%%% Definition:
+\begin{defn}[Global Covergence]
+   An iterative algorithm is globally convergent if for any initial solution coordinate $x^{\circ}\in\mathcal{R}^{n}$ $\left(\text{or } x^{\circ}\in\mathcal{S}\right)$, the algorithm generates a sequence of solutions that converges to the solution $x^{\ast}$.
+\end{defn}
+
+\bigskip
+Convergence is assumed asymptotic if the solution is not found after a finite number of iterations. Generally, globally convergent algorithms change search directions at each new coordinate, $x^{k}$. Therefore,
+
+%%% Definition:
+\begin{defn}[Descendant Direction] A linearly independent vector $d\in\mathcal{R}^{n}$ represents a descendant direction of a real function $f$ in $x\in\mathcal{R}^{n}$ if there is $\delta>0$, such that $f\left(x+t d\right)<f\left(x\right)$ for any $t\in\left.\left(0,\delta\right.\right]$.   
+\end{defn}
+
+%%% Definition:
+\begin{defn}[Viable Direction] A linearly independent vector $d\in\mathcal{R}^{n}$ represents a viable direction of a real function $f$ in $x\in\mathcal{S}$ if there is $\theta >0$, such that $x+t d\in \mathcal{S}$ for all $t\in\left.\left(0,\theta\right.\right]$.   
+\end{defn}
+
+%%% Subsection
+\subsection{Conditions for Optimality}\label{Chapter:GlobalOpt:Section:Definitions}
+
+
 %%%
 %%% Section
 %%%
