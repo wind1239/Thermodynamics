@@ -31,7 +31,7 @@ However, if $\mathcal{S}=\mathcal{R}^{n}$ then the problem is called  \underline
 \end{displaymath}
 where $x=\left(x_{1},\cdots,x_{n}\right)$.
 \end{shaded}
-Indeed, for such problems we need to obtain first- and second-order necessary and sufficient conditions for optimality, defined by the following theorems\footnote{Proof of these theorems and definitions can be found in any fundamental and/or advanced linear algebra and optimisation text books.}:
+Indeed, for such problems we need to obtain first- and second-order necessary and sufficient conditions for optimality, defined by the following theorems\footnote{Proof of these theorems and definitions can be found in any advanced linear algebra and optimisation text books.}:
 
 %%% Theorem:
 \begin{thm}[First-Order Optimality Conditions]\label{Chapter:GlobalOpt:TheoremFirstOrder}
@@ -43,7 +43,7 @@ Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}$ be differentiable at a solution co
 Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}$ be twice differentiable at a solution coordinate $x^{\ast}\in\mathcal{R}^{n}$. 
    \begin{enumerate}
        \item If $x^{\ast}$ is a local solution of problem $\mathcal{P}$, then $\nabla f\left(x^{\ast}\right)=0$ and $\nabla^{2}f\left(x^{\ast}\right)$ is positive semi-definite (necessary condition).
-       \item If $\nabla f\left(x^{\ast}\right)=0$ and $\nabla^{2}f\left(x^{\ast}\right)$ is positive definite, then there is an $\alpha > 0$ such that $f\left(x\right)\ge\left(x^{\ast}\right)+\alpha\left\|x+\alpha\right\|^{2}$ for all $x$ near $x^{\ast}$ (sufficient condition).
+       \item If $\nabla f\left(x^{\ast}\right)=0$ and $\nabla^{2}f\left(x^{\ast}\right)$ is positive definite, then there is an $\alpha > 0$ such that $f\left(x\right)\ge f\left(x^{\ast}\right)+\alpha\left\|x+\alpha\right\|^{2}$ for all $x$ near $x^{\ast}$ (sufficient condition).
    \end{enumerate}
 \end{thm}
 Theorem~\ref{Chapter:GlobalOpt:TheoremSecondOrder} establishes both 2$^{\text{nd}}$-order necessary and sufficient conditions for a problem whereas Theorem~\ref{Chapter:GlobalOpt:TheoremFirstOrder} describes 1$^{\text{st}}$-order necessary conditions. The sufficiency conditions is given by the following definitions:
