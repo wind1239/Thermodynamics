@@ -367,14 +367,25 @@ This system of equations representing the problem $\mathcal{P}$ (Eqn.~\ref{Chapt
 This section summarises the local search aspects of general Newton methods.
 
 From Section~\ref{Chapter:GlobalOpt:Section:NewtonMethods:Intro}, consider the non-constrained optimisation problem $\mathcal{P}$ (Eqn.~\ref{Chapter:GlobalOpt:Box:NonConstrainedOptimisationProblem}) where $f\left(\xi\right)$ is a function twice differentiable in $\mathcal{R}^{n}$ space. In the Newton method, consider a solution coordinate $\xi_{k}$ which is assumed a good approximation for a local minimiser of $f$ such that in the neighbourhood of $\xi_{k}$, the approximation
-\begin{displaymath}
+\begin{equation}
     f\left(\xi_{k}+\omega\right) \approx f\left(\xi_{k}\right) + m_{k}\left(\omega\right)
-\end{displaymath}
+\end{equation}
 is appropriate and 
-\begin{displaymath}
+\begin{equation}
 m_{k}\left(\omega\right) = \nabla f\left(\xi_{k}\right)^{\text{T}}\omega + \frc{1}{2}\omega^{\text{T}}\nabla^{2}f\left(\xi_{k}\right)\omega
+\end{equation}
+is local quadratic approximation of $f$ around $\xi_{k}$. Another approximation $\xi_{k+1}$, better than $\xi_{k}$, can be obtained from
+\begin{displaymath}
+   \xi_{k+1} = \xi_{k} + S_{k},
 \end{displaymath}
-
+where $S_{k}$ is a local minimiser of $m_{k}$ and thus,
+\begin{equation}
+   \nabla m_{k}\left(S_{k}\right) = \nabla f\left(\xi_{k}\right) + \nabla^{2} f\left(\xi_{k}\right)S_{k} = 0.
+\end{equation}
+If $ \nabla^{2} f\left(\xi_{k}\right)$ is nonsingular, then from this equation we can determine Newton direction $S_{k}$ as
+\begin{equation}
+   S_{k} = - \left(\nabla^{2} f\left(\xi_{k}\right)\right)^{-1}\nabla f\left(\xi_{k}\right)
+\end{equation}
 
 
 
