@@ -422,7 +422,7 @@ where
 
 
 %%%  SUBSECTION
-\subsection{Hessian of the Molar Gibbs Free Energy}\label{Chapter:ThermodynamicFormulation:Section:HessianGibbs}
+\subsection{Hessian of the Molar Gibbs Free Energy}\label{Chapter:ThermodynamicFormulation:Section:HessianGibbs}\index{Hessian matrix ! Molar Gibbs free energy}
 Since the Gibbs free energy is a function twice differentiable, the Hessian\footnote{For a review on partial derivatives and Hessian matrix (definitions and applications in non-linear optimisation, see \href{https://www.math.vt.edu/people/dlr/m2k_svb11_hesian.pdf}{https://www.math.vt.edu/people/dlr/m2k$\_$svb11$\_$hesian.pdf}.} of the molar Gibbs free energy, $g=G/n_{c}$, is a symmetric matrix. In addition, $\forall (i,j)=1, \cdots, n_{c}-1$ and using the relations from Sections~\ref{Chapter:ThermodynamicFormulation:Section:GibbsDuhen} and ~\ref{Chapter:ThermodynamicFormulation:Section:GradientGibbs} we can obtain the elements of the Hessian matrix:
 \begin{eqnarray}
    \frc{\partial^{2}g}{\partial\mfr[x]{i}{L}\partial\mfr[x]{j}{L}} &=& \frc{\partial^{2}g}{\partial\mfr[x]{j}{L}\partial\mfr[x]{i}{L}} = L\left[\left(\frc{\partial\mfr[\mu]{i}{L}}{\partial\mfr[x]{j}{L}} - \frc{\partial\mfr[\mu]{n_{c}}{L}}{\partial\mfr[x]{j}{L}}\right) + \frc{L}{V}\left(\frc{\partial\mfr[\mu]{i}{V}}{\partial\mfr[x]{j}{V}} - \frc{\partial\mfr[\mu]{n_{c}}{V}}{\partial\mfr[x]{j}{V}}\right)\right], \\
@@ -573,7 +573,7 @@ and replacing Eqn.\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsDuhenRelation_2
 \begin{equation}
    \frc{\partial\d}{\partial\mfr[x]{j}{L}} = \left[\mfr[\mu]{j}{L}\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}\right) - \mfr[\mu]{j}{V}\left(z_{1},\cdots,z_{n_{c}}\right)\right] - \left[\mfr[\mu]{n_{c}}{L}\left(\mfr[x]{1}{L},\cdots,\mfr[x]{n_{c}-1}{L}\right) \mfr[\mu]{n_{c}}{V}\left(z_{1},\cdots,z_{n_{c}}\right)\right].
 \end{equation}
-Therefore the Hessian matrix of the function $d$ is,
+Therefore the Hessian matrix of the function $d$ is,\index{Hessian matrix }
 \begin{equation}
    \frc{\partial^{2}\d}{\partial x_{j}\partial x_{i}} =  \frc{\partial^{2}\d}{\partial x_{i}\partial x_{j}} = \frc{\partial\mfr[\mu]{j}{L}}{\partial\mfr[x]{i}{L}} - \frc{\partial\mfr[\mu]{n_{c}}{L}}{\partial\mfr[x]{i}{L}}, \hspace{.5cm} (i,j)=1,\cdots,n_{c}-1.
 \end{equation}

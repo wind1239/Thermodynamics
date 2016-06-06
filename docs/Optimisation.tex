@@ -14,7 +14,9 @@
 \subsection{Main Definitions}\label{Chapter:GlobalOpt:Section:Definitions}
 The main aim of optimisation methods is to find the {\it global optimum} (maximum or minimum) of a function. However, global optimum are often difficult to obtain except in a few problems. 
 
-A \underline{constrained minimisation problem} is defined as,
+\begin{itemize}
+%%%
+\item {\bf Constrained and Non-Constrained Problems:} A \underline{constrained minimisation problem} is defined as,
 \begin{shaded}
    Given an {\it objective function} $f\left(\cdot\right):\mathcal{S}\subset\mathcal{R}^{n}\rightarrow\mathcal{R}$, where $\mathcal{S}$ is either the constraints or the solutions set of the optimisation problem $\mathcal{P}$,
 \begin{displaymath}
@@ -31,7 +33,9 @@ However, if $\mathcal{S}=\mathcal{R}^{n}$ then the problem is called  \underline
 \end{displaymath}
 where $x=\left(x_{1},\cdots,x_{n}\right)$.
 \end{shaded}
-Indeed, for such problems we need to obtain first- and second-order necessary and sufficient conditions for optimality, defined by the following theorems\footnote{Proof of these theorems and definitions can be found in any advanced linear algebra and optimisation text books.}:
+
+%%%
+\item {\bf Conditions for Optimality:} Indeed, for such problems we need to obtain first- and second-order necessary and sufficient conditions for optimality, defined by the following theorems\footnote{Proof of these theorems and definitions can be found in any advanced linear algebra and optimisation text books.}:
 
 %%% Theorem:
 \begin{thm}[First-Order Optimality Conditions]\label{Chapter:GlobalOpt:TheoremFirstOrder}
@@ -46,16 +50,26 @@ Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}$ be twice differentiable at a solut
        \item If $\nabla f\left(x^{\ast}\right)=0$ and $\nabla^{2}f\left(x^{\ast}\right)$ is positive definite, then there is an $\alpha > 0$ such that $f\left(x\right)\ge f\left(x^{\ast}\right)+\alpha\left\|x+\alpha\right\|^{2}$ for all $x$ near $x^{\ast}$ (sufficient condition).
    \end{enumerate}
 \end{thm}
-Theorem~\ref{Chapter:GlobalOpt:TheoremSecondOrder} establishes both 2$^{\text{nd}}$-order necessary and sufficient conditions for a problem whereas Theorem~\ref{Chapter:GlobalOpt:TheoremFirstOrder} describes 1$^{\text{st}}$-order necessary conditions. The sufficiency conditions is given by the following definitions:
+
+%%%
+\item {\bf Convex Functions:} Theorem~\ref{Chapter:GlobalOpt:TheoremSecondOrder} establishes both 2$^{\text{nd}}$-order necessary and sufficient conditions for a problem whereas Theorem~\ref{Chapter:GlobalOpt:TheoremFirstOrder} describes 1$^{\text{st}}$-order necessary conditions. The sufficiency conditions is given by the following definition:
 
 %%% Definition:
 \begin{defn}[Convex Sets and Functions] For
    \begin{enumerate}
        \item A subset $\mathcal{C}\subset\mathcal{R}^{n}$ is assumed convex if for every pair $x$ and $y$ taken from $\mathcal{C}$, the entire line segment connecting $x$ and $y$ is also contained in $\mathcal{C}$,
            \begin{displaymath}
-              \left[x,\right]\subset\mathcal{C}\;\;\;\text{ where }\;\;\; \left[x,y\right]=\left\{\left(1-\lambda\right)x +\lambda y : 0\le\lambda\le 1\right\}
+              \left[x,y\right]\subset\mathcal{C}\;\;\;\text{ where }\;\;\; \left[x,y\right]=\left\{\left(1-\lambda\right)x +\lambda y : 0\le\lambda\le 1\right\}
            \end{displaymath}
-       \item A function $f:\mathcal{R}^{n}\rightarrow \mathcal{R}\cup\left\{\pm\infty\right\}$ is assumed convex if the set
+       \item A function $f:\mathcal{R}^{n}\rightarrow \mathcal{R}\cup\left\{\pm\infty\right\}$ is assumed convex if the set\footnote{The {\it epigraph (epi)} of a function $f:X\rightarrow\left[-\infty,+\infty\right]$ is the subset of $\mathcal{R}^{n}$ given by,
+            \begin{displaymath}
+                \text{epi}(f) = \left\{\left(x,w\right)\left|\; x\in X,w\in\mathcal{R}, f(x) \le w\right.\right\}.
+            \end{displaymath}
+          The {\it effective domain (dom)} of the function $f$ is the set
+            \begin{displaymath}
+                \text{dom}(f) = \left\{x\in X \left|\; f(x) < \infty\right.\right\}.
+            \end{displaymath}
+           } 
            \begin{displaymath}
               \text{epi}(f) = \left\{\left(\mu,x\right): f(x)\le \mu\right\}
            \end{displaymath}
@@ -68,7 +82,7 @@ Theorem~\ref{Chapter:GlobalOpt:TheoremSecondOrder} establishes both 2$^{\text{nd
 
 %%% Lemma:
 \begin{lem}
-    The function $f : \mathcal{R}^{n}\rightarrow\mathcal{R}$ is convex \underline{if and only if} for every two solution coordinates, $x_{1},x_{2}\in\text{ dom}(f)$ and $\lambda\in\left[0,1\right]$ there is
+    The function $f : \mathcal{R}^{n}\rightarrow\mathcal{R}$ is convex \underline{if and only if} for every two solution coordinates, $\left\{x_{1},x_{2}\right\}\in\text{ dom}(f)$ and $\lambda\in\left[0,1\right]$ there is
        \begin{displaymath}
           f\left(\lambda x_{1} +\left(1-\lambda\right)x_{2}\right) \le \lambda f\left(x_{1}\right) + \left(1 - \lambda\right)f\left(x_{2}\right),
        \end{displaymath}
@@ -105,7 +119,9 @@ If $f$ is a differentiable convex function then a better solution can be obtaine
              \end{displaymath}
        \end{enumerate}
 \end{lem}
-From {\it Lemma}~\ref{Lemma_Convex},
+
+%%%
+\item {\bf Differentiable Function and Local and Global Minima:} From {\it Lemma}~\ref{Lemma_Convex},
 %%% Theorem:
 \begin{thm}\label{Theorem_Convex2}
    Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}\cup\left\{+\infty\right\}$ be convex and also let's suppose that $x^{\ast}\in\mathcal{R}^{n}$ is a solution coordinate at which $f$ is differentiable. Then $x^{\ast}$ is a global solution to the problem $\mathcal{P}$ if and only if $\nabla f\left(x^{\ast}\right)=0$.
@@ -159,8 +175,8 @@ Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}^{n}$, the Lipschitz-continuous func
    A solution coordinate $x^{\ast}\in\mathcal{S}$ is a global solution of a problem if $f\left(x^{\ast}\right)\leq f\left(x\right)\;\;\forall x\in\mathcal{S}$.
 \end{defn}
 
-\bigskip
-Optimisation methods are often based on iterative methods, in which after an initial solution $\left(\text{or estimate}, x^{\circ}\right)$ is chosen, a sequence of points $\left\{x^{k}\right\}$ is obtained through a prescribed algorithm. The sequence must converge to the solution $x^{\ast}$ of the problem.
+%%%
+\item {\bf Convergence Conditions:} Optimisation methods are often based on iterative methods, in which after an initial solution $\left(\text{or estimate}, x^{\circ}\right)$ is chosen, a sequence of points $\left\{x^{k}\right\}$ is obtained through a prescribed algorithm. The sequence must converge to the solution $x^{\ast}$ of the problem.
 %%% Definition:
 \begin{defn}[Local Covergence]
    An algorithm is locally convergent if there is a positive scalar $\sigma$ such that for any initial solution coordinate $x^{\circ}\in\mathcal{R}^{n}$ $\left(\text{or } x^{\circ}\in\mathcal{S}\right)$, with $\left|x^{\circ}-x^{\ast}\right|\leq\sigma$, the algorithm generates a sequence of solutions that converges to the solution $x^{\ast}$.
@@ -179,20 +195,126 @@ Convergence is assumed asymptotic if the solution is not found after a finite nu
 \end{defn}
 
 %%% Definition:
-\begin{defn}[Viable Direction] A linearly independent vector $d\in\mathcal{R}^{n}$ represents a viable direction of a real function $f$ in $x\in\mathcal{S}$ if there is $\theta >0$, such that $x+t d\in \mathcal{S}$ for all $t\in\left.\left(0,\theta\right.\right]$.   
+\begin{defn}[Feasible Direction] A linearly independent vector $d\in\mathcal{R}^{n}$ represents a feasible direction of a real function $f$ in $x\in\mathcal{S}$ if there is $\theta >0$, such that $x+t d\in \mathcal{S}$ for all $t\in\left.\left(0,\theta\right.\right]$.   
 \end{defn}
+
+\end{itemize}
 
 %%% Subsection
 \subsection{Conditions of Optimality}\label{Chapter:GlobalOpt:Section:ConditionsOptimality}
-Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}$ with $x^{\ast}$ be a global minimum of the function.
+Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}$ with $x^{\ast}$ be a global extremum (minimum or maximum) of the function.
 
 %%% Subsection
 \subsubsection{Non-Constrained Optimisation}
+  \begin{enumerate}[{\bf i)}]
+      \item {\bf First-Order Condition (necessary):} If $x^{\ast}$ is the extremum (i.e., maximum or minimum) of a function $f$, then this function is differentiable in $x^{\ast}$. Thus a necessary condition is,
+          \begin{displaymath}
+             \nabla f\left(x^{\ast}\right) = 0.
+          \end{displaymath}
+      \item  {\bf Second-Order Condition (necessary):} If $x^{\ast}$ is the local extremum (i.e., maximum or minimum) of a function $f$, then it is necessary that the function be twice differentiable in $x^{\ast}$, i.e.,
+          \begin{displaymath}
+             \nabla f\left(x^{\ast}\right) = 0.
+          \end{displaymath}
+and the Hessian matrix $\mathcal{H}\left(x^{\ast}\right)$,
+          \begin{displaymath}
+             \mathcal{H}\left(x^{\ast}\right) \equiv \nabla^{2} f\left(x^{\ast}\right) \text{ is positive (minimum) / negative (maximum) semi-definite}.\index{Hessian matrix ! Conditions of optimality}
+          \end{displaymath}
+      \item {\bf Sufficient Condition:} Let's $f(x)$ be a function twice differentiable in $x^{\ast}$ such that,
+          \begin{eqnarray}
+             &&\nabla f\left(x^{\ast}\right) = 0, \nonumber \\
+             && \text{and } \mathcal{H}\left(x^{\ast}\right) \text{ is positive (minimum) / negative (maximum) definite,} \nonumber 
+          \end{eqnarray}
+           thus $x^{\ast}$ is a strict local extremum of function $f$.
+  \end{enumerate}
 
+The Hessian matrix, $\mathcal{H}\left(x^{\ast}\right)$, can be assessed through,
+\begin{enumerate}[(a)]
+   \item Contribution of the second-order term of the Taylor expansion around $x^{\ast}$,
+         \begin{displaymath}
+            f(x) - f\left(x^{\ast}\right) = \frc{1}{2}\left(x-x^{\ast}\right)^{\text{T}} \mathcal{H}\left(x^{\ast}\right)\left(x-x^{\ast}\right) + \cdots
+         \end{displaymath}
+   \item Eigenvalues (characteristic values) signs of $\mathcal{H}\left(x^{\ast}\right)$,
+         \begin{displaymath}
+            \mathcal{H}\left(x^{\ast}\right) = V \Lambda V^{-1},
+         \end{displaymath}
+         where $V$ and $\Lambda$ are matrices of eigenvectors (columns) and eigenvalues (diagonals), respectively. As the Hessian matrix is symmetric $\left(\text{and therefore }V^{-1}=V^{\text{T}}, \text{i.e., orthogonal matrix}\right)$ and defining $z(x)=V^{-1}\left(x-x^{\ast}\right)$, thus $\left(x-x^{\ast}\right)^{\text{T}}V=z^{\text{T}}$. Then the Taylor expansion around $x^{\ast}$ can be expressed as
+         \begin{displaymath}
+            f(x) - f\left(x^{\ast}\right) = \frc{1}{2}z^{\text{T}}\Lambda z + \cdots = \frc{1}{2}\summation_{i=1}^{n}\lambda_{i}z_{i}^{2} + \cdots,
+         \end{displaymath}
+         where $\lambda_{1},\cdots,\lambda_{n}$ are the determinants of {\it principal minors} of the matrix $\Lambda$.
+   \item Determinant signs of the main {\it principal minors} of $\mathcal{H}\left(x^{\ast}\right)$ (Sylvester criterion). Below,  we summarise the relationship between $\mathcal{H}\left(x^{\ast}\right)$ and its first principal minor of order $k$, $\mathcal{M}_{k}\left(\mathcal{H}\right)$,
+    \begin{center}
+        \begin{tabular}{|c | c c c|}
+           \hline
+              {\bf $\mathcal{H}\left(x^{\ast}\right)$} & {\bf Taylor}  &  {\bf $\lambda$} & {\bf $\Delta_{k}=\text{det}\left(\mathcal{M}_{k}\right)$} \\
+           \hline
+             positive semi-definite & $x^{\text{T}}\mathcal{H}x \ge 0$ & $\ge 0$ &   $\ge 0$ \\
+             positive definite      & $x^{\text{T}}\mathcal{H}x   > 0$ & $>   0$ &   $>   0$ \\
+             negative semi-definite & $x^{\text{T}}\mathcal{H}x \le 0$ & $\le 0$ &   $(-1)^{k}\Delta_{k}\ge 0$ \\
+             negative definite      & $x^{\text{T}}\mathcal{H}x   < 0$ & $<   0$ &   $(-1)^{k}\Delta_{k} > 0$ \\
+             indefinite             & $x^{\text{T}}\mathcal{H}x (>/<) 0$& $(>/<) 0$ &   different from above \\
+          \hline
+        \end{tabular}
+ %      \caption{Analysis of the Hessian matrix.}
+    \end{center}
+$\mathcal{M}_{k}\left(\mathcal{H}\right)$ is obtained from the removal of the last $n-k$ columns and rows of the matrix $\mathcal{H}$,
+\end{enumerate}
 
+Therefore,  we can say that $x^{\ast}$ is,
+     \begin{itemize}
+         \item Local minimum if $\mathcal{H}\left(x^{\ast}\right)$ is positive definite, $f(x) > f\left(x^{\ast}\right)$;
+         \item Local maximum if $\mathcal{H}\left(x^{\ast}\right)$ is negative definite, $f(x) < f\left(x^{\ast}\right)$;
+         \item Saddle point if $\mathcal{H}\left(x^{\ast}\right)$ is indefinite, thus eventually $f(x) < f\left(x^{\ast}\right)$ and $f(x) > f\left(x^{\ast}\right)$;
+     \end{itemize}
+     If $\mathcal{H}\left(x^{\ast}\right)$ is semi-definite then we need to further investigate high-order terms of the Taylor expansion.
 
 %%% Subsection
 \subsubsection{Constrained Optimisation}
+Let $\mathcal{P}$ be an optimisation problem of function $f:\mathcal{R}^{n}\rightarrow\mathcal{R}$ subject to equality $\left[h(x)\right]$ and inequality $\left[g(x)\right]$ constraints,
+    \begin{eqnarray}
+        \mathcal{P}: \text{Minimise } f(x) && \nonumber \\
+        \text{subject to}:&& h_{j}(x) = 0, \;\; j=1, \cdots, m \nonumber \\
+                          && g_{j}(x) \le 0, \;\; j=1, \cdots, p \nonumber \\
+                          && x\in X\subseteq \mathcal{R}^{n}, \nonumber 
+    \end{eqnarray}
+where $f(x)$, $g(x)$ and $h(x)$ $\in\mathcal{C}^{2}$. The set of all feasible points is defined as,
+    \begin{displaymath}
+        \mathcal{K} = \left\{x\in X\subseteq \mathcal{R}^{n}\; \left| \; h(x) = 0,\; g(x) \le 0\right. \right\}
+    \end{displaymath}
+
+An inequality constraint $g_{j}(x)$ is said to be {\it active} in a feasible point $\hat{x}$, if $g_{j}\left(\hat{x}\right)=0$, otherwise it is an {\it inactive constraint}. Active constraints impose a boundary in the viability region, whereas inactive constraints do not prescribe any boundary in the neighbourhood of point $\hat{x}$, which is defined by the hyper-sphere of radius $\varepsilon$ around this point, $\mathcal{B}_{\varepsilon}\left(\hat{x}\right)$. A vector $d$ is called {\it feasible directional vector} from the point $\hat{x}$, if there exist an hyper-sphere of radius $\varepsilon$ such that,
+   \begin{displaymath}
+      \left(\hat{x}+\lambda d\right) \in \left\{\mathcal{B}_{\varepsilon}\left(\hat{x}\right)\cap\mathcal{K}\right\}\;\;\forall \; 0\le \lambda\le \frc{\varepsilon}{\left|\ d\right\|}.
+   \end{displaymath}
+The set of vectors of feasible directions from $\hat{x}$ is commonly called{\it cone of feasible directions of} $\mathcal{K}$ around the point $\hat{x}$. If $d\ne 0$, then $\hat{x}$must satisfy the following condition,
+   \begin{eqnarray}
+      && d^{\text{T}}\nabla h\left(\hat{x}\right) = 0, \nonumber \\
+      && d^{\text{T}}\nabla g\left(\hat{x}\right) \le 0 \;\;\;\ \text{ for actives } g\left(\hat{x}\right) \Rightarrow g(x)\approx \cancelto{0}{g\left(\hat{x}\right)} + \lambda\nabla^{\text{T}}g\left(\hat{x}\right)d \le 0, \nonumber
+   \end{eqnarray}
+however, if $d^{\text{T}}\nabla f\left(\hat{x}\right)< 0$, then $d$ is effectively a feasible direction, i.e., 
+    \begin{displaymath}
+       f\left(\hat{x}+\lambda d\right) < f\left(\hat{x}\right)\;\;\text{for all }\;\; 0\le\lambda\le\frc{\varepsilon}{\left\|d\right\|}\;\;\text{as } f(x)-f\left(\hat{x}\right)\approx \lambda\nabla^{\text{T}} f\left(\hat{x}\right)d < 0.
+    \end{displaymath}
+If $\hat{x}=x^{\ast}$ is a local minimum of problem $\mathcal{P}$, then for a sufficiently small $\lambda$,
+    \begin{displaymath}
+       f\left(x^{\ast}\right) \le f\left(x^{\ast}+\lambda d\right).
+    \end{displaymath}
+
+In order to ensure that all necessary and sufficient conditions for a constraint optimisation problem are met, we need to transform it into a non-constraint problem and apply the conditions accordingly. One way to achieve it is to make use of {\it Lagrange functions}, $\mathcal{L}\left(x,\lambda,\mu\right)$,
+    \begin{displaymath}   
+       \mathcal{L}\left(x,\lambda,\mu\right) = f(x) + \lambda^{\text{T}}h(x) + \mu^{\text{T}}g(x),\;\;\;\mu\ge 0,
+    \end{displaymath}
+where $\lambda$ and $\mu$ are the Lagrangian multipliers associated with the equality and inequality constraints, respectively ($\mu$ is also known as {\it Kuhn-Tucker multipliers}). Therefore, the optimisation problem becomes,
+    \begin{displaymath}
+       \mathcal{P}:\;\;\;\max_{\lambda,\mu\ge 0} \min_{x} \mathcal{L}\left(x,\lambda,\mu\right),
+    \end{displaymath} 
+where $\lambda$ is positive when $h(x)\ge 0$ and negative when $h(x)\le 0$. At the optimum coordinate,
+    \begin{displaymath}
+       \mathcal{L}\left(x^{\ast}, \lambda^{\ast},\mu^{\ast}\right) = f\left(x^{\ast}\right).
+    \end{displaymath}
+Each Lagrangian multiplier relates the sensitivity of the objective function \wrt the constraint.
+
+
 
 
 
