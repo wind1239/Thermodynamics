@@ -331,7 +331,7 @@ To be added later.
 \section{Introduction to Newton-based Methods}\label{Chapter:GlobalOpt:Section:NewtonMethods}
 
 %%% Section
-\subsection{Linear Search}\label{Chapter:GlobalOpt:Section:NewtonMethods:LinearSearch}
+\subsection{Introduction}\label{Chapter:GlobalOpt:Section:NewtonMethods:Intro}
 
     Let's consider an open domain $\mathcal{C}$ in $\mathcal{R}^{n}$ defined as
 \begin{displaymath}
@@ -340,13 +340,46 @@ To be added later.
 and a non-linear function $f$ differentiable in $\mathcal{C}$. If this function is twice differentiable in the open space $\mathcal{D}\subset\mathcal{R}^{n}$, then the optimisation problem $\mathcal{P}$ becomes,
 \begin{eqnarray}
    \mathcal{P}:&& \text{Minimise }\; f(x)      \nonumber \\
-               && \text{with } x\in\mathca{C}  \nonumber
+               && \text{with } x\in\mathcal{C}  \nonumber
 \end{eqnarray}
 This minimisation problem with linear inequality constraints can be onverted into a non-constrained optimisation problem through a change of variables,
 \begin{displaymath}
-    \xi_{i} = \ln\left(\frc{1}{x_{i}}-1\right)\;\;\; i=1,\dots,n,
+    \xi_{i} = \ln\left(\frc{1}{x_{i}}-1\right)\;\;\; \Longleftrightarrow x_{i}= \frc{1}{\exp{\left(\xi_{i}\right)}+1} \;\; i=1,\dots,n, 
 \end{displaymath}
-therefore we can garantee that for all $i=1,\cdots,n \Rightarrow -\infty < \xi_{i} < +\infty$
+therefore we can garantee that for all $i=1,\cdots,n \Rightarrow -\infty < \xi_{i} < +\infty$, and the optimisation problem becomes,
+   \begin{eqnarray}\label{Chapter:GlobalOpt:Box:NonConstrainedOptimisationProblem}
+      \mathcal{P}:&& \text{Minimise }\; f(\xi)           \\
+                  && \text{with } \xi\in\mathcal{R}^{n}  \nonumber
+   \end{eqnarray}
+With such change in variable, the gradient vector, $\nabla f\left(\xi\right)$, and the Hessian matrix, $\nabla^{2}f\left(\xi\right)$, of function $f\left(\xi\right)$, with $\xi=\left(\xi_{1},\cdots,\xi_{n}\right)$, can be obtained from
+\begin{subequations}
+  \begin{align}
+    & \frc{\partial f\left(\xi\right)}{\partial\xi_{i}} = \left(x_{i}^{2}-x_{i}\right)\frc{\partial f\left(x\right)}{\partial x_{i}} \;\;\;\;\forall i=1,\cdots,n, \\
+    & \frc{\partial^{2} f\left(\xi\right)}{\partial\xi_{i}^{2}} = \left(x_{i}^{2}-x_{i}\right)\left[\left(x_{i}^{2}-x_{i}\right)\frc{\partial^{2} f\left(x\right)}{\partial x_{i}^{2}} + \left(2x_{i}-1\right)\frc{\partial f\left(x\right)}{\partial x_{i}}\right] \;\;\; \forall i=1,\cdots,n \text{ and } i\ne j, \\
+    & \frc{\partial^{2} f\left(\xi\right)}{\partial\xi_{j}\partial\xi_{i}} = \left(x_{i}^{2}-x_{i}\right)\left(x_{j}^{2}-x_{j}\right)\frc{\partial^{2} f\left(x\right)}{\partial x_{j}\partial x_{i}}\;\;\; \forall [i,j]=1,\cdots,n
+  \end{align}
+\end{subequations}
+This system of equations representing the problem $\mathcal{P}$ (Eqn.~\ref{Chapter:GlobalOpt:Box:NonConstrainedOptimisationProblem}) can be solved by any available optimisation method for non-constrained problems, where the aim is to find $\xi^{\ast}\in\mathcal{R}^{n}$ in which the optimality conditions $\nabla f\left(\xi^{\ast}\right)=0$ and $\nabla^{2} f\left(\xi^{\ast}\right) \ge 0$  must be satisfied.
+
+
+%%% Section
+\subsection{Local Newton Method}\label{Chapter:GlobalOpt:Section:NewtonMethods:LocalNewton}
+This section summarises the local search aspects of general Newton methods.
+
+From Section~\ref{Chapter:GlobalOpt:Section:NewtonMethods:Intro}, consider the non-constrained optimisation problem $\mathcal{P}$ (Eqn.~\ref{Chapter:GlobalOpt:Box:NonConstrainedOptimisationProblem}) where $f\left(\xi\right)$ is a function twice differentiable in $\mathcal{R}^{n}$ space. In the Newton method, consider a solution coordinate $\xi_{k}$ which is assumed a good approximation for a local minimiser of $f$ such that in the neighbourhood of $\xi_{k}$, the approximation
+\begin{displaymath}
+    f\left(\xi_{k}+\omega\right) \approx f\left(\xi_{k}\right) + m_{k}\left(\omega\right)
+\end{displaymath}
+is appropriate and 
+\begin{displaymath}
+m_{k}\left(\omega\right) = \nabla f\left(\xi_{k}\right)^{\text{T}}\omega + \frc{1}{2}\omega^{\text{T}}\nabla^{2}f\left(\xi_{k}\right)\omega
+\end{displaymath}
+
+
+
+
+%%% Section
+\subsection{Linear Search}\label{Chapter:GlobalOpt:Section:NewtonMethods:LinearSearch}
 
 
 \clearpage
