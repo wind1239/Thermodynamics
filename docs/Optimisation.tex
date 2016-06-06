@@ -399,16 +399,13 @@ This statement does not how fast the Newton's method will converge to the soluti
 \begin{equation}
    \left\|\xi_{k+1}-\xi^{\ast}\right\| \le \alpha \left\|\xi_{k}-\xi^{\ast}\right\|,\;\;\; k\ge 0\;\;\text{for any constant} \alpha\in\left(0,1\right). 
 \end{equation}
-If $\alpha$ is very small then the method's convergence is appropriate, however if $\alpha$ is close to the unity than convergence is very slow. 
-
-
- 
+If $\alpha$ is very small then the method's convergence is appropriate, however if $\alpha$ is close to the unity than the convergence is very slow. Now consider a sequence $\left\{\xi_{k}\right\}$ that converges quadratically to $\xi^{\ast}$ if 
 \begin{equation}
    \left\|\xi_{k+1}-\xi^{\ast}\right\| \le \beta \left\|\xi_{k}-\xi^{\ast}\right\|^{2},\;\;\; k\ge 0\;\;\text{for any } \beta >0. 
 \end{equation}
 This relation indicates that $\left(\text{relative error}\right)_{k+1} \le \text{ constant }\times\left[\left(\text{relative error}\right)_{k}\right]^{2}$. If we divide the above relation by $\left\|\xi^{\ast}\right\|$ and assuming that $\xi^{\ast}\ne 0$,
 \begin{equation}
-   \frc{\left\|\xi_{k+1}-\xi^{\ast}\right\|}{\left\|\xi^{\ast}\right\|} \le 
+   \frc{\left\|\xi_{k+1}-\xi^{\ast}\right\|}{\left\|\xi^{\ast}\right\|} \le \beta \left(\frc{\left\|\xi_{k}-\xi^{\ast}\right\|}{\left\|\xi^{\ast}\right\|}\right)^{2},\;\;\; k\ge 0
 \end{equation}
 
 %%% Section
