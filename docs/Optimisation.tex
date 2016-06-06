@@ -403,10 +403,25 @@ If $\alpha$ is very small then the method's convergence is appropriate, however 
 \begin{equation}
    \left\|\xi_{k+1}-\xi^{\ast}\right\| \le \beta \left\|\xi_{k}-\xi^{\ast}\right\|^{2},\;\;\; k\ge 0\;\;\text{for any } \beta >0. 
 \end{equation}
-This relation indicates that $\left(\text{relative error}\right)_{k+1} \le \text{ constant }\times\left[\left(\text{relative error}\right)_{k}\right]^{2}$. If we divide the above relation by $\left\|\xi^{\ast}\right\|$ and assuming that $\xi^{\ast}\ne 0$,
+This relation indicates that $\left(\text{relative error}\right)_{k+1} \le \text{ constant }\times\left[\left(\text{relative error}\right)_{k}\right]^{2}$. %If we divide the above relation by $\left\|\xi^{\ast}\right\|$ and assuming that $\xi^{\ast}\ne 0$, we obtain 
+%\begin{equation}
+%   \frc{\left\|\xi_{k+1}-\xi^{\ast}\right\|}{\left\|\xi^{\ast}\right\|} \le \left(\beta\left\|\xi^{\ast}\right\|\right) \left(\frc{\left\|\xi_{k}-\xi^{\ast}\right\|}{\left\|\xi^{\ast}\right\|}\right)^{2},\;\;\; k\ge 0
+%\end{equation}
+And finally the sequence $\left\{\xi_{k}\right\}$ that converges superlinearly to $\xi^{\ast}$ if 
 \begin{equation}
-   \frc{\left\|\xi_{k+1}-\xi^{\ast}\right\|}{\left\|\xi^{\ast}\right\|} \le \beta \left(\frc{\left\|\xi_{k}-\xi^{\ast}\right\|}{\left\|\xi^{\ast}\right\|}\right)^{2},\;\;\; k\ge 0
+   \left\|\xi_{k+1}-\xi^{\ast}\right\| \le \beta_{k}
+   \left\|\xi_{k}-\xi^{\ast}\right\|,\;\;\; k\ge 0\;\;\text{for a sequence } \beta_{k} \text{ that converges to zero}.
 \end{equation}
+
+
+
+
+
+
+
+
+
+
 
 %%% Section
 \subsection{Linear Search}\label{Chapter:GlobalOpt:Section:NewtonMethods:LinearSearch}
