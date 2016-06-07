@@ -559,7 +559,60 @@ Model description in this section is a summary of the \SAA originally developed 
  \caption{Simmulated Annealing Algorithm.}\label{Chapter:GlobalOpt:Algorithm:SAA}
 \end{algorithm}
 \begin{enumerate}[{\bf Step 1: }]
-   \item An initial estimate of the vector of solution-coordinate $b\le\mfr[\underline{X}]{}{0}\le a$, where $a$ and $b$ are the upper and lower limits of the solution domain, respectively, in other words we need to ensure that the vector of solution-coordinate is bounded. We also need to initialise the {\it cooling schedule}:
+%%%%%%%
+   \item An initial estimate of the vector of solution-coordinate $mfr[\underline{X}]{}{0}$ and the upper and lower limits, $a$ and $b$, of the solution domain.  We also need to initialise the following elements of the {\it cooling schedule}:
+   \begin{itemize}
+      \item Stepping matrix: $\underline{\underline{V}}_{0}$;
+      \item Temperature: $T_{0}$;
+      \item Stoppage criteria: $\varepsilon$;
+      \item Maximum number of successive reduction of the temperature parameter: $N_{T_{e}}$;
+      \item Maximum number of cycles: $N_{S}$;
+      \item Number of directions: $N_{h}$;
+      \item Parameter for controlling the size of the stepping matrix: $C$;
+      \item Maximum number of iteration before the temperature reduction: $N_{T}$;
+      \item Parameter for temperature reduction: $r_{T}$.
+   \end{itemize}
+   It is also worthy establishing the indices used in Algorithm~\ref{Chapter:GlobalOpt:Algorithm:SAA} that are initialised as zero:
+   \begin{itemize}
+      \item $i$: points or iterations;
+      \item $j$: cycles along the coordinates;
+      \item $m$: adjusts in the stepping matrix;
+      \item $k$: temperature;
+      \item $h$: direction of the generated set of solution-coordinates.
+   \end{itemize}
+
+%%%%%%%
+   \item The initial vector of solution-coordinate should be bounded, i.e., $b <\mfr[\underline{X}]{}{0}< a$. If any component of $\mfr[\underline{X}]{}{0}$ is out of bounds then a new $\mfr[\underline{X}]{}{0}$ is generated.
+
+%%%%%%%
+   \item Calculate the function $F\left(\mfr[\underline{X}]{}{0}\right)$ and set up:
+       \begin{itemize}
+           \item $\mfr[\underline{X}]{}{i} = \mfr[\underline{X}]{}{\text{opt}} = \mfr[\underline{X}]{}{0}$, where $\mfr[\underline{X}]{}{i}$ represents
+                 \begin{displaymath}
+                    \mfr[\underline{X}]{}{i} = \left(X_{1}\; X_{2}\; \cdots \; X_{n-1}\;  X_{n}\right)^{\text{T}},
+                 \end{displaymath}
+            at the {\it i}$^{th}$ iteration;
+           \item $F\left(\mfr[\underline{X}]{}{0}\right) = F\left(\mfr[\underline{X}]{}{i}\right) = \mfr[F]{}{i} = \mfr[F]{}{\text{opt}}$. 
+       \end{itemize}
+
+%%%%%%%
+   \item Let the vector $\underline{X}\subseteq\mathcal{R}^{n}$ be compose by the {\it canonical basis} $\underline{e}$, \ie generated based on a set of linearly independent generalised eigenvectors,
+   \begin{displaymath}
+      \underline{e} = \left[
+             \begin{pmatrix}1 \\ 0 \\ 0 \\ \vdots \\ 0 \\ 0 \end{pmatrix},
+             \begin{pmatrix}0 \\ 1 \\ 0 \\ \vdots \\ 0 \\ 0 \end{pmatrix},
+             \begin{pmatrix}0 \\ 0 \\ 1 \\ \vdots \\ 0 \\ 0 \end{pmatrix},
+             \cdots,
+             \begin{pmatrix}0 \\ 0 \\ 0 \\ \vdots \\ 1 \\ 0 \end{pmatrix},
+             \begin{pmatrix}0 \\ 0 \\ 0 \\ \vdots \\ 0 \\ 1 \end{pmatrix}
+      \right],
+   \end{displaymath}
+   A new solution-coordinate vector, $\mfr[\underline{X}]{}{i+1}$, is generated based on $\mfr[\underline{X}]{}{i}$ along the direction $h$,
+      \begin{equation}
+         \mfr[\underline{X}]{}{i+1,h} = \mfr[\underline{X}]{}{i,h} + R \mfr[\underline{\underline{V}}]{}{j}\mfr[\underline{e}]{}{h}
+      \end{equation}
+
+%%%%%%%
 \end{enumerate}
 
 
