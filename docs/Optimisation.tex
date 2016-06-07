@@ -433,12 +433,48 @@ If $\nabla f$ satisfies {\it Result 1}, then a sequence $\left\{\xi_{k}\right\}$
 \subsection{Linear Search}\label{Chapter:GlobalOpt:Section:NewtonMethods:LinearSearch}
 \end{comment}
 
-\clearpage
 %%%
 %%% Section
 %%%
 \section{Simulated Annealing Algorithm}\label{Chapter:GlobalOpt:Section:SimulatedAnnealing}
+The Simulated Annealing Algorithm (SAA) is a stochastic numerical method for global optimisation problems. In traditional iterative search methods (Algorithm~\ref{Chapter:GlobalOpt:Algorithm:IterativeSearch}), the function $F$ is continuously evaluated based on an initial estimate and if there is a decrease on the value of the function, then the point is accepted, otherwise it is rejected. This family of algorithms has two main issues: (a) the algorithm can remain in regions of local minima (Fig.~\ref{Chapter:GlobalOpt:Fig:IterativeSearch_SA_Algorithms}, top) and, (b) the solution will {\it always} depend on the initial estimate. Therefore, in order to find the global minima, iterative search algorithms need to be applied continuously starting from each local minima found.
 
+
+
+%%% Figure
+\begin{figure}[h]
+       % \begin{center}
+          \includegraphics[width=\columnwidth,clip]{./Figs/IterativeSearchAlgorithm}\vspace{-0.5cm}
+          \includegraphics[width=\columnwidth,clip]{./Figs/SimulatedAnnealingAlgorithm}\vspace{-0.5cm}
+           \caption{Graphical representation of iterative search (top) and the simulated annealing algorithms.} 
+        %\end{center}%
+\label{Chapter:GlobalOpt:Fig:IterativeSearch_SA_Algorithms}
+\end{figure}
+%%% Figure
+
+
+%%%
+%%% ALGORITHM
+%%%
+\begin{algorithm}[H]\scriptsize
+   \SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+   \SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+   \SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}\SetKwInOut{Calculate}{Calculate}\SetKwInOut{Set}{Set}\SetKwInOut{Adjust}{Adjust}\SetKwInOut{Generate}{Generate}
+
+      \Input{Given an initial estimative $x_{i}\in\Omega\subseteq\mathcal{R}^{n}$;}
+      \While{ Convergence $\left(F\left(x_{v}\right)\le F\left(x_{i}\right)\right)$ }{ 
+             \Generate{ A set of coordinate solutions $x_{v}$ based on $x_{i}$;}
+              \Calculate{$\delta=F\left(x_{v}\right)-F\left(x_{i}\right)$}
+              \If{$\delta \le 0$}{
+                   $x_{i}=x_{v}$}}
+
+ \caption{Iterative search algorithm.}\label{Chapter:GlobalOpt:Algorithm:IterativeSearch}
+\end{algorithm}
+
+
+%%%
+%%% ALGORITHM
+%%%
 \begin{algorithm}[H]\scriptsize
    \SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
    \SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
@@ -484,18 +520,16 @@ If $\nabla f$ satisfies {\it Result 1}, then a sequence $\left\{\xi_{k}\right\}$
              }{
                \Adjust{ Temperature parameter }} 
      } % While 
-
-
-
  \caption{Simmulated Annealing Algorithm.}
 \end{algorithm}
 
 
 
-\clearpage
 
 
+\begin{comment}
 %%%
 %%% Section
 %%%
 \section{Particle Swarm Algorithm}
+\end{comment}
