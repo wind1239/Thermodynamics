@@ -12,11 +12,11 @@
 
 %%% Subsection
 \subsection{Main Definitions}\label{Chapter:GlobalOpt:Section:Definitions}
-The main aim of optimisation methods is to find the {\it global optimum} (maximum or minimum) of a function. However, global optimum are often difficult to obtain except in a few problems. 
+The main aim of optimisation methods is to find the {\it global optimum} (maximum or minimum) of a function. \citet{Pardalos_2000} \citep[see also][]{Piro_2016} gives a good overview on global optimisation methods. However, global optimum are often difficult to obtain except in a few problems. 
 
 \begin{itemize}
 %%%
-\item {\bf Constrained and Non-Constrained Problems:} A \underline{constrained minimisation problem} is defined as,
+\item {\bf Constrained and Non-Constrained Problems:} A \underline{constrained minimisation problem} is defined as,\index{Optimisation!Constrained problems}\index{Optimisation! Non-Constrained problems}
 \begin{shaded}
    Given an {\it objective function} $f\left(\cdot\right):\mathcal{S}\subset\mathcal{R}^{n}\rightarrow\mathcal{R}$, where $\mathcal{S}$ is either the constraints or the solutions set of the optimisation problem $\mathcal{P}$,
 \begin{displaymath}
@@ -35,7 +35,7 @@ where $x=\left(x_{1},\cdots,x_{n}\right)$.
 \end{shaded}
 
 %%%
-\item {\bf Conditions for Optimality:} Indeed, for such problems we need to obtain first- and second-order necessary and sufficient conditions for optimality, defined by the following theorems\footnote{Proof of these theorems and definitions can be found in any advanced linear algebra and optimisation text books.}:
+\item {\bf Conditions for Optimality:}\index{Optimisation! Conditions for optimality} Indeed, for such problems we need to obtain first- and second-order necessary and sufficient conditions for optimality, defined by the following theorems\footnote{Proof of these theorems and definitions can be found in any advanced linear algebra and optimisation text books.}:
 
 %%% Theorem:
 \begin{thm}[First-Order Optimality Conditions]\label{Chapter:GlobalOpt:TheoremFirstOrder}
@@ -437,9 +437,11 @@ If $\nabla f$ satisfies {\it Result 1}, then a sequence $\left\{\xi_{k}\right\}$
 %%% Section
 %%%
 \section{Simulated Annealing Algorithm}\label{Chapter:GlobalOpt:Section:SimulatedAnnealing}
-The Simulated Annealing Algorithm (SAA) is a stochastic numerical method for global optimisation problems~\citep[for an overview of optimisation methods, see][]{Eglese_1990,Rinnooy_1984}. In traditional iterative search methods (Algorithm~\ref{Chapter:GlobalOpt:Algorithm:IterativeSearch}), the function $F$ is continuously evaluated based on an initial estimate and if there is a decrease on the value of the function, then the point is accepted, otherwise it is rejected. This family of algorithms has two main issues: (a) the algorithm can remain in regions of local minima (Fig.~\ref{Chapter:GlobalOpt:Fig:IterativeSearch_SA_Algorithms}, top) and, (b) the solution will {\it always} depend on the initial estimate. Therefore, in order to find the global minima, iterative search algorithms need to be applied continuously starting from each local minima found.
 
-
+%%% Section
+\subsection{Introduction}
+The Simulated Annealing Algorithm (SAA) is a stochastic numerical method for global optimisation problems~\citep[for an overview of optimisation methods, see][]{Eglese_1990,Rinnooy_1984}. 
+\medskip
 
 %%% Figure
 \begin{figure}[h]
@@ -451,12 +453,14 @@ The Simulated Annealing Algorithm (SAA) is a stochastic numerical method for glo
 \label{Chapter:GlobalOpt:Fig:IterativeSearch_SA_Algorithms}
 \end{figure}
 %%% Figure
-
+\index{Optimisation!Iterative search algorithm}
+In traditional iterative search methods (Algorithm~\ref{Chapter:GlobalOpt:Algorithm:IterativeSearch}), the function $F$ is continuously evaluated based on an initial estimate and if there is a decrease on the value of the function, then the point is accepted, otherwise it is rejected. This family of algorithms has two main issues: (a) the algorithm can remain in regions of local minima (Fig.~\ref{Chapter:GlobalOpt:Fig:IterativeSearch_SA_Algorithms}, top) and, (b) the solution will {\it always} depend on the initial estimate. Therefore, in order to find the global minima, iterative search algorithms need to be applied continuously starting from each local minima found.
+\medskip
 
 %%%
 %%% ALGORITHM
 %%%
-\begin{algorithm}[H]\scriptsize
+\begin{algorithm}[h]%\scriptsize
    \SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
    \SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
    \SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}\SetKwInOut{Calculate}{Calculate}\SetKwInOut{Set}{Set}\SetKwInOut{Adjust}{Adjust}\SetKwInOut{Generate}{Generate}
@@ -471,11 +475,43 @@ The Simulated Annealing Algorithm (SAA) is a stochastic numerical method for glo
  \caption{Iterative search algorithm.}\label{Chapter:GlobalOpt:Algorithm:IterativeSearch}
 \end{algorithm}
 
+The \SAA, as a typical local search algorithm~\citep{Tsallis_1996,Dekkers_1991}, is able to accept solution cordinates that do not lead to increase of the objective function. Thus it is able to `jump' regions of local minima in its continuous search to the global minima (Fig.~\ref{Chapter:GlobalOpt:Fig:IterativeSearch_SA_Algorithms}, bottom). The acceptance of points that leads to the increase of the objective function, $F\left(x_{k+1}\right) > F\left(x_{k}\right)$, is controlled by a stochastic submodel.
 
+
+%%% Section
+\subsection{Method Initialisation}\label{Chapter:GlobalOpt:Section:SAA}\index{Simulated annealing algorithm}\index{Optimisation!Simulated annealing algorithm}
+Algorithm~\ref{Chapter:GlobalOpt:Algorithm:SAA} shows a simplified description of the \SAA as introduced by \citet{Corana_1987}\citep[see also][]{Goffe_1994}. The first step is to calculate the value of the objective function, $F\left(\mfr[\underline{X}]{}{0}\right)$ based on the initial vector of independent variables $\mfr[\underline{X}]{}{0}\subseteq\mathcal{R}^{n}$ and the temperature parameter\footnote{In the \SAA, temperature is a parameter in the algorithm and \underline{is not} related to the physical temperature.}, $T(t=0)=T_{0}$. A new solution-coordinate vector, $\mfr[\underline{X}]{}{1}$, is stochastically generated based on the previous iteration, $\mfr[\underline{X}]{}{0}$ and the new objective function, $F\left(\mfr[\underline{X}]{}{1}\right)$, is obtained. If the value of the function after the new iteration is smaller than the previous, $F\left(\mfr[\underline{X}]{}{1}\right) \le F\left(\mfr[\underline{X}]{}{0}\right)$, then the solution-coordinate is accepted $\left(\mfr[\underline{X}]{}{\text{opt}}=\mfr[\underline{X}]{}{\text{1}}\right)$, otherwise the {\it Metropolis criteria} is used.
+
+%%% Section
+\subsection{Metropolis Criteria}
+\citet{Metropolis_1953}\index{Simulated annealing algorithm!Metropolis criteria} developed an algorithm to simulate the behaviour of an ensemble of atoms in equilibrium at a given temperature. At each stage of this algorithm, the position of every atom is represented by random movements that lead to energy gradient, $\Delta E$. The system is assumed stable when the energy of the system is the minimum. Therefore if $\Delta E \le 0$ the movement is accept, however if $\Delta E > 0$ the probability that the ensemble of atoms configuration be accepted is assessed by the following probability distribution function,
+\begin{equation}
+  \mathcal{P}\left(\Delta E\right) = \exp{\left[-\frc{\Delta E}{k_{B}T}\right]}, 
+\end{equation}
+where $k_{B}$ is the Boltzmann constant. A random number in the interval $[0,1]$ is selected $\left(\mathcal{N}_{r}\right)$ and if $\mathcal{P}\left(\Delta E\right) < \mathcal{N}_{r}$ the configuration is accepted. This acceptance criteria is based on the Boltzmann statistical distribution, and the continuous use of this criteria simulates the atom movement in thermal bath at temperature. 
+
+%%% Section
+\subsection{Analogy with Physical Annealing}
+Thus, if the energy variation and  the ensemble of atoms configuration are represented by the objective function, $F\left(\underline{X}\right)$, and the vector of independent variables, $\underline{X}$, respectively, then the procedure adopted by \citet{Metropolis_1953} generates an ensemble of configurations for the optimisation problem at a given temperature $T$. In the analogy of the physical annealing process, the system is initially at melting temperature. The temperature is slowly reduced (\ie in stages) until the atoms reach an stable arrangement configuration (\ie low temperature). 
+%%% Figure
+\begin{figure}[h]
+       % \begin{center}
+          \includegraphics[width=\columnwidth,clip]{./Figs/SimulatedAnnealingAlgorithmTemperature}
+           \caption{Graphical representation of the SAA's throughout the domain with smooth decrease of the temperature parameter.} 
+        %\end{center}%
+\label{Chapter:GlobalOpt:Fig:SimulatedAnnealingAlgorithmTemperature}
+\end{figure}
+%%% Figure
+The implementation of the \SAA depends on a relatively large number of parameters, often called {\it cooling schedule} \citep[see][for a good review]{Nourani_1998}. During the \SAA simulation as the indices are incremented the temperature is reduced. It is important to notice that the larger the temperature, the larger the probability that the new configuration to be accepted. Overall, the \SAA scan throughout the domain with large acceptance of solution-coordinates, where the ascendant movements are required. As the temperature is reduced, the algorithm starts to accepts fewer new solution-coordinates, Fig.~\ref{Chapter:GlobalOpt:Fig:SimulatedAnnealingAlgorithmTemperature}. Thus, during the global optimisation the probability of acceptance of a new solution-coordinate that lead to an increase in the objective function tends asymptotically to zero due to the Boltzmann (or canonical) probability distribution function \citep{Tsallis_1996,Dekkers_1991}.
+
+
+%%% Section
+\subsection{Summary Description of the \SAA}
+Model description in this section is a summary of the \SAA originally developed by \citet{Corana_1987} and \citet{Gomes_MSc_1999} and optimised by \citet{Goffe_1994} \citep[see also][]{gomes_2001}. Given a vector of solution-coordinate $\underline{X}\subseteq\mathcal{R}^{n}$ and the objective function $F\left(\underline{X}\right)$ that must be minimised. Algorithm~\ref{Chapter:GlobalOpt:Algorithm:SAA} can be divided into 10 main steps:
 %%%
 %%% ALGORITHM
 %%%
-\begin{algorithm}[H]\scriptsize
+\begin{algorithm}[h]%\scriptsize
    \SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
    \SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
    \SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}\SetKwInOut{Calculate}{Calculate}\SetKwInOut{Set}{Set}\SetKwInOut{Adjust}{Adjust}
@@ -520,9 +556,11 @@ The Simulated Annealing Algorithm (SAA) is a stochastic numerical method for glo
              }{
                \Adjust{ Temperature parameter }} 
      } % While 
- \caption{Simmulated Annealing Algorithm.}
+ \caption{Simmulated Annealing Algorithm.}\label{Chapter:GlobalOpt:Algorithm:SAA}
 \end{algorithm}
-
+\begin{enumerate}[{\bf Step 1: }]
+   \item An initial estimate of the vector of solution-coordinate $b\le\mfr[\underline{X}]{}{0}\le a$, where $a$ and $b$ are the upper and lower limits of the solution domain, respectively, in other words we need to ensure that the vector of solution-coordinate is bounded. We also need to initialise the {\it cooling schedule}:
+\end{enumerate}
 
 
 
