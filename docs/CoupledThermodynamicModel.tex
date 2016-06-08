@@ -76,7 +76,7 @@
 \pagestyle{fancy}%%%%
 % with this we ensure that the chapter and section
 % headings are in lowercase
-%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
 \fancyhf{} %delete the current section for header and footer
 %\fancyhead[LE,RO]{\bfseries\thepage}
@@ -308,6 +308,10 @@
 \newcommand{\mfr}[3][error]{#1_{#2}^{\left(#3\right)}}
 %{P$_{#1}$DG-P$_{#2}$DG}%$_{#3}$}
 
+%%% TIKz
+\usepackage{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%                              %%%%%%%

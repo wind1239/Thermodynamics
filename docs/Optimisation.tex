@@ -507,7 +507,7 @@ The implementation of the \SAA depends on a relatively large number of parameter
 
 %%% Section
 \subsection{Summary Description of the \SAA}
-Model description in this section is a summary of the \SAA originally developed by \citet{Corana_1987} and \citet{Gomes_MSc_1999} and optimised by \citet{Goffe_1994} \citep[see also][]{gomes_2001}. Given a vector of solution-coordinate $\underline{X}\subseteq\mathcal{R}^{n}$ and the objective function $F\left(\underline{X}\right)$ that must be minimised. Algorithm~\ref{Chapter:GlobalOpt:Algorithm:SAA} can be divided into 10 main steps:
+Model description in this section is a summary of the \SAA originally developed by \citet{Corana_1987} and \citet{Gomes_MSc_1999} and optimised by \citet{Goffe_1994} \citep[see also][]{gomes_2001}. Given a vector of solution-coordinate $\underline{X}\subseteq\mathcal{R}^{n}$ and the objective function $F\left(\underline{X}\right)$ that must be minimised. Algorithm~\ref{Chapter:GlobalOpt:Algorithm:SAA} can be divided into 10 main steps summarised in Fig.~\ref{Chapter:GlobalOpt:Fig:FlowChart}:
 %%%
 %%% ALGORITHM
 %%%
@@ -560,7 +560,7 @@ Model description in this section is a summary of the \SAA originally developed 
 \end{algorithm}
 \begin{enumerate}[{\bf Step 1: }]
 %%%%%%%
-   \item An initial estimate of the vector of solution-coordinate $mfr[\underline{X}]{}{0}$ and the upper and lower limits, $a$ and $b$, of the solution domain.  We also need to initialise the following elements of the {\it cooling schedule}:
+   \item\label{Step1} An initial estimate of the vector of solution-coordinate $mfr[\underline{X}]{}{0}$ and the upper and lower limits, $b$ and $a$, of the solution domain.  We also need to initialise the following elements of the {\it cooling schedule}:
    \begin{itemize}
       \item Stepping matrix: $\underline{\underline{V}}_{0}$;
       \item Temperature: $T_{0}$;
@@ -582,10 +582,10 @@ Model description in this section is a summary of the \SAA originally developed 
    \end{itemize}
 
 %%%%%%%
-   \item The initial vector of solution-coordinate should be bounded, i.e., $b <\mfr[\underline{X}]{}{0}< a$. If any component of $\mfr[\underline{X}]{}{0}$ is out of bounds then a new $\mfr[\underline{X}]{}{0}$ is generated.
+   \item\label{Step2} The initial vector of solution-coordinate should be bounded, i.e., $a <\mfr[\underline{X}]{}{0}< b$. If any component of $\mfr[\underline{X}]{}{0}$ is out of bounds then a new $\mfr[\underline{X}]{}{0}$ is generated.
 
 %%%%%%%
-   \item Calculate the function $F\left(\mfr[\underline{X}]{}{0}\right)$ and set up:
+   \item\label{Step3} Calculate the function $F\left(\mfr[\underline{X}]{}{0}\right)$ and set up:
        \begin{itemize}
            \item $\mfr[\underline{X}]{}{i} = \mfr[\underline{X}]{}{\text{opt}} = \mfr[\underline{X}]{}{0}$, where $\mfr[\underline{X}]{}{i}$ represents
                  \begin{displaymath}
@@ -596,7 +596,7 @@ Model description in this section is a summary of the \SAA originally developed 
        \end{itemize}
 
 %%%%%%%
-   \item Let the vector $\underline{X}\subseteq\mathcal{R}^{n}$ be compose by the {\it canonical basis} $\underline{e}$, \ie generated based on a set of linearly independent generalised eigenvectors,
+   \item\label{Step4} Let the vector $\underline{X}\subseteq\mathcal{R}^{n}$ be compose by the {\it canonical basis} $\underline{e}$, \ie generated based on a set of linearly independent generalised eigenvectors,
    \begin{displaymath}
       \underline{e} = \left[
              \begin{pmatrix}1 \\ 0 \\ 0 \\ \vdots \\ 0 \\ 0 \end{pmatrix},
@@ -607,13 +607,185 @@ Model description in this section is a summary of the \SAA originally developed 
              \begin{pmatrix}0 \\ 0 \\ 0 \\ \vdots \\ 0 \\ 1 \end{pmatrix}
       \right],
    \end{displaymath}
-   A new solution-coordinate vector, $\mfr[\underline{X}]{}{i+1}$, is generated based on $\mfr[\underline{X}]{}{i}$ along the direction $h$,
+A new solution-coordinate vector, $\mfr[\underline{X}]{}{i+1}$, is generated based on $\mfr[\underline{X}]{}{i}$ along the direction $h$,
       \begin{equation}
-         \mfr[\underline{X}]{}{i+1,h} = \mfr[\underline{X}]{}{i,h} + R \mfr[\underline{\underline{V}}]{}{j}\mfr[\underline{e}]{}{h}
+         \mfr[\underline{X}]{}{i,h+1} = \mfr[\underline{X}]{}{i,h} + R \mfr[\underline{\underline{V}}]{}{j}\mfr[\underline{e}]{}{h},\label{Chapter:GlobalOpt:Eqn:XEvolution}
       \end{equation}
+where $\mfr[\underline{e}]{}{h}$ is the unity vector of the $h^{\text{th}}$ direction coordinate, $\mfr[\underline{\underline{V}}]{}{j}$ is the diagonal stepping matrix and $R$ is a number generated randomly in the $[-1,1]$ interval. Table~\ref{Chapter:GlobalOpt:Table:XEvolution} and Fig.~\ref{Chapter:GlobalOpt:Fig:SimulatedAnnealingAlgorithmOrthogonal} show how $\underline{X}$ is continuously generated in all directions, in which all movements are orthogonal to each other. Figure~\ref{Chapter:GlobalOpt:Fig:SimulatedAnnealingAlgorithmOrthogonal} shows an example of $\underline{X}$ generation for a function $F\left(X_{1},X_{2}\right)$ in $\mathcal{R}^{2}$, where the dot lines represent solution-coordinates that were not accepted by the {\it Metropolis Criteria}.
+
+%%%%%%%
+   \item\label{Step5} If the $h^{\text{th}}$ coordinate of $\mfr[\underline{X}]{}{i+1}$ lies out of bounds, \ie $\mfr[\underline{X}]{}{i+1} < a$ or $\mfr[\underline{X}]{}{i+1} > b$, then the algorithm returns to Step~\ref{Step4}.
+
+%%%%%%%
+   \item\label{Step6} Calculate $F\left(\mfr[\underline{X}]{}{i+1}\right) = \mfr[F]{}{i+1}$ and
+       \begin{itemize}
+           \item If $\mfr[F]{}{i+1}\le \mfr[F]{}{i}\;\Longrightarrow$: the new vector, $\mfr[\underline{X}]{}{i+1}$,  is accepted. Additionally, index $i$ and counter $N_{h}$ are incremented. If $\mfr[F]{}{i+1} < \mfr[F]{}{\text{opt}}$ then $\mfr[\underline{X}]{}{\text{opt}} = \mfr[\underline{X}]{}{i+1}$ and $\mfr[F]{}{\text{opt}} = \mfr[F]{}{i+1}$;
+           \item Otherwise, the new vector {\bf\underline{may}} be rejected accordingly with the {\it Metropolis criteria},
+               \begin{equation}
+                   \mathcal{P} = \exp{\left[-\frc{\mfr[F]{}{i+1}-\mfr[F]{}{i}}{T_{k}}\right]}, \label{Chapter:GlobalOpt:Eqn:MetropolisCriteria}
+               \end{equation}
+$\mathcal{P}$ is compared against a random number $\mathcal{P}^{\star}$. If $\mathcal{P}^{\star}>\mathcal{P}$, the new vector is rejected , otherwise is accepted and the index $i$ and counter $N_{h}$ are incremented.
+       \end{itemize}
+
+%%%%%%%
+   \item\label{Step7} Index $h$ is incremented and
+       \begin{itemize}
+           \item If $h<n$, then the algorithm returns to Step~\ref{Step4};
+           \item Otherwise, $h=1$ and $j$ is incremented.
+       \end{itemize}
+
+%%%%%%%
+   \item\label{Step8} Here,
+       \begin{itemize}
+           \item If $j<N_{s}$, then the algorithm returns to Step~\ref{Step4};
+           \item Otherwise, the stepping matrix is incremented,
+               \begin{subequations}
+                  \begin{align}
+                      & \mfr[\underline{\underline{V}}]{}{m+1} = \mfr[\underline{\underline{V}}]{}{m+1}\left[1 + \frc{5}{2}C\left(\frc{N_{a}}{N_{s}}-0.6\right)\right], \hspace{.5cm}\hfill \text{if }\frc{N_{a}}{N_{s}} > 0.6 \\
+                      & \mfr[\underline{\underline{V}}]{}{m+1} = \mfr[\underline{\underline{V}}]{}{m+1}\left[1 + \frc{5}{2}C\left(0.4 - \frc{N_{a}}{N_{s}}\right)\right], \hspace{.5cm}\hfill \text{if }\frc{N_{a}}{N_{s}} < 0.4 \\ 
+                      & \mfr[\underline{\underline{V}}]{}{m+1} = \mfr[\underline{\underline{V}}]{}{m+1},
+                  \end{align}
+               \end{subequations}
+where $N_{a}$ is the number of accepted points, and as this number increases $\underline{\underline{V}}$ also increases. For a given $T$, the ratio between accepted and rejected numbers tends to decrease. It is clear that the dimension of $\underline{\underline{V}}$ is smaller as the solution-coordinates reaches the optimum region. However, as $T$ increases, the dimension of $\underline{\underline{V}}$ tends to increase to ensure that the algorithm can `jump' regions of local minimum. Therefore, \citet{Zhang_1993, Dekkers_1991,Goffe_1994} suggested that the ratio between accepted and rejected points to be close to unity.
+       \end{itemize}
+
+%%%%%%%
+   \item\label{Step9} Here, 
+       \begin{itemize}
+           \item If $m<N_{T}$, then the algorithm returns to Step~\ref{Step4};
+           \item Otherwise, parameter $T_{k}$ is reduced,
+               \begin{equation}
+                   T_{k+1} = r_{T} T_{k}
+               \end{equation}
+               and $\mfr[F]{}{k+1}=\mfr[F]{}{i}$.
+       \end{itemize}
+       As the temperature parameter decreases, the acceptance of solution-coordinates that lead to larger values of the function is less favourable, leading to an increase of the number of rejected solution-coordinates and the stepping matrix is reduced. Thus, the value of the function obtained at the new temperature is assumed optimum. 
+
+%%%%%%%
+   \item\label{Step10} Stoppage Criteria
+       \begin{itemize}
+           \item If $\left\|\mfr[F]{}{k}-\mfr[F]{}{\text{opt}}\right\|\le\epsilon$, the algorithm returns the numerical values;
+           \item Otherwise, index $i$ is incremented, $\mfr[X]{}{i}=\mfr[X]{}{\text{opt}}$, $\mfr[F]{}{i}=\mfr[F]{}{\text{opt}}$ and the algorithm returns to Step~\ref{Step4}.
+       \end{itemize}
 
 %%%%%%%
 \end{enumerate}
+
+
+\begin{table}[h]
+     Here we show the generation of solution-coordinate vector $\underline{X}$ at each direction. Consider $\underline{X}\subset\mathcal{R}^{n}$,
+   \begin{displaymath}
+        \begin{pmatrix}X_{1} \\ X_{2} \\ X_{3} \\ \vdots \\ X_{n-1} \\ X_{n} \end{pmatrix},
+   \end{displaymath}
+the stepping diagonal matrix, $\underline{\underline{V}}$,
+   \begin{displaymath}
+       \begin{pmatrix}
+        V_{1,1} & 0      & 0      & \cdots & 0         & 0      \\
+        0      & V_{2,2} & 0      & \cdots & 0         & 0      \\
+        0      & 0      & V_{3,3} & \cdots & 0         & 0      \\
+       \vdots  & \vdots & \vdots & \cdots & \vdots    & \vdots \\
+        0      & 0      & 0      & \cdots & V_{n-1,n-1} & 0       \\
+        0      & 0      & 0      & \cdots & 0         & V_{n,n} 
+       \end{pmatrix},
+   \end{displaymath}
+and finally the unit vectors,
+   \begin{displaymath}
+      \underline{e} = \left[
+             \begin{pmatrix}e_{1} \\ 0    \\ 0    \\ \vdots \\ 0     \\ 0    \end{pmatrix},
+             \begin{pmatrix}0    \\ e_{2} \\ 0    \\ \vdots \\ 0     \\ 0    \end{pmatrix},
+             \begin{pmatrix}0    \\ 0    \\ e_{3} \\ \vdots \\ 0     \\ 0    \end{pmatrix},
+             \cdots,
+             \begin{pmatrix}0    \\ 0    \\ 0    \\ \vdots \\ e_{n-1} \\ 0    \end{pmatrix},
+             \begin{pmatrix}0    \\ 0    \\ 0    \\ \vdots \\ 0      \\ e_{n} \end{pmatrix}
+      \right].
+   \end{displaymath}
+$\underline{X}$ varies in each spatial direction,
+   \begin{eqnarray}
+        \mfr[\underline{X}]{}{1}   &=& \mfr[\underline{X}]{}{0}   + R \underline{\underline{V}}\;\mfr[\underline{e}]{}{1}   \nonumber \\
+        \mfr[\underline{X}]{}{2}   &=& \mfr[\underline{X}]{}{1}   + R \underline{\underline{V}}\;\mfr[\underline{e}]{}{2}   \nonumber \\
+        \mfr[\underline{X}]{}{3}   &=& \mfr[\underline{X}]{}{2}   + R \underline{\underline{V}}\;\mfr[\underline{e}]{}{3}   \nonumber \\
+                                   & &   \hspace{.5cm}\vdots                                                                \nonumber \\
+        \mfr[\underline{X}]{}{h-1} &=& \mfr[\underline{X}]{}{h-2} + R \underline{\underline{V}}\;\mfr[\underline{e}]{}{h-1} \nonumber \\
+        \mfr[\underline{X}]{}{h}   &=& \mfr[\underline{X}]{}{h-1} + R \underline{\underline{V}}\;\mfr[\underline{e}]{}{h}   \nonumber 
+   \end{eqnarray}
+Therefore, with a rigorous notation we recover Eqn.~\ref{Chapter:GlobalOpt:Eqn:XEvolution},
+      \begin{displaymath}
+         \mfr[\underline{X}]{}{i,h+1} = \mfr[\underline{X}]{}{i,h} + R \mfr[\underline{\underline{V}}]{}{j}\mfr[\underline{e}]{}{h}.
+      \end{displaymath}
+
+   \caption{Generation of the solution-coordinate vector $\underline{X}$.}\label{Chapter:GlobalOpt:Table:XEvolution},
+\end{table}
+
+%%% Figure
+\begin{figure}[h]
+       % \begin{center}
+          \includegraphics[width=\columnwidth,clip]{./Figs/SimulatedAnnealingAlgorithmOrthogonal}
+           \caption{Graphical representation of the $\underline{X}\subseteq\mathcal{R}^{2}$ generation in different directions from initial solution-coordinate $A$ to final solution-coordinate $B$. Note that its evolution occurs through orthogonal movements.} 
+        %\end{center}%
+\label{Chapter:GlobalOpt:Fig:SimulatedAnnealingAlgorithmOrthogonal}
+\end{figure}
+
+
+\begin{figure}
+
+% Define block styles
+\tikzstyle{decision} =   [diamond,   draw, fill=blue!20, text width=4em, text badly centered, node distance=3cm, inner sep=2pt]
+\tikzstyle{block} =      [rectangle, draw, fill=blue!20, text width=5em,   text centered,       rounded corners,   minimum height=4em]
+\tikzstyle{blocklarge} = [rectangle, draw, fill=blue!20, text width=10em,  text centered,       rounded corners,   minimum height=4em]
+\tikzstyle{blocklarge2} = [rectangle, draw, fill=blue!20, text width=15em,  text centered,       rounded corners,   minimum height=4em]
+\tikzstyle{blockhuge} =  [rectangle, draw, fill=blue!20, text width=30em,  text centered,       rounded corners,   minimum height=4em]
+\tikzstyle{line} =       [draw, -latex']
+\tikzstyle{cloud} =      [draw, ellipse,   fill=red!20,  node distance=3cm,                                        minimum height=2em]
+   
+\begin{center} 
+\begin{tikzpicture}[node distance = 3cm, auto]
+    % Place nodes
+    \node [blocklarge](init) {Initialisation of parameters.};
+    \node [blockhuge, below of=init](procedure) {Execute a cycle of random movements in all directions. Accept or reject each solution-coordinate according to the {\it Metropolis criteria}. Store the optimum solution-coordinate.};
+
+    \node [decision, below of=procedure] (decide1) {Number of cycles $> N_{s}$};
+
+    \node [blocklarge2, below of=decide1](Stepping) {Adjust $\underline{\underline{V}}$. Re-initialise the number of cycles.};
+
+    \node [decision, below of=Stepping] (decide2) {Number of stepping $> N_{T}$};
+    \node [blockhuge, below of=decide2] (procedure2) {Reduce the temperature parameter. Re-initialise the number of adjusts. Select the current coordinate as optimum.};
+    \node [decision, below of=procedure2] (Stoppage) {Is stoppage criteria met?}; 
+    \node [block, below of=Stoppage, node distance=3cm] (stop) {Stop};
+
+    % Draw edges
+    \path [line] (init) -- (procedure);
+    \path [line] (procedure) -- (decide1);
+    \path [line] (decide1) -| node [near start] {no}  (procedure.east);
+    \path [line] (decide1) -- node {yes} (Stepping);
+    \path [line] (Stepping) -- (decide2);
+    \path [line] (decide2) -| node [near start] {no} (procedure.east);
+    \path [line] (decide2) -- node {yes} (procedure2);
+    \path [line] (procedure2) -- (Stoppage);
+    \path [line] (Stoppage) -| node [near start] {no} (procedure.east);
+    \path [line] (Stoppage) -- node {yes} (stop);
+
+\end{tikzpicture}
+\end{center}
+\caption{Flowchart of the \SAA.}
+\label{Chapter:GlobalOpt:Fig:FlowChart}
+\end{figure}
+
+%%% Section
+\subsection{Applying the \SAA in the VLE Problem}
+For the optimisation problem described in Algorithm~\ref{VLE_Problem:Algorithm}, the objective function, $F\left(\underline{X}\right)$ is the molar Gibbs free energy and the vector of solution-coordinates is,
+     \begin{displaymath}
+          \underline{X} = 
+                 \begin{pmatrix}\mfr[x]{1}{L} \\ \mfr[x]{2}{L} \\  \mfr[x]{3}{L} \\ \vdots \\  \mfr[x]{n_{c}-1}{L} \\ L \end{pmatrix},
+     \end{displaymath}
+with the following linear constraints,
+     \begin{displaymath}
+           0 < L < 1, \hspace{1cm} 0 < \mfr[x]{i}{L} < 1,\;\left(\forall i=1,\cdots,n_{c}-1\right), \text{ and } \hspace{1cm} \summation_{i=1}^{n_{c}-1}\mfr[x]{i}{L} < 1
+     \end{displaymath}
+
+
+
+
+
 
 
 
