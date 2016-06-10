@@ -56,12 +56,14 @@ else:
 
     if Task == 'Problem':
         ProblemFileName = sys.argv[ 3 ]
+    elif Task == 'Benchmarks':
+        TestCases = sys.argv[ 3 ]
 
 """ Creating a file for general output """
 if Task == 'Problem':
     IO.OutPut( Task, Method, Problem_Name = ProblemFileName )
 else:
-    IO.OutPut( Task, Method )
+    IO.OutPut( Task, Method, Benchmark_Number = TestCases )
 
 
 """ Generating X_Opt array """
@@ -73,7 +75,7 @@ if ( Method == 'SAA' or Method == 'SA' ):
     if ( Task == 'Problem' ):
         X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = ProblemFileName )
     elif( Task == 'Benchmarks' ):
-        X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task )
+        X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = TestCases )
         
 else:
     print "Method", Method, "has not been defined yet!"

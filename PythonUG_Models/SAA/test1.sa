@@ -26,6 +26,9 @@ RT   0.09
 # Temp: SAA temperature parameter
 Temp 58.
 
+# X_Init: Initial guess for the solution-coordinate vector
+X_Init       0.25  0.45
+
 # LowerBounds: Lower bounds for the solution-coordinate vector
 LowerBounds  -1.5  -1.5
 

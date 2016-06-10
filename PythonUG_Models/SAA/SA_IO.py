@@ -3,6 +3,7 @@
 
 import sys
 import numpy as np
+import SA_Print as Print
 
 
 ###
@@ -39,8 +40,13 @@ def OutPut( Task, Method, *args, **kwargs ):
     if 'Problem_Name' in kwargs:
         Problem_Name = kwargs.get( 'Problem_Name', None )
         FileName = Task + '_' + Method + '_' + Problem_Name + '.out' # Creating file for general output
+        
+    elif 'Benchmark_Number' in kwargs:
+        Problem_Name = kwargs.get( 'Benchmark_Number', None )
+        FileName = Task + '_' + Method + '_' + 'TestCase_' + Problem_Name + '.out' # Creating file for general output
+
     else:
-        FileName = Task + '_' + Method + '.out' # Creating file for general output
+        sys.exit( 'In OutPut function. Option not found' )
 
     f_SAOutput = open( FileName, 'w' )
 
@@ -61,11 +67,45 @@ def CheckNumberTests():
 
     f.close()
     return ntest
+
+###
+###
+###
+def CountingNumberOfTests( **kwargs ):
+    """ This function reads the file 'Benchmarks.in' that contains the list of
+            benchmark test-cases. It returns the number of test-cases and
+            if a test-case number is given (through the ** argument), then
+            it will also returns the name of the function associated with
+            this test-case number."""
+    import csv # Using csv (comma separated values) module
+
+    FileNumber = -100 ; TestName = ''
+
+    for key in kwargs:
+        if ( key == 'Test_Case' ):
+            FileNumber = kwargs[ key ]
+    
+    count = 0
+    with open( 'Benchmarks.in' ) as file:
+        reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
+        for row in reader:
+            if row == [] or ListOfCommentsStrings( row ): # List of comment strings that can be used
+                Nothing_To_Be_Done = True
+            else:
+                count+=1
+                if count ==  FileNumber:
+                    TestName = row[ 1 ]
+
+    file.close()
+
+    return count, TestName
+
 ###
 ###
 ###
 def ReadInCoolingSchedule( **kwargs ):
     """ This function reads the contents of the cooling schedule file"""
+    import csv # Using csv (comma separated values) module
 
     """ ===========================================================
             Set up Global variables used throughout the code
@@ -74,7 +114,6 @@ def ReadInCoolingSchedule( **kwargs ):
         SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, SA_Fopt, \
         X_Optimum, F_Optimum
 
-    #SA_GlobalVariables()
 
     """ Local variables: """
     SA_Cooling = [] ; SA_Cooling_list = [] ; SA_Benchmarks = []
@@ -82,112 +121,87 @@ def ReadInCoolingSchedule( **kwargs ):
     """Reading Input files """
     if kwargs:
         for key in kwargs:
-            if ( key == 'File_Name' ):
+            if ( key == 'File_Name' ): # For Problems
                 FileName = kwargs[ key ]
-                N_Tests = 0
-            elif( key == 'Number_of_Tests' ):
-                N_Tests = kwargs[ key ]
-                FileName = 'Benchmarks.in'
+                
+            elif( key == 'Test_Number' ): # For Benchmark Test-Cases
+                TestNumber = kwargs[ key ]
+                dummy, FileName = CountingNumberOfTests( Test_Case = TestNumber )
+                
             else:
-                sys.exit( 'Option not found' )
+                sys.exit( 'In ReadInCoolingSchedule. Option not found' )
 
     else:
         sys.exit( 'Option not found' )
 
-    icount = 0 ; ntest = 0
-    SA_Testing = False
+
     Are_There_Dimensions = False
 
-    if N_Tests == 0: # Running Problem
-        Read_SA_File( FileName )
-        print ':::', SA_N, C, Debugging
+    """ Open input file containing Cooling Schedule: """ 
+    with open( FileName + '.sa', 'r' ) as file:
+        reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
 
+        for row in reader:
+            if row == [] or ListOfCommentsStrings( row ): # List of comment strings that can be used
+                Nothing_To_Be_Done = True
 
-    else: # Running Benchmarks
+            elif row[ 0 ] == 'Number_Dimensions': # This MUST be the first variable declared in the input file
+                SA_N = int( row[ 1 ] )
+                Are_There_Dimensions = True
+                print SA_N
 
-        print 'oiiii'
+            elif Are_There_Dimensions:
 
+                if row[ 0 ] == 'Minimum': # Maximum or Minimum
+                    SA_Minimum = row[ 1 ]
 
+                elif row[ 0 ] == 'NS': # Maximum number of cycles
+                    SA_NS = int( row[ 1 ] )
 
-    """ Open input file containing Cooling Schedule: 
+                elif row[ 0 ] == 'NT': # Maximum number of iterations before the temperature reduction
+                    SA_NT = int( row[ 1 ] )
 
-    with open( FileName + '.sa', 'r' ) as f:
-        
-        for line in f:
-            if line[ 0 ] == '$': # Variable's name
-                line.rstrip()
-            elif line[ 0 ] == '$': # Test Name
-                line.rstrip()
-                SA_Cooling_list.append( line[ 3 : len( line ) - 1 ] )
-                #print 'b1:', line[ 3 : len( line ) - 1 ]
-                icount += 1
-            elif line[ 0 ] == '#': # Variable's name
-                line.rstrip()
-                SA_Cooling_list.append( line[ 2 : len( line ) - 1 ] )
-                #print 'b2:', line[ 2 : len( line ) - 1 ]                
-                icount += 1
-            elif ( line == '\n' ): # Empty lines
-                #print 'b3:', line
-                line.rstrip()
-            else:
-                inner_list = []
-                #print 'buuu:', len( SA_Cooling_list ),  ( icount - 1 ), str( SA_Cooling_list[ icount - 1 ][0:9] )
-                if ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ][0:9] ) == 'Benchmark' ) ):
-                    ntest += 1
+                elif row[ 0 ] == 'MaxEvl': # Maximum number of evaluations of the objective function
+                    SA_MaxEvl = int( row[ 1 ] )
 
-                elif ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Minimum' ) ):
-                    inner_list = [ elt.strip() for elt in line.split(',') ]  
-                    #print 'here:', inner_list[ 0 ]                  
-                    SA_Cooling.append( to_bool( inner_list[ 0 ] ) )
+                elif row[ 0 ] == 'EPS': # Minimum acceptable discrepancy (used throughout the SAA)
+                    SA_EPS = float( row[ 1 ] )
 
+                elif row[ 0 ] == 'RT': # Parameter for temperature reduction
+                    SA_RT = float( row[ 1 ] )
 
-                elif ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Debugging' ) ):
-                    inner_list = [ elt.strip() for elt in line.split(',') ]
-                    SA_Cooling.append( to_bool( inner_list[ 0 ] ) )
+                elif row[ 0 ] == 'Temp': # SAA temperature parameter
+                    SA_Temp = float( row[ 1 ] )
 
+                elif row[ 0 ] == 'X_Init': # Initial guess for the solution-coordinate vector
+                    SA_Xopt = ReadingRows_Float( row )
 
-                elif ( ( len( SA_Cooling_list ) >= ( icount - 1 ) ) and ( str( SA_Cooling_list[ icount - 1 ] ) == 'Function' ) ):
-                    inner_list = [ elt.strip() for elt in line.split(',') ]
-                    SA_Cooling.append( inner_list[ 0 ] )
+                elif row[ 0 ] == 'LowerBounds': # Lower bounds for the solution-coordinate vector
+                    SA_LowerBounds = ReadingRows_Float( row )
+
+                elif row[ 0 ] == 'UpperBounds': # Upper bounds for the solution-coordinate vector
+                    SA_UpperBounds = ReadingRows_Float( row )
+
+                elif row[ 0 ] == 'VM': # Stepping matrix (only the diagonal representing each direction
+                    SA_VM = ReadingRows_Float( row )
+
+                elif row[ 0 ] == 'C': # Parameter for controlling the size of the stepping matrix
+                    SA_C = ReadingRows_Float( row )
+
+                elif row[ 0 ] == 'Debugging': # Option to dump all intermediate results into the *.out file (True or False)
+                    SA_Debugging = row[ 1 ]
 
                 else:
-                    inner_list = [ float(elt.strip()) for elt in line.split(',') ]
-                    SA_Cooling.append( inner_list )
+                    sys.exit('Option not recognised')
 
-
-    f.close()
-
-    for itest in range( N_Tests):
-        if N_Tests > 0:
-            if itest == 0:
-                node = itest * 16 + itest
             else:
-                node = itest * 16 + itest - 1
-        else:
-            node = itest * 14 + itest
-            
-        SA_Function.append( SA_Cooling[ node + 0 ] )
-        SA_N.append( num( SA_Cooling[ node + 1 ][0] ) )
-        SA_Minimum.append( SA_Cooling[ node + 2 ] )
-        SA_Debugging.append( SA_Cooling[ node + 3 ] )
-        SA_NS.append( num( SA_Cooling[ node + 4 ][0] ) )
-        SA_NT.append( num( SA_Cooling[ node + 5 ][0] ) )
-        SA_MaxEvl.append( SA_Cooling[ node + 6 ][0] )
-        SA_EPS.append( SA_Cooling[ node + 7 ][0] )
-        SA_RT.append(  SA_Cooling[ node + 8 ][0] )
-        SA_Temp.append( SA_Cooling[ node + 9 ][0] )
+                print 'Number_Dimensions was not defined in the FIRST line'
+                sys.exit()
 
-        SA_LowerBounds.append( SA_Cooling[ node + 10 ] )
-        SA_UpperBounds.append( SA_Cooling[ node + 11 ] )
-        SA_VM.append( SA_Cooling[ node + 12 ] )
-        SA_C.append( SA_Cooling[ node + 13 ] )
+    file.close()
+    Print.Print_SAA_Diagnostic( FileName, init = 'yes' )
 
-        if N_Tests > 0:
-            SA_Xopt.append( SA_Cooling[ node + 14 ] )
-            SA_Fopt.append( SA_Cooling[ node + 15 ][ 0 ] )
-        else:
-            SA_Xopt.append( 0. )
-            SA_Fopt.append( 0. )
+    """    
 
         # Printing initialisation of the SA Algorithm 
         f_SAOutput.write( '\n' )

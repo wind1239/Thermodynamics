@@ -21,31 +21,137 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         EPS, RT, Temperature, LowerBounds, UpperBounds, \
         VM, C, Debugging
 
-    #IO.SA_GlobalVariables()
+    X_Optimum = [] ; F_Optimum = [] ; TestSolution = [] ; N_Tests = 0
 
-    X_Optimum = [] ; F_Optimum = [] ; TestSolution = []
 
-    ntests = 0
+    """"
+    ===================================================================
+    ===================================================================
+    ===================================================================
+
+        If we are undertaken model validation through benchmarks, we
+          may opt to run all benchmark test-cases or a specific one
+          controlled in the original command line as:
+    
+              a) python Optimiser.py SAA Benchmarks All
+                            or
+              b) python Optimiser.py SAA Benchmarks N
+    
+          where N is the number of the required test-case as defined 
+          in the 'Benchmarks.in' file.
+    
+    ===================================================================
+    ===================================================================
+    ===================================================================
+                                                                        """
+    N_Tests, dummy = IO.CountingNumberOfTests( ) # Checking the total number of test-cases.
     if( Task == 'Benchmarks' ):
-        ntests = IO.CheckNumberTests()
+        if kwargs:
+            for key in kwargs:
+                if ( key == 'FileName' ):
+                    TestCases = kwargs[ key ]
+                    if TestCases == 'All':
+                        Test = 100 * N_Tests
+                    else:
+                        Test = int( TestCases )
+
+    elif( Task == 'Problem' ):
+        if kwargs: 
+            for key in kwargs:
+                if ( key == 'FileName' ): 
+                    ProblemFileName = kwargs[ key ]
+                    Test = 0 ; N_Tests = 0
+             
+    else:
+        sys.exit( 'In SimulatedAnnealing. Option not found' )
+
+        
+    """"
+    ===================================================================
+    ===================================================================
+    ===================================================================
+
+        Now, depending on the case, 'Benchmarks' or 'Problem' we 
+          proceed the optimisation, if:
+    
+              a) 'Problem': then N_Tests = 0 and we run SAA just once
+                            or
+              b) 'Benchmarks': there are 2 options here,
+                  b.1 ) 'All': it will read each cooling schedule 
+                               file for all test-cases and proceed
+                               with the optimisation.
+                  b.2 ) 'N': where 1 <= N <= N_Tests. It will read
+                             only the cooling schedule of test-case
+                             N and proceed with the optimisation.
+    
+    ===================================================================
+    ===================================================================
+    ===================================================================
+                                                                    """
+    for itest in range( N_Tests ):
+
+        if( Task == 'Benchmarks' ):
+            if TestCases != 'All': # Dealing with test-case N
+                if itest == Test:
+                    SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
+                        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, \
+                        SA_Fopt = IO.ReadInCoolingSchedule( Test_Number = Test )
+            else:
+                SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
+                    SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, \
+                    SA_Fopt = IO.ReadInCoolingSchedule( Test_Number = itest )
+                
+
+        elif( Task == 'Problem' ):
+            #rub1 = []; rub2 = []
+            SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
+                SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, rub1, \
+                rub2 =  IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
+
+        else:
+            sys.exit( 'In SimulatedAnnealing. Option not found' )
+
+
+
+
+
+
+
+
+
+
+
+
+    if( Task == 'Benchmarks' ):
+        if kwargs:
+            for key in kwargs:
+                if ( key == 'FileName' ):
+                    TestCases = kwargs[ key ]
+                else:
+                    sys.exit( 'In SimulatedAnnealing. Option not found' )
+
+        else:
+            sys.exit( 'In SimulatedAnnealing. Option not found' )
+
         SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
             SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, \
-            SA_Fopt = IO.ReadInCoolingSchedule( Number_of_Tests = ntests )
+            SA_Fopt = IO.ReadInCoolingSchedule( Test_Number = TestCases )
 
     elif( Task == 'Problem' ):
         if kwargs: # For Problems
             for key in kwargs:
                 if ( key == 'FileName' ): 
                     ProblemFileName = kwargs[ key ]
+                else:
+                    sys.exit( 'In SimulatedAnnealing. Option not found' )
+
+        else:
+            sys.exit( 'In SimulatedAnnealing. Option not found' )
 
             rub1 = []; rub2 = []
-            SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-                SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, rub1, \
-                rub2 =  IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
-            ntests = 0
-
-        else: 
-            sys.exit( 'Option not found' )
+        SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
+            SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, rub1, \
+            rub2 =  IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
 
     else:
         sys.exit( 'Option not found' )

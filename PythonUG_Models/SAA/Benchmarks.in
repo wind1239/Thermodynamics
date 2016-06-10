@@ -1,0 +1,8 @@
+###
+### List of Benchmark test-cases
+###
+
+Test_1       Beale_Function
+Test_2       Easom_Function
+Test_3       CosineMixture_Function
+Test_4       Dummy_Function
