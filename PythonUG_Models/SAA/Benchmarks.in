@@ -1,8 +1,12 @@
 ###
-### List of Benchmark test-cases
+### List of Benchmark Test-cases
+###
+###  Obtained from Jamil etal. (2013) Int. J. Math. Mod. and Num. Optimisation
+###          4(2):150-194  (doi: 10.1504/IJMMNO.2013.055204)
 ###
 
 Test_1       Beale_Function
 Test_2       Easom_Function
 Test_3       CosineMixture_Function
-Test_4       Dummy_Function
+Test_4       Booth_Function
+Test_5       Hosaki_Function

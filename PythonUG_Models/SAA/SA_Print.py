@@ -27,19 +27,24 @@ def HelpInput():
 ###
 ###
 ###
-def Print_SAA_Diagnostic( FileName, **kwargs ):
+def Print_SAA_Diagnostic( **kwargs ):
     # This function writes into a file all relevant info -re SAA calculations
 
-    if kwargs.get( 'init', None ) == 'yes':
+    if kwargs.get( 'Initialisation', None ) == 'yes':
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( '============================================================ \n' )
         IO.f_SAOutput.write( '   Initialisation of the Simulated Annealing Algorithm:      \n' )
-        IO.f_SAOutput.write( '      Test Name: {a:}'.format( a = str( FileName ) ) +      '\n' )
+        IO.f_SAOutput.write( '      Test Name: {a:}'.format( a = str( IO.SA_Function ) ) +      '\n' )
         IO.f_SAOutput.write( '============================================================ \n' )
         IO.f_SAOutput.write( '\n' )
         
     else:
-        IO.f_SAOutput.write( 'hi' )
+        IO.f_SAOutput.write( '\n' )
+        IO.f_SAOutput.write( '============================================================ \n' )
+        IO.f_SAOutput.write( '        Simulated Annealing algorithm diagnostics:           \n' )
+        IO.f_SAOutput.write( '      Test Name: {a:}'.format( a = str( IO.SA_Function ) ) +      '\n' )
+        IO.f_SAOutput.write( '============================================================ \n' )
+        IO.f_SAOutput.write( '\n' )
 
 
     
@@ -56,8 +61,8 @@ def Print_SAA_Diagnostic( FileName, **kwargs ):
     IO.f_SAOutput.write( 'VM: {a:}, C: {b:}'.format( a = IO.SA_VM, b = IO.SA_C ) + '\n' )
     IO.f_SAOutput.write( '\n' )
     
-    if kwargs.get( 'init', None ) == 'yes':
-        IO.f_SAOutput.write( 'Inital Solution for Test: {a:}'.format( a = str( IO.SA_Xopt ) + '\n' ) )
+    if kwargs.get( 'Initialisation', None ) == 'yes':
+        IO.f_SAOutput.write( 'Inital Solution for Test: {a:}'.format( a = str( IO.SA_X ) + '\n' ) )
         
 
 

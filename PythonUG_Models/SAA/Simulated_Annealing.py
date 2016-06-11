@@ -60,7 +60,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             for key in kwargs:
                 if ( key == 'FileName' ): 
                     ProblemFileName = kwargs[ key ]
-                    Test = 0 ; N_Tests = 0
+                    Test = 0 ; N_Tests = 1
              
     else:
         sys.exit( 'In SimulatedAnnealing. Option not found' )
@@ -93,102 +93,41 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         if( Task == 'Benchmarks' ):
             if TestCases != 'All': # Dealing with test-case N
                 if itest == Test:
-                    SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-                        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, \
-                        SA_Fopt = IO.ReadInCoolingSchedule( Test_Number = Test )
+                    Function_Name, Minimum, Ndim, NS, NT, MaxEvl, EPS, RT, Temp, \
+                        LowerBounds, UpperBounds, VM, C, Debugging, \
+                        SA_X = IO.ReadInCoolingSchedule( Test_Number = Test )
             else:
-                SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-                    SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, \
-                    SA_Fopt = IO.ReadInCoolingSchedule( Test_Number = itest )
+                Function_Name, Minimum, Ndim, NS, NT, MaxEvl, EPS, RT, Temp, \
+                    LowerBounds, UpperBounds, VM, C, Debugging, \
+                    SA_X = IO.ReadInCoolingSchedule( Test_Number = itest )
                 
 
         elif( Task == 'Problem' ):
-            #rub1 = []; rub2 = []
-            SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-                SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, rub1, \
-                rub2 =  IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
+            Function_Name, Minimum, Ndim, NS, NT, MaxEvl, EPS, RT, Temp, \
+                LowerBounds, UpperBounds, VM, C, Debugging, \
+                SA_X =  IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
 
         else:
             sys.exit( 'In SimulatedAnnealing. Option not found' )
 
 
+        """
+            ===================================================================
 
-
-
-
-
-
-
-
-
-
-    if( Task == 'Benchmarks' ):
-        if kwargs:
-            for key in kwargs:
-                if ( key == 'FileName' ):
-                    TestCases = kwargs[ key ]
-                else:
-                    sys.exit( 'In SimulatedAnnealing. Option not found' )
-
-        else:
-            sys.exit( 'In SimulatedAnnealing. Option not found' )
-
-        SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-            SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, \
-            SA_Fopt = IO.ReadInCoolingSchedule( Test_Number = TestCases )
-
-    elif( Task == 'Problem' ):
-        if kwargs: # For Problems
-            for key in kwargs:
-                if ( key == 'FileName' ): 
-                    ProblemFileName = kwargs[ key ]
-                else:
-                    sys.exit( 'In SimulatedAnnealing. Option not found' )
-
-        else:
-            sys.exit( 'In SimulatedAnnealing. Option not found' )
-
-            rub1 = []; rub2 = []
-        SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-            SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, rub1, \
-            rub2 =  IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
-
-    else:
-        sys.exit( 'Option not found' )
-
-    stop
-
-    """ Calling main SA loop: """
-
-
-    for itest in range( ntests ):
-
-        Function_Name = SA_Function[ itest ]
-        Ndim = SA_N[ itest ]
-        Minimum = SA_Minimum[ itest ]
-        NS = SA_NS[ itest ]
-        NT = SA_NT[ itest ]
-        MaxEvl = SA_MaxEvl[ itest ]
-        EPS = SA_EPS[ itest ]
-        RT = SA_RT[ itest ]
-        Temperature = SA_Temp[ itest ]
-        LowerBounds = SA_LowerBounds[ itest ]
-        UpperBounds = SA_UpperBounds[ itest ]
-        VM = SA_VM[ itest ]
-        C = SA_C[ itest ]
-        Debugging = SA_Debugging[ itest ]
-
-        if( Task == 'Benchmarks' ):
-            XSolution = SA_Xopt[ itest ]
-            FSolution = SA_Fopt[ itest ]
-
+                Calling main SA loop:
         
+            ===================================================================
+        """
 
         """ Initial guess-solution obtained randomly """
-        X_Guess = []
-        X_Guess = RanGen.RandomNumberGenerator( Ndim, LowerBounds, UpperBounds )
+        #X_Guess = []
+        for i in range(10):
+            X_Guess = RanGen.RandomNumberGenerator( Ndim, LowerBounds, UpperBounds )
+            print 'XGuess:', X_Guess
 
-        """ Calling the function for the first time before the SA main loop """
+        stop
+
+        """ Calling the function for the first time before the SA main loop 
         Func = BTest.TestFunction( Function_Name, Ndim, X_Guess )
 
 
@@ -197,14 +136,18 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
 
-        """" Printing solutions in the screen and in the output file """
+         Printing solutions in the screen and in the output file 
 
         TestSolution.append( BTest.AssessTests( Function_Name, XSolution, X_OPT, EPS ) )
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( '{a:}:{b:}'.format( a = Function_Name, b = TestSolution[ itest ] ) + '\n' )
         IO.f_SAOutput.write( '\n' )
 
-        print Function_Name, ':', TestSolution[ itest ]
+        print Function_Name, ':', TestSolution[ itest ]"""
+
+        X_OPT =1. ; F_OPT=1.
+
+    return X_OPT, F_OPT
 
 
 ###

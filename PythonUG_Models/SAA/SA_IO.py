@@ -2,6 +2,7 @@
 #!/usr/bin/env python
 
 import sys
+import os
 import numpy as np
 import SA_Print as Print
 
@@ -111,8 +112,8 @@ def ReadInCoolingSchedule( **kwargs ):
             Set up Global variables used throughout the code
         ===========================================================  """
     global SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, SA_Fopt, \
-        X_Optimum, F_Optimum
+        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_X
+    global SA_Xopt, SA_Fopt # These variables are defined here just for practicality
 
 
     """ Local variables: """
@@ -122,11 +123,14 @@ def ReadInCoolingSchedule( **kwargs ):
     if kwargs:
         for key in kwargs:
             if ( key == 'File_Name' ): # For Problems
-                FileName = kwargs[ key ]
+                SA_Function = kwargs[ key ]
+                Function = SA_Function
                 
             elif( key == 'Test_Number' ): # For Benchmark Test-Cases
                 TestNumber = kwargs[ key ]
-                dummy, FileName = CountingNumberOfTests( Test_Case = TestNumber )
+                dummy, SA_Function = CountingNumberOfTests( Test_Case = TestNumber )
+                Function = os.path.abspath( './Tests/' + SA_Function + '.sa' )
+                print Function
                 
             else:
                 sys.exit( 'In ReadInCoolingSchedule. Option not found' )
@@ -134,11 +138,10 @@ def ReadInCoolingSchedule( **kwargs ):
     else:
         sys.exit( 'Option not found' )
 
-
     Are_There_Dimensions = False
-
-    """ Open input file containing Cooling Schedule: """ 
-    with open( FileName + '.sa', 'r' ) as file:
+    
+    """ Open input file containing Cooling Schedule: """
+    with open( Function + '.sa', 'r' ) as file:
         reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
 
         for row in reader:
@@ -174,7 +177,7 @@ def ReadInCoolingSchedule( **kwargs ):
                     SA_Temp = float( row[ 1 ] )
 
                 elif row[ 0 ] == 'X_Init': # Initial guess for the solution-coordinate vector
-                    SA_Xopt = ReadingRows_Float( row )
+                    SA_X = ReadingRows_Float( row )
 
                 elif row[ 0 ] == 'LowerBounds': # Lower bounds for the solution-coordinate vector
                     SA_LowerBounds = ReadingRows_Float( row )
@@ -199,44 +202,13 @@ def ReadInCoolingSchedule( **kwargs ):
                 sys.exit()
 
     file.close()
-    Print.Print_SAA_Diagnostic( FileName, init = 'yes' )
+    Print.Print_SAA_Diagnostic( Initialisation = 'yes' )
 
-    """    
-
-        # Printing initialisation of the SA Algorithm 
-        f_SAOutput.write( '\n' )
-        f_SAOutput.write( '============================================================ \n' )
-        f_SAOutput.write( '   Initialisation of the Simulated Annealing Algorithm: \n' )
-        f_SAOutput.write( '============================================================ \n' )
-        f_SAOutput.write( '\n' )
-        f_SAOutput.write( 'Test Name: {a:}'.format( a = str( SA_Function[ itest ] ) ) + '\n' )
-        f_SAOutput.write( 'Minimisation: {a:>10s}'.format( a = str( SA_Minimum[ itest ] ) ) + '\n' )
-        f_SAOutput.write( 'Dimension-Space: {a:4d}'.format( a = SA_N[ itest ] ) + '\n' )
-        f_SAOutput.write( 'Maximum Number of Function Evaluations: {a:4d}'.format( a = int( SA_MaxEvl[ itest ] ) ) + '\n' )
-        f_SAOutput.write( '\n' )
-        f_SAOutput.write( 'NS: {a:3d}, NT: {b:3d}'.format( a = SA_NS[ itest ], b = SA_NT[ itest ] ) + '\n' )
-        f_SAOutput.write( 'EPS: {a:.4e}'.format( a = SA_EPS[ itest ] ) + '\n' )
-        f_SAOutput.write( '\n' )
-        f_SAOutput.write( 'Temperature: {a:.4f} \nParameter for temperature reduction (RT): {b:.4f}'.format( a = SA_Temp[ itest ], b = SA_RT[ itest ] ) + '\n' )
-        f_SAOutput.write( '\n' )
-        f_SAOutput.write( 'Lower Bounds: {a:}, Upper Bounds: {b:}'.format( a = SA_LowerBounds[ itest ], b = SA_UpperBounds[ itest ] ) + '\n' )
-        f_SAOutput.write( 'VM: {a:}, C: {b:}'.format( a = SA_VM[ itest ], b = SA_C[ itest ] ) + '\n' )
-        f_SAOutput.write( '\n' )
-        f_SAOutput.write( 'Optimum Solution for Test: {a:}'.format( a = str( SA_Function[ itest ] ) + '\n' ) )
-        if N_Tests > 0:
-            f_SAOutput.write( '{s:10} X_Opt: {a:}'.format( s = ' ', a = SA_Xopt[ itest ] ) + '\n' )
-            f_SAOutput.write( '{s:10} F_Opt: {a:}'.format( s = ' ', a = SA_Fopt[ itest ] ) + '\n' )
-        f_SAOutput.write( '\n' )
-        f_SAOutput.write( '============================================================ \n' )
-        f_SAOutput.write( ' \n' )
-        f_SAOutput.write( '============================================================ \n' )
-        f_SAOutput.write( '\n' )
-            
+    
     return SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_Xopt, SA_Fopt
+        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_X
 
 
-"""
 
 def ListOfCommentsStrings( row ):
     """ This function identifies if the line is a comment."""
@@ -269,68 +241,3 @@ def ReadingRows_Float( row ):
         Array[ i ] = row[ i + 1 ]
         
     return Array
-
-
-def Read_SA_File( FileName ):
-    # This function open the SAA problem file and reads all elements of the cooling schedule
-    import csv # Using csv (comma separated values) module
-    
-    """ Open input file containing Cooling Schedule: """ 
-    with open( FileName + '.sa', 'r' ) as file:
-        reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
-        
-        for row in reader:
-            if row == [] or ListOfCommentsStrings( row ): # List of comment strings that can be used
-                Nothing_To_Be_Done = True
-
-            elif row[ 0 ] == 'Number_Dimensions': # This MUST be the first variable declared in the input file
-                SA_N = int( row[ 1 ] )
-                Are_There_Dimensions = True
-                print SA_N
-
-            elif Are_There_Dimensions:
-
-                if row[ 0 ] == 'Minimum': # Maximum or Minimum
-                    SA_Minimum = row[ 1 ]
-    
-                elif row[ 0 ] == 'NS': # Maximum number of cycles
-                    SA_NS = int( row[ 1 ] )
-    
-                elif row[ 0 ] == 'NT': # Maximum number of iterations before the temperature reduction
-                    SA_NT = int( row[ 1 ] )
-    
-                elif row[ 0 ] == 'MaxEvl': # Maximum number of evaluations of the objective function
-                    SA_MaxEvl = int( row[ 1 ] )
-    
-                elif row[ 0 ] == 'EPS': # Minimum acceptable discrepancy (used throughout the SAA)
-                    SA_EPS = float( row[ 1 ] )
-    
-                elif row[ 0 ] == 'RT': # Parameter for temperature reduction
-                    SA_RT = float( row[ 1 ] )
-    
-                elif row[ 0 ] == 'Temp': # SAA temperature parameter
-                    SA_Temp = float( row[ 1 ] )
-    
-                elif row[ 0 ] == 'LowerBounds': # Lower bounds for the solution-coordinate vector
-                    SA_LowerBounds = ReadingRows_Float( row )
-    
-                elif row[ 0 ] == 'UpperBounds': # Upper bounds for the solution-coordinate vector
-                    SA_UpperBounds = ReadingRows_Float( row )
-    
-                elif row[ 0 ] == 'VM': # Stepping matrix (only the diagonal representing each direction
-                    SA_VM = ReadingRows_Float( row )
-    
-                elif row[ 0 ] == 'C': # Parameter for controlling the size of the stepping matrix
-                    SA_C = ReadingRows_Float( row )
-    
-                elif row[ 0 ] == 'Debugging': # Option to dump all intermediate results into the *.out file (True or False)
-                    SA_Debugging = row[ 1 ]
-    
-                else:
-                    sys.exit('Option not recognised')
-
-            else:
-                print 'Number_Dimensions was not defined in the FIRST line'
-                sys.exit()
-
-

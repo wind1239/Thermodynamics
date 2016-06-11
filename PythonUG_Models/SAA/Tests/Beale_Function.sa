@@ -1,0 +1,56 @@
+###
+### COOLING SCHEDULE FOR THE BEALE FUNCTION 
+###   
+###  F(x,y) = (1.5-x+x*y)**2 + (2.25-x+x*y**2)**2 +
+###           (2.625 - x + x*y**3)**2
+###
+###    Domain: x = [-4.5, 4.5] and y = [-4.5, 4.5] 
+###   
+###    Optimum: f(3, 0.5) = 0.
+###
+###  Jamil etal. (2013) Int. J. Math. Mod. and Num. Optimisation
+###          4(2):150-194
+###       (doi: 10.1504/IJMMNO.2013.055204)
+###
+
+# N: Dimension of the problem
+Number_Dimensions  2
+
+# Extremum: Maximum/Minimum
+Minimum  True
+
+# NS: Maximum number of cycles
+NS     90
+
+# NT: Maximum number of iterations before the temperature reduction
+NT     25
+
+# MaxEvl: Maximum number of evaluations of the objective function
+MaxEvl  5000000
+
+# EPS: Minimum acceptable discrepancy (used throughout the SAA)
+EPS  1.e-6
+
+# RT: Parameter for temperature reduction
+RT   0.09
+
+# Temp: SAA temperature parameter
+Temp 58.
+
+# X_Init: Initial guess for the solution-coordinate vector
+X_Init       2.5  0.45
+
+# LowerBounds: Lower bounds for the solution-coordinate vector
+LowerBounds  -4.5  -4.5
+
+# UpperBounds: Upper bounds for the solution-coordinate vector
+UpperBounds   4.5   4.5
+
+# VM: Stepping matrix (only the diagonal representing each direction)
+VM     1.e-2     1.e-2
+
+# C: Parameter for controlling the size of the stepping matrix
+C      1.e-3     1.e-3
+
+# Debugging: Option to dump all intermediate results into the *.out file (True or False)
+Debugging  False
