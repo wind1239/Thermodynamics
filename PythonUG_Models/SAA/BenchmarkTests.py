@@ -31,7 +31,7 @@ def TestFunction( TestName, n, X ):
         Result = TestFunction_Booth( n, X )
 
     elif( TestName == 'Hosaki_Function' ):
-        Result = TestFunction_Booth( n, X )
+        Result = TestFunction_Hosaki( n, X )
 
     else:
         print '====> ', TestName, ' <===='
@@ -99,7 +99,7 @@ def TestFunction_CosineMixture2D( n, X ):
 ####
 def TestFunction_Booth( n, X ):
     """ Booth Function """
-    F = ( X[0] + 2. * X[1] - 7. )**2 + ( 2. X[0] + X[1]- 5 )**2
+    F = ( X[0] + 2. * X[1] - 7. )**2 + ( 2. * X[0] + X[1] - 5 )**2
 
     return F
     

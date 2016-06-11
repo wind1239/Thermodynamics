@@ -93,7 +93,7 @@ def CountingNumberOfTests( **kwargs ):
             if row == [] or ListOfCommentsStrings( row ): # List of comment strings that can be used
                 Nothing_To_Be_Done = True
             else:
-                count+=1
+                count+=1                
                 if count ==  FileNumber:
                     TestName = row[ 1 ]
 
@@ -124,13 +124,12 @@ def ReadInCoolingSchedule( **kwargs ):
         for key in kwargs:
             if ( key == 'File_Name' ): # For Problems
                 SA_Function = kwargs[ key ]
-                Function = SA_Function
+                Function = SA_Function + '.sa'
                 
             elif( key == 'Test_Number' ): # For Benchmark Test-Cases
                 TestNumber = kwargs[ key ]
                 dummy, SA_Function = CountingNumberOfTests( Test_Case = TestNumber )
                 Function = os.path.abspath( './Tests/' + SA_Function + '.sa' )
-                print Function
                 
             else:
                 sys.exit( 'In ReadInCoolingSchedule. Option not found' )
@@ -141,7 +140,7 @@ def ReadInCoolingSchedule( **kwargs ):
     Are_There_Dimensions = False
     
     """ Open input file containing Cooling Schedule: """
-    with open( Function + '.sa', 'r' ) as file:
+    with open( Function, 'r' ) as file:
         reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
 
         for row in reader:
@@ -151,7 +150,6 @@ def ReadInCoolingSchedule( **kwargs ):
             elif row[ 0 ] == 'Number_Dimensions': # This MUST be the first variable declared in the input file
                 SA_N = int( row[ 1 ] )
                 Are_There_Dimensions = True
-                print SA_N
 
             elif Are_There_Dimensions:
 

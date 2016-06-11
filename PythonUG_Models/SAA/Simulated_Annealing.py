@@ -60,7 +60,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             for key in kwargs:
                 if ( key == 'FileName' ): 
                     ProblemFileName = kwargs[ key ]
-                    Test = 0 ; N_Tests = 1
+                    Test = 0 ; N_Tests = 0
              
     else:
         sys.exit( 'In SimulatedAnnealing. Option not found' )
@@ -88,7 +88,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
     ===================================================================
     ===================================================================
                                                                     """
-    for itest in range( N_Tests ):
+    for itest in range( N_Tests + 1 ):
 
         if( Task == 'Benchmarks' ):
             if TestCases != 'All': # Dealing with test-case N
@@ -96,6 +96,8 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                     Function_Name, Minimum, Ndim, NS, NT, MaxEvl, EPS, RT, Temp, \
                         LowerBounds, UpperBounds, VM, C, Debugging, \
                         SA_X = IO.ReadInCoolingSchedule( Test_Number = Test )
+                else:
+                    continue
             else:
                 Function_Name, Minimum, Ndim, NS, NT, MaxEvl, EPS, RT, Temp, \
                     LowerBounds, UpperBounds, VM, C, Debugging, \
@@ -110,6 +112,8 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         else:
             sys.exit( 'In SimulatedAnnealing. Option not found' )
 
+        print 
+
 
         """
             ===================================================================
@@ -119,35 +123,35 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             ===================================================================
         """
 
-        """ Initial guess-solution obtained randomly """
-        #X_Guess = []
-        for i in range(10):
-            X_Guess = RanGen.RandomNumberGenerator( Ndim, LowerBounds, UpperBounds )
-            print 'XGuess:', X_Guess
+        """ Calling the function for the first time before the SA main loop """
+        if Task == 'Benchmarks':
+            Func = BTest.TestFunction( Function_Name, Ndim, SA_X ) 
+            
+        else: # Problems
+            Func = 1. # rhs needs to be changed to take into account the problem's function
 
-        stop
-
-        """ Calling the function for the first time before the SA main loop 
-        Func = BTest.TestFunction( Function_Name, Ndim, X_Guess )
-
+        IO.f_SAOutput.write( '\n' )
+        IO.f_SAOutput.write( 'Initial evaluation of the function:{a:.4e}'.format( a = Func ) + '\n' )
 
         X_OPT, F_OPT = ASA_Loops( Task, X_Guess, Func )
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
 
-         Printing solutions in the screen and in the output file 
+        # Printing solutions in the screen and in the output file 
 
         TestSolution.append( BTest.AssessTests( Function_Name, XSolution, X_OPT, EPS ) )
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( '{a:}:{b:}'.format( a = Function_Name, b = TestSolution[ itest ] ) + '\n' )
         IO.f_SAOutput.write( '\n' )
 
-        print Function_Name, ':', TestSolution[ itest ]"""
+        print Function_Name, ':', TestSolution[ itest ]
 
         X_OPT =1. ; F_OPT=1.
 
-    return X_OPT, F_OPT
+    #return X_OPT, F_OPT
+
+    return SA_X, Func
 
 
 ###
