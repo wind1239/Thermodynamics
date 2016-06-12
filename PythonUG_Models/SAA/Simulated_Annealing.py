@@ -9,7 +9,7 @@ import SA_Print as Print
 import RandomGenerator as RanGen
 import SpecialFunctions as SpFunc
 import SAA_Tools as SaT
-import ObjectFunction as ObF
+import ObjectiveFunction as ObF
 
 """ =========================================================================
 
@@ -130,43 +130,36 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( 'Initial evaluation of the function:{a:.4e}'.format( a = Func ) + '\n' )
-        """
+        
 
         X_OPT, F_OPT = ASA_Loops( Task, Func )
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
 
-        # Printing solutions in the screen and in the output file 
+        """# Printing solutions in the screen and in the output file 
 
         TestSolution.append( BTest.AssessTests( SaT.Function_Name, XSolution, X_OPT, EPS ) )
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( '{a:}:{b:}'.format( a = Function_Name, b = TestSolution[ itest ] ) + '\n' )
         IO.f_SAOutput.write( '\n' )
-        print Function_Name, ':', TestSolution[ itest ]"""
+        print Function_Name, ':', TestSolution[ itest ]
 
-        X_OPT =1. ; F_OPT=1.
+        X_OPT =1. ; F_OPT=1."""
 
     #return X_OPT, F_OPT
 
-    return SaT.SA_X, Func
+    return X_OPT, F_OPT
 
 
 ###
 ### Main SA loop
 ###
-
-#def ASA_Loops( Task, TestName, Ndim, Minimum, NS, NT, MaxEvl, \
-#                   EPS, RT, Temp, LowerBounds, UpperBounds, \
-#                   VM, C, Debugging, X_Try, Func )
 def ASA_Loops( Task, Func ):
         
     """ For debugging """
     #pdb.set_trace()
     TestName = SaT.Function_Name
-
-    print 'Temp::::::::::', SaT.Temp
-    stop
 
     IO.f_SAOutput.write( '\n' )
     IO.f_SAOutput.write( 'Initialising SA Algorithm for: {a:}'.format( a = TestName ) + '\n' )
@@ -246,6 +239,7 @@ def ASA_Loops( Task, Func ):
                     """ The function must be minimum """
                     if SaT.Minimum:
                         FuncP = -FuncP
+                        #IO.f_SAOutput.write( '{s:20} XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
 
                     NFCNEV += 1 # Number of evaluation of the function
 
@@ -276,7 +270,7 @@ def ASA_Loops( Task, Func ):
                         if ( SaT.Debugging ):
                             IO.f_SAOutput.write( '{s:20} New vector-solution is accepted ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
 
-                        NAcc += 1
+                        NAcc += 1 
                         NACP[ hloop ] = NACP[ hloop ] + 1
                         NUp += 1
 
@@ -285,6 +279,7 @@ def ASA_Loops( Task, Func ):
 
                         if ( FuncP > FOpt ):
                             XOpt = XP ; FOpt = FuncP
+                            IO.f_SAOutput.write( '{s:20} XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
 
                     else:
                         """ However if FuncP is smaller than the others, thus the 
@@ -305,7 +300,7 @@ def ASA_Loops( Task, Func ):
                                 IO.f_SAOutput.write( '\n \n ')
                                 IO.f_SAOutput.write( '{s:20} Metropolis Criteria; New vector-solution is generated ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
 
-                            NAcc += 1
+                            NAcc += 1 
                             NACP[ hloop ] = NACP[ hloop ] + 1
                             NDown += 1
 
@@ -336,10 +331,10 @@ def ASA_Loops( Task, Func ):
                     SaT.VM[ i ] =  SaT.UpperBounds[ i ] - SaT.LowerBounds[ i ]
 
                 if SaT.Debugging:
-                    IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = VM ) + '\n' )
+                    IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = SaT.VM ) + '\n' )
 
 
-            NACP = 0
+            NACP = [ 0 for i in range( SaT.Ndim ) ]
             
             """ End of m loop """
             mloop += 1
@@ -365,8 +360,10 @@ def ASA_Loops( Task, Func ):
 
         if Quit:
             X_Try = XOpt
-            if Minimum:
+            if SaT.Minimum:
                 FOpt = - FOpt
+
+            print '===>>>', XOpt, FOpt
 
             IO.f_SAOutput.write( '\n \n     ******** TERMINATION ALGORITHM *********** \n \n ' )
 
@@ -378,7 +375,7 @@ def ASA_Loops( Task, Func ):
         """
            ==========================================================
               If the stoppage criteria can not be reached, then
-                 continue the LOOP
+                 continue the K-LOOP
            ==========================================================  """
         
         SaT.Temp = SaT.RT * SaT.Temp
