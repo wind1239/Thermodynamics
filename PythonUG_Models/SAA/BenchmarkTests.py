@@ -1,12 +1,8 @@
 
 #!/usr/bin/env python
 
-import matplotlib.pyplot as bplot
-import numpy as np
 import math 
 import sys
-#import AdaptiveSimulatedAnnealing as ASA
-import Simulated_Annealing as ASA
 
 ####
 ####

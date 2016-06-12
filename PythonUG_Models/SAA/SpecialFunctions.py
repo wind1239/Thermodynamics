@@ -4,6 +4,7 @@
 import math
 import sys
 import RandomGenerator as RanGen
+import SAA_Tools as SaT
 
    
 ###
@@ -40,9 +41,9 @@ def Envelope_Constraints( X, **kwargs ):
                 IsNormalised = kwargs[ key ]
 
     else:
-         LowerBounds = SA_LowerBounds
-         UpperBounds = SA_UpperBounds
-         n = SA_N
+         LowerBounds = SaT.LowerBounds
+         UpperBounds = SaT.UpperBounds
+         n = SaT.Ndim
     
     evaluations = 1
     
@@ -55,14 +56,14 @@ def Envelope_Constraints( X, **kwargs ):
     while TryAgain:
            
         for i in range( dim ):
-            if ( ( X[ i ] < LowerBounds[ i ]) | (X[ i ] > UpperBounds[ i ] ) ):
+            if ( ( X[ i ] < LowerBounds[ i ]) or ( X[ i ] > UpperBounds[ i ] ) ):
                 rand = RanGen.RandomNumberGenerator( n, LowerBounds, UpperBounds )
                 X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
                     rand[ i ]
                 X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
                 Try = True
 
-        if ( IsNormalised ):
+        if ( IsNormalised ): # Thermod problem
             
             Sum = ListSum( X[ 0 : dim ] )
 
@@ -92,7 +93,7 @@ def Envelope_Constraints( X, **kwargs ):
                 evaluations = evaluations + 1
                 Try = True
 
-        else:
+        else: # Not a Thermod problem
             if kwargs:
                 for key in kwargs:
                     if ( key == 'TryC' ):
