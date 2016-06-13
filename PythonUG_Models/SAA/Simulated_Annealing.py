@@ -85,7 +85,10 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
     ===================================================================
     ===================================================================
     ===================================================================
-                                                                    """
+                                                                        """
+
+    jtest = 0
+
     for itest in range( N_Tests + 1 ):
 
         if( Task == 'Benchmarks' ):
@@ -93,19 +96,19 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                 if itest == Test:
                     SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                         SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
-                        SaT.SA_X = IO.ReadInCoolingSchedule( Test_Number = Test )
+                        SaT.SA_X, BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = Test )
                 else:
                     continue
             else:
                 SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                     SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
-                    SaT.SA_X = IO.ReadInCoolingSchedule( Test_Number = itest )
+                    SaT.SA_X, BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = itest )
                 
 
         elif( Task == 'Problem' ):
             SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                 SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
-                SaT.SA_X = IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
+                SaT.SA_X, BenchmarkSolution = IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
 
         else:
             sys.exit( 'In SimulatedAnnealing. Option not found' )
@@ -137,17 +140,19 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
 
-        """# Printing solutions in the screen and in the output file 
-
-        TestSolution.append( BTest.AssessTests( SaT.Function_Name, XSolution, X_OPT, EPS ) )
-        IO.f_SAOutput.write( '\n' )
-        IO.f_SAOutput.write( '{a:}:{b:}'.format( a = Function_Name, b = TestSolution[ itest ] ) + '\n' )
-        IO.f_SAOutput.write( '\n' )
-        print Function_Name, ':', TestSolution[ itest ]
-
-        X_OPT =1. ; F_OPT=1."""
-
-    #return X_OPT, F_OPT
+        """
+           =====================================================================
+               Assessing the solution (comparison against known solution)
+           ====================================================================="""
+        if Task == 'Benchmarks':
+            TestSolution.append( BTest.AssessTests( X_OPT, BenchmarkSolution ) )
+            IO.f_SAOutput.write( '\n' )
+            IO.f_SAOutput.write( '===========================================================' )
+            IO.f_SAOutput.write( '\n' )
+            IO.f_SAOutput.write( '            Assessment of the test-cases :      ' )
+            IO.f_SAOutput.write( '{a:}:{b:}'.format( a = SaT.Function_Name, b = TestSolution[ jtest ] ) + '\n' )
+            IO.f_SAOutput.write( '\n' )
+            jtest += 1
 
     return X_OPT, F_OPT
 
@@ -174,7 +179,7 @@ def ASA_Loops( Task, Func ):
     XP = [ 0. for i in range( SaT.Ndim ) ]
     FStar = [ MaxNum for i in range ( NEps ) ] ; FStar[ 0 ] = Func
     
-    FOpt = Func ; XOpt = SaT.SA_X ; X_Try = SaT.SA_X
+    FOpt = Func ; XOpt = SaT.SA_X ; X_Try = SaT.SA_X 
 
     """ The 'Fraction' variable assess if the function to be optimised is
            a thermodynamic function (TRUE) and therefore the elements of the
@@ -239,7 +244,6 @@ def ASA_Loops( Task, Func ):
                     """ The function must be minimum """
                     if SaT.Minimum:
                         FuncP = -FuncP
-                        #IO.f_SAOutput.write( '{s:20} XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
 
                     NFCNEV += 1 # Number of evaluation of the function
 
@@ -278,7 +282,9 @@ def ASA_Loops( Task, Func ):
                                chosen as the new optimum                               """
 
                         if ( FuncP > FOpt ):
-                            XOpt = XP ; FOpt = FuncP
+                            for i in range( SaT.Ndim ):
+                                XOpt[ i ] = XP[ i ]
+                            FOpt = FuncP 
                             IO.f_SAOutput.write( '{s:20} XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
 
                     else:
@@ -363,12 +369,11 @@ def ASA_Loops( Task, Func ):
             if SaT.Minimum:
                 FOpt = - FOpt
 
-            print '===>>>', XOpt, FOpt
-
             IO.f_SAOutput.write( '\n \n     ******** TERMINATION ALGORITHM *********** \n \n ' )
 
             IO.f_SAOutput.write( '{s:20} Minimum was found (FOpt = {a:}) with coordinates XOpt: {b:}'.format( s = ' ', a = FOpt, b = XOpt ) + '\n' )
-            IO.f_SAOutput.write( '{s:20} Number of evaluations of the function:{a:5d}. Number of rejected points:{b:5d}'.format( s = ' ', a = NFCNEV, b = NRej ) + '\n' )
+            IO.f_SAOutput.write( '{s:20} Number of evaluations of the function: {a:5d}. Number of rejected points: {b:5d}'.format( s = ' ', a = NFCNEV, b = NRej ) + '\n' )
+            print 'Number of evaluations of the function:', NFCNEV
 
             return XOpt, FOpt
 

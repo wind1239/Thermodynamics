@@ -19,7 +19,7 @@ Number_Dimensions  2
 Minimum  True
 
 # NS: Maximum number of cycles
-NS     90
+NS     10
 
 # NT: Maximum number of iterations before the temperature reduction
 NT     25
@@ -31,10 +31,10 @@ MaxEvl  5000000
 EPS  1.e-6
 
 # RT: Parameter for temperature reduction
-RT   0.09
+RT   0.1
 
 # Temp: SAA temperature parameter
-Temp 58.
+Temp 10.
 
 # X_Init: Initial guess for the solution-coordinate vector
 X_Init       3.  3.
@@ -49,7 +49,10 @@ UpperBounds   5.   6.
 VM     1.e-2     1.e-2
 
 # C: Parameter for controlling the size of the stepping matrix
-C      1.e-3     1.e-3
+C      1.e-2     1.e-2
 
 # Debugging: Option to dump all intermediate results into the *.out file (True or False)
-Debugging  True
+Debugging  False
+
+# Benchmark_Solution: Solution-coordinate and solution of the Benchmark test-case
+Benchmark_Solution   4.   2.  -2.3458

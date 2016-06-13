@@ -5,6 +5,7 @@ import sys
 import SA_IO as IO
 import Simulated_Annealing as ASA
 import SA_Print as SAPrint
+import time
 
 
 ###                                     ###
@@ -45,6 +46,9 @@ import SA_Print as SAPrint
                iii) "Test_A.py": contains the main call for the test-function.
                                                                                            """
 
+# Measuring CPU-time in the beginning of the simulation:
+total_time = time.clock()
+
 # Input of argument:
 if len( sys.argv ) < 3:
     SAPrint.HelpInput()
@@ -82,5 +86,10 @@ else:
     sys.exit()
 
     
-print 'X :', X_Opt, F_Opt
+print 'X_Opt: ', X_Opt, ', F_Opt: ', F_Opt
 
+
+
+# Measuring CPU-time at the end of the simulation:
+total_time2 = time.clock()
+print 'Total CPU simulation time:',total_time2 - total_time

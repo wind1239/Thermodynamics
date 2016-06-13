@@ -112,7 +112,7 @@ def ReadInCoolingSchedule( **kwargs ):
             Set up Global variables used throughout the code
         ===========================================================  """
     global SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_X
+        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_X, BenchmarkSolution
     global SA_Xopt, SA_Fopt # These variables are defined here just for practicality
 
 
@@ -189,6 +189,9 @@ def ReadInCoolingSchedule( **kwargs ):
                 elif row[ 0 ] == 'C': # Parameter for controlling the size of the stepping matrix
                     SA_C = ReadingRows_Float( row )
 
+                elif row[ 0 ] == 'Benchmark_Solution': # Solution of the Benchmark test-case
+                    BenchmarkSolution = ReadingRows_Float( row, Solution = 'yes' )
+
                 elif row[ 0 ] == 'Debugging': # Option to dump all intermediate results into the *.out file (True or False)
                     SA_Debugging = row[ 1 ]
 
@@ -201,10 +204,14 @@ def ReadInCoolingSchedule( **kwargs ):
 
     file.close()
     Print.Print_SAA_Diagnostic( Initialisation = 'yes' )
-
+    
+    if kwargs:
+        for key in kwargs:
+            if ( key == 'File_Name' ): # For Problems we assign this array as zero.
+                BenchmarkSolution = [ 0. in range( SA_N + 1 )]
     
     return SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
-        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_X
+        SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_X, BenchmarkSolution
 
 
 
@@ -230,12 +237,18 @@ def ListOfCommentsStrings( row ):
     return IsItaComment
 
 
-def ReadingRows_Float( row ):
+def ReadingRows_Float( row, *args, **kwargs ):
     """ This function reads the contents of a row and convert them into a
           real (i.e., float) array.  """
 
-    Array = np.arange( float( SA_N ) )
-    for i in xrange( 0, SA_N ):
+    if 'Solution' in kwargs:
+        BSolution = kwargs.get( 'Solution', None )
+        nd = SA_N + 1 # Solution-coordinate + Function
+    else:
+        nd = SA_N 
+
+    Array = np.arange( float( nd ) )
+    for i in xrange( 0, nd ):
         Array[ i ] = row[ i + 1 ]
         
     return Array

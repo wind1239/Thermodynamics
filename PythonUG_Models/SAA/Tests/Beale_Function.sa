@@ -38,7 +38,7 @@ RT   0.09
 Temp 58.
 
 # X_Init: Initial guess for the solution-coordinate vector
-X_Init       2.5  0.45
+X_Init       3.  0.5
 
 # LowerBounds: Lower bounds for the solution-coordinate vector
 LowerBounds  -4.5  -4.5
@@ -54,3 +54,6 @@ C      1.e-3     1.e-3
 
 # Debugging: Option to dump all intermediate results into the *.out file (True or False)
 Debugging  False
+
+# Benchmark_Solution: Solution-coordinate and solution of the Benchmark test-case
+Benchmark_Solution   3.    .5    0.

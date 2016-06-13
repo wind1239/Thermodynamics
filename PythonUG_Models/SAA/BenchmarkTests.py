@@ -3,6 +3,8 @@
 
 import math 
 import sys
+import BenchmarkTests as BTest
+import SAA_Tools as SaT
 
 ####
 ####
@@ -38,17 +40,22 @@ def TestFunction( TestName, n, X ):
 ####
 ####
 ####
-def AssessTests( TestName, XSolution, XOpt, F_EPS ):
+def AssessTests( XSA_Solution, Solution ):
+    """ This function assess solutions obtained from the SAA by comparing them
+           (solution-coordinates and function value) against the known
+           solution.                                                           """
 
-    FSolution = TestFunction( TestName, len( XSolution ), XSolution )
-    FOpt = TestFunction( TestName, len( XOpt ), XOpt )
+    FSA_Solution = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, XSA_Solution )
+    F_Solution = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, Solution[ 0 : SaT.Ndim ] )
 
-    Result = True
+    Pass = True 
 
-    if ( abs( FSolution - FOpt ) >= F_EPS ):
-        Result = False
+    if abs( FSA_Solution - F_Solution ) >= 1.e-4 :
+        Pass = False
 
-    return Result
+    print 'Assessment of the function:', Pass, ' with computed and analytical solution of: ', FSA_Solution, F_Solution
+
+    return Pass
 
 ####
 ####

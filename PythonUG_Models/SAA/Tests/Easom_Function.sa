@@ -54,3 +54,6 @@ C      1.e-3     1.e-3
 
 # Debugging: Option to dump all intermediate results into the *.out file (True or False)
 Debugging  False
+
+# Benchmark_Solution: Solution-coordinate and solution of the Benchmark test-case
+Benchmark_Solution   3.1415927   3.1415927  -1.
