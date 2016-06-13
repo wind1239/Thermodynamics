@@ -132,7 +132,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             Func = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X ) 
 
         IO.f_SAOutput.write( '\n' )
-        IO.f_SAOutput.write( 'Initial evaluation of the function:{a:.4e}'.format( a = Func ) + '\n' )
+        IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
         
 
         X_OPT, F_OPT = ASA_Loops( Task, Func )
@@ -150,7 +150,8 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             IO.f_SAOutput.write( '===========================================================' )
             IO.f_SAOutput.write( '\n' )
             IO.f_SAOutput.write( '            Assessment of the test-cases :      ' )
-            IO.f_SAOutput.write( '{a:}:{b:}'.format( a = SaT.Function_Name, b = TestSolution[ jtest ] ) + '\n' )
+            IO.f_SAOutput.write( '\n' )
+            IO.f_SAOutput.write( '{a:}: {b:}'.format( a = SaT.Function_Name, b = TestSolution[ jtest ] ) + '\n' )
             IO.f_SAOutput.write( '\n' )
             jtest += 1
 
@@ -270,8 +271,10 @@ def ASA_Loops( Task, Func ):
                     if ( FuncP >= Func ):
                         X_Try = XP
                         Func = FuncP
+                        if XP[ 0 ] >= 3.14 and XP[ 0 ] <= 3.16 and XP[ 1 ] >= 3.14 and XP[ 1 ] <= 3.16 :
+                            print 'XP: ', XP, '& ', FuncP
 
-                        if ( SaT.Debugging ):
+                        if SaT.Debugging == True :
                             IO.f_SAOutput.write( '{s:20} New vector-solution is accepted ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
 
                         NAcc += 1 
@@ -282,10 +285,14 @@ def ASA_Loops( Task, Func ):
                                chosen as the new optimum                               """
 
                         if ( FuncP > FOpt ):
+                            if XP[ 0 ] >= 3.14 and XP[ 0 ] <= 3.16 and XP[ 1 ] >= 3.14 and XP[ 1 ] <= 3.16 :
+                                print 'XP: ', XP, '==================> ', FuncP
                             for i in range( SaT.Ndim ):
                                 XOpt[ i ] = XP[ i ]
-                            FOpt = FuncP 
-                            IO.f_SAOutput.write( '{s:20} XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
+                            FOpt = FuncP
+                            
+                            if SaT.Debugging == True :
+                                IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
 
                     else:
                         """ However if FuncP is smaller than the others, thus the 
@@ -302,7 +309,7 @@ def ASA_Loops( Task, Func ):
                             X_Try = XP
                             Func = FuncP
 
-                            if SaT.Debugging :
+                            if SaT.Debugging == True :
                                 IO.f_SAOutput.write( '\n \n ')
                                 IO.f_SAOutput.write( '{s:20} Metropolis Criteria; New vector-solution is generated ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
 
@@ -336,7 +343,7 @@ def ASA_Loops( Task, Func ):
                 if ( SaT.VM[ i ] > ( SaT.UpperBounds[ i ] - SaT.LowerBounds[ i ] ) ):
                     SaT.VM[ i ] =  SaT.UpperBounds[ i ] - SaT.LowerBounds[ i ]
 
-                if SaT.Debugging:
+                if SaT.Debugging == True :
                     IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = SaT.VM ) + '\n' )
 
 
@@ -359,6 +366,7 @@ def ASA_Loops( Task, Func ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
                 Quit = False
 
+
         """
            ==========================================================
                      Checking the end of the SAA
@@ -373,7 +381,6 @@ def ASA_Loops( Task, Func ):
 
             IO.f_SAOutput.write( '{s:20} Minimum was found (FOpt = {a:}) with coordinates XOpt: {b:}'.format( s = ' ', a = FOpt, b = XOpt ) + '\n' )
             IO.f_SAOutput.write( '{s:20} Number of evaluations of the function: {a:5d}. Number of rejected points: {b:5d}'.format( s = ' ', a = NFCNEV, b = NRej ) + '\n' )
-            print 'Number of evaluations of the function:', NFCNEV
 
             return XOpt, FOpt
 
@@ -384,7 +391,7 @@ def ASA_Loops( Task, Func ):
            ==========================================================  """
         
         SaT.Temp = SaT.RT * SaT.Temp
-        for i in xrange( NEps - 1, 0, -1 ):
+        for i in xrange( NEps - 1, 1, -1 ):
             FStar[ i ] = FStar[ i - 1 ]
 
         Func = FOpt

@@ -154,7 +154,7 @@ def ReadInCoolingSchedule( **kwargs ):
             elif Are_There_Dimensions:
 
                 if row[ 0 ] == 'Minimum': # Maximum or Minimum
-                    SA_Minimum = row[ 1 ]
+                    SA_Minimum = to_bool( row[ 1 ] )
 
                 elif row[ 0 ] == 'NS': # Maximum number of cycles
                     SA_NS = int( row[ 1 ] )
@@ -193,7 +193,7 @@ def ReadInCoolingSchedule( **kwargs ):
                     BenchmarkSolution = ReadingRows_Float( row, Solution = 'yes' )
 
                 elif row[ 0 ] == 'Debugging': # Option to dump all intermediate results into the *.out file (True or False)
-                    SA_Debugging = row[ 1 ]
+                    SA_Debugging = to_bool( row[ 1 ] )
 
                 else:
                     sys.exit('Option not recognised')

@@ -76,8 +76,7 @@ def TestFunction_Easom( n, X ):
     """ Easom Function """
     
     Pi = 4. * math.atan( 1. )
-    F = - math.cos( X[ 0 ] ) * math.cos( X[ 1 ] ) * \
-        math.exp( -( X[ 0 ] - Pi )**2 - ( X[ 1 ] - Pi )**2 )    
+    F = - math.cos( X[ 0 ] ) * math.cos( X[ 1 ] ) * math.exp( -( X[ 0 ] - Pi )**2 - ( X[ 1 ] - Pi )**2 ) 
 
     return F
 
