@@ -50,7 +50,7 @@ def AssessTests( XSA_Solution, Solution ):
 
     Pass = True 
 
-    if abs( FSA_Solution - F_Solution ) >= 1.e-4 :
+    if abs( FSA_Solution - F_Solution ) >= 1.e-2 :
         Pass = False
 
     print 'Assessment of the function:', Pass, ' with computed and analytical solution of: ', FSA_Solution, F_Solution

@@ -23,19 +23,19 @@ Minimum  True
 NS     30
 
 # NT: Maximum number of iterations before the temperature reduction
-NT     105
+NT     80
 
 # MaxEvl: Maximum number of evaluations of the objective function 
-MaxEvl  500000
+MaxEvl  800000
 
 # EPS: Minimum acceptable discrepancy (used throughout the SAA)
-EPS  1.e-1
+EPS  1.e-5
 
 # RT: Parameter for temperature reduction
-RT   0.8
+RT   0.80
 
 # Temp: SAA temperature parameter
-Temp 85.
+Temp   125.
 
 # X_Init: Initial guess for the solution-coordinate vector
 X_Init       1.0    1.5

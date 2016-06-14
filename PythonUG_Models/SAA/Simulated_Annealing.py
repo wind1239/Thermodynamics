@@ -113,14 +113,10 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         else:
             sys.exit( 'In SimulatedAnnealing. Option not found' )
 
-        print 
-
 
         """
             ===================================================================
-
-                Calling main SA loop:
-        
+                      Initial Assessemnt of the Objective Function
             ===================================================================
         """
 
@@ -129,11 +125,22 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             Func = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X ) 
             
         else: # Problems
-            Func = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X ) 
+            Func = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X )
+            
+        """ The function must be minimum """
+        if SaT.Minimum:
+            Func = -Func
 
+        """"                  Printing into the *out file                    """
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
         
+
+        """
+            ===================================================================
+                Calling main SA loop:       
+            ===================================================================
+        """      
 
         X_OPT, F_OPT = ASA_Loops( Task, Func )
         
@@ -151,7 +158,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             IO.f_SAOutput.write( '\n' )
             IO.f_SAOutput.write( '            Assessment of the test-cases :      ' )
             IO.f_SAOutput.write( '\n' )
-            IO.f_SAOutput.write( '{a:}: {b:}'.format( a = SaT.Function_Name, b = TestSolution[ jtest ] ) + '\n' )
+            IO.f_SAOutput.write( '{a:}:  {b:}'.format( a = SaT.Function_Name, b = TestSolution[ jtest ] ) + '\n' )
             IO.f_SAOutput.write( '\n' )
             jtest += 1
 
@@ -226,15 +233,19 @@ def ASA_Loops( Task, Func ):
                         else:
                             XP[ i ] = X_Try[ i ]
 
+                    """ ===========================================================
+                            Feasibility Test (only for Thermod problems) -- check
+                              for compositional constraints.
+                        =========================================================== """
                     if Fraction:
-                        """ If this is a Thermod problem check for compositional constraints """
                         XP[ dim ] = 1. - SpFunc.ListSum( XP[ 0 : dim ] )
                         
                     SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
-
+                    
                     if Try:
                         LNobds += 1
                         Nobds += 1
+                    """ ============================================================ """
 
                     if Task == 'Benchmarks':
                         FuncP = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, XP )
@@ -256,9 +267,7 @@ def ASA_Loops( Task, Func ):
                        =================================================================="""
                     
                     if ( NFCNEV >= SaT.MaxEvl ):
-                        IO.f_SAOutput.write( '\n' )
-                        IO.f_SAOutput.write( '{s:20} Maximum number of evaluations of the function was reached. Either increase MAXEVL or EPS or reduce RT or NT (NFCNEV: {a:})'.format( s = ' ', a = NFCNEV ) + '\n' )
-                        IO.f_SAOutput.write( '{s:20} XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
+                        Print.Print_SAA_Diagnostic( MaxEval = 'yes', FOpt = FOpt, XOpt = XOpt, NFCNEV = NFCNEV )
                         sys.exit('SAA did not converge. Too many evaluations of the function!')
 
 
@@ -271,8 +280,6 @@ def ASA_Loops( Task, Func ):
                     if ( FuncP >= Func ):
                         X_Try = XP
                         Func = FuncP
-                        if XP[ 0 ] >= 3.14 and XP[ 0 ] <= 3.16 and XP[ 1 ] >= 3.14 and XP[ 1 ] <= 3.16 :
-                            print 'XP: ', XP, '& ', FuncP
 
                         if SaT.Debugging == True :
                             IO.f_SAOutput.write( '{s:20} New vector-solution is accepted ( X: {a:}) with solution {b:.4f}'.format( s = ' ', a = X_Try, b = FuncP ) + '\n' )
@@ -285,21 +292,18 @@ def ASA_Loops( Task, Func ):
                                chosen as the new optimum                               """
 
                         if ( FuncP > FOpt ):
-                            if XP[ 0 ] >= 3.14 and XP[ 0 ] <= 3.16 and XP[ 1 ] >= 3.14 and XP[ 1 ] <= 3.16 :
-                                print 'XP: ', XP, '==================> ', FuncP
                             for i in range( SaT.Ndim ):
                                 XOpt[ i ] = XP[ i ]
                             FOpt = FuncP
                             
                             if SaT.Debugging == True :
-                                IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) )
+                                IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) + '\n')
 
                     else:
-                        """ However if FuncP is smaller than the others, thus the 
-                               Metropolis criteria (Gaussian probability density
-                               function) - or any other density function that may be
-                               added latter - may be used to either accept or reject
-                               this coordinate.                                        """
+                        """ However if FuncP is smaller than the others, thus the Metropolis criteria 
+                               (Gaussian probability density function) - or any other density function
+                               that may be added latter - may be used to either accept or reject this
+                               coordinate.                                                            """
                         
                         rand = RanGen.RandomNumberGenerator( SaT.Ndim, SaT.LowerBounds, SaT.UpperBounds )
                         Density = math.exp( ( FuncP - Func ) / max( SaT.Temp, SaT.EPS ) )
@@ -353,18 +357,32 @@ def ASA_Loops( Task, Func ):
             mloop += 1
 
         """
+           =======================================================================
+                Diagnostics of the algorithm before the next temperature reduction
+           ======================================================================= """
+
+        Print.Print_SAA_Diagnostic( Diagnostics = 'yes', FOpt = FOpt, NUp = NUp, NDown = NDown, NRej = NRej, NAcc = NAcc, LNobds = LNobds, XOpt = XOpt, FStar = FStar )
+
+        """
            ==========================================================
                      Checking the stoppage criteria
            ==========================================================  """
-        
-        Quit = False ; FStar[ 0 ] = Func
 
-        if ( FOpt - FStar[ 0 ] ) <= SaT.EPS :
+        print 'FOpt:', FOpt, Func,'======',  FStar
+        print 'XP:', XP
+        
+        Quit = False #; FStar[ 0 ] = Func
+        FStar[ 0 ] = FOpt
+        ###print '::::::::::::::::FStar:::', FStar
+
+        if abs( FOpt - FStar[ 0 ] ) <= SaT.EPS :
             Quit = True
 
         for i in range( NEps ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
+            #if abs( FOpt - FStar[ i ] ) > SaT.EPS :
                 Quit = False
+                continue
 
 
         """
@@ -374,13 +392,15 @@ def ASA_Loops( Task, Func ):
 
         if Quit:
             X_Try = XOpt
-            if SaT.Minimum:
-                FOpt = - FOpt
+            if  SaT.Minimum :
+                FOpt = -FOpt
 
-            IO.f_SAOutput.write( '\n \n     ******** TERMINATION ALGORITHM *********** \n \n ' )
+            """
+               =======================================================================
+                        Termination of the Simulated Annealing algorithm
+               ======================================================================= """
 
-            IO.f_SAOutput.write( '{s:20} Minimum was found (FOpt = {a:}) with coordinates XOpt: {b:}'.format( s = ' ', a = FOpt, b = XOpt ) + '\n' )
-            IO.f_SAOutput.write( '{s:20} Number of evaluations of the function: {a:5d}. Number of rejected points: {b:5d}'.format( s = ' ', a = NFCNEV, b = NRej ) + '\n' )
+            Print.Print_SAA_Diagnostic( Termination = 'yes', FOpt = FOpt, NRej = NRej, XOpt = XOpt, NFCNEV = NFCNEV )
 
             return XOpt, FOpt
 
@@ -391,7 +411,7 @@ def ASA_Loops( Task, Func ):
            ==========================================================  """
         
         SaT.Temp = SaT.RT * SaT.Temp
-        for i in xrange( NEps - 1, 1, -1 ):
+        for i in xrange( NEps - 1, 0, -1 ):
             FStar[ i ] = FStar[ i - 1 ]
 
         Func = FOpt
