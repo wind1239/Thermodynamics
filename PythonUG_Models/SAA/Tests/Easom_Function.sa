@@ -20,37 +20,37 @@ Number_Dimensions  2
 Minimum  True
 
 # NS: Maximum number of cycles (60)
-NS     60
+NS     30
 
 # NT: Maximum number of iterations before the temperature reduction (2)
-NT     53
+NT     5
 
 # MaxEvl: Maximum number of evaluations of the objective function (5000000)
-MaxEvl  500000
+MaxEvl  1000000
 
 # EPS: Minimum acceptable discrepancy (used throughout the SAA)
-EPS  1.e-5
+EPS  1.e-3
 
 # RT: Parameter for temperature reduction
-RT   0.8
+RT   0.95
 
 # Temp: SAA temperature parameter
 Temp 25.
 
 # X_Init: Initial guess for the solution-coordinate vector
-X_Init       3.   3.
+X_Init      3.14      3.14
 
 # LowerBounds: Lower bounds for the solution-coordinate vector
-LowerBounds  -10.  -10.
+LowerBounds  -5.  -5.
 
 # UpperBounds: Upper bounds for the solution-coordinate vector
-UpperBounds   10.   10.
+UpperBounds   5.   5.
 
 # VM: Stepping matrix (only the diagonal representing each direction)
-VM     1.e-2     1.e-2
+VM     1.       1.
 
 # C: Parameter for controlling the size of the stepping matrix
-C      1.e-3     1.e-3
+C      2.        2.
 
 # Debugging: Option to dump all intermediate results into the *.out file (True or False)
 Debugging  False

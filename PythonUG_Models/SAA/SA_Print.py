@@ -4,6 +4,7 @@
 import sys
 import SA_IO as IO
 import SAA_Tools as SaT
+import time
 
 
 ###
@@ -83,10 +84,12 @@ def Print_SAA_Diagnostic( **kwargs ):
             IO.f_SAOutput.write( 'Number of rejected /accepted points: {a:4d}, {b:4d}'.format( a = NREJ, b = NACC ) + '\n' )
 
             LNOBDS = kwargs.get( 'LNobds', None ) 
-            IO.f_SAOutput.write( 'Number of points out of the bounds: {a:4d}'.format( a = LNOBDS ) + '\n' )
+            IO.f_SAOutput.write( 'Number of points out of the bounds (feasibility test): {a:4d}'.format( a = LNOBDS ) + '\n' )
 
             Total_Number_of_Movements = NUP + NDOWN + NREJ
-            IO.f_SAOutput.write( 'Total_Number_of_Movements: {a:4d}'.format( a = Total_Number_of_Movements ) + '\n' )
+            IO.f_SAOutput.write( 'Total number of movements: {a:4d}'.format( a = Total_Number_of_Movements ) + '\n' )
+            NFCNEV = kwargs.get( 'NFCNEV', None )
+            IO.f_SAOutput.write( 'Total number of evaluations of the function: {a:4d}'.format( a = NFCNEV ) + '\n' )
 
             XOPT = kwargs.get( 'XOpt', None )
             IO.f_SAOutput.write( 'Current optimal solution-coordinate: {a:}'.format( a = str( XOPT ) + '\n' ) )
@@ -108,10 +111,12 @@ def Print_SAA_Diagnostic( **kwargs ):
             IO.f_SAOutput.write( 'Number of rejected /accepted points: {a:4d}, {b:4d}'.format( a = NREJ, b = NACC ) + '\n' )
 
             LNOBDS = kwargs.get( 'LNobds', None ) 
-            IO.f_SAOutput.write( 'Number of points out of the bounds: {a:4d}'.format( a = LNOBDS ) + '\n' )
+            IO.f_SAOutput.write( 'Number of points out of the bounds (feasibility test): {a:4d}'.format( a = LNOBDS ) + '\n' )
 
             Total_Number_of_Movements = NUP + NDOWN + NREJ
-            IO.f_SAOutput.write( 'Total_Number_of_Movements: {a:4d}'.format( a = Total_Number_of_Movements ) + '\n' )
+            IO.f_SAOutput.write( 'Total number of movements: {a:4d}'.format( a = Total_Number_of_Movements ) + '\n' )
+            NFCNEV = kwargs.get( 'NFCNEV', None )
+            IO.f_SAOutput.write( 'Total number of evaluations of the function: {a:4d}'.format( a = NFCNEV ) + '\n' )
 
             XOPT = kwargs.get( 'XOpt', None )
             IO.f_SAOutput.write( 'Current optimal solution-coordinate: {a:}'.format( a = str( XOPT ) + '\n' ) )
@@ -170,6 +175,33 @@ def Print_SAA_Diagnostic( **kwargs ):
         IO.f_SAOutput.write( 'Minimum was found (FOpt = {a:}) with coordinates XOpt: {b:}'.format( s = ' ', a = FuncOpt, b = XOPT ) + '\n' )
         IO.f_SAOutput.write( 'Number of evaluations of the function: {a:5d}. Number of rejected points: {b:5d}'.format( s = ' ', a = NFCNEV, b = NREJ ) + '\n' )
         IO.f_SAOutput.write( '\n' )
+            
+
+    """ ============================================================================================
+                                          ASSESSING ALL BENCHMARK TEST-CASES
+        ============================================================================================ """        
+        
+    if kwargs.get( 'Bench_AllTestCases', None ) == 'yes':
+        
+        IO.f_SAOutput.write( '\n' '\n' )
+        IO.f_SAOutput.write( '============================================================ \n' )
+        IO.f_SAOutput.write( '     Assessment of all benchmark test-cases:       \n' )
+        IO.f_SAOutput.write( '============================================================ \n' )
+        IO.f_SAOutput.write( '\n' )
+        
+        TestSolution = kwargs.get( 'Solution', None )
+        TestSolution_Name = kwargs.get( 'Solution_Name', None )
+        TestSolution_Time = kwargs.get( 'Solution_Time', None )
+
+        for i in range( len( TestSolution ) ):
+            IO.f_SAOutput.write( '{a:}: {b:}'.format( a = TestSolution_Name[ i ], b = TestSolution[ i ] ) + '\n' )
+            IO.f_SAOutput.write( 'CPU time: {a:}'.format( s = ' ', a = TestSolution_Time[ i ] ) + '\n' )
+
+
+        FinalTime = time.clock()
+        IO.f_SAOutput.write( 'Total CPU time for Benchmark tests: {a:}'.format( s = ' ', a = FinalTime - SaT.Time_Init ) + '\n' )
+
+        
         
 
 

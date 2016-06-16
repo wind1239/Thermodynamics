@@ -2,10 +2,11 @@
 #!/usr/bin/env python
 
 import sys
+import time
 import SA_IO as IO
 import Simulated_Annealing as ASA
-import SA_Print as SAPrint
-import time
+import SA_Print as Print
+import SAA_Tools as SaT
 
 
 ###                                     ###
@@ -46,12 +47,14 @@ import time
                iii) "Test_A.py": contains the main call for the test-function.
                                                                                            """
 
+#global Time_Init, Time_Final
+
 # Measuring CPU-time in the beginning of the simulation:
-total_time = time.clock()
+SaT.Time_Init = time.clock()
 
 # Input of argument:
 if len( sys.argv ) < 3:
-    SAPrint.HelpInput()
+    Print.HelpInput()
     sys.exit()
     
 else:
@@ -71,7 +74,7 @@ else:
 
 
 """ Generating X_Opt array """
-X_Opt = []
+#X_Opt = []
 
 """ Calling the optimisation routine """
 
@@ -86,10 +89,14 @@ else:
     sys.exit()
 
     
-print 'X_Opt: ', X_Opt, ', F_Opt: ', F_Opt
 
+# Measuring CPU-time at the end of the simulation and print it out:
+SaT.Time_Final = time.clock()
 
-
-# Measuring CPU-time at the end of the simulation:
-total_time2 = time.clock()
-print 'Total CPU simulation time:',total_time2 - total_time
+print 'Total CPU simulation time:', SaT.Time_Final - SaT.Time_Init
+IO.f_SAOutput.write(  '\n' '\n' )
+IO.f_SAOutput.write( '============================================================ \n' )
+IO.f_SAOutput.write( '  TOTAL CPU TIME FOR THE OPTIMISATION PROBLEM                \n' )
+IO.f_SAOutput.write( '============================================================ \n' )
+IO.f_SAOutput.write( '\n' )
+IO.f_SAOutput.write( 'CPU Time: {a:}'.format( a = SaT.Time_Final - SaT.Time_Init ) + '\n' )

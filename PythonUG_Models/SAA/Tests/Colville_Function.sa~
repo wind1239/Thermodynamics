@@ -1,11 +1,14 @@
 ###
-### COOLING SCHEDULE FOR THE BOOTH FUNCTION 
+### COOLING SCHEDULE FOR THE COLVILLE FUNCTION 
 ###   
-###  F(x,y) = (x + 2*y - 7)**2 + ( 2*x + y - 5)**2
+###  F(x1,x2,x3,x4) = 100*(x1-x2**2)**2 + (1-x1)**2 + 
+###                   90*(x4-x3**2)**2 + (1-x3)**2 +
+###                   10.1*((x2-1)**2+(x4-1)**2) +
+###                   19.8*(x2-1)*(x4-1)
 ###
-###    Domain: x = [-10, 10] and y = [-10, 10] 
+###    Domain:   -10 <= xi <= 10 
 ###   
-###    Optimum: f(1, 3) = 0.
+###    Optimum: f(1, 1, 1, 1) = 0.
 ###
 ###  Jamil etal. (2013) Int. J. Math. Mod. and Num. Optimisation
 ###          4(2):150-194
@@ -13,16 +16,16 @@
 ###
 
 # N: Dimension of the problem
-Number_Dimensions  2
+Number_Dimensions  4
 
 # Extremum: Maximum/Minimum
 Minimum  True
 
 # NS: Maximum number of cycles
-NS     10
+NS     90
 
 # NT: Maximum number of iterations before the temperature reduction
-NT     6
+NT     25
 
 # MaxEvl: Maximum number of evaluations of the objective function
 MaxEvl  5000000
@@ -31,28 +34,28 @@ MaxEvl  5000000
 EPS  1.e-6
 
 # RT: Parameter for temperature reduction
-RT   0.85
+RT   0.09
 
 # Temp: SAA temperature parameter
-Temp 88.
+Temp 58.
 
 # X_Init: Initial guess for the solution-coordinate vector
-X_Init       0.  4.
+X_Init       0.  4.  5.  -1.
 
 # LowerBounds: Lower bounds for the solution-coordinate vector
-LowerBounds  -10.  -10.
+LowerBounds  -10.  -10.  -10.  -10.
 
 # UpperBounds: Upper bounds for the solution-coordinate vector
-UpperBounds   10.   10.
+UpperBounds   10.   10.   10.   10.
 
 # VM: Stepping matrix (only the diagonal representing each direction)
-VM     1.    1.
+VM     1.e-2     1.e-2     1.e-2     1.e-2
 
 # C: Parameter for controlling the size of the stepping matrix
-C      3.     3.
+C      1.e-3     1.e-3      1.e-3     1.e-3
 
 # Debugging: Option to dump all intermediate results into the *.out file (True or False)
-Debugging  False
+Debugging  True
 
 # Benchmark_Solution: Solution-coordinate and solution of the Benchmark test-case
-Benchmark_Solution   1.   3.  0.
+Benchmark_Solution   1.   1.  1.  1.   0.

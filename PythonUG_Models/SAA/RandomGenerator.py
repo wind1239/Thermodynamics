@@ -4,18 +4,17 @@
 import math
 import random
 import time
-import numpy as np
 
 ###
 ### Random number generators 
 ###
-def RandomNumberGenerator( n, Lower, Upper ):
+def RandomNumberGenerator( n ):
 
     rn = []
     # Initialisation:
     for i in range( n ):
         r = random.SystemRandom()
-        seed = time.time() # seed
+        seed = time.clock()
         if ( seed % 2 > 1. ):
             r = random.SystemRandom( seed )
         else:
@@ -25,6 +24,6 @@ def RandomNumberGenerator( n, Lower, Upper ):
             else:
                 r = random.SystemRandom( r1 )
                 
-        rn.append( r.uniform( Lower[ i ], Upper[ i ] ) )
+        rn.append( r.uniform( 0., 1. ) )
                 
     return rn

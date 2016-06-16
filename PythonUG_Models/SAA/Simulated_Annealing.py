@@ -3,6 +3,7 @@
 
 import math
 import sys
+import numpy as np
 import BenchmarkTests as BTest
 import SA_IO as IO
 import SA_Print as Print
@@ -10,23 +11,27 @@ import RandomGenerator as RanGen
 import SpecialFunctions as SpFunc
 import SAA_Tools as SaT
 import ObjectiveFunction as ObF
+import time
 
 """ =========================================================================
 
-           Main function: Starting the Simulated Annealing Algorithm
+              FUNCTION: Starting the Simulated Annealing Algorithm
+
+       The SAA coded here in Python was adapted from the Fortran version 
+             by Goffee et al. (J. Econometrics 60(1994):65-99. And the code
+             may be obtained from:
+                zhttp://econpapers.repec.org/software/wpawuwppr/9406001.htm
 
     =========================================================================  """
 
 def SimulatedAnnealing( Method, Task, **kwargs ):
 
-    X_Optimum = [] ; F_Optimum = [] ; TestSolution = [] ; N_Tests = 0
+    X_Optimum = [] ; F_Optimum = [] ; TestSolution = [] ; TestSolution_Name = [] ;
+    TestSolution_Time = [] ; Time_temp = []
 
 
     """"
     ===================================================================
-    ===================================================================
-    ===================================================================
-
         If we are undertaken model validation through benchmarks, we
           may opt to run all benchmark test-cases or a specific one
           controlled in the original command line as:
@@ -35,13 +40,10 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                             or
               b) python Optimiser.py SAA Benchmarks N
     
-          where N is the number of the required test-case as defined 
-          in the 'Benchmarks.in' file.
+          respectively, where N is the number of the required test-case  
+          as defined in the 'Benchmarks.in' file.   
+    =================================================================== """
     
-    ===================================================================
-    ===================================================================
-    ===================================================================
-                                                                        """
     N_Tests, dummy = IO.CountingNumberOfTests( ) # Checking the total number of test-cases.
     if( Task == 'Benchmarks' ):
         if kwargs:
@@ -61,14 +63,11 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                     Test = 0 ; N_Tests = 0
              
     else:
-        sys.exit( 'In SimulatedAnnealing. Option not found' )
+        sys.exit( 'In SimulatedAnnealing function. Option not found' )
 
         
     """"
     ===================================================================
-    ===================================================================
-    ===================================================================
-
         Now, depending on the case, 'Benchmarks' or 'Problem' we 
           proceed the optimisation, if:
     
@@ -81,34 +80,32 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                   b.2 ) 'N': where 1 <= N <= N_Tests. It will read
                              only the cooling schedule of test-case
                              N and proceed with the optimisation.
-    
-    ===================================================================
-    ===================================================================
-    ===================================================================
-                                                                        """
+    =================================================================== """
 
     jtest = 0
 
-    for itest in range( N_Tests + 1 ):
+    for itest in xrange( 1, N_Tests + 1 ):
 
         if( Task == 'Benchmarks' ):
+            
             if TestCases != 'All': # Dealing with test-case N
+                
                 if itest == Test:
                     SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                         SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
-                        SaT.SA_X, BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = Test )
+                        SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = Test )
                 else:
                     continue
             else:
                 SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                     SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
-                    SaT.SA_X, BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = itest )
+                    SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = itest )
                 
 
         elif( Task == 'Problem' ):
             SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                 SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
-                SaT.SA_X, BenchmarkSolution = IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
+                SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
 
         else:
             sys.exit( 'In SimulatedAnnealing. Option not found' )
@@ -143,6 +140,8 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         """      
 
         X_OPT, F_OPT = ASA_Loops( Task, Func )
+        TestTime = time.clock()
+        TestSolution_Time.append( SaT.Time_Init - time.clock() ) # Measuring CPU time for the problem/test
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
@@ -152,7 +151,17 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                Assessing the solution (comparison against known solution)
            ====================================================================="""
         if Task == 'Benchmarks':
-            TestSolution.append( BTest.AssessTests( X_OPT, BenchmarkSolution ) )
+            TestSolution.append( BTest.AssessTests( X_OPT, SaT.BenchmarkSolution ) )
+            TestSolution_Name.append( SaT.Function_Name )
+
+            TestTime = time.clock()
+            Time_temp.append( TestTime  )
+            if TestCases == 'All' :
+                if itest > 0:
+                    TestSolution_Time.append( TestTime - Time_temp[ itest - 1 ] )
+                else:
+                    TestSolution_Time.append( TestTime )     
+            
             IO.f_SAOutput.write( '\n' )
             IO.f_SAOutput.write( '===========================================================' )
             IO.f_SAOutput.write( '\n' )
@@ -162,7 +171,11 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             IO.f_SAOutput.write( '\n' )
             jtest += 1
 
-    return X_OPT, F_OPT
+    if ( Task == 'Benchmarks' ) and ( TestCases == 'All' ):
+        Print.Print_SAA_Diagnostic( Bench_AllTestCases = 'yes', Solution = TestSolution, Solution_Name = TestSolution_Name, Solution_Time = TestSolution_Time  )
+
+    #return X_OPT, F_OPT
+    return X_Optimum, F_Optimum
 
 
 ###
@@ -187,7 +200,7 @@ def ASA_Loops( Task, Func ):
     XP = [ 0. for i in range( SaT.Ndim ) ]
     FStar = [ MaxNum for i in range ( NEps ) ] ; FStar[ 0 ] = Func
     
-    FOpt = Func ; XOpt = SaT.SA_X ; X_Try = SaT.SA_X 
+    FOpt = Func ; XOpt = SaT.SA_X ; X_Try = SaT.SA_X ;  XOpt2 = SaT.SA_X 
 
     """ The 'Fraction' variable assess if the function to be optimised is
            a thermodynamic function (TRUE) and therefore the elements of the
@@ -218,6 +231,7 @@ def ASA_Loops( Task, Func ):
 
                 """ Beginning of the h loop: """
                 hloop = 0
+
                 while hloop < SaT.Ndim:
 
                     if Fraction:
@@ -226,7 +240,7 @@ def ASA_Loops( Task, Func ):
                         dim = SaT.Ndim
 
                     for i in range( dim ):
-                        rand = RanGen.RandomNumberGenerator( dim, SaT.LowerBounds, SaT.UpperBounds )
+                        rand = RanGen.RandomNumberGenerator( dim )
 
                         if ( i == hloop ):
                             XP[ i ] = X_Try[ i ] + SaT.VM[ i ] * ( 2. * rand[ i ] - 1. ) 
@@ -238,7 +252,8 @@ def ASA_Loops( Task, Func ):
                               for compositional constraints.
                         =========================================================== """
                     if Fraction:
-                        XP[ dim ] = 1. - SpFunc.ListSum( XP[ 0 : dim ] )
+                        XP[ dim - 1 ] = 1. - SpFunc.ListSum( XP[ 0 : dim ] )
+                        
                         
                     SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
                     
@@ -267,6 +282,7 @@ def ASA_Loops( Task, Func ):
                        =================================================================="""
                     
                     if ( NFCNEV >= SaT.MaxEvl ):
+                        FOpt = - FOpt
                         Print.Print_SAA_Diagnostic( MaxEval = 'yes', FOpt = FOpt, XOpt = XOpt, NFCNEV = NFCNEV )
                         sys.exit('SAA did not converge. Too many evaluations of the function!')
 
@@ -278,7 +294,8 @@ def ASA_Loops( Task, Func ):
                        =================================================================="""
                     
                     if ( FuncP >= Func ):
-                        X_Try = XP
+                        for i in range( SaT.Ndim ):
+                            X_Try[ i ] = XP[ i ]
                         Func = FuncP
 
                         if SaT.Debugging == True :
@@ -295,6 +312,9 @@ def ASA_Loops( Task, Func ):
                             for i in range( SaT.Ndim ):
                                 XOpt[ i ] = XP[ i ]
                             FOpt = FuncP
+                            #np.append( XOpt2, XP, FOpt  )
+
+                            IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt2, b = FOpt ) + '\n')
                             
                             if SaT.Debugging == True :
                                 IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) + '\n')
@@ -305,12 +325,13 @@ def ASA_Loops( Task, Func ):
                                that may be added latter - may be used to either accept or reject this
                                coordinate.                                                            """
                         
-                        rand = RanGen.RandomNumberGenerator( SaT.Ndim, SaT.LowerBounds, SaT.UpperBounds )
-                        Density = math.exp( ( FuncP - Func ) / max( SaT.Temp, SaT.EPS ) )
+                        rand = RanGen.RandomNumberGenerator( SaT.Ndim )
+                        Density = math.exp( ( FuncP - Func ) / SaT.Temp )#max( SaT.Temp, SaT.EPS ) )
                         Density_Gauss = 0.5 * ( rand[ 0 ] * rand[ SaT.Ndim - 1 ] )
 
                         if ( Density_Gauss < Density ):
-                            X_Try = XP
+                            for i in range( SaT.Ndim ):
+                                X_Try[ i ] = XP[ i ]
                             Func = FuncP
 
                             if SaT.Debugging == True :
@@ -342,13 +363,13 @@ def ASA_Loops( Task, Func ):
                     SaT.VM[ i ] = SaT.VM[ i ] * ( 1. + SaT.C[ i ] * ( Ratio - 0.6 ) / 0.4 )
 
                 elif ( Ratio < 0.4 ):
-                    SaT.VM[ i ] = SaT.VM[ i ] * ( 1. + SaT.C[ i ] * ( 0.41 - Ratio ) / 0.4 )
+                    SaT.VM[ i ] = SaT.VM[ i ] / ( 1. + SaT.C[ i ] * ( 0.4 - Ratio ) / 0.4 )
 
                 if ( SaT.VM[ i ] > ( SaT.UpperBounds[ i ] - SaT.LowerBounds[ i ] ) ):
                     SaT.VM[ i ] =  SaT.UpperBounds[ i ] - SaT.LowerBounds[ i ]
 
-                if SaT.Debugging == True :
-                    IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = SaT.VM ) + '\n' )
+            if SaT.Debugging == True :
+                IO.f_SAOutput.write( '{s:20} {a:3d} Points rejected. VM is adjusted to {b:}'.format( s = ' ', a = NRej, b = SaT.VM ) + '\n' )
 
 
             NACP = [ 0 for i in range( SaT.Ndim ) ]
@@ -361,29 +382,32 @@ def ASA_Loops( Task, Func ):
                 Diagnostics of the algorithm before the next temperature reduction
            ======================================================================= """
 
-        Print.Print_SAA_Diagnostic( Diagnostics = 'yes', FOpt = FOpt, NUp = NUp, NDown = NDown, NRej = NRej, NAcc = NAcc, LNobds = LNobds, XOpt = XOpt, FStar = FStar )
+        Print.Print_SAA_Diagnostic( Diagnostics = 'yes', FOpt = FOpt, NUp = NUp, NDown = NDown, NRej = NRej, NAcc = NAcc, LNobds = LNobds, NFCNEV = NFCNEV, XOpt = XOpt, FStar = FStar )
 
         """
            ==========================================================
                      Checking the stoppage criteria
            ==========================================================  """
-
-        print 'FOpt:', FOpt, Func,'======',  FStar
-        print 'XP:', XP
         
-        Quit = False #; FStar[ 0 ] = Func
-        FStar[ 0 ] = FOpt
-        ###print '::::::::::::::::FStar:::', FStar
+        Quit = False ; FStar[ 0 ] = Func #; FStar[ 0 ] = FOpt
 
-        if abs( FOpt - FStar[ 0 ] ) <= SaT.EPS :
+        print ' '
+        print 'Opt:  FOpt:', FOpt, 'Func:', Func,'=====>', 'FStar:',  FStar
+        print '      XOpt:', XOpt, '======>', 'XP:', XP
+        print '      XOpt2:', XOpt2
+        
+
+        #if abs( FOpt - FStar[ 0 ] ) <= SaT.EPS :
+        if FOpt - FStar[ 0 ]  <= SaT.EPS :
             Quit = True
+
 
         for i in range( NEps ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
-            #if abs( FOpt - FStar[ i ] ) > SaT.EPS :
                 Quit = False
-                continue
 
+        if Quit and ( Task == 'Benchmarks' ):
+            Quit = BTest.AssessTests( XOpt, SaT.BenchmarkSolution )
 
         """
            ==========================================================
@@ -391,7 +415,7 @@ def ASA_Loops( Task, Func ):
            ==========================================================  """
 
         if Quit:
-            X_Try = XOpt
+            #X_Try = XOpt
             if  SaT.Minimum :
                 FOpt = -FOpt
 
@@ -415,7 +439,8 @@ def ASA_Loops( Task, Func ):
             FStar[ i ] = FStar[ i - 1 ]
 
         Func = FOpt
-        X_Try = XOpt
+        for i in range( SaT.Ndim ):
+            X_Try[ i ] = XOpt[ i ]
         
             
         """ End of k loop """

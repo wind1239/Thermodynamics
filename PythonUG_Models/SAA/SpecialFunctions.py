@@ -57,7 +57,7 @@ def Envelope_Constraints( X, **kwargs ):
            
         for i in range( dim ):
             if ( ( X[ i ] < LowerBounds[ i ]) or ( X[ i ] > UpperBounds[ i ] ) ):
-                rand = RanGen.RandomNumberGenerator( n, LowerBounds, UpperBounds )
+                rand = RanGen.RandomNumberGenerator( n )
                 X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
                     rand[ i ]
                 X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
@@ -80,7 +80,7 @@ def Envelope_Constraints( X, **kwargs ):
                     return X
             else:
                 for i in range( dim ):
-                    rand = RanGen.RandomNumberGenerator( n, LowerBounds, UpperBounds )
+                    rand = RanGen.RandomNumberGenerator( n )
                     if( evaluations % 3 == 0 ):
                         X[ i ] = rand[ i ]
                     elif ( evaluations % 7 == 0 ):
@@ -92,6 +92,14 @@ def Envelope_Constraints( X, **kwargs ):
 
                 evaluations = evaluations + 1
                 Try = True
+
+            """ ################################################################################
+                  Here it needs to be add a function to ensure feasibility of the composition
+                    solution-coordinates,
+                                  XiL = ( Z - (1-L) *XiV ) / L
+                    This means we need to add a function linking the
+                    SAA and the thermodynamic functions.
+                ################################################################################"""
 
         else: # Not a Thermod problem
             if kwargs:
