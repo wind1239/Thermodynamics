@@ -32,13 +32,13 @@ MaxEvl  1000000
 EPS  1.e-3
 
 # RT: Parameter for temperature reduction
-RT   0.95
+RT   0.55
 
 # Temp: SAA temperature parameter
 Temp 25.
 
 # X_Init: Initial guess for the solution-coordinate vector
-X_Init      3.14      3.14
+X_Init      -4.5      4.5
 
 # LowerBounds: Lower bounds for the solution-coordinate vector
 LowerBounds  -5.  -5.

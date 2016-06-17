@@ -140,8 +140,6 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         """      
 
         X_OPT, F_OPT = ASA_Loops( Task, Func )
-        TestTime = time.clock()
-        TestSolution_Time.append( SaT.Time_Init - time.clock() ) # Measuring CPU time for the problem/test
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
@@ -155,12 +153,13 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             TestSolution_Name.append( SaT.Function_Name )
 
             TestTime = time.clock()
-            Time_temp.append( TestTime  )
+            Time_temp.append( TestTime )
             if TestCases == 'All' :
-                if itest > 0:
+                if itest > 1:
                     TestSolution_Time.append( TestTime - Time_temp[ itest - 1 ] )
                 else:
                     TestSolution_Time.append( TestTime )     
+            print '=================>>>>', itest, TestTime, Time_temp
             
             IO.f_SAOutput.write( '\n' )
             IO.f_SAOutput.write( '===========================================================' )
@@ -170,6 +169,14 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             IO.f_SAOutput.write( '{a:}:  {b:}'.format( a = SaT.Function_Name, b = TestSolution[ jtest ] ) + '\n' )
             IO.f_SAOutput.write( '\n' )
             jtest += 1
+            
+        else: # Problem
+            TestTime = time.clock()
+            TestSolution_Time.append( time.clock() - SaT.Time_Init ) # Measuring CPU time for the problem/test
+
+
+    print 'TestSolutionTime_all:', TestSolution_Time
+    
 
     if ( Task == 'Benchmarks' ) and ( TestCases == 'All' ):
         Print.Print_SAA_Diagnostic( Bench_AllTestCases = 'yes', Solution = TestSolution, Solution_Name = TestSolution_Name, Solution_Time = TestSolution_Time  )
@@ -200,7 +207,8 @@ def ASA_Loops( Task, Func ):
     XP = [ 0. for i in range( SaT.Ndim ) ]
     FStar = [ MaxNum for i in range ( NEps ) ] ; FStar[ 0 ] = Func
     
-    FOpt = Func ; XOpt = SaT.SA_X ; X_Try = SaT.SA_X ;  XOpt2 = SaT.SA_X 
+    FOpt = Func ; XOpt = SaT.SA_X ; X_Try = SaT.SA_X 
+    XOpt_f = [ 0. for i in range( SaT.Ndim ) ]
 
     """ The 'Fraction' variable assess if the function to be optimised is
            a thermodynamic function (TRUE) and therefore the elements of the
@@ -283,7 +291,7 @@ def ASA_Loops( Task, Func ):
                     
                     if ( NFCNEV >= SaT.MaxEvl ):
                         FOpt = - FOpt
-                        Print.Print_SAA_Diagnostic( MaxEval = 'yes', FOpt = FOpt, XOpt = XOpt, NFCNEV = NFCNEV )
+                        Print.Print_SAA_Diagnostic( MaxEval = 'yes', FOpt = FOpt, XOpt = XOpt_f, NFCNEV = NFCNEV )
                         sys.exit('SAA did not converge. Too many evaluations of the function!')
 
 
@@ -312,12 +320,13 @@ def ASA_Loops( Task, Func ):
                             for i in range( SaT.Ndim ):
                                 XOpt[ i ] = XP[ i ]
                             FOpt = FuncP
-                            #np.append( XOpt2, XP, FOpt  )
+                            for i in range( SaT.Ndim ):
+                                XOpt_f[i] = XP[i]
 
-                            IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt2, b = FOpt ) + '\n')
+                            print 'NFCNEV(', NFCNEV, '), XOpt: ', XOpt_f, ' with FOpt: ', FOpt
                             
                             if SaT.Debugging == True :
-                                IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt, b = FOpt ) + '\n')
+                                IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt_f, b = FOpt ) + '\n')
 
                     else:
                         """ However if FuncP is smaller than the others, thus the Metropolis criteria 
@@ -326,8 +335,15 @@ def ASA_Loops( Task, Func ):
                                coordinate.                                                            """
                         
                         rand = RanGen.RandomNumberGenerator( SaT.Ndim )
-                        Density = math.exp( ( FuncP - Func ) / SaT.Temp )#max( SaT.Temp, SaT.EPS ) )
-                        Density_Gauss = 0.5 * ( rand[ 0 ] * rand[ SaT.Ndim - 1 ] )
+                        #Density = math.exp( ( FuncP - Func ) / SaT.Temp )#max( SaT.Temp, SaT.EPS ) )
+                        if SaT.Temp < max( 1.e-6, SaT.EPS ):
+                            Density = math.exp( ( FuncP - Func ) / max( 1.e-3 * SaT.EPS, rand[0] ) )
+                        else:
+                            Density = math.exp( ( FuncP - Func ) / SaT.Temp )
+                        temp = 1.
+                        for i in range( SaT.Ndim ):
+                            temp = temp * rand[ i ]
+                        Density_Gauss = math.sqrt(abs( temp ) )
 
                         if ( Density_Gauss < Density ):
                             for i in range( SaT.Ndim ):
@@ -383,35 +399,40 @@ def ASA_Loops( Task, Func ):
            ======================================================================= """
 
         Print.Print_SAA_Diagnostic( Diagnostics = 'yes', FOpt = FOpt, NUp = NUp, NDown = NDown, NRej = NRej, NAcc = NAcc, LNobds = LNobds, NFCNEV = NFCNEV, XOpt = XOpt, FStar = FStar )
+        
+
+        # This will make the tests run faster as we know the solution, thus they do
+        #     not need to continue search if the solution if close enough
+        if Task == 'Benchmarks':
+            Quit = BTest.AssessTests( XOpt_f, SaT.BenchmarkSolution )
+            if Quit:
+                if  SaT.Minimum :
+                    FOpt = -FOpt
+                Print.Print_SAA_Diagnostic( Termination = 'yes', FOpt = FOpt, NRej = NRej, XOpt = XOpt_f, NFCNEV = NFCNEV )
+                return XOpt_f, FOpt
+                
 
         """
            ==========================================================
                      Checking the stoppage criteria
            ==========================================================  """
         
-        Quit = False ; FStar[ 0 ] = Func #; FStar[ 0 ] = FOpt
+        Quit = False ; FStar[ 0 ] = Func
 
-        print ' '
-        print 'Opt:  FOpt:', FOpt, 'Func:', Func,'=====>', 'FStar:',  FStar
-        print '      XOpt:', XOpt, '======>', 'XP:', XP
-        print '      XOpt2:', XOpt2
-        
-
-        #if abs( FOpt - FStar[ 0 ] ) <= SaT.EPS :
         if FOpt - FStar[ 0 ]  <= SaT.EPS :
             Quit = True
 
-
         for i in range( NEps ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
-                Quit = False
+                Quit = False 
 
         if Quit and ( Task == 'Benchmarks' ):
-            Quit = BTest.AssessTests( XOpt, SaT.BenchmarkSolution )
+            Quit = BTest.AssessTests( XOpt_f, SaT.BenchmarkSolution )
+
 
         """
            ==========================================================
-                     Checking the end of the SAA
+               Termination of the Simulated Annealing algorithm       
            ==========================================================  """
 
         if Quit:
@@ -419,14 +440,9 @@ def ASA_Loops( Task, Func ):
             if  SaT.Minimum :
                 FOpt = -FOpt
 
-            """
-               =======================================================================
-                        Termination of the Simulated Annealing algorithm
-               ======================================================================= """
+            Print.Print_SAA_Diagnostic( Termination = 'yes', FOpt = FOpt, NRej = NRej, XOpt = XOpt_f, NFCNEV = NFCNEV )
 
-            Print.Print_SAA_Diagnostic( Termination = 'yes', FOpt = FOpt, NRej = NRej, XOpt = XOpt, NFCNEV = NFCNEV )
-
-            return XOpt, FOpt
+            return XOpt_f, FOpt
 
         """
            ==========================================================

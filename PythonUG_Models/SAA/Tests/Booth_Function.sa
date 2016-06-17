@@ -28,16 +28,16 @@ NT     6
 MaxEvl  5000000
 
 # EPS: Minimum acceptable discrepancy (used throughout the SAA)
-EPS  1.e-6
+EPS  1.e-3
 
 # RT: Parameter for temperature reduction
-RT   0.85
+RT   0.65
 
 # Temp: SAA temperature parameter
 Temp 88.
 
 # X_Init: Initial guess for the solution-coordinate vector
-X_Init       0.  4.
+X_Init       1.5    1.5
 
 # LowerBounds: Lower bounds for the solution-coordinate vector
 LowerBounds  -10.  -10.
@@ -49,7 +49,7 @@ UpperBounds   10.   10.
 VM     1.    1.
 
 # C: Parameter for controlling the size of the stepping matrix
-C      3.     3.
+C      2.     2.
 
 # Debugging: Option to dump all intermediate results into the *.out file (True or False)
 Debugging  False

@@ -10,5 +10,7 @@ Test_2       Beale_Function
 Test_3       Easom_Function
 Test_4       Booth_Function
 Test_5       Hosaki_Function
-Test_6       Colville4D_Function
+
+# Tests below are slow and may need to have the cooling schedule optimised
+# Test_6       Colville4D_Function
 # Test_7       CosineMixture_Function

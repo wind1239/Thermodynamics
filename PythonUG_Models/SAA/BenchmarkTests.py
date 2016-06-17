@@ -5,6 +5,7 @@ import math
 import sys
 import BenchmarkTests as BTest
 import SAA_Tools as SaT
+import SA_IO as IO
 
 ####
 ####
@@ -25,8 +26,8 @@ def TestFunction( TestName, n, X ):
     elif ( TestName == 'Easom_Function' ):
         Result = TestFunction_Easom( n, X )
 
-    #elif ( TestName == 'CosineMixture_Function' ):
-    #    Result = TestFunction_CosineMixture2D( n, X )
+    elif ( TestName == 'CosineMixture_Function' ):
+        Result = TestFunction_CosineMixture2D( n, X )
 
     elif( TestName == 'Booth_Function' ):
         Result = TestFunction_Booth( n, X )
@@ -56,11 +57,10 @@ def AssessTests( XSA_Solution, Solution ):
 
     Pass = True 
 
-    if abs( FSA_Solution - F_Solution ) >= 1.e-2 :
+    if abs( FSA_Solution - F_Solution ) >= SaT.EPS :
         Pass = False
 
-    print 'Assessment of the function:', Pass, ' with computed and analytical solution of: ', FSA_Solution, F_Solution
-    print 'X:', XSA_Solution
+    IO.f_SAOutput.write( 'Assessment of function: {a:}. Analytical: {b:.4e}, Numerical: {c:.4e}. ==> Pass: {d:}'.format( a = SaT.Function_Name, b = F_Solution, c = FSA_Solution, d = Pass ) + '\n' )
 
     return Pass
 

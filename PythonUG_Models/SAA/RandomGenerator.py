@@ -2,8 +2,10 @@
 #!/usr/bin/env python
 
 import math
+import numpy as np
 import random
 import time
+import sys
 
 ###
 ### Random number generators 
