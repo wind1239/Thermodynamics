@@ -94,12 +94,14 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                     SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                         SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
                         SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = Test )
+                    print '======================', SaT.Function_Name, '======================'
                 else:
                     continue
             else:
                 SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                     SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
                     SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = itest )
+                print '======================', SaT.Function_Name, '======================'
                 
 
         elif( Task == 'Problem' ):
@@ -158,9 +160,8 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                 if itest > 1:
                     TestSolution_Time.append( TestTime - Time_temp[ itest - 1 ] )
                 else:
-                    TestSolution_Time.append( TestTime )     
-            print '=================>>>>', itest, TestTime, Time_temp
-            
+                    TestSolution_Time.append( TestTime )
+                    
             IO.f_SAOutput.write( '\n' )
             IO.f_SAOutput.write( '===========================================================' )
             IO.f_SAOutput.write( '\n' )
@@ -323,7 +324,7 @@ def ASA_Loops( Task, Func ):
                             for i in range( SaT.Ndim ):
                                 XOpt_f[i] = XP[i]
 
-                            print 'NFCNEV(', NFCNEV, '), XOpt: ', XOpt_f, ' with FOpt: ', FOpt
+                            print 'NFCNEV(', NFCNEV, '), XOpt: ', XOpt_f, ' with FOpt: ', FOpt, '(Analytical:', -BTest.TestFunction( SaT.Function_Name, SaT.Ndim, SaT.BenchmarkSolution[ 0 : SaT.Ndim ] ),')'
                             
                             if SaT.Debugging == True :
                                 IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt_f, b = FOpt ) + '\n')
