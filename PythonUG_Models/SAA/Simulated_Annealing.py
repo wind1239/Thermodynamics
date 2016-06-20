@@ -20,7 +20,7 @@ import time
        The SAA coded here in Python was adapted from the Fortran version 
              by Goffee et al. (J. Econometrics 60(1994):65-99. And the code
              may be obtained from:
-                zhttp://econpapers.repec.org/software/wpawuwppr/9406001.htm
+                http://econpapers.repec.org/software/wpawuwppr/9406001.htm
 
     =========================================================================  """
 

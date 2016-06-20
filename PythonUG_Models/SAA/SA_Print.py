@@ -18,9 +18,9 @@ def HelpInput():
     print "              OR  "
     print "python Optimiser.py <Method = 'SAA'>  <Task = 'Problem'> <File Name >"
     print ' '
-    print "e.g., python Optimiser.py SA Benchmarks all"
-    print "e.g., python Optimiser.py SA Benchmarks 2"
-    print "      python Optimiser.py SA Problem    VLE_MethanePentane "
+    print "e.g., python Optimiser.py SAA Benchmarks all"
+    print "e.g., python Optimiser.py SAA Benchmarks 2"
+    print "      python Optimiser.py SAA Problem    VLE_MethanePentane "
     print ' '
     print " Info for the benchmark test-cases must be contained in the file"
     print " Benchmarks.in"
