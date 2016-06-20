@@ -1,0 +1,16 @@
+###
+### List of Benchmark Test-cases
+###
+###  Obtained from Jamil etal. (2013) Int. J. Math. Mod. and Num. Optimisation
+###          4(2):150-194  (doi: 10.1504/IJMMNO.2013.055204)
+###
+
+Test_1       Judge_Function
+Test_2       Beale_Function
+Test_3       Easom_Function
+Test_4       Booth_Function
+Test_5       Hosaki_Function
+
+# Tests below are slow and may need to have the cooling schedule optimised
+# Test_6       Colville4D_Function
+# Test_7       CosineMixture_Function
