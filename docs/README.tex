@@ -1,0 +1,184 @@
+\documentclass[14pt,twoside]{article}
+
+\usepackage{amsfonts,amsmath,amssymb,stmaryrd,indentfirst}
+\usepackage{epsfig,graphicx,times,psfrag}
+\usepackage{natbib}
+\usepackage{pdfpages,enumerate}% ,enumitem}
+ 
+%%% Rotating Page
+\usepackage{pdflscape}
+\usepackage{afterpage}
+%\usepackage{capt-of}% or use the larger `caption` package
+%\usepackage{lipsum}% dummy text
+
+
+\usepackage[pdftex,bookmarks,colorlinks=true,urlcolor=blue,citecolor=blue]{hyperref}
+
+%\usepackage{fancyhdr} %%%%
+%\pagestyle{fancy}%%%%
+\pagestyle{empty}
+\def\newblock{\hskip .11em plus .33em minus .07em}
+
+\setlength\textwidth      {16.5cm}
+\setlength\textheight     {22.0cm}
+\setlength\oddsidemargin  {-0.3cm}
+\setlength\evensidemargin {-0.3cm}
+
+\setlength\headheight{0in} 
+\setlength\topmargin{0.cm}
+\setlength\headsep{1.cm}
+\setlength\footskip{1.cm}
+\setlength\parskip{0pt}
+\usepackage{makeidx}
+\makeindex
+
+%%%
+%%% space between lines
+%%%
+\renewcommand {\baselinestretch}{1.5}
+
+\begin{document}
+
+\begin{center}
+   \Large{ {\bf Optimiser.py: a Python code for global optimisation of constrained objective functions 
+     using the stochastic Simulated Annealing Algorithm}}
+
+\end{center}
+
+\renewcommand {\baselinestretch}{1.}
+
+   The python code in this repository contains the Simulated Annealing Algorithm as designed by \href{http://www.sciencedirect.com/science/article/pii/0304407694900388}{Goffe {\it et al.} (J. Econometrics 60(1994):65-99)}, 
+\begin{center}
+        \href{http://econpapers.repec.org/software/wpawuwppr/9406001.htm}{http://econpapers.repec.org/software/wpawuwppr/9406001.htm}
+\end{center}
+
+
+\section{Introduction}
+   The simulated annealing algorithm (SAA) is a stochastic optimisation method designed to find the global minimum of a constrained function. A comprehensive (but not extensive) documentation of the SAA may be found in Chapter 6 of the `Integrated Multi-Fluid Flows and Thermodynamic Models' report. 
+
+
+\section{Quick-Run}
+   The module can perform global optimisation using the SAA in two classes of cases:
+   \begin{enumerate}[a)]
+      \item `Benchmarks' (there is a list of test-cases in the "Benchmarks.in" file);
+      \item `Problem' (i.e., case problem that you want to find the global minimum/maximum).
+   \end{enumerate}
+   The current code is run by either,
+   \begin{center}
+               python Optimiser.py SAA Benchmarks $<$ N $>$
+   \end{center}
+   or 
+   \begin{center}
+               python Optimiser.py SAA Problem $<$ Name $>$.
+   \end{center}
+   The former command line performs the SAA method in a set of benchmark test-cases (listed in the `Benchmarks.in' file and included in the `Tests' directory), where $<$ N $>$ is either the test-case number (currently 1 to 5) or `All' (in which all 5 test-cases are performed at once). The later command line performs the SAA method in the chosen problem, where $<$ Name $>$ stands for the problem test-case name.
+
+
+\section{Code Design}
+   The algorithm is divided into 8 code files:
+   \begin{description}
+%%%%
+      \item[`Optimiser.py'] is the "main" code that contains the preamble of the algorithm and reads and interpret the command line for the code. As it stands, there are 3 distinct configurations:
+          \begin{enumerate}[a)]
+             \item Run the SAA in a function (e.g., `test1'): 
+                \begin{center}
+                    python Optimiser.py SAA Problem test1
+                \end{center}
+             \item Run one benchmark test-case. Currently there are 5 test-cases listed in the `Benchmarks.in' file and coded in the `BenchmarkTests.py' file:
+                \begin{center}
+                    python Optimiser.py SAA Benchmarks 1
+                \end{center}
+                This will find the global minimum of the Judge function (Test$\_$1).
+             \item Run all benchmark test-cases at once:
+                \begin{center}
+                    python Optimiser.py SAA Benchmarks All
+                \end{center}
+                This will find the global minimum of all functions contained in the `Benchmarks.in' file and coded in the `BenchmarkTests.py' file.
+          \end{enumerate}
+          The `Optimiser.py' will read the input task and will either perform a global optimisation in a prescribed function given by the operator, or seek for the global minimum of 5 standard optimisation test-cases.
+
+%%%%
+      \item[`RandomGenerator.py'] contains a simple random number generator (between 0.0 and 1.0) with Gaussian distribution.
+
+%%%%
+      \item[`SA$\_$IO.py'] contains functions that will read the standard input files as,
+                \begin{center}
+                    $<$ Function $>$.sa
+                \end{center}
+
+           This `$^{\ast}$.sa' file {\bf must} contain all cooling schedule parameters, including:
+           \begin{enumerate}[a)]
+               \item dimensionality of the problem;
+               \item type of problem (i.e., maximisation or minimisation);
+               \item temperature parameter;
+               \item upper and lower bounds of the problem's solution-coordinate;
+               \item reducing factor of the temperature parameter;
+               \item maximum number of cycles;
+               \item maximum number of iterations before the temperature parameter is reduced;
+               \item main diagonal of the stepping matrix;
+               \item parameter for controlling the stepping matrix;
+               \item maximum number of evalutions of the objective function;
+               \item minimum acceptable discrepancy between solution-coordinates and functions;
+               \item Initial guess of the solution-coordinate.
+           \end{enumerate}
+           Examples of cooling schedules, as `$^{\ast}$.sa' files, may be found in the `Tests' directory (which contains all benchmark test-cases). 
+
+%%%%
+      \item[`SAA$\_$Tools.py'] contains the global variables used throughout the code.
+
+%%%%
+      \item[`SA$\_$Print.py'] contains functions that output solutions into a file named as either (see function `Output' in the `SA$\_$IO.py' file),
+              \begin{center}
+                   Benchmarks$\_$SAA$\_$TestCase$\_<$ N $>$.out (e.g., Benchmarks$\_$SAA$\_$TestCase$\_$3.out),
+              \end{center}
+     or 
+              \begin{center}
+                  Problem$\_$SAA$\_<$ Problem$\_$Name $>$.out  (e.g., Problem$\_$SAA$\_<$ Problem$\_$Flash-C1C2.out),
+              \end{center}
+     where $<$ N $>$ is either the number of the benchmark test-case (defined in the `Benchmarks.in' file) or `All' (for running the algorithm in all test-cases). $<$ Problem$\_$Name $>$ stands for the problem case you wish to minimise. 
+
+%%%%
+      \item[`SpecialFunctions.py'] contains a few functions necessary for the SAA to be smoothly performed. In particular, the `Envelope$\_$Constraints' was designed to ensure that an initial feasibility analysis (for Thermodynamic problems) is undertaken, however it should be further integrated the thermodynamic module to ensure it work properly. Ideally, the feasibility test should ensure:
+     \begin{enumerate}[a)]
+         \item Solution-coordinates are bounded, i.e.,
+                   \begin{displaymath}
+                       \text{LB}_{i} <  \text{X}_{i}  <  \text{UB}_{i},
+                   \end{displaymath}
+               where $LB$ and $UB$ are lower- and upper-bounds defined in the cooling schedule. 
+
+         \item Summation of $\left(N_{c} - 1 \right)$ elements of the solution-coordinate that relates to thermodynamic composition (i.e., mole/mass fractions) are also bounded, i.e.,
+                   \begin{displaymath}
+                       0 < \sum\limits_{i=1}^{N_{c}-1} X_{i}^{(j)} < 1,
+                   \end{displaymath}
+                where $j$ is the phase (i.e., = $L$ or $V$ in a VLE problem).
+
+         \item Compositions of the second phase of the solution-coordinate that relates to thermodynamic composition (i.e., mole/mass fractions) are also bounded, i.e., 
+              \begin{eqnarray}
+                 && X_{i}^{(V)} = \frac{ Z_{i} - L X_{i}^{(L)}} { 1 - L } \nonumber \\
+                      \text{or} && \nonumber \\ 
+                 &&X_{i}^{(L)} = \frac{ Z_{i} - ( 1 - L ) X_{i}^{(V)} }{ L}, \nonumber
+              \end{eqnarray}
+        subjected to,
+              \begin{displaymath}
+                     0 < X_{i}^{(j)} < 1,\;\;\text{ where }i = 1, \cdots, N_{c} \text{ and }j = L,V.
+              \end{displaymath}
+     \end{enumerate}
+
+%%%%
+      \item[`ObjectiveFunction.py'] should link the SAA with the problem that needs to be optimised.
+
+
+%%%%
+      \item[`SimulateAnnealing.py'] is the main optimisation function -- `SimulatedAnnealing' that,
+           \begin{enumerate}[a)]
+               \item Reads the cooling schedule of the benchmark test-cases (`$^{\ast}$.sa' contained in the `Tests' directory) or the problem;
+               \item Undertakes the algorithm (contained in the `ASA$\_$Loops' function);
+               \item Print out the diagnostic of the test-case/problem.
+           \end{enumerate}
+
+
+
+   \end{description}
+
+
+\end{document}

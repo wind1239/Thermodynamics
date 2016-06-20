@@ -1,9 +1,12 @@
 #! /bin/bash
 
-default:	CoupledThermodynamicModel.pdf
+default:	CoupledThermodynamicModel.pdf README.pdf
 
 CoupledThermodynamicModel.pdf:  CoupledThermodynamicModel.tex
 CoupledThermodynamicModel.idx:  CoupledThermodynamicModel.idx
+README.pdf: README.tex
+README.idx: README.idx
+
 
 %.pdf:	%.tex
 	rm -f $*.pdf
