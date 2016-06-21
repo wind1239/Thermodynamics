@@ -1,0 +1,83 @@
+
+%%%
+%%% CHAPTER
+%%%
+\chapter{Unconstrained Optimisation Methods}\label{Appendix:UnconstrainedOptimisationMethods}
+
+The main aim of unconstrained optimisation problems is to find the extremum (maximum or minimum) of a function with no bounded solution-coordinate, i.e., \citep[see][]{Conn_Book}
+\begin{displaymath}
+   \mathcal{P}: \text{ Minimise }\; f(x)\; \text{ such that }\; x\in\mathcal{R}. 
+\end{displaymath}
+Such problems may be solved using:
+   \begin{enumerate}[a)]
+      \item analytical methods that requires gradients of the function, or;
+      \item numerical methods that may be either 
+          \begin{enumerate}[i)]
+              \item deterministic methods (local optimisation methods):
+                  \begin{itemize}
+                     \item gradient-based (i.e., convex optimisation) methods require the use of gradients of functions. It often converges very fast to the local extremum if the initial solution is close enough to the optimal solution;
+                     \item methods that do not require convexity (e.g., simplex and pattern-search methods); 
+                  \end{itemize} 
+              \item stochastic methods (global optimisation methods) use randomness to escape regions of local extremum:
+                  \begin{itemize}
+                     \item pure random search (e.g., Luus-Jaakola, simulated annealing etc): often very slow methods;
+                     \item genetic algorithms;
+                     \item evolution strategies.
+                  \end{itemize}
+          \end{enumerate} 
+   \end{enumerate}
+In similar way, numerical methods for solving unconstrained problems maybe divided into (Fig.~\ref{Appendix:UnconstrainedOptimisationMethods:Fig:FlowChart})
+   \begin{enumerate}[a)]
+      \item gradient-based methods, i.e., it requires gradients (i.e., Hessians matrices) of the function, e.g.,
+          \begin{itemize}
+             \item Root-finding methods, i.e., 1D optimisation (e.g., Newton-Raphson, Bissection, etc);
+             \item Relaxation algorithm;
+             \item Descent methods (e.g., Gradient-descent, Newton-descent, BFGS etc)
+             \item Trust region methods.
+          \end{itemize}
+      \item gradient-free methods:
+          \begin{itemize}
+             \item random search: Luus-Jaakola, simulated annealing
+             \item approximation of the gradient:
+                 \begin{itemize}
+                     \item extremum seeking;
+                     \item Nelder-Mead simplex;
+                     \item etc.
+                 \end{itemize}
+          \end{itemize}
+   \end{enumerate}
+
+\begin{figure}
+
+% Define block styles
+\tikzstyle{decision} =   [diamond,   draw, fill=blue!20, text width=4em, text badly centered, node distance=3cm, inner sep=3pt]
+\tikzstyle{block} =      [rectangle, draw, fill=blue!20, text width=5em,   text centered,       rounded corners,   minimum height=4em]
+\tikzstyle{blocklarge} = [rectangle, draw, fill=blue!20, text width=10em,  text centered,       rounded corners,   minimum height=4em]
+\tikzstyle{blocklarge2} = [rectangle, draw, fill=blue!20, text width=15em,  text centered,       rounded corners,   minimum height=4em]
+\tikzstyle{blockhuge} =  [rectangle, draw, fill=blue!20, text width=30em,  text centered,       rounded corners,   minimum height=4em]
+\tikzstyle{line} =       [draw, -latex']
+\tikzstyle{cloud} =      [draw, ellipse,   fill=red!20,  node distance=3cm,                                        minimum height=2em]
+   
+\begin{center} 
+\begin{tikzpicture}[node distance = 3cm, auto]
+    % Place nodes
+    \node [blocklarge](Question) {Is the Gradient of the function available?} ;
+    %\node [decision] (Question) {Is the Gradient available?};
+    \node [block, above of=Question, node distance=3cm] (GradFree) {Gradient-free methods};
+    \node [decision, below of=Question] (Decide1) {Linear Equations?};
+    \node [block, below of=Decide1, node distance=3cm] (GradF) {$\nabla F = 0$};
+    \node [block, right of=Decide1, node distance=3cm] (GradB) {Gradient-based methods};
+
+
+    % Draw edges
+    \path [line] (Question) -- node [near start] {no}  (GradFree.south);
+    \path [line] (Question) -- node {yes} (Decide1);
+    \path [line] (Decide1)  -- node [near start] {no} (GradB.west);
+    \path [line] (Decide1)  -- node {yes} (GradF.north);
+
+
+\end{tikzpicture}
+\end{center}
+\caption{Flowchart of the unconstrained optimisation problems.}
+\label{Appendix:UnconstrainedOptimisationMethods:Fig:FlowChart}
+\end{figure}
