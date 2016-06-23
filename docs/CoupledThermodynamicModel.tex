@@ -331,6 +331,22 @@
 %\includeonly{model_introduction, model_reservoir_equations, model_description}
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 
+%%
+%% Short Abstract at the beginning of each chapter
+%%
+%%%% Option 1:
+\usepackage{changepage}
+%%%% Option 2:
+%\newenvironment{chapabstract}{%
+%    \begin{center}%
+%      %\bfseries Chapter Abstract
+%      \bfseries 
+%    \end{center}}%
+
+
+
+
+
 \begin{document}
 
 \vspace{4cm}
@@ -357,8 +373,9 @@
 \bigskip
      {\bf{\large Date:}}                            &     &   \today                    \\
                                                     &     &                             \\
-     {\bf{\large Revision 1:}}                      &     &  March 15, 2016             \\
-     {\bf{\large Revision 2:}}                      &     &  \today                     \\
+     {\bf{\large Revision 1:}}                      &     &  March 15$^{\text{th}}$, 2016  \\
+     {\bf{\large Revision 2:}}                      &     &  June 23$^{\text{rd}}$, 2016   \\
+%     {\bf{\large Revision 3:}}                      &     &  \today                     \\
                                                     &     &                             \\
   \end{tabular}
 \vspace{3.5cm}
@@ -390,8 +407,8 @@
 \input{TransportModel}
 \input{MainBoxFormulation}
 \input{EOS_PR} % Simple Hydrate Model
-\input{Hydrate_Formulation} % Simple Hydrate Model
 \input{Optimisation}
+\input{Hydrate_Formulation} % Simple Hydrate Model
 
 %\input{Integrated_Compositional} % Compositional
 %\pagebreak

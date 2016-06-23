@@ -4,6 +4,16 @@
 %%%
 \chapter{Thermodynamic Formulation}\label{Chapter:ThermodynamicFormulation}
 
+\begin{adjustwidth}{1cm}{1cm}
+    {\it The CVFEM-based numerical formulation for multiphase and multi-component Darcy flows are fully described in Chapters~\ref{ChapterMultiFluidsModel} and~\ref{Chapter:CompositionalModel}. In particular, Chapter~\ref{Chapter:CompositionalModel} focused on the discretisation involving the molar/mass fractions of components present in any/all phases (and therefore under either equilibrium or non-equilibrium conditions). In the main multi-component equation (\eg Eqns.~\ref{phase1-comp-i'}-~\ref{phase3-comp-i'} for three components), phase separation (\ie isothermal flash) is controlled by a constant $\mfr[E]{i}{j\; k}$ that is known by chemical and petroleum engineering communities as $K_{i}-$value. This constant is a function of species, pressure and temperature \citep{SmithVanNess_Book}, \ie an equation of state, and is often parameterised and tabulated for common binaru chemical species (in particular hydrocarbons). This outdated approach, although practical, is plagued by inaccuracy and has been replaced in most flow and process simulators by more rigorous thermodynamic formulations and equations of state that can acuratelly represent PVT relations.
+
+This chapter will focus on the development of a thermodynamic framework that enables effective calculation of phase behaviour of a multi-component mixture in two-phase systems. The approach was originally developed by \citet{Henderson_Thesis} and is based on transforming the traditional molar free Gibbs energy formulation into a constrained optimisation problem. The molar free Gibbs energy is described as a function of composition (molar/mass fraction) of components and phases in equilibrium and, each phase can be represented by coupled equations of state (along with mixing and combining rules) and activity models. 
+\medskip
+
+The contents of this chapter were taken from \citet{Henderson_Thesis} and \citet{Gomes_MSc_1999} \citep[see also][]{Henderson_2001,michelsen_1984,gomes_2001}.
+}
+\end{adjustwidth}
+
 %%%
 %%% SECTION
 %%%

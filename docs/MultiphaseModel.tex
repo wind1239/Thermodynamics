@@ -4,9 +4,16 @@
 %%%
 \chapter{Multi-Fluids Porous Media Flow Model}\label{ChapterMultiFluidsModel}
 
+%%% Summary of the Chapter
+\begin{adjustwidth}{1cm}{1cm}
+   {\it The main aim of this chapter is to describe the multiphase porous media flow model used throughout this documentation. This chapter introduces the novel CVFEM formulation with new element-pairs that ensure high-order numerical accuracy in time and space of the set of conservative equations. In summary, pressure and velocities of all phases/fluids are discretised and solved in finite element space whereas scalar fields (\eg saturation, density, temperature etc) are solved in control volume space. Finite element pressure and velocity fields are projected in CV space in order to obtain high-order fluxes on the control volume boundaries. 
+\medskip
+
+The contents of this chapter were taken from \citet{gomes_2016} and \citet{Fluidity_Manual}.}
+\end{adjustwidth}
+
 %%% SECTION
 \section{Numerical Formulation: Force Balance Model}\label{ChapterMultiFluidsModel:Section:overlapping_method_section}
-This section was taken from the paper XXX by Gomes {\it et al.}
 
 \subsection{A novel representation of multi-phase Darcy flows}\label{ChapterMultiFluidsModel:Section:DarcyModel}
 Darcy's law for immiscible multi-phase flow may be written in the form:
@@ -80,7 +87,7 @@ where $\phi$ is the porosity and $s_{cty}$ is a source term. Eqn.~\ref{saturatio
      \int_{\Omega} M_{i} \displaystyle\frac{\phi \left({S_{\alpha i}^{n+1}}-{S_{\alpha i}^{n}}\right)}{\Delta t} \d V + \nonumber  \\ 
      \oint_{\Gamma_{CV_{i}}} \left[\theta^{n+\frac{1}{2}} {\mathbf n}  \cdot {\mathbf u}_{\alpha}^{n+1} S_{\alpha}^{n+1} + \left(1-\theta^{n+\frac{1}{2}}\right) {\mathbf n} \cdot {\mathbf u}_{\alpha}^{n} S_{\alpha}^{n} \right]d\Gamma = \int_{\Omega}  M_{i} {s_{cty,\alpha}^{n+\theta}} \d V, \label{detail-sat-eqn-k}
 \end{eqnarray}
-where $\mathbf{n}$ is the outward-pointing unit normal vector to the surface ($\Gamma_{CV_{i}}$) of the control volume $i$ and $n$ is the current time level. More details on the numerical methods used to solve Eqn.~\ref{detail-sat-eqn-k} can be found in \cite{pavlidis_2013b}.
+where $\mathbf{n}$ is the outward-pointing unit normal vector to the surface ($\Gamma_{CV_{i}}$) of the control volume $i$ and $n$ is the current time level. More details on the numerical methods used to solve Eqn.~\ref{detail-sat-eqn-k} can be found in \citet{pavlidis_2016}.
 
 The global continuity equation is obtained by summing Eqn.~\ref{detail-sat-eqn-k} over all phases:
 \begin{eqnarray}

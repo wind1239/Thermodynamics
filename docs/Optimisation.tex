@@ -4,6 +4,21 @@
 %%%
 \chapter{Global Optimisation Methods}\label{Chapter:GlobalOpt}
 
+\begin{adjustwidth}{1cm}{1cm}
+    {\it Chapters~\ref{Chapter:ThermodynamicFormulation} and ~\ref{Chapter:EOSPR} fully described the thermodynamic formulation for vapour-liquid equilibrium (VLE) system as a constrained optimisation problem. A general algorithm -- Algorithm~\ref{VLE_Problem:Algorithm}, was developed to provide a framework to calculate compositions (mol/mass fraction) of each component in all phases and vaporised fraction in equilibrium conditions. The optimisation problem consists in find the solution coordinate,
+\begin{displaymath}
+   \underline{X} = \left\{\mfr[y]{i}{L}, L\right\},\;\text{ with } i=1,\cdots,\mathcal{N}_{c}\;\;\text{ and subject to } \summation_{i=1}^{\mathcal{N}_{c}}\mfr[y]{i}{j}=1\;\text{ with }j=1,\cdots,\mathcal{N}_{p},
+\end{displaymath}
+that minimises the molar free Gibbs energy function (\ie Eqn.~\ref{Chapter:ThermodynamicFormulation:Eqn:GibbsMolarFinal}, in which $g$ is the objective function of the optimisation problem) at a prescribed pressure, temperature and overall composition conditions. The global minimum of this strongly non-linear function represents the equilibrium at such system coordinates $\left(T, P, z_{i}\right)$ and can be solved by any global optimisation method. The severe non-linearity of this objective function limits (or prevents) the use of gradient-based optimisation methods that are often faster (\ie more efficient) than gradient-free methods. In addition, gradient-based methods tends to converge to local extremum near the initial solution and are not able to leave such regions. Gradient-free methods do not rely on Hessian matrices and are often the preferred choice to solve constrained optimisation problems of highly non-linear objective functions.  
+
+This chapter summarises the main fundamentals for optimisation methods (constrained and non-constrained problems) and focuses on the description of the gradient-free and stochastic Simulated Annealing algorithm (SAA). As a random-search method, the SAA does not depend on the initial solution and is able to leave regions of local extremum in its search to the global extremum.
+
+\medskip
+
+The contents of this chapter were taken from \citet{Gomes_MSc_1999} and \citet{Jamil_2013} \citep[see also][]{gomes_2001,Kramer_BookChapter_2011,Rios_2013,Hicken_LectNote1,Hicken_LectNote2,Hicken_LectNote3}.
+}
+\end{adjustwidth}
+
 
 %%%
 %%% Section
@@ -14,7 +29,7 @@
 \subsection{Main Definitions}\label{Chapter:GlobalOpt:Section:Definitions}
 The main aim of optimisation methods is to find the {\it global optimum} (maximum or minimum) of a function. \citet{Pardalos_2000} \citep[see also][]{Piro_2016} gives a good overview on global optimisation methods. However, global optimum are often difficult to obtain except in a few problems\footnote{See also Appendix~\ref{Appendix:UnconstrainedOptimisationMethods}.}.
 
-\begin{itemize}
+\begin{enumerate}[i)]
 %%%
 \item {\bf Constrained and Non-Constrained Problems:} A \underline{constrained minimisation problem} is defined as,\index{Optimisation!Constrained problems}\index{Optimisation! Non-Constrained problems}
 \begin{shaded}
@@ -147,7 +162,7 @@ This establishes that $f^{\prime}\left(x;d\right)$ exists for all $x\in\text{ do
     Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}\cup\left\{+\infty\right\}$ be convex. Then, $f$ is bounded in a neighbourhood of a solution coordinate $x^{\ast}$ if and only if $f$ is Lipschitz\footnote{
 Let $f:\mathcal{R}^{n}\rightarrow\mathcal{R}^{n}$, the Lipschitz-continuous function is defined by:
     \begin{enumerate}[(a)]
-       \item Given an open set $\mathcal{B}\subseteq\mathcal{R}^{n}$, a function $f$ is called Lipschitz-continuous on the open subset $\mathcal{B}$ is there is a constant $\Lambda\in\mathcal{R}_{0}^{+}$ such that,
+       \item Given an open set $\mathcal{B}\subseteq\mathcal{R}^{n}$, a function $f$ is called Lipschitz-continuous on the open subset $\mathcal{B}$ if there is a constant $\Lambda\in\mathcal{R}_{0}^{+}$ such that,
            \begin{displaymath}
                \left\|f(x)-f(y)\right\| \le  \Lambda\left\|x-y\right\|, \hspace{.5cm} \forall[x,y]\in\mathcal{B}.
            \end{displaymath}
@@ -198,7 +213,7 @@ Convergence is assumed asymptotic if the solution is not found after a finite nu
 \begin{defn}[Feasible Direction] A linearly independent vector $d\in\mathcal{R}^{n}$ represents a feasible direction of a real function $f$ in $x\in\mathcal{S}$ if there is $\theta >0$, such that $x+t d\in \mathcal{S}$ for all $t\in\left.\left(0,\theta\right.\right]$.   
 \end{defn}
 
-\end{itemize}
+\end{enumerate}
 
 %%% Subsection
 \subsection{Conditions of Optimality}\label{Chapter:GlobalOpt:Section:ConditionsOptimality}

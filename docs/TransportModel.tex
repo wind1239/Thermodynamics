@@ -4,6 +4,13 @@
 %%%
 \chapter{Multi-Component Flow Model}\label{Chapter:CompositionalModel}
 
+\begin{adjustwidth}{1cm}{1cm}
+    {\it In Chapter~\ref{ChapterMultiFluidsModel}, the numerical formulation and solution methods used to discretise and solve the coupled extended Darcy and global continuity (saturation) equations were described. These equations were solved to obtain pressure, velocity, saturation and density of all phases. Such formulation assumes that each phase is uniform and neglects the existence of components. This chapter introduces an additional set of conservative equations for composition (molar or mass fractions) of the phases that are solved with the previous Darcy and saturation equations. The current compositional formulation assumes that species may be present in any or all phases, therefore the concept of equilibrium is not necessary.
+\medskip
+
+The contents of this chapter were taken from \citet{Fluidity_Manual}.
+}
+\end{adjustwidth}
 
 %%% SECTION
 \section{Introduction}\label{Chapter:CompositionalModel:Section:Introduction}\index{Multi-component model}
@@ -48,11 +55,13 @@ We can decouple the conservative equation into two equations (for simplicity let
              && \phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o} \right) + \nabla\cdot\left(\mfr[y]{i}{o}\mfr[\rho]{i}{o}\mfr[S]{}{o}\mfr[\mathbf{u}]{}{o}  \right) - K_{i}  = 0, \nonumber \\
              && \phi \displaystyle\frac{\partial}{\partial t}\left(\mfr[y]{i}{g}\mfr[\rho]{i}{g}\mfr[S]{}{g}  \right) + \nabla\cdot\left(\mfr[y]{i}{g}\mfr[\rho]{i}{g}\mfr[S]{}{g}\mfr[\mathbf{u}]{}{g} \right) + K_{i} = 0.  \nonumber
           \end{eqnarray}
-The term $K_{i}$ is selected as $K_{i}=\alpha_i \left(\mfr[y]{i}{g} - E_{i} \mfr[y]{i}{o}\right)$ (for positive $\alpha_{i}$), in an attempt to enforce a parameterisd equation of state, $\mfr[y]{i}{g} - E_{i} \mfr[y]{i}{o}=0 \Longrightarrow E_{i}=\frc{\mfr[y]{i}{g}}{\mfr[y]{i}{o}}$
-           \begin{eqnarray}
-               && \phi  \displaystyle\frac{\partial}{\partial t}\left(y_{i}^{o}\rho_i^{o}S^{o} \right) + \nabla\cdot\left(y_{i}^{o}\rho_i^{o}S^{o}\mathbf{u}^{o}  \right) - \alpha_i (y_i^g - E_i y_i^o)  = 0, \label{oil-comp-i} \nonumber\\
-               && \phi \displaystyle\frac{\partial}{\partial t}\left(y_{i}^{g}\rho_i^{g}S^{g}  \right) +  \nabla\cdot\left( y_{i}^{g}\rho_i^{g}S^{g}\mathbf{u}^{g}  \right) + \alpha_i (y_i^g - E_i y_i^o) = 0. \label{water-comp-i} \nonumber\label{Chapter:CompositionalModel:Section:MultiComponentFormulation:Section:2PhaseSystem:Eqn:MassConservationSaturation}
-           \end{eqnarray}
+The term $K_{i}$ is selected as $K_{i}=\alpha_i \left(\mfr[y]{i}{g} - E_{i} \mfr[y]{i}{o}\right)$ (for positive $\alpha_{i}$), in an attempt to enforce a parameterised equation of state, $\mfr[y]{i}{g} - E_{i} \mfr[y]{i}{o}=0 \Longrightarrow E_{i}=\frc{\mfr[y]{i}{g}}{\mfr[y]{i}{o}}$
+           \begin{subequations}
+             \begin{align}
+               && \phi  \displaystyle\frac{\partial}{\partial t}\left(y_{i}^{o}\rho_i^{o}S^{o} \right) + \nabla\cdot\left(y_{i}^{o}\rho_i^{o}S^{o}\mathbf{u}^{o}  \right) - \alpha_i (y_i^g - E_i y_i^o)  = 0, \label{oil-comp-i} \\
+               && \phi \displaystyle\frac{\partial}{\partial t}\left(y_{i}^{g}\rho_i^{g}S^{g}  \right) +  \nabla\cdot\left( y_{i}^{g}\rho_i^{g}S^{g}\mathbf{u}^{g}  \right) + \alpha_i (y_i^g - E_i y_i^o) = 0. \label{water-comp-i}
+            \end{align} %\label{Chapter:CompositionalModel:Section:MultiComponentFormulation:Section:2PhaseSystem:Eqn:MassConservationSaturation}
+           \end{subequations}
 
 These coupled equations are solved for $\mfr[y]{i}{o}$ and $\mfr[y]{i}{g}$ and for each $i$ component in {\it oil} phase, 
            \begin{equation}
@@ -81,13 +90,212 @@ in which $\beta$ is an order one scalar, e.g., $\beta=1$.
 \subsection{Three-Phase System}\label{Chapter:CompositionalModel:Section:MultiComponentFormulation:Section:3PhaseSystem}
 
 The formulation for 2 phases can be easily extended to 3 (or more) phases, e.g., oil, gas and water, and the global saturation equation can be rewritten as 
-     \begin{eqnarray}
-               \phi  \frc{\partial}{\partial t}\left(\mfr[y]{i}{1}\mfr[\rho]{i}{1}\mfr[S]{}{1} \right) &+& \nabla\cdot\left(\mfr[y]{i}{1}\mfr[\rho]{i}{1}\mfr[S]{}{1}\mfr[\mathbf{u}]{}{1}  \right) - \mfr[\alpha]{i}{1\;2} \left(\mfr[y]{i}{2} - \mfr[E]{i}{1\;2}\mfr[y]{i}{1}\right)  = \mfr[Q]{i}{1} ,\nonumber \label{phase1-comp-i} \\
-               \phi \frc{\partial}{\partial t}\left(\mfr[y]{i}{2}\mfr[\rho]{i}{2}\mfr[S]{}{2} \right) &+&  \nabla\cdot\left( \mfr[y]{i}{2}\mfr[\rho]{i}{2}\mfr[S]{}{2}\mfr[\mathbf{u}]{}{2} \right) + \mfr[\alpha]{i}{1\;2} \left(\mfr[y]{i}{2} - \mfr[E]{i}{1\;2} \mfr[y]{i}{1}\right)   - \nonumber \\
-              &&  \mfr[\alpha]{i}{2\;3} \left(\mfr[y]{i}{3} - \mfr[E]{i}{2\;3} \mfr[y]{i}{2}\right) = \mfr[Q]{i}{2} , \nonumber \label{phase2-comp-i} \\
-               \phi \frc{\partial}{\partial t}\left(\mfr[y]{i}{3}\mfr[\rho]{i}{3}\mfr[S]{}{3} \right) &+&  \nabla\cdot\left( \mfr[y]{i}{3}\mfr[\rho]{i}{3}\mfr[S]{}{3}\mfr[\mathbf{u}]{}{3}  \right) +  \mfr[\alpha]{i}{2\;3} \left(\mfr[y]{i}{3} - \mfr[E]{i}{2\;3} \mfr[y]{i}{2}\right) = \mfr[Q]{i}{3}, \nonumber\label{phase3-comp-i}
-    \end{eqnarray}
+     \begin{subequations}
+        \begin{align}
+               &&\phi  \frc{\partial}{\partial t}\left(\mfr[y]{i}{1}\mfr[\rho]{i}{1}\mfr[S]{}{1} \right) + \nabla\cdot\left(\mfr[y]{i}{1}\mfr[\rho]{i}{1}\mfr[S]{}{1}\mfr[\mathbf{u}]{}{1}  \right) - \mfr[\alpha]{i}{1\;2} \left(\mfr[y]{i}{2} - \mfr[E]{i}{1\;2}\mfr[y]{i}{1}\right)  = \mfr[Q]{i}{1} \label{phase1-comp-i} \\
+              && \phi \frc{\partial}{\partial t}\left(\mfr[y]{i}{2}\mfr[\rho]{i}{2}\mfr[S]{}{2} \right) +  \nabla\cdot\left( \mfr[y]{i}{2}\mfr[\rho]{i}{2}\mfr[S]{}{2}\mfr[\mathbf{u}]{}{2} \right) + \mfr[\alpha]{i}{1\;2} \left(\mfr[y]{i}{2} - \mfr[E]{i}{1\;2} \mfr[y]{i}{1}\right) - \mfr[\alpha]{i}{2\;3} \left(\mfr[y]{i}{3} - \mfr[E]{i}{2\;3} \mfr[y]{i}{2}\right) = \mfr[Q]{i}{2}, \label{phase2-comp-i} \\
+              && \phi \frc{\partial}{\partial t}\left(\mfr[y]{i}{3}\mfr[\rho]{i}{3}\mfr[S]{}{3} \right) +  \nabla\cdot\left( \mfr[y]{i}{3}\mfr[\rho]{i}{3}\mfr[S]{}{3}\mfr[\mathbf{u}]{}{3}  \right) +  \mfr[\alpha]{i}{2\;3} \left(\mfr[y]{i}{3} - \mfr[E]{i}{2\;3} \mfr[y]{i}{2}\right) = \mfr[Q]{i}{3}, \label{phase3-comp-i}
+       \end{align}
+    \end{subequations}
 with $\mfr[\alpha]{i}{j\;k} = \beta \frc{\phi \left(\mfr[\rho]{i}{j}\mfr[S]{}{j}  \frc{1}{\mfr[E]{i}{j\;k}} +\mfr[\rho]{i}{k}\mfr[S]{}{k} \right)}{\Delta t} $.
 
 
-$\mfr[Q]{i}{j}$ is the component $i$ source for phase $j$ and the overall component $i$ source is given by $Q_i=\summation_{j=1}^{{\cal N}_p} \mfr[Q]{i}{j}$.  The resulting constraint is the intersection of the lines $\mfr[y]{i}{2} - \mfr[E]{i}{1\;2} \mfr[y]{i}{1}=0$ and $\mfr[y]{i}{3} - \mfr[E]{i}{2\;3}\mfr[y]{i}{2}= 0$ on the phase diagram represented as a triangle with $\mfr[y]{i}{j}, \; j =1,2,3$ at each of the three corners of the triangle. The three $\mfr[y]{i}{j}, \; j =1,2,3$ for a given component $i$ represents a point (in area coordinates) on this diagram.
+$\mfr[Q]{i}{j}$ is the component $i$ source for phase $j$ and the overall component $i$ source is given by $Q_i=\summation_{j=1}^{{\cal N}_p} \mfr[Q]{i}{j}$.  The resulting constraint is the intersection of the lines $\mfr[y]{i}{2} - \mfr[E]{i}{1\;2} \mfr[y]{i}{1}=0$ and $\mfr[y]{i}{3} - \mfr[E]{i}{2\;3}\mfr[y]{i}{2}= 0$ on the phase diagram represented as a triangle with $\mfr[y]{i}{j}, \; j =1,2,3$ at each of the three corners of the triangle. The three $\mfr[y]{i}{j}, \; j =1,2,3$ for a given component $i$ represents a point (in area coordinates) on this diagram. 
+
+
+Notice that the sign alternates on the terms involving $\mfr[\alpha]{}{1\;2}$ and $\mfr[\alpha]{}{2\;3}$. The sign is choosen so that the diagonal coupling term between the phases is positive and thus it provides a relaxation of $\mfr[y]{i}{j}$ to satisfy the EOS. This is similar to non-equilibrium thermodynamics which are therefore easily applied using this approach. 
+
+
+Eliminating the terms involving $\mfr[\alpha]{}{1\;2}$ and $\mfr[\alpha]{}{2\;3}$ (in Eqns.~\ref{phase1-comp-i},~\ref{phase2-comp-i} and~\ref{phase3-comp-i}) results in the conservation equation, which is typically applied in equilibrium, satisfying composition models: 
+\begin{equation}
+    \summation_{j=1}^{\mathcal{N}_{p}} \left\{\phi \frc{\partial}{\partial t}\left[\mfr[y]{i}{j}\mfr[\rho]{i}{j}\mfr[S]{}{j} \right] + \nabla\cdot\left[\mfr[y]{i}{j}\mfr[\rho]{i}{j}\mfr[S]{}{j}\mathbf{\mfr[u]{}{j}} \right]  \right\} = Q_{i}, 
+\end{equation}
+but is also satisfied by non-equilibium models such as described here. 
+
+The application of EOS may not necessary result in a unique approach. For example, a third EOS may be generated by combining 
+\begin{displaymath}
+   \mfr[y]{i}{2}-\mfr[E]{i}{1\;2}\mfr[y]{i}{1} = 0 \;\text{ and }\; \mfr[y]{i}{3}-\mfr[E]{i}{2\;3}\mfr[y]{i}{2} = 0,
+\end{displaymath}
+to form
+\begin{displaymath}
+   \mfr[y]{i}{3}-\mfr[E]{i}{2\;3}\mfr[E]{i}{1\;2}\mfr[y]{i}{1} = 0 \;\text{ or }\; \mfr[y]{i}{3}-\mfr[E]{i}{1\;3}\mfr[y]{i}{1} = 0,
+\end{displaymath} 
+which links the first and third phases directly and thus may be preferred. In this case the component $i$ equations become: 
+     \begin{subequations}
+        \begin{align}
+            && \phi \frc{\partial}{\partial t} \left[ \mfr[y]{i}{1}\mfr[\rho]{i}{1}\mfr[S]{}{1} \right] + \nabla\cdot\left[\mfr[y]{i}{1}\mfr[\rho]{i}{1}\mfr[S]{}{1}\mathbf{\mfr[u]{}{1}}\right] - \mfr[\alpha]{i}{1\;2}\left[\mfr[y]{i}{2} - \mfr[E]{i}{1\;2} \mfr[y]{i}{1}\right] - \nonumber  \\
+            && \mfr[\alpha]{i}{1\;3} \left[\mfr[y]{i}{3} - \mfr[E]{i}{1\;3} \mfr[y]{i}{1}\right] = \mfr[Q]{i}{1} , \label{phase1-comp-i'} \\ 
+%
+            && \phi \frc{\partial}{\partial t} \left[ \mfr[y]{i}{2}\mfr[\rho]{i}{2}\mfr[S]{}{2} \right] + \nabla\cdot\left[\mfr[y]{i}{2}\mfr[\rho]{i}{2}\mfr[S]{}{2}\mathbf{\mfr[u]{}{2}}\right] + \mfr[\alpha]{i}{1\;2}\left[\mfr[y]{i}{2} - \mfr[E]{i}{1\;2}\mfr[y]{i}{1}\right] - \nonumber \\
+            && \mfr[\alpha]{i}{2\;3} \left[\mfr[y]{i}{3} - \mfr[E]{i}{2\;3} \mfr[y]{i}{2} \right] = \mfr[Q]{i}{2} , \label{phase2-comp-i'} \\
+%
+            && \phi \frc{\partial}{\partial t} \left[ \mfr[y]{i}{3}\mfr[\rho]{i}{3}\mfr[S]{}{3} \right] + \nabla\cdot\left[\mfr[y]{i}{3}\mfr[\rho]{i}{3}\mfr[S]{}{3}\mathbf{\mfr[u]{}{3}}\right] + \mfr[\alpha]{i}{2\;3}\left[\mfr[y]{i}{3} - \mfr[E]{i}{2\;3}\mfr[y]{i}{2}\right] + \nonumber \\
+            && \mfr[\alpha]{i}{1\;3} \left[\mfr[y]{i}{3} - \mfr[E]{i}{1\;3} \mfr[y]{i}{1}\right] = \mfr[Q]{i}{3}  . \label{phase3-comp-i'}
+        \end{align}
+     \end{subequations}
+
+
+%%% Subsection
+\subsection{Component source partitioning between the phases}\label{ComponentPhaseSourcePartitioning} 
+One way to choose the component $i$ source for phase $j$ -- $\mfr[Q]{i}{j}$, is simply to place all component $i$ source $\left(Q_{i}\right)$ into phase one, that is $\mfr[Q]{i}{1}=Q_{i}$ and  $\mfr[Q]{i}{k}=0, \; k=2,\cdots,\mathcal{N}_{p}$, bearing in mind that mass balance leads to  $Q_{i}=\summation_{j=1}^{\mathcal{N}_{p}} \mfr[Q]{i}{j}$. However, one is reliant on the terms involving $\mfr[\alpha]{i}{j\;k}$ in order to re-distribute the source between the phases so that the equilibrium conditions $\mfr[y]{i}{j} = \mfr[E]{i}{j\;k} \mfr[y]{i}{k}$ are satisfied. An alternative is to distribute the source in such a way that it is consistent with the equilibrium conditions which leads to:
+     \begin{subequations}
+        \begin{align}
+           && \mfr[Q]{i}{1} = \frc{\mfr[\rho]{i}{1} \mfr[S]{}{1} Q_{i}} {\mfr[\rho]{i}{1}\mfr[S]{}{1} + \summation_{k=1}^{\mathcal{N}_{p}}\mfr[\rho]{i}{k}\mfr[S]{}{k}\mfr[E]{i}{1\;k}},\hspace{2.5cm} \label{Qi1} \\
+%
+           && \mfr[Q]{i}{j} = \frc{\mfr[\rho]{i}{j} \mfr[S]{}{j} \mfr[E]{i}{1\;j} Q_{i}} {\mfr[\rho]{i}{1} \mfr[S]{}{1} + \summation_{k=1}^{\mathcal{N}_{p}} \mfr[\rho]{i}{k} \mfr[S]{}{k} \mfr[E]{i}{1\;k} }, \;\; j = 2,\cdots, \mathcal{N}_{p}.\label{Qi2}
+        \end{align}
+     \end{subequations}
+
+
+%%% SECTION
+\section{The Multi-Component Solution Method}\label{Chapter:CompositionalModel:Section:SolutionMethod}
+
+%%% Subsection
+\subsection{Solving the Discretised Linear Equations} \label{Chapter:CompositionalModel:Section:Structure_Yij}
+As there are no explicit coupling terms between the different components within the equations for $\mfr[y]{i}{j}$ (\eg Eqns.~\ref{phase1-comp-i},~\ref{phase2-comp-i},~\ref{phase3-comp-i}), for each component $i$ a coupled system of $\mathcal{N}_{p}$ equations need to be solved. When the equations for $\mfr[y]{i}{j}$ are discretised (in space and time) the result is a system of linear equations that needs to be solved at each time level, with a block structure strongly coupling the phases due to the presence of terms involving $\mfr[\alpha]{}{j\;k}$ (that enforce the EoS's).The larger the values of $\mfr[\alpha]{}{j\;k}$ the stronger this coupling. 
+
+The strength of this coupling is easily handled in the matrix equation solver used to solve the linear system of equations, by simply using a block type iterative matrix solver (\eg GMRES with BFGS\footnote{Generalised minimal residual method (GRMES) is an iterative method for non-symmetric system of equation. Broyden-Fletcher-Goldfarb-Shanno (BFGS) algorithm is an iterative method for solving unconstrained nonlinear optimization problems \citep[see][for full description of these methods]{Golub_Book,Bunch_Book,Xiao_2008}.} preconditioning). If explicit methods are to be used then it is suggested that all but the interphase coupling terms are treated explicitly. 
+
+%%% Subsection
+\subsection{Assessment of the Number of Equations and Unknowns $\mfr[y]{i}{j}$}\label{Chapter:CompositionalModel:Section:Assessment_Yij}
+From the previous sections, it is clear that the number of equations equals the number of unknowns. For example, in the 2 components problem, Eqns.~\ref{oil-comp-i}-~\ref{water-comp-i}, for each component $i$ there are two unknowns, $\mfr[y]{1}{j}$ and $\mfr[y]{2}{j}$, for a given phase $j$. These two equations could equally be seen as the EoS, $\mfr[y]{i}{g} - E_{i} \mfr[y]{i}{o} = 0$, and the phase summed component $i$, Eqn.~\ref{saturation_compositional_4}. 
+
+Similarly for the three phase system above in Section~\ref{Chapter:CompositionalModel:Section:MultiComponentFormulation:Section:3PhaseSystem}, the phase summed equation for component $i$ plus two equations of state for each phase $j$. The equation counts for the saturation, pressure and velocity equations are the same as for a non multi-component system. 
+
+%%% Subsection
+\subsection{Well-Posed $\mfr[y]{i}{j}$-Equations at Zero-Saturations $\mfr[S]{}{j}$}\label{Chapter:CompositionalModel:Section:ZeroSaturations} 
+Due to the presence of the terms involving $\mfr[\alpha]{}{j\;k}$, the systems of equations for $\mfr[y]{i}{j}$ always remain well-posed. When the saturation become zero, the resulting equation set is simply replaced by the EoS, \eg $\mfr[y]{i}{3} - \mfr[E]{i}{2\;3}\mfr[y]{i}{2} = 0$.
+
+%%% Subsection
+\subsection{Diffusion in the $\mfr[y]{i}{j}$-Equations} \label{Chapter:CompositionalModel:Section:DiffusionYij}
+The general form of the $\mfr[y]{i}{j}$-equations including diffusion is: 
+\begin{equation}
+\phi  \frc{\partial}{\partial t}\left[\mfr[y]{i}{j}\mfr[\rho]{i}{j}\mfr[S]{}{j} \right] + \nabla\cdot\left[\mfr[y]{i}{j}\mfr[\rho]{i}{j}\mfr[S]{}{j}\mathbf{\mfr[u]{}{j}}  \right] + \nabla\cdot\mfr[\rho]{i}{j}\mfr[S]{}{j}\mfr[\tau]{}{j}\nabla\mfr[y]{i}{j} + \summation_{k=1}^{\mathcal{N}_{p}} \mfr[\alpha]{i}{j\;k}\mfr[y]{i}{k} = \mfr[Q]{i}{j}. \label{diff-phasej-comp-i}
+\end{equation}
+Summing this equation over all components, $i$, and using $\summation_{i} \mfr[y]{i}{j}=1$, one can see that the diffusion term disappears from the resulting saturation equation. However, for space and/or time limiting the summation may not enable the diffusion terms to be eliminated from the saturation equations and thus the diffusion flux around each control volume also need to appear in the saturation equation.
+
+%%% Subsection
+\subsection{Discretisation Consistency and Flux-Limiting} \label{Chapter:CompositionalModel:Section:FluxLimiting}
+Now, testing Eqn.~\ref{diff-phasej-comp-i} with a top hat basis function $M_m$ and applying integration by parts over each control volume $m$, results in (ignoring diffusion and source terms for the time being, using backward-Euler on the interphase coupling terms and using $\theta$-time stepping -- \citet{gomes_book_2012}, for the advection terms): 
+
+\begin{eqnarray}
+    && \int\limits_{V_{m}} M_{m} \phi_{m} \left[ \frc{ \mfr[y]{i,m}{j,n+1} - \mfr[\tilde{\rho}]{i,m}{j,n+1} \mfr[\tilde{S}]{i,m}{j,n+1} - \mfr[y]{i,m}{j,n}\mfr[\rho]{i,m}{j,n}\mfr[S]{m}{j,n} }{\Delta t} \right] \d V + \nonumber \\
+%
+    && \int\limits_{\Gamma_{V_m}} \left\{ \mfr[\theta]{i}{j,n+1/2} \mfr[\hat{y}]{i}{j,n+1} \mfr[\hat{\rho}]{i}{j,n+1} \mfr[\hat{S}]{}{j,n+1} \mathbf{n}\cdot\mfr[\mathbf{u}]{}{j,n+1} + \left[1-\mfr[\theta]{i}{j,n+1/2}\right] \mfr[\hat{y}]{i}{j,n} \mfr[\hat{\rho}]{i}{j,n} \mfr[\hat{S}]{}{j,n} \mathbf{n}\cdot \mfr[\mathbf{u}]{}{j,n} \right\}  \d\Gamma \nonumber \\
+%
+    && + \int\limits_{\Gamma_{V_m}}  \mathbf{n}\cdot\mfr[\mathbf{g}]{i}{j,n+1/2}\d\Gamma + \int\limits_{V_m} M_m \summation_{k=1}^{\mathcal{N}_{p}} \mfr[a]{i,m}{j\;k} \left\{ \tilde{\theta}_{a} \mfr[y]{i,m}{k,n+1} + \left[1-\tilde{\theta}_{a}\right] \mfr[\tilde{y}]{i,m}{k,n+1}\right\} \d V  = 0. \label{disc-phasej-comp-i}
+\end{eqnarray}
+The hat represents flux limited values of the indicated solution variables at the quadrature points on the surface of the control volumes, and the tilde  represents the latest value of the associated variable within the iteration process, so on the first iteration this might be from the previous time step. The flux $\mathbf{n}\cdot\mfr[\mathbf{g}]{i}{j,n+\frac{1}{2}}$ is the result of the diffusion discretisation. 
+
+
+In general, the values of the time flux-limiting functions $\mfr[\theta]{i}{j,n+\frac{1}{2}}$ are also determined at each quadrature point on the control volume surfaces using a non-linear iteration. Dividing Eqn.~\ref{disc-phasej-comp-i} by $\mfr[\rho]{i,m}{j,n+1}$ then summing the result over all $i$-components results in the discretised equation for saturation: 
+\begin{eqnarray}
+    && \int\limits_{V_m} M_{m} \phi_{m} \left[ \frc{\mfr[\tilde{S}]{m}{j,n+1} - \mfr[S]{m}{j,n}}{\Delta t} \right]\d V + 
+       \int\limits_{\Gamma_{V_m}} \left\{ \mfr[\widehat{\Theta}]{m}{j, n+1/2} \mfr[\hat{S}]{}{j, n+1}\mathbf{n}\cdot \mfr[\mathbf{u}]{}{j, n+1} + \right.\nonumber \\
+    && \left. \mfr[\widehat{\left[1-\Theta\right]}]{m}{j, n+1/2}\mfr[\hat{S}]{}{j, n}\mathbf{n}\cdot \mfr[\mathbf{u}]{}{j, n}\right\}\d\Gamma 
+       = \int\limits_{V_m} M_{m} \mfr[m]{m}{j, n+1/2} \d V ,\label{disc-phasej-sat-i}
+\end{eqnarray}
+which has also used the summation constraints:  
+\begin{equation}
+   \summation_{i=1}^{\mathcal{N}_c} \mfr[y]{i,m}{j, n} = \summation_{i=1}^{\mathcal{N}_c}\mfr[y]{i,m}{j,n+1}=1,  \label{sum-constraint} 
+\end{equation}
+and the interphase mass exchange is:
+\begin{eqnarray}
+   \mfr[m]{m}{j, n+1/2} &=& -\summation_{i=1}^{{\cal N}_c} \frc{1}{ \mfr[\tilde{\rho}]{i,m}{j, n+1} \int\limits_{V_m}M_m dV} \int\limits_{\Gamma_{V_m}}  \mathbf{n}\cdot\mfr[\mathbf{g}]{i}{j,n+\frac{1}{2}}d\Gamma -\summation_{i=1}^{{\cal N}_c} \summation_{k=1}^{{\cal N}_p} \mfr[\alpha]{i,m}{j\;k} \frc{\mfr[y]{i,m}{k, n+1}}{\mfr[\tilde{\rho}]{i,m}{k, n+1}} \nonumber \\
+                        && -w_c \phi_m\frc{\mfr[\tilde{S}]{m}{j, n+1}}{\Delta t} \left[1- \summation_{i=1}^{{\cal N}_c} \mfr[y]{i,m}{j,n+1} \right] + \mfr[h]{m}{j, n+\frac{1}{2}},\label{disc-mass-exchange}
+\end{eqnarray}
+in which  $w_c\in [0, 1]$ helps enforcing the constraint $\summation_{i=1}^{{\cal N}_c} {y_{i}^{j}}_m^{n+1}=1$ and $w_c=1$ is the full correction whereas $w_c=0$ represents no correction -- generally $w_c=\frac{1}{2}$ is used. The full correction $w_c=1$ can be unstable. One can see that the term involving $w_c$ applies the summation constraint $\summation_i \mfr[y]{i,m}{k, n+1}=1$ as $w_c=1$ effectively replaces the summation of the time-implicit term on the r.h.s. of Eqn.~\ref{disc-phasej-comp-i}, that is:
+\begin{displaymath}
+    \phi_m  \frc{ \mfr[y]{i,m}{j, n+1}\mfr[\tilde{\rho}]{i,m}{j, n+1}\mfr[S]{m}{j,n+1}}{\Delta t}\;\; \text{ with }\;\;  \phi_{m}\frc{\mfr[S]{m}{j,n+1}}{\Delta t}.
+\end{displaymath}
+That is applying the summation constraint, $\summation_{i} \mfr[y]{i,m}{j, n+1}=1$. By ensuring positivity of the effective absorption in the saturation equation associated with the term involving $w_c$, the stability can be enhanced, \ie, this term is replaced by,
+\begin{displaymath}
+-w_c \phi_m\frc{\mfr[\tilde{S}]{m}{j, n+1}}{\Delta t} \max{\left\{ 1 - \summation_{i=1}^{\mathcal{N}_c} \mfr[y]{i,m}{j, n+1}, 0 \right\}}  . 
+\end{displaymath} 
+
+Also
+\begin{equation}
+    \phi_m \summation_{i=1}^{{\cal N}_c} \left[\frc{ \mfr[y]{i,m}{j,n+1} \mfr[\rho]{i,m}{j, n+1} \mfr[S]{m}{j, n+1} + \mfr[y]{i,m}{j,n} \mfr[\rho]{i,m}{j, n} \mfr[S]{m}{j, n}}{\mfr[\tilde{\rho}]{i,m}{j,n+1}\Delta t} \right] = -\mfr[h]{m}{j,n+\frac{1}{2}} + \phi_{m} \frc{\mfr[S]{m}{j,n+1}-\mfr[S]{m}{j,n}}{\Delta t},
+\end{equation}
+and using $\summation_{i}\mfr[y]{i,m}{j,n+1}=1$,
+\begin{equation}
+     \mfr[h]{m}{j, n+\frac{1}{2}} = \phi_{m} \mfr[S]{m}{j,n+1} \summation_{i}^{\mathcal{N}_{c}} \left[\frc{ \mfr[y]{i,m}{j,n+1} \mfr[\tilde{\rho}]{i,m}{j,n+1} - \mfr[y]{i,m}{j,n+1} \mfr[\rho]{i,m}{j,n+1}}{ \mfr[\tilde{\rho}]{i,m}{j,n+1}\Delta t}\right] - \phi_{m} \mfr[S]{m}{j,n} \summation_{i}^{\mathcal{N}_{c}} \left[\frc{ \mfr[y]{i,m}{j,n} \mfr[\tilde{\rho}]{i,m}{j,n+1} - \mfr[y]{i,m}{j,n} \mfr[\rho]{i,m}{j,n}}{ \mfr[\tilde{\rho}]{i,m}{j,n+1}\Delta t}\right].
+\end{equation}
+
+Now using
+\begin{displaymath} 
+    \mfr[\rho]{i,m}{j,n+1}=\mfr[\tilde{\rho}]{i,m}{j,n+1}+\mfr[b]{i,m}{j}\left(\mfr[p]{}{n+1}-\tilde{p}\right),\;\;\text{ with }\;\;\mfr[b]{i,m}{j}=\frc{\partial\mfr[\rho]{i,m}{j}\left(\tilde{p}\right)}{\partial p}\;\;\text{ and }\;\; \mfr[B]{m}{j} = \summation_{i=1}^{\mathcal{N}_{c}}\left[\frc{\mfr[y]{i,m}{j,n+1}\mfr[b]{i,m}{j}}{\mfr[\tilde{\rho}]{i,m}{j,n+1}}\right]
+\end{displaymath}  
+then
+\begin{equation}
+     \mfr[h]{m}{j, n+\frac{1}{2}} = -\phi_{m} \mfr[S]{m}{j,n+1} \frc{\mfr[B]{m}{j}\left[\mfr[p]{}{n+1}-\tilde{p}\right]}{\Delta t} - \phi_{m} \mfr[S]{m}{j,n} \summation_{i}^{\mathcal{N}_{c}} \left\{\frc{ \mfr[y]{i,m}{j,n} \left[\mfr[\tilde{\rho}]{i,m}{j,n+1} - \mfr[\rho]{i,m}{j,n} \right]}{ \mfr[\tilde{\rho}]{i,m}{j,n+1}\Delta t }\right\}.
+\end{equation}
+In Eqn.~\ref{disc-phasej-sat-i} the space/time flux limiting functions are: 
+     \begin{subequations}
+        \begin{align}
+           && \mfr[\widehat{\Theta}]{m}{j,n+\frac{1}{2}} = \summation_{i=1}^{\mathcal{N}_{c}}\mfr[\theta]{i}{j,n+\frac{1}{2}}\mfr[\hat{y}]{i}{j,n+1}\frc{\mfr[\hat{\rho}]{i}{j,n+1}}{\mfr[\tilde{\rho}]{i,m}{j,n+1}} \label{disc-phasej-X-i} \\
+           && \mfr[\left(\widehat{1-\Theta}\right)]{m}{j,n+\frac{1}{2}} = \summation_{i=1}^{\mathcal{N}_{c}}\left[1-\mfr[\theta]{i}{j,n+\frac{1}{2}}\right]\mfr[\hat{y}]{i}{j,n}\frc{\mfr[\hat{\rho}]{i}{j,n}}{\mfr[\tilde{\rho}]{i,m}{j,n+1}}. \label{disc-phasej-Y-i}
+        \end{align}
+     \end{subequations}
+An initial estimate of the iteration within a time-step might be 
+\begin{displaymath}
+    \mfr[\widehat{\Theta}]{m}{j,n+\frac{1}{2}}=1\;\;\text{ and }\;\;\mfr[\left(\widehat{1-\Theta}\right)]{m}{j,n+\frac{1}{2}}=0.
+\end{displaymath}
+The summations must be realised at the discrete level which includes the treatment of the spatial derivatives. Thus, the simplest way to achieve consistency and therefore bounded and conservative solutions is to use upwind differencing. However, this may not be efficient and when more accurate flux-limiting methods are used then equations similar to Eqns.~\ref{disc-phasej-X-i} and ~\ref{disc-phasej-Y-i} may be used as limiting functions. Some ways to achieve this consistency are: 
+\begin{enumerate}[i)]
+   \item to use the limiting functions (Eqns.~\ref{disc-phasej-X-i} and~\ref{disc-phasej-Y-i}); 
+   \item to use the same flux-limiting functions in the equations for the $\mfr[y]{i}{j}$ as used in the equations for the $\mfr[S]{}{j}$, thus if $\mfr[S]{}{j}$ uses upwinding schemes then so does $\mfr[y]{i}{j}$ calculations;
+   \item to use a specified value of $\mfr[\theta]{i}{j,n}$ (\eg $1$ or $\frac{1}{2}$) and flux-limiting methods that have in-built properties that ensures $\summation_{i} \mfr[\hat{y}]{i}{j,n}=1$ at each quadrature point on the CV boundaries; 
+   \item to apply no flux-limiting scheme on the $\mfr[y]{i}{j}$ calculations (a central difference, upwind or other linear scheme will normally obey the summation criteria $\summation_{i} \mfr[\hat{y}]{i}{j,n}=1$ on the CV boundaries) and use a specified $\theta$. This may cause the $\mfr[y]{i}{j}$ to become unbounded, but the saturation field of all phases, $\mfr[S]{}{j}$, if limited, will be bounded. 
+\end{enumerate}
+
+
+
+%%% Subsection
+\subsection{Satisfying the Equations} \label{Chapter:CompositionalModel:Section:SatisfyingEqns}
+Equation ~\ref{disc-phasej-comp-i} was divided by the compositional density, $\mfr[\rho]{i,m}{j,n+1}$, before being summed up to obtain Eqn.~\ref{disc-phasej-sat-i}. This stage is key as otherwise it will not form a linearly independent system of equations. A simple example is provided by single phase, two component incompressible flow. 
+
+The density equations might be a linear combination of the two components and thus the conservation of mass equation is simply a combination of these two compositional equations. However, the incompressability constraint $\nabla \cdot {\bf u}^n=0$ must also be satisfied. This is in fact the result of Eqn.~\ref{disc-phasej-sat-i} but it would not be enforced if Eqn.~\ref{disc-phasej-comp-i} was not divided through by the compositional density, $\mfr[\rho]{i,m}{j,n+1}$, before summing. 
+
+
+%%% Subsection
+\subsection{Satisfying Summation Constraints} \label{Chapter:CompositionalModel:Section:SatisfyingConstraints}
+The constraint $\summation_{j}\mfr[S]{}{j}=1$ is satisfied in the usual way by forming a global continuity equation, which is a weighted sum of the saturation equations and then applying the saturation constraint, $\summation_{j}\mfr[S]{}{j}=1$, at the unknown future time-level. The application of the summation constraints (Eqn.~\ref{sum-constraint}) in forming the saturation equations (Eqn.~\ref{disc-phasej-sat-i}) ensures that on convergence, within a time-step of the iterative process, the summation constraints are satisfied (\ie Eqn.~\ref{sum-constraint}). 
+
+
+That only way that both, Eqns.~\ref{disc-phasej-comp-i} and ~\ref{disc-phasej-sat-i}, can be satisfied, is if the summation constraints (Eqn.~\ref{sum-constraint}) are enforced. If one is unwilling to iterate within a time-step then the summation constraints can still be enforced in a similar way to the IMPES method~\citep[\ie implicit pressure explicit saturation method, see][for further details]{chen_2006,coats_2000,Haukas_2006}. That is IMPES plus explicit compositional (IMPESC) solution (solved sequentially after the saturation equations are solved). Another approach would be to solve the equation as implicitly as possible (\eg using the non-linear $\theta$-method) and on the final iteration within a time-step, use the latest guess for all variables in the terms, other than the time-terms (last iteration is explicit). This would ensure that all the summations constraints are exactly enforced and one can achieve second-order or higher accuracy in time. A draw back of this approach (also shared with IMPESC) is that for near zero (or at zero saturation) one may need a small amount of implicitness in order to ensure well-posedness of the system of equations for $\mfr[y]{i}{j}$. This may be realised using $\tilde\theta_a=1\times 10^{-4}$ in Eqn.~\ref{disc-phasej-comp-i}. 
+
+
+
+%%% Subsection
+\subsection{Implicit Treatment of Velocity}\label{Chapter:CompositionalModel:Section:ImpVelocity}
+In incompressible flows, velocity is often treated implicitly in the continuity equation which is formed from the set of compositional equations. However, if composition is treated explicitly using forward-Euler, then velocity can also be treated explicitly also in the compositional equations, and therefore the continuity equations. 
+
+This is a system that can not be solved for incompressible flows because of the infinite compressive wave speed. One way to avoid this issue is to treat velocity in the compositional equations more implicitly. Therefore, the surface term may contain:
+\begin{equation}
+    \theta\mfr[S]{}{n+1}\mfr[u]{}{n+1} + \left[1-\theta\right]\mfr[S]{}{n}\mfr[u]{}{n}. \label{adv-part} 
+\end{equation}
+If $\mfr[u]{}{n}$ is replaced by
+\begin{displaymath}
+    \mfr[\tilde{u}]{}{n} = \theta_{v}\mfr[u]{}{n+1} + \left[1-\theta_{v}\right]\mfr[u]{}{n},
+\end{displaymath}
+thus Eqn.~\ref{adv-part} becomes,
+\begin{equation}
+    \left\{\theta\mfr[S]{}{n+1} + \left[1-\theta\right]\mfr[S]{}{n}\theta_{v}\right\}\mfr[u]{}{n+1} + \left\{\left[1-\theta\right]\mfr[S]{}{n} \left[1-\theta_{v}\right]\right\}\mfr[u]{}{n}. 
+\label{adv-part-implicit-vel}
+\end{equation}
+Now if velocity is treated fully implicitly, then $\theta_{v}=1$. If however, the original discretisation is required then $\theta_{v}=0$. A criteria (assuming the saturation does not change in time and at least a 50$\%$ of the value of $u^{n+1}$ is used) may be set up as 
+\begin{displaymath}
+  \theta+\left[1-\theta\right]\theta_{v} \ge \frc{1}{2} 
+\end{displaymath}
+and thus if $\theta\ge\frac{1}{2}$ then $\theta_{v} = \hat{\theta_{v}}$ otherwise,  
+\begin{displaymath}
+\theta_{v} =\max{ \left\{ \frc{\frac{1}{2}-\theta}{1-\theta}, \hat{\theta}_{v} \right\}} , 
+\end{displaymath}
+in which $\hat\theta_{v}$ is the value that we should aim for. For example, $\hat{\theta}_v=0$ to avoid changing the value of $\theta$ or the time-stepping method, whenever possible. 
+
+
+%%% Subsection
+\subsection{Order of Solving the Global System of Equations} \label{Chapter:CompositionalModel:Section:OrderofSolving}
+In order to have access to the future saturation to help forming time-derivatives of compositional equations (Eqns.~\ref{phase1-comp-i}, \ref{phase2-comp-i}, \ref{phase3-comp-i}), the coupled saturation/velocity and pressure equations must be solved first (during a non-linear iteration within a time level). When the velocity/pressure equations are solved for, then an improved value of the future density, $\mfr[\rho]{i}{j}$, can be determined and used in the equations to calculate saturation of the phases. The final step in the iteration for a time step is to determine $\mfr[y]{i}{j}$. 
+
