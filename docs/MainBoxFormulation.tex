@@ -466,7 +466,7 @@ The main issue is to calculate $\frc{\partial\ln\varphi_{i}}{\partial x_{j}}$ fr
 \section{Phase Stability Analysis}\label{Chapter:ThermodynamicFormulation:Section:PhaseStabilityAnalysis}
 This section aims to investigate the thermodynamic stability of multi-component in two-phase systems. 
 
-Let's consider a system at prescribed temperature, $T$ and pressure, $P$, conditions has chemical species with $n_{1}, n_{2}, \cdots, n_{c}$ moles. For simplicity, let's first assume that the whole mixture is at vapour phase, and the Gibbs free energy of the system is,
+Let's consider a system at prescribed temperature, $T$, and pressure, $P$, conditions and with chemical species of $n_{1}, n_{2}, \cdots, n_{c}$ moles. For simplicity, let's first assume that the whole mixture is at vapour phase, and the Gibbs free energy of the system is,
 \begin{equation}
    G_{0} \equiv \mfr[G]{}{V}\left(\mfr[n]{1}{V}, \mfr[n]{2}{V}, \cdots, \mfr[n]{c}{V}\right) = \summation_{i=1}^{n_{c}}\mfr[n]{i}{V}\mfr[\mu]{i}{V}.
 \end{equation}   
@@ -474,9 +474,14 @@ The chemical potential of each component in the vapour phase is a homogeneous fu
 \begin{displaymath}
    \mfr[\mu]{i}{V}\left(\mfr[n]{1}{V}, \mfr[n]{2}{V}, \cdots, \mfr[n]{c}{V}\right) = \mfr[\mu]{i}{V}\left(z_{1},z_{2}, \cdots, z_{n_{c}}\right),
 \end{displaymath}
-where $z_{i}=\frc{\mfr[n]{i}{V}}{\summation_{i=1}^{n_{c}}\mfr[n]{i}{V}}$ is the overall composition of component $i$in the mixture. Let's now impose a small perturbation to the mixture as so as it splits into two phases -- liquid and vapour, with $\mfr[n]{i}{V}-\mfr[\varepsilon]{i}{L}$ and $\mfr[\varepsilon]{i}{L}$ moles $\left(\text{with }i=1, \cdots, n_{c}\right)$, respectively. $\mfr[\varepsilon]{i}{L}$ is an infinitesimal number of moles of species $i$. 
+where $z_{i}=\frc{\mfr[n]{i}{V}}{\summation_{i=1}^{n_{c}}\mfr[n]{i}{V}}$ is the overall composition of component $i$ in the mixture. Let's now impose a small perturbation to the mixture as so as it splits into two phases -- liquid and vapour, with $\mfr[n]{i}{V}-\mfr[\varepsilon]{i}{L}$ and $\mfr[\varepsilon]{i}{L}$ moles $\left(\text{with }i=1, \cdots, n_{c}\right)$, respectively. $\mfr[\varepsilon]{i}{L}$ is an infinitesimal number of moles of species $i$. 
 
-If $\mfr[x]{i}{V}=\frc{\mfr[n]{i}{V}-\mfr[\varepsilon]{i}{L}}{\summation_{i=1}{n_{c}}\left(\mfr[n]{i}{V}-\mfr[\varepsilon]{i}{L}\right)}$ and $\mfr[x]{i}{V}=\frc{\mfr[\varepsilon]{i}{L}}{\summation_{i=1}{n_{c}}\mfr[\varepsilon]{i}{L}}$ are the molar fraction of component $i$ in the vapour and liquid phases, respectively, then the Gibbs free energy of the system in the new equilibrium state can be expressed as,
+\medskip
+If
+\begin{displaymath}
+   \mfr[x]{i}{V}=\frc{\mfr[n]{i}{V}-\mfr[\varepsilon]{i}{L}}{\summation_{i=1}^{n_{c}}\left(\mfr[n]{i}{V}-\mfr[\varepsilon]{i}{L}\right)} \;\;\text{ and }\;\; \mfr[x]{i}{L}=\frc{\mfr[\varepsilon]{i}{L}}{\summation_{i=1}^{n_{c}}\mfr[\varepsilon]{i}{L}},
+\end{displaymath}
+ are the molar fraction of component $i$ in the vapour and liquid phases, respectively, then the Gibbs free energy of the system in the new equilibrium state can be expressed as,
 \begin{subequations}
   \begin{align}
    &G_{I} \equiv \mfr[G]{}{V}\left(\mfr[n]{1}{V}-\mfr[\varepsilon]{1}{L}, \cdots, \mfr[n]{c}{V}-\mfr[\varepsilon]{n_{c}}{L}\right) + \mfr[G]{}{L}\left(\mfr[\varepsilon]{1}{L}, \cdots, \mfr[\varepsilon]{n_{c}}{L}\right), \\
@@ -487,7 +492,8 @@ If $\mfr[x]{i}{V}=\frc{\mfr[n]{i}{V}-\mfr[\varepsilon]{i}{L}}{\summation_{i=1}{n
 \end{subequations}
 The main assumption here is that \underline{all components are presented in all phases}, i.e., $0<\mfr[x]{i}{V}<1$ and $0<\mfr[x]{i}{L}<1$, $\forall i=1, \cdots, n_{c}$. 
 
-Now, let's suppose that the perturbation inmposed to the original system does not result in any phase split, i.e.,
+\medskip
+Now, let's suppose that the perturbation imposed to the original system does not result in any phase split, i.e.,
 \begin{equation}
     G_{II} \equiv G_{0} = \mfr[G]{}{V}\left(\mfr[n]{1}{V}, \cdots, \mfr[n]{c}{V}\right) = \summation_{i=1}^{n_{c}}\mfr[n]{i}{V}\mfr[\mu]{i}{V} \left(z_{1}, \cdots, z_{n_{c}}\right).
 \end{equation}
