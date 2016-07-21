@@ -44,8 +44,8 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
           as defined in the 'Benchmarks.in' file.   
     =================================================================== """
     
-    N_Tests, dummy = IO.CountingNumberOfTests( ) # Checking the total number of test-cases.
     if( Task == 'Benchmarks' ):
+        N_Tests, dummy = IO.CountingNumberOfTests( ) # Checking the total number of test-cases.
         if kwargs:
             for key in kwargs:
                 if ( key == 'FileName' ):
