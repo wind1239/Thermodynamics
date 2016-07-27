@@ -39,6 +39,8 @@ def Envelope_Constraints( X, **kwargs ):
                 Try = kwargs[ key ]
             elif ( key == 'IsNormalised' ):
                 IsNormalised = kwargs[ key ]
+            elif ( key == 'Z_Feed' ):
+                Z_Feed = kwargs[ key ]
 
     else:
          LowerBounds = SaT.LowerBounds
@@ -51,11 +53,11 @@ def Envelope_Constraints( X, **kwargs ):
         dim = n - 1
     else:
         dim = n
-
         
     while TryAgain:
            
-        for i in range( dim ):
+        #for i in range( dim ):
+        for i in range( n ):
             if ( ( X[ i ] < LowerBounds[ i ]) or ( X[ i ] > UpperBounds[ i ] ) ):
                 rand = RanGen.RandomNumberGenerator( n )
                 X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
@@ -68,18 +70,26 @@ def Envelope_Constraints( X, **kwargs ):
             Sum = ListSum( X[ 0 : dim ] )
 
             if ( Sum < 1. ):
-                X[ n - 1 ] = 1. - Sum
-                TryAgain = False
-                if kwargs:
-                    for key in kwargs:
-                        if ( key == 'TryC' ):
-                            return X, Try
-                        else:
-                            return X
-                else:
-                    return X
+                SumOneOtherPhase = CalcOtherPhase( X, Z_Feed, UpperBounds, LowerBounds )
+                if SumOneOtherPhase:
+                    TryAgain = False
+                    if kwargs:
+                        for key in kwargs:
+                            if ( key == 'TryC' ):
+                                return X, Try
+                            else:
+                                return X
+                    else:
+                        return X
+                else: # It did not satisfy the Box Formulation
+                    rand = RanGen.RandomNumberGenerator( n )
+                    X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
+                        rand[ i ]
+                    X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
+                    
             else:
-                for i in range( dim ):
+                #for i in range( dim ): # This may need to be re-assesed later ...
+                for i in range( n ): # This may need to be re-assesed later ...
                     rand = RanGen.RandomNumberGenerator( n )
                     if( evaluations % 3 == 0 ):
                         X[ i ] = rand[ i ]
@@ -91,7 +101,21 @@ def Envelope_Constraints( X, **kwargs ):
                         X[ i ] = rand[ i - 1 ]
 
                 evaluations = evaluations + 1
-                Try = True
+                
+                Sum = ListSum( X[ 0 : dim ] )
+                if ( Sum < 1. ):            
+                    SumOneOtherPhase = CalcOtherPhase( X, Z_Feed, UpperBounds, LowerBounds )
+                    Try = True
+                    if SumOneOtherPhase:
+                        TryAgain = False
+                        if kwargs:
+                            for key in kwargs:
+                                if ( key == 'TryC' ):
+                                    return X, Try
+                                else:
+                                    return X
+                        else:
+                            return X
 
             """ ################################################################################
                   Here it needs to be add a function to ensure feasibility of the composition
@@ -111,6 +135,39 @@ def Envelope_Constraints( X, **kwargs ):
             else:
                 return X
 
+###
+### Calculating the other phase
+###
+def CalcOtherPhase( X, Z, UB, LB ):
+    """ This function calculates the composition of the other phase. The input is X[0:N], where X[N-1]
+            is the phase composition. Z[0:N] is the feed composition. UB and LB are the lower and upper
+            bound arrays.                                                                               """
+    N = len( Z )
+    Lphase = X[ N - 1 ] ;  Vphase = 1. - Lphase
+    
+    MFrac = [ 0. for i in range( N * N ) ] # Generating an null array
+    for i in range( N - 1 ):
+        MFrac[ i ] = X[ i ]
+
+    MFrac[ N - 1 ] = 1. - ListSum( MFrac[ 0 : N - 1 ] )
+
+    for i in range( N ):
+        MFrac[ N + i ] = ( Z[ i ] - Lphase * MFrac[ i ] ) / Vphase
+
+        #print 'MFrac:', MFrac
+
+    for i in range( N ): # Checking bounds at the other phase
+        if MFrac[ N + i ] < LB[ i ] or MFrac[ N + i ] > UB[ i ]:
+            TestOtherPhase = False
+            return TestOtherPhase
+
+    SumOtherPhase =  ListSum( MFrac[ N:N*N ] )
+    if abs( SumOtherPhase - 1. ) <= 1.0e-7:
+        TestOtherPhase = True
+    else:
+        TestOtherPhase = False
+    return TestOtherPhase
+           
 
 ###
 ### Converting anything to wither integer or float

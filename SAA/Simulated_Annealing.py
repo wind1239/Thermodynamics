@@ -43,6 +43,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
           respectively, where N is the number of the required test-case  
           as defined in the 'Benchmarks.in' file.   
     =================================================================== """
+
     
     if( Task == 'Benchmarks' ):
         N_Tests, dummy = IO.CountingNumberOfTests( ) # Checking the total number of test-cases.
@@ -60,7 +61,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             for key in kwargs:
                 if ( key == 'FileName' ): 
                     ProblemFileName = kwargs[ key ]
-                    Test = 0 ; N_Tests = 0
+                    Test = 0 ; N_Tests = 1
              
     else:
         sys.exit( 'In SimulatedAnnealing function. Option not found' )
@@ -71,7 +72,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         Now, depending on the case, 'Benchmarks' or 'Problem' we 
           proceed the optimisation, if:
     
-              a) 'Problem': then N_Tests = 0 and we run SAA just once
+              a) 'Problem': then N_Tests = 1 and we run SAA just once
                             or
               b) 'Benchmarks': there are 2 options here,
                   b.1 ) 'All': it will read each cooling schedule 
@@ -124,7 +125,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             Func = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X ) 
             
         else: # Problems
-            Func = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X )
+            Func, Z_Feed = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X )
             
         """ The function must be minimum """
         if SaT.Minimum:
@@ -133,7 +134,6 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         """"                  Printing into the *out file                    """
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
-        
 
         """
             ===================================================================
@@ -141,7 +141,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             ===================================================================
         """      
 
-        X_OPT, F_OPT = ASA_Loops( Task, Func )
+        X_OPT, F_OPT = ASA_Loops( Task, Func, Z_Feed )
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
@@ -189,7 +189,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 ###
 ### Main SA loop
 ###
-def ASA_Loops( Task, Func ):
+def ASA_Loops( Task, Func, Z_Feed ):
         
     """ For debugging """
     #pdb.set_trace()
@@ -248,8 +248,10 @@ def ASA_Loops( Task, Func ):
                     else:
                         dim = SaT.Ndim
 
-                    for i in range( dim ):
-                        rand = RanGen.RandomNumberGenerator( dim )
+                    #for i in range( dim ):
+                    for i in range( SaT.Ndim ):
+                        rand = RanGen.RandomNumberGenerator( SaT.Ndim )
+                        #rand = RanGen.RandomNumberGenerator( dim )
 
                         if ( i == hloop ):
                             XP[ i ] = X_Try[ i ] + SaT.VM[ i ] * ( 2. * rand[ i ] - 1. ) 
@@ -261,10 +263,12 @@ def ASA_Loops( Task, Func ):
                               for compositional constraints.
                         =========================================================== """
                     if Fraction:
-                        XP[ dim - 1 ] = 1. - SpFunc.ListSum( XP[ 0 : dim ] )
+                        XP[ dim ] = X_Try[ dim ]
+                        #XP[ SaT.Ndim ] = X_Try[ SaT.Ndim ]
+
                         
-                        
-                    SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
+                    SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, Z_Feed = Z_Feed )
+                    
                     
                     if Try:
                         LNobds += 1
@@ -274,7 +278,10 @@ def ASA_Loops( Task, Func ):
                     if Task == 'Benchmarks':
                         FuncP = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, XP )
                     else: # Problems
-                        FuncP = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, XP )
+                        FuncP, dummy = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, XP )
+
+                    #print 'here we are again .... oh dear :::',  XP, FuncP
+                    #sys.exit()
 
                         
                     """ The function must be minimum """
@@ -324,7 +331,10 @@ def ASA_Loops( Task, Func ):
                             for i in range( SaT.Ndim ):
                                 XOpt_f[i] = XP[i]
 
+                        if Task == 'Benchmarks':
                             print 'NFCNEV(', NFCNEV, '), XOpt: ', XOpt_f, ' with FOpt: ', FOpt, '(Analytical:', -BTest.TestFunction( SaT.Function_Name, SaT.Ndim, SaT.BenchmarkSolution[ 0 : SaT.Ndim ] ),')'
+                        else:
+                            print 'NFCNEV(', NFCNEV, '), XOpt: ', XOpt_f, ' with FOpt: ', FOpt
                             
                             if SaT.Debugging == True :
                                 IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt_f, b = FOpt ) + '\n')
