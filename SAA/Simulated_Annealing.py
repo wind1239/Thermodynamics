@@ -141,7 +141,10 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             ===================================================================
         """      
 
-        X_OPT, F_OPT = ASA_Loops( Task, Func, Z_Feed )
+        if Task == 'Benchmarks':
+            X_OPT, F_OPT = ASA_Loops( Task, Func )
+        else: # Problems
+            X_OPT, F_OPT = ASA_Loops( Task, Func, Z_Feed = Z_Feed )
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
@@ -189,11 +192,17 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 ###
 ### Main SA loop
 ###
-def ASA_Loops( Task, Func, Z_Feed ):
+def ASA_Loops( Task, Func, **kwargs ):
         
     """ For debugging """
     #pdb.set_trace()
+
     TestName = SaT.Function_Name
+    if kwargs:
+        for key in kwargs:
+            if ( key == 'Z_Feed' ):
+                Z_Feed = kwargs[ key ]
+        
 
     IO.f_SAOutput.write( '\n' )
     IO.f_SAOutput.write( 'Initialising SA Algorithm for: {a:}'.format( a = TestName ) + '\n' )
@@ -266,8 +275,10 @@ def ASA_Loops( Task, Func, Z_Feed ):
                         XP[ dim ] = X_Try[ dim ]
                         #XP[ SaT.Ndim ] = X_Try[ SaT.Ndim ]
 
-                        
-                    SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, Z_Feed = Z_Feed )
+                    if Task == 'Benchmarks':
+                        SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
+                    else:
+                        SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, Z_Feed = Z_Feed )
                     
                     
                     if Try:
