@@ -12,6 +12,7 @@ import SpecialFunctions as SpFunc
 import SAA_Tools as SaT
 import ObjectiveFunction as ObF
 import time
+import pdb
 
 """ =========================================================================
 
@@ -134,6 +135,9 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         """"                  Printing into the *out file                    """
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
+        if Task == 'Problem':
+            SpFunc.CalcOtherPhase( SaT.SA_X, Z_Feed, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
+
 
         """
             ===================================================================
@@ -267,18 +271,22 @@ def ASA_Loops( Task, Func, **kwargs ):
                         else:
                             XP[ i ] = X_Try[ i ]
 
+                        #pdb.set_trace()
+
                     """ ===========================================================
                             Feasibility Test (only for Thermod problems) -- check
                               for compositional constraints.
                         =========================================================== """
-                    if Fraction:
-                        XP[ dim ] = X_Try[ dim ]
+                    #if Fraction:
+                    #    XP[ dim ] = X_Try[ dim ]
                         #XP[ SaT.Ndim ] = X_Try[ SaT.Ndim ]
 
                     if Task == 'Benchmarks':
                         SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
                     else:
                         SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, Z_Feed = Z_Feed )
+
+                    #sys.exit()
                     
                     
                     if Try:
@@ -384,6 +392,7 @@ def ASA_Loops( Task, Func, **kwargs ):
                             NRej += 1
 
                     """ End of h loop """
+                    #pdb.set_trace()
                     hloop += 1
                     
                 """ End of j loop """
@@ -463,6 +472,8 @@ def ASA_Loops( Task, Func, **kwargs ):
                 FOpt = -FOpt
 
             Print.Print_SAA_Diagnostic( Termination = 'yes', FOpt = FOpt, NRej = NRej, XOpt = XOpt_f, NFCNEV = NFCNEV )
+            if Task == 'Problem':
+                SpFunc.CalcOtherPhase( XP, Z_Feed, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
 
             return XOpt_f, FOpt
 
