@@ -35,11 +35,13 @@ Accentric_Factor            0.01          0.09
 # Composition of the feeding stream (z, dimensionless)
 Feed_Composition            0.275         0.725
 
+
 # Binary interaction parameter
 # Component_i Component_j Value
 BinaryInteraction
 1      2        0.0923
 2      1        0.0923
+
 
 # Wilson equation parameters
 # Component_i Component_j Value
