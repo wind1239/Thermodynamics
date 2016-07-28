@@ -23,7 +23,7 @@ def Q( MFrac ):
             #Q1[ i ] = Q1[ i ] + MFrac[ i ] * MFrac[ j ] * F[ node ]     # Calculating the whole F first
             Q1 = Q1 + MFrac[ i ] * MFrac[ j ] * BART2( i, j )            # Falculating F when we need
             #print ' ** the Q1 = ', Q1, ' the MFrac i and j are ', MFrac[ i ], MFrac[ j ],  
-    print
+    #print
     return Q1
 
 
@@ -32,7 +32,7 @@ def D( MFrac ):
     D1 = 0
     for i in range(ThT.NComp):
         D1 = D1 + MFrac[ i ] * ( PR.PREoS_Calc_b( i ) - PR.PREoS_Calc_a( i, ThT.T_Crit[i] ) / ThT.Rconst * ThT.T_System[ 0 ] ) + ( lng.gibbs( MFrac ) / c * ThT.Rconst * ThT.T_System[ 0 ] )
-    print
+    #print
     return D1
 
 
@@ -40,13 +40,13 @@ def AM( MFrac ):
     #print ' ** i am at the AM( MFrac ) function ', ThT.Rconst, ThT.T_System[ 0 ]
     #print ' ** ', Q( MFrac )
     AM1 = ( ThT.Rconst * ThT.T_System[ 0 ] ) * Q( MFrac ) * D( MFrac ) / ( 1 - D( MFrac ) )
-    print
+    #print
     return AM1
 
 
 def BM( MFrac ):
     BM1 = Q( MFrac ) / ( 1 - D( MFrac ) )
-    print
+    #print
     return BM1
 
 
@@ -56,7 +56,7 @@ def DQ( MFrac ):
         for j in range(ThT.NComp):
             node = i * ThT.NComp + j
             DQ1[ i ] = 2 * ( DQ1[ i ] + MFrac[ j ] * BART2( i, j ) )
-    print
+    #print
     return DQ1
 
 
@@ -65,10 +65,10 @@ def DD( MFrac ):
     c = (1 / np.sqrt(2)) * np.log( np.sqrt(2)-1 )
     for i in range(ThT.NComp):
         DD1 = ( PR.PREoS_Calc_a( i, ThT.T_System[0] ) / ( PR.PREoS_Calc_b( i ) * ThT.Rconst * ThT.T_System[ 0 ] ) ) + lng.ln_gamma( MFrac ) / c
-    print
+    #print
     return DD1
 
 def B( MFrac ):
     B1 = ( BM( MFrac ) * ThT.P_System[0] ) / ( ThT.Rconst * ThT.T_System[ 0 ] )
-    print 
+    #print 
     return B1

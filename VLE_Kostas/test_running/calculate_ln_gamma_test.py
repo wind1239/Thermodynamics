@@ -40,5 +40,5 @@ def gibbs( MFrac ):
             #print ' the node in is = ', node
             gibbs1 = - ( ThT.Rconst * ThT.T_System[ 0 ] ) * ( gibbs1 + MFrac[ j ] * ( np.log( MFrac [ i ] * ThT.Lamda_wilson[ node ] ) ) ) 
     #print '  the Gibbs energy in excess for the mixture of ', ThT.Species[i] , ThT.Species[j], ' is Ge = ', gibbs1
-    print
+    #print
     return gibbs1

@@ -2,8 +2,11 @@
 
 import numpy as np
 import math
-import sys
-
+import os, sys
+# Add here the Functions that will be optimised
+lib_path = os.path.abspath('../../SAA' ) # path to SAA
+sys.path.append( lib_path ) # <== Adding the above in the sys path for python
+import SAA_Tools as SaT
 # =================== ASSOCIATED/EXTERNAL FUNCTIONS ====================#
 
 
@@ -26,7 +29,9 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
 
     ''' Open a file named 'input.dat' that contains all thermo-physical parameters for
         the model '''
-    with open( '../VLE_Kostas/test_running/input_test.dat', 'rt' ) as file:
+    Filename = SaT.Function_Name + '.dat'
+    with open( '../VLE_Kostas/test_running/' + Filename, 'rt' ) as file:
+    #with open( '../VLE_Kostas/test_running/input_test.dat', 'rt' ) as file:
     #with open( 'input_test.dat', 'rt' ) as file:
         reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
         
@@ -80,8 +85,7 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                     Lamda_wilson = ReadingLamda_wilson( reader )
     #
             else:
-                print 'Number_components was not defined in the FIRST line'
-                sys.exit()
+                sys.exit( 'Number_components was not defined in the FIRST line' )
                 
 
 # This function reads a row containing float elements

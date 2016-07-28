@@ -12,10 +12,10 @@ import calculate_terms_test as terms
 
 def CALC_FI( iphase, frac ):
     lnfi = [ 0. for i in range( ThT.NComp ) ]
-    print
-    print ' * TSystem, PSystem = ', ThT.T_System[0], ThT.P_System[0]
-    print ' * the terms.AM( frac ), terms.BM( frac ) = ', terms.AM( frac ), terms.BM( frac )
-    print 
+    #print
+    #print ' * TSystem, PSystem = ', ThT.T_System[0], ThT.P_System[0]
+    #print ' * the terms.AM( frac ), terms.BM( frac ) = ', terms.AM( frac ), terms.BM( frac )
+    #print 
     zmax , zmin = PR.Cubic_PR( ThT.T_System[0], ThT.P_System[0], terms.AM( frac ), terms.BM( frac ) )
 
     DD_KC = [ 0. for i in range( ThT.NComp ) ]
@@ -44,7 +44,7 @@ def CALC_FI( iphase, frac ):
         #print ' term3 = ', term3
         #print ' term4 = ', term4
         lnfi[ i ] = term1 + term2 + term3 * term4
-        print '    fi = ', lnfi[ i ], ' for the MFrac = ', frac[ i ] 
+        #print '    fi = ', lnfi[ i ], ' for the MFrac = ', frac[ i ] 
     
     return lnfi
 

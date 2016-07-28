@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import numpy as np
-import math
-import sys
+import math, sys, time
+#import sys
 import thermotools_test as ThT
 import calculate_EOS_PR_test as PR
 import calculate_ln_gamma_test as lng
@@ -13,7 +13,8 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import matplotlib.pyplot as plt
-import time 
+#import time 
+import pdb
 
 ###
 ### Functions Call_Calc_ChemPot
@@ -84,7 +85,7 @@ def GibbsCalculation( XSolution ):
 
 #    print
 #    print
-#    print ' = = = = = = = = = = = = = = = = = = = = = = = = = BEGIN OF THE GIBBS CALCULATIONS = = = = = = = = = = = = = = = = = = = = = = = = '
+    print ' = = = = = = BEGIN OF THE GIBBS CALCULATIONS = = = =  = = = = = = '
 #    print
 #    print
 
@@ -114,6 +115,8 @@ def GibbsCalculation( XSolution ):
         Sum2 = Sum2 + MFrac[ icomp ]
 
     MFrac[ ThT.NComp - 1 ] = 1. - Sum2 # Determining MFrac @ Vapour Phase (last component)
+
+    pdb.set_trace()
 
     ChemPot = Call_Calc_ChemPot( MFrac ) # ChemPot has dimension (NPhase * NComp)
 

@@ -13,7 +13,7 @@ def Calc_ChemPot( iphase, MFrac ):
     lnPXi = [0. for i in range(ThT.NComp) ]
     #print 
     #print ' ---------------------------------------------------------------------------- lnPXi =',lnPXi, ' ChemPot =', ChemPot 
-    print
+    #print
     lnphi = fi.CALC_FI( iphase, MFrac ) # lnphi is the 1st term of the rhs of the equation and contains Nc components 
     #print ' --------------------------------------------------------------------- the lnphi from above is = ', lnphi 
     # Calculating second-term of the rhs
