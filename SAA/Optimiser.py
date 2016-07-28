@@ -72,10 +72,6 @@ if Task == 'Problem':
 else:
     IO.OutPut( Task, Method, Benchmark_Number = TestCases )
 
-
-""" Generating X_Opt array """
-#X_Opt = []
-
 """ Calling the optimisation routine """
 
 if ( Method == 'SAA' or Method == 'SA' ):
