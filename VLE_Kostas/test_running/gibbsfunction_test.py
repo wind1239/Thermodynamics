@@ -25,7 +25,7 @@ def Call_Calc_ChemPot( MFrac ):  # This function will ...
         node_init = iphase * ThT.NComp ; node_final = iphase * ThT.NComp + ThT.NComp
         ChemPot = [0. for z in range(ThT.NComp * ThT.NPhase) ] # Creating a temporary array ChemPot
 
-        print MFrac[ node_init:node_final ], node_init, node_final
+        #print MFrac[ node_init:node_final ], node_init, node_final
         ChemPot[ node_init:node_final ] = chemp.Calc_ChemPot( iphase, MFrac[ node_init : node_final ] )
 
     # End Loop for Phases
@@ -85,7 +85,7 @@ def GibbsCalculation( XSolution ):
 
 #    print
 #    print
-    print ' = = = = = = BEGIN OF THE GIBBS CALCULATIONS = = = =  = = = = = = '
+#    print ' = = = = = = BEGIN OF THE GIBBS CALCULATIONS = = = =  = = = = = = '
 #    print
 #    print
 
@@ -114,9 +114,10 @@ def GibbsCalculation( XSolution ):
         MFrac[ icomp ] = ( ThT.Z_Feed[ icomp ] - Lphase * MFrac[ ThT.NComp + icomp ] ) / Vphase
         Sum2 = Sum2 + MFrac[ icomp ]
 
-    MFrac[ ThT.NComp - 1 ] = 1. - Sum2 # Determining MFrac @ Vapour Phase (last component)
+    MFrac[ ThT.NComp - 1 ] = 1. - Sum2 # Determining MFrac @ Vapour Phase (last component
 
-    pdb.set_trace()
+    # For debugging
+    # pdb.set_trace()
 
     ChemPot = Call_Calc_ChemPot( MFrac ) # ChemPot has dimension (NPhase * NComp)
 

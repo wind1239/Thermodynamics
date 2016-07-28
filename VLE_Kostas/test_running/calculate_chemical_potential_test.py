@@ -7,7 +7,7 @@ import thermotools_test as ThT
 import calculate_fi_test as fi
 
 def Calc_ChemPot( iphase, MFrac ):
-    print ' * i am finally in the chemical potetnial function '
+    #print ' * i am finally in the chemical potetnial function '
 
     ChemPot = [0. for i in range(ThT.NComp) ] 
     lnPXi = [0. for i in range(ThT.NComp) ]

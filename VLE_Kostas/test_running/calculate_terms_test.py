@@ -6,6 +6,7 @@ import calculate_EOS_PR_test as PR
 import calculate_ln_gamma_test as lng
 import pylab 
 import time
+import pdb
 
 def BART2( icomp, jcomp ):
     node = icomp * ThT.NComp + jcomp
@@ -46,7 +47,7 @@ def AM( MFrac ):
 
 def BM( MFrac ):
     BM1 = Q( MFrac ) / ( 1 - D( MFrac ) )
-    #print
+    #print '===> Q & D:', BM1, Q( MFrac ), D( MFrac )
     return BM1
 
 
@@ -69,6 +70,9 @@ def DD( MFrac ):
     return DD1
 
 def B( MFrac ):
+    #print 'BM in B', BM( MFrac )
+    # For debugging
+    #pdb.set_trace()
     B1 = ( BM( MFrac ) * ThT.P_System[0] ) / ( ThT.Rconst * ThT.T_System[ 0 ] )
     #print 
     return B1

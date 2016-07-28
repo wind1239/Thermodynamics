@@ -5,6 +5,8 @@ import math
 import sys
 import RandomGenerator as RanGen
 import SAA_Tools as SaT
+import SA_IO as IO
+import pdb
 
    
 ###
@@ -55,6 +57,8 @@ def Envelope_Constraints( X, **kwargs ):
         dim = n
         
     while TryAgain:
+
+        #pdb.set_trace()
            
         #for i in range( dim ):
         for i in range( n ):
@@ -83,9 +87,10 @@ def Envelope_Constraints( X, **kwargs ):
                         return X
                 else: # It did not satisfy the Box Formulation
                     rand = RanGen.RandomNumberGenerator( n )
-                    X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
-                        rand[ i ]
-                    X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
+                    for i in range( n ):
+                        X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
+                            rand[ i ]
+                        X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
                     
             else:
                 #for i in range( dim ): # This may need to be re-assesed later ...
@@ -138,7 +143,7 @@ def Envelope_Constraints( X, **kwargs ):
 ###
 ### Calculating the other phase
 ###
-def CalcOtherPhase( X, Z, UB, LB ):
+def CalcOtherPhase( X, Z, UB, LB, **kwargs ):
     """ This function calculates the composition of the other phase. The input is X[0:N], where X[N-1]
             is the phase composition. Z[0:N] is the feed composition. UB and LB are the lower and upper
             bound arrays.                                                                               """
@@ -154,7 +159,15 @@ def CalcOtherPhase( X, Z, UB, LB ):
     for i in range( N ):
         MFrac[ N + i ] = ( Z[ i ] - Lphase * MFrac[ i ] ) / Vphase
 
-        #print 'MFrac:', MFrac
+    if kwargs: # extra diagnostics ... print the components mol fraction and phase mol fraction
+        for key in kwargs:
+            if ( key == 'Diagnostics' ):
+                Diag = kwargs[ key ]
+                if Diag:
+                    IO.f_SAOutput.write( '\n' )
+                    IO.f_SAOutput.write( 'Composition (liq and vap): {a:}'.format( a = MFrac ) + '\n' )
+                    IO.f_SAOutput.write( 'Liquid Phase Molar Fraction: {a:}'.format( a = Lphase ) + '\n' )
+                    
 
     for i in range( N ): # Checking bounds at the other phase
         if MFrac[ N + i ] < LB[ i ] or MFrac[ N + i ] > UB[ i ]:
