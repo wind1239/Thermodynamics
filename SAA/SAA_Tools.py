@@ -3,7 +3,6 @@
 
 import sys
 
-
 ###
 ### Defining Global Variables used in the SAA
 ###
