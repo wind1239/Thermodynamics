@@ -117,7 +117,7 @@ def ReadInCoolingSchedule( **kwargs ):
 
 
     """ Local variables: """
-    SA_Cooling = [] ; SA_Cooling_list = [] ; SA_Benchmarks = []
+    SA_Cooling = [] ; SA_Cooling_list = [] ; SA_Benchmarks = []; Validation = False
     
     """Reading Input files """
     if kwargs:
@@ -130,6 +130,9 @@ def ReadInCoolingSchedule( **kwargs ):
                 TestNumber = kwargs[ key ]
                 dummy, SA_Function = CountingNumberOfTests( Test_Case = TestNumber )
                 Function = os.path.abspath( './Tests/' + SA_Function + '.sa' )
+
+            elif( key == 'Task' ): # For Problems
+                Task = kwargs[ key ]
                 
             else:
                 sys.exit( 'In ReadInCoolingSchedule. Option not found' )
@@ -190,7 +193,11 @@ def ReadInCoolingSchedule( **kwargs ):
                     SA_C = ReadingRows_Float( row )
 
                 elif row[ 0 ] == 'Benchmark_Solution': # Solution of the Benchmark test-case
-                    BenchmarkSolution = ReadingRows_Float( row, Solution = 'yes' )
+                    if Task == 'Problem':
+                        BenchmarkSolution = ReadingRows_Mix( row )
+                        Validation = True
+                    else:
+                        BenchmarkSolution = ReadingRows_Float( row, Solution = 'yes' )
 
                 elif row[ 0 ] == 'Debugging': # Option to dump all intermediate results into the *.out file (True or False)
                     SA_Debugging = to_bool( row[ 1 ] )
@@ -208,7 +215,8 @@ def ReadInCoolingSchedule( **kwargs ):
     if kwargs:
         for key in kwargs:
             if ( key == 'File_Name' ): # For Problems we assign this array as zero.
-                BenchmarkSolution = [ 0. in range( SA_N + 1 )]
+                if Validation == False:
+                    BenchmarkSolution = [ 0. in range( SA_N + 1 )]
     
     return SA_Function, SA_Minimum, SA_N, SA_NS, SA_NT, SA_MaxEvl, SA_EPS, SA_RT, SA_Temp, \
         SA_LowerBounds, SA_UpperBounds, SA_VM, SA_C, SA_Debugging, SA_X, BenchmarkSolution
@@ -250,5 +258,14 @@ def ReadingRows_Float( row, *args, **kwargs ):
     Array = np.arange( float( nd ) )
     for i in xrange( 0, nd ):
         Array[ i ] = row[ i + 1 ]
+        
+    return Array
+
+def ReadingRows_Mix( row ):
+    """ This function reads the contents of a row with multiple data types. """
+
+    Array = []
+    for i in range( SA_N + 1 ):
+        Array.append( row[ i + 1 ] )
         
     return Array
