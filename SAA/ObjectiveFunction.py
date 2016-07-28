@@ -21,16 +21,7 @@ import Test_A as Test
 ###
 def ObjFunction( Function_Name, Ndim, XSolution ):
 
-    if Function_Name == 'test1':
-        Result = Test.test1( Ndim, XSolution )
-
-    elif Function_Name == 'Gibbs_Test1':
-        Result, Z_Feed = WpG.Wrapper( Ndim, XSolution )
-
-    else:
-        #Result = Kostas.GibbsK( XSolution )
-        print '====> ', TestName, ' <===='
-        sys.exit( 'Objective Function not found' )
+    Result, Z_Feed = WpG.Wrapper( Ndim, XSolution )
 
     return Result, Z_Feed
     
