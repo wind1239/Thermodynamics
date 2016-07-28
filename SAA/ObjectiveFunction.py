@@ -9,6 +9,7 @@ sys.path.append( lib_path ) # <== Adding the above in the sys path for python
 import WrapperGibbs as WpG
 #import gibbsfunction_test_10 as Kostas
 import Test_A as Test 
+import pdb
 
 ###
 ### This function 'calls' the objective function that needs to be 
