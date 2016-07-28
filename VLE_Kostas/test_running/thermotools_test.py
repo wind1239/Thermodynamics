@@ -26,7 +26,8 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
 
     ''' Open a file named 'input.dat' that contains all thermo-physical parameters for
         the model '''
-    with open( 'input_test.dat', 'rt' ) as file:
+    with open( '../VLE_Kostas/test_running/input_test.dat', 'rt' ) as file:
+    #with open( 'input_test.dat', 'rt' ) as file:
         reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
         
         for row in reader:
