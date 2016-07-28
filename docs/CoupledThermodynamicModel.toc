@@ -1,0 +1,43 @@
+\contentsline {chapter}{\numberline {1}Transport Model}{3}{chapter.1}
+\contentsline {section}{\numberline {1.1}Introduction}{3}{section.1.1}
+\contentsline {section}{\numberline {1.2}New Multi-Component Model Formulation}{4}{section.1.2}
+\contentsline {subsection}{\numberline {1.2.1}Two-Phase System}{4}{subsection.1.2.1}
+\contentsline {subsection}{\numberline {1.2.2}Three-Phase System}{5}{subsection.1.2.2}
+\contentsline {chapter}{\numberline {2}Thermodynamic Formulation}{7}{chapter.2}
+\contentsline {section}{\numberline {2.1}Mass Balance}{7}{section.2.1}
+\contentsline {section}{\numberline {2.2}Gibbs Free Energy}{8}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}General Formulation}{8}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Minimum Molar Gibbs Free Energy}{12}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Gibbs-Duhen Relation}{12}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Molar Gibbs Free Energy Gradient}{14}{subsection.2.2.4}
+\contentsline {subsection}{\numberline {2.2.5}Hessian of the Molar Gibbs Free Energy}{16}{subsection.2.2.5}
+\contentsline {section}{\numberline {2.3}Phase Stability Analysis}{17}{section.2.3}
+\contentsline {chapter}{\numberline {3}Equations of State}{21}{chapter.3}
+\contentsline {section}{\numberline {3.1}Peng-Robinson Equation of State (PR-EOS)}{21}{section.3.1}
+\contentsline {section}{\numberline {3.2}Modified Peng-Robinson Equation of State (PRSV-EOS)}{22}{section.3.2}
+\contentsline {section}{\numberline {3.3}Mixing Rules}{22}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Classical Mixing Rules}{22}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Mixing Rules and the Free Helmholtz Energy in Excess}{22}{subsection.3.3.2}
+\contentsline {section}{\numberline {3.4}Free Helmholtz Energy in Excess}{25}{section.3.4}
+\contentsline {section}{\numberline {3.5}Calculation of the Fugacity Coefficient}{25}{section.3.5}
+\contentsline {chapter}{\numberline {4}Hydrate Formation}{27}{chapter.4}
+\contentsline {section}{\numberline {4.1}Mass Conservation and Degrees of Freedom Analysis}{27}{section.4.1}
+\contentsline {section}{\numberline {4.2}Fugacity Models}{28}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Models for Liquid and Vapour Phases}{28}{subsection.4.2.1}
+\contentsline {subsubsection}{\numberline {4.2.1.1}Soave-Redlich-Kwong Equation of State (SRK-EOS)}{28}{subsubsection.4.2.1.1}
+\contentsline {subsubsection}{\numberline {4.2.1.2}Peng-Robinson Equation of State (PR-EOS)}{28}{subsubsection.4.2.1.2}
+\contentsline {subsection}{\numberline {4.2.2}Host-Component in the Liquid Phase}{29}{subsection.4.2.2}
+\contentsline {section}{\numberline {4.3}Models for the Hydrate Phase}{29}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}van der Waals and Platteeuw Model}{29}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Fugacity of Water -- Klauda Model}{30}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Fugacity of Water -- Zhang Model}{30}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Fugacity of Water -- Ballard Model}{30}{subsection.4.3.4}
+\contentsline {chapter}{\numberline {5}Global Optimisation Methods}{31}{chapter.5}
+\contentsline {section}{\numberline {5.1}Legendre Polynomials}{31}{section.5.1}
+\contentsline {section}{\numberline {5.2}Simulated Annealing Algorithm}{32}{section.5.2}
+\contentsline {section}{\numberline {5.3}Particle Swarm Algorithm}{33}{section.5.3}
+\contentsline {chapter}{\numberline {A}Material Balance based on Mass Fraction}{35}{appendix.A}
+\contentsline {section}{\numberline {A.1}Mass Balance}{35}{section.A.1}
+\contentsline {chapter}{\numberline {B}Converting Mole and Mass Fractions}{37}{appendix.B}
+\contentsline {section}{\numberline {B.1}Calculating Mass Fraction from Mole Fraction}{37}{section.B.1}
+\contentsline {section}{\numberline {B.2}Calculating Mole Fraction from Mass Fraction}{38}{section.B.2}
