@@ -109,7 +109,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         elif( Task == 'Problem' ):
             SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                 SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
-                SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( File_Name = ProblemFileName )
+                SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( File_Name = ProblemFileName, Task = Task )
 
         else:
             sys.exit( 'In SimulatedAnnealing. Option not found' )
@@ -143,7 +143,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             ===================================================================
                 Calling main SA loop:       
             ===================================================================
-        """      
+        """
 
         if Task == 'Benchmarks':
             X_OPT, F_OPT = ASA_Loops( Task, Func )
@@ -183,13 +183,12 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             TestSolution_Time.append( time.clock() - SaT.Time_Init ) # Measuring CPU time for the problem/test
 
 
-    print 'TestSolutionTime_all:', TestSolution_Time
+    print 'Elapsed CPU-Time:', TestSolution_Time
     
 
     if ( Task == 'Benchmarks' ) and ( TestCases == 'All' ):
         Print.Print_SAA_Diagnostic( Bench_AllTestCases = 'yes', Solution = TestSolution, Solution_Name = TestSolution_Name, Solution_Time = TestSolution_Time  )
 
-    #return X_OPT, F_OPT
     return X_Optimum, F_Optimum
 
 
@@ -457,8 +456,47 @@ def ASA_Loops( Task, Func, **kwargs ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
                 Quit = False 
 
-        if Quit and ( Task == 'Benchmarks' ):
-            Quit = BTest.AssessTests( XOpt_f, SaT.BenchmarkSolution )
+        if Quit:
+            if Task == 'Benchmarks':
+                Quit = BTest.AssessTests( XOpt_f, SaT.BenchmarkSolution )
+
+            elif Task == 'Problem' and IO.to_bool( SaT.BenchmarkSolution[ 0 ] ): # For validation
+                Solution = np.arange( float( SaT.Ndim ) )
+                for i in range( SaT.Ndim ):
+                    Solution[ i ] = IO.num( SaT.BenchmarkSolution[ i + 1 ] )
+
+                FuncValid, dummy = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, Solution )
+                FuncOpt, dummy = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, XOpt )
+                print 'Gibbs Function (Validation, Optimum):', FuncValid, FuncOpt
+
+                Pass = True
+                if abs( FuncValid - FuncOpt ) >= SaT.EPS:
+                    Pass = Pass and False
+
+                for i in range( SaT.Ndim ):
+                    if abs( XOpt[ i ] - Solution[ i ] ) >= SaT.EPS:
+                        Pass = Pass and False
+
+                if Pass:
+                    print 'Error Associated with: '
+                    print ' (a) Function: ', abs( FuncValid - FuncOpt ) / FuncValid * 100., '%'
+                    print ' (b) Solution Variables:'
+                    for i in range( SaT.Ndim ):
+                        print 'X[',i,']', abs( XOpt[ i ] - Solution[ i ] ) / Solution[ i ] * 100., '%'
+                    Quit == True
+
+
+            
+
+        #print '===>', SaT.BenchmarkSolution
+        #print assert(SaT.BenchmarkSolution)
+        #sys.exit('fck11')
+
+        #if assert(SaT.BenchmarkSolution):
+        #    sys.exit('fck11')
+        #else:
+        #    sys.exit('fck--')
+        #elif Quit and ( Task == 'Problem' ) and 
 
 
         """

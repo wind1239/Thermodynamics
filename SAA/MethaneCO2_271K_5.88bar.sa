@@ -28,7 +28,7 @@ RT   0.65
 Temp   95.
 
 # X_Init: Initial guess for the solution-coordinate vector
-X_Init       0.1057  0.1705
+X_Init       0.10  0.17
 
 # LowerBounds: Lower bounds for the solution-coordinate vector
 LowerBounds  1.E-6   1.E-6
@@ -41,6 +41,10 @@ VM     1.E-2     1.E-2
 
 # C: Parameter for controlling the size of the stepping matrix
 C      0.60     0.60
+
+# Benchmark_Solution: Solution-coordinate for this pressure, temperature and feed composition
+# This array contains [ X1L L ]
+Benchmark_Solution   True  0.1057  0.1705
 
 # Debugging: Option to dump all intermediate results into the *.out file (True or False)
 Debugging  False
