@@ -54,7 +54,7 @@ def Call_Calc_Gibbs( MFrac, ChemPot ): # This function will ...
         sys.exit()
     else:
         #PhaseFrac[ 0 ] = ( ThT.Z_Feed[0] - MFrac[ 2 ] ) / Temp ; PhaseFrac[ 1 ] = 1. - PhaseFrac[ 0 ]
-        PhaseFrac[ 0 ] = 0.9 ; PhaseFrac[ 1 ] = 1. - PhaseFrac[ 0 ]  
+        PhaseFrac[ 0 ] = 0.1 ; PhaseFrac[ 1 ] = 1. - PhaseFrac[ 0 ]  
         # the line above describes the condition for the feed composition zi = V * yi + (1 - V) * xi
     
     sumGibbs = 0. ; sumfeedk = 0.
