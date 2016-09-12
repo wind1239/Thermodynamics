@@ -1,0 +1,20 @@
+
+============================================================ 
+   Initialisation of the Simulated Annealing Algorithm:      
+      Test Name: MethaneCO2_271K_4_76bar
+============================================================ 
+
+Minimisation:       True
+Dimension-Space:    2
+Maximum Number of Function Evaluations: 10000
+
+NS:  10, NT:  10
+EPS: 1.0000e-02
+
+Temperature: 95.0000 
+Parameter for temperature reduction (RT): 0.6500
+
+Lower Bounds: [  1.00000000e-06   1.00000000e-06], Upper Bounds: [ 0.99999  0.99999]
+VM: [ 0.01  0.01], C: [ 0.6  0.6]
+
+Inital Solution for Test: [ 0.1  0.1]
