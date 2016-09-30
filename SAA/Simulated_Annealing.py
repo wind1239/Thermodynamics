@@ -13,6 +13,8 @@ import SAA_Tools as SaT
 import ObjectiveFunction as ObF
 import time
 import pdb
+import pylab as pl
+
 
 """ =========================================================================
 
@@ -31,7 +33,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
     TestSolution_Time = [] ; Time_temp = []
 
 
-    """"
+    """
     ===================================================================
         If we are undertaken model validation through benchmarks, we
           may opt to run all benchmark test-cases or a specific one
@@ -137,6 +139,8 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
         if Task == 'Problem':
             SpFunc.CalcOtherPhase( SaT.SA_X, Z_Feed, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
+        print Z_Feed
+        #stop 
 
 
         """
@@ -239,6 +243,7 @@ def ASA_Loops( Task, Func, **kwargs ):
 
         NUp = 0; NRej = 0; NDown = 0; LNobds = 0
 
+        #print '================================================================================kloop =', kloop
 
         """ Beginning of the m loop: """
         mloop = 0
@@ -327,7 +332,7 @@ def ASA_Loops( Task, Func, **kwargs ):
                             function increases.
                        =================================================================="""
                     
-                    if ( FuncP >= Func ):
+                    if ( FuncP > Func ):
                         for i in range( SaT.Ndim ):
                             X_Try[ i ] = XP[ i ]
                         Func = FuncP
@@ -352,7 +357,8 @@ def ASA_Loops( Task, Func, **kwargs ):
                         if Task == 'Benchmarks':
                             print 'NFCNEV(', NFCNEV, '), XOpt: ', XOpt_f, ' with FOpt: ', FOpt, '(Analytical:', -BTest.TestFunction( SaT.Function_Name, SaT.Ndim, SaT.BenchmarkSolution[ 0 : SaT.Ndim ] ),')'
                         else:
-                            print 'NFCNEV(', NFCNEV, '), XOpt: ', XOpt_f, ' with FOpt: ', FOpt
+                            if (NFCNEV % 25) >= 24 :
+                               print 'NFCNEV(', NFCNEV, '), XOpt: ', XOpt_f, ' with FOpt: ', FOpt
                             
                             if SaT.Debugging == True :
                                 IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt_f, b = FOpt ) + '\n')
@@ -397,6 +403,7 @@ def ASA_Loops( Task, Func, **kwargs ):
                 """ End of j loop """
                 jloop += 1
 
+            
             """
                ==================================================================
                  As half of the evaluations may be accepted, thus the VM array
@@ -422,7 +429,7 @@ def ASA_Loops( Task, Func, **kwargs ):
             
             """ End of m loop """
             mloop += 1
-
+           
         """
            =======================================================================
                 Diagnostics of the algorithm before the next temperature reduction
@@ -440,21 +447,25 @@ def ASA_Loops( Task, Func, **kwargs ):
                     FOpt = -FOpt
                 Print.Print_SAA_Diagnostic( Termination = 'yes', FOpt = FOpt, NRej = NRej, XOpt = XOpt_f, NFCNEV = NFCNEV )
                 return XOpt_f, FOpt
-                
+        #stop         
 
         """
            ==========================================================
-                     Checking the stoppage criteria
+                     Checking the stoppage criteria           
            ==========================================================  """
         
         Quit = False ; FStar[ 0 ] = Func
 
+        print ' FOpt, FStar, Func', FOpt, FStar, Func
+ 
         if FOpt - FStar[ 0 ]  <= SaT.EPS :
             Quit = True
-
+        print ' ===== i am here ====='
         for i in range( NEps ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
-                Quit = False 
+                Quit = False; #print ' SaT.EPS ', SaT.EPS
+              
+        #stop  
 
         if Quit:
             if Task == 'Benchmarks':
@@ -532,5 +543,21 @@ def ASA_Loops( Task, Func, **kwargs ):
             
         """ End of k loop """
         kloop += 1
+
+
+
+'''
+pl.title('Plot of y vs. x')  # give plot a title
+
+pl.xlabel('x axis')          # make axis labels
+pl.ylabel('y axis')
+
+# use pylab to plot x and y
+plot1 = pl.plot(FOpt, time.time(), 'r')
+plot2 = pl.plot(x2, y2, 'go')
+
+pl.legend([plot1, plot2], ('red line', 'green circles'), 'best', numpoints=1) # plot legend
+pl.show() 
+'''
 
     
