@@ -437,7 +437,6 @@ def ASA_Loops( Task, Func, **kwargs ):
 
         Print.Print_SAA_Diagnostic( Diagnostics = 'yes', FOpt = FOpt, NUp = NUp, NDown = NDown, NRej = NRej, NAcc = NAcc, LNobds = LNobds, NFCNEV = NFCNEV, XOpt = XOpt, FStar = FStar )
         
-
         # This will make the tests run faster as we know the solution, thus they do
         #     not need to continue search if the solution if close enough
         if Task == 'Benchmarks':
@@ -461,6 +460,7 @@ def ASA_Loops( Task, Func, **kwargs ):
         if FOpt - FStar[ 0 ]  <= SaT.EPS :
             Quit = True
         print ' ===== i am here ====='
+        print ' number of dimensions ', SaT.Ndim
         for i in range( NEps ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
                 Quit = False; #print ' SaT.EPS ', SaT.EPS
