@@ -511,8 +511,7 @@ def ASA_Loops( Task, Func, **kwargs ):
                         print 'X[',i,']', abs( XOpt[ i ] - Solution[ i ] ) / Solution[ i ] * 100., '%'
                     Quit == True
 
-
-            
+           
 
         #print '===>', SaT.BenchmarkSolution
         #print assert(SaT.BenchmarkSolution)
