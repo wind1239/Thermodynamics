@@ -459,8 +459,8 @@ def ASA_Loops( Task, Func, **kwargs ):
  
         if FOpt - FStar[ 0 ]  <= SaT.EPS :
             Quit = True
-        print ' ===== i am here ====='
-        print ' number of dimensions ', SaT.Ndim
+        #print ' ===== i am here ====='
+        #print ' number of dimensions ', SaT.Ndim
         for i in range( NEps ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
                 Quit = False; #print ' SaT.EPS ', SaT.EPS
