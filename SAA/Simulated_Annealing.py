@@ -485,7 +485,7 @@ def ASA_Loops( Task, Func, **kwargs ):
         if Quit:
             if Task == 'Benchmarks':
                 Quit = BTest.AssessTests( XOpt_f, SaT.BenchmarkSolution )
-
+                
             elif Task == 'Problem' and IO.to_bool( SaT.BenchmarkSolution[ 0 ] ): # For validation
                 Solution = np.arange( float( SaT.Ndim ) )
                 for i in range( SaT.Ndim ):
@@ -552,12 +552,12 @@ def ASA_Loops( Task, Func, **kwargs ):
         SaT.Temp = SaT.RT * SaT.Temp
         for i in xrange( NEps - 1, 0, -1 ):
             FStar[ i ] = FStar[ i - 1 ]
-            print 'FStar[ i ]',FStar[ i ] 
+            #print 'FStar[ i ]',FStar[ i ] 
 
         Func = FOpt
         for i in range( SaT.Ndim ):
             X_Try[ i ] = XOpt[ i ]
-            print 'X_Try[ i ]',X_Try[ i ] 
+            #print 'X_Try[ i ]',X_Try[ i ] 
             
         """ End of k loop """
         kloop += 1
