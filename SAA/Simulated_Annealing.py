@@ -466,12 +466,14 @@ def ASA_Loops( Task, Func, **kwargs ):
                      Checking the stoppage criteria           
            ==========================================================  """
         
-        Quit = False ; FStar[ 0 ] = Func
+        Quit = True ; FStar[ 0 ] = Func
+          
+        #print '--------------------------------------' 
+        #print ' FOpt, FStar, Func', FOpt, FStar, Func
+        #print '--------------------------------------' 
 
-        print ' FOpt, FStar, Func', FOpt, FStar, Func
- 
         if FOpt - FStar[ 0 ]  <= SaT.EPS :
-            Quit = True
+            Quit = False 
         #print ' ===== i am here ====='
         #print ' number of dimensions ', SaT.Ndim
         for i in range( NEps ):
@@ -538,6 +540,8 @@ def ASA_Loops( Task, Func, **kwargs ):
                 SpFunc.CalcOtherPhase( XP, Z_Feed, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
 
             return XOpt_f, FOpt
+        
+        #print ' XOpt_f, FOpt ', XOpt_f, FOpt
 
         """
            ==========================================================
@@ -548,11 +552,12 @@ def ASA_Loops( Task, Func, **kwargs ):
         SaT.Temp = SaT.RT * SaT.Temp
         for i in xrange( NEps - 1, 0, -1 ):
             FStar[ i ] = FStar[ i - 1 ]
+            print 'FStar[ i ]',FStar[ i ] 
 
         Func = FOpt
         for i in range( SaT.Ndim ):
             X_Try[ i ] = XOpt[ i ]
-        
+            print 'X_Try[ i ]',X_Try[ i ] 
             
         """ End of k loop """
         kloop += 1
