@@ -28,9 +28,13 @@ import pylab as pl
     =========================================================================  """
 
 def SimulatedAnnealing( Method, Task, **kwargs ):
-
-    X_Optimum = [] ; F_Optimum = [] ; TestSolution = [] ; TestSolution_Name = [] ;
-    TestSolution_Time = [] ; Time_temp = []
+      
+    X_Optimum = [] 
+    F_Optimum = [] 
+    TestSolution = [] 
+    TestSolution_Name = [] 
+    TestSolution_Time = [] 
+    Time_temp = []
 
 
     """
@@ -68,6 +72,15 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
              
     else:
         sys.exit( 'In SimulatedAnnealing function. Option not found' )
+
+#--------------------------------------------------------------------------
+# **kwargs allows to pass variable number of keyword argument like this 
+#  def my_three(a, b, c):
+#      print(a, b, c)
+#  a = {'a': "one", 'b': "two", 'c': "three" }
+#  my_three(**a)
+#--------------------------------------------------------------------------
+
 
         
     """"
@@ -234,7 +247,7 @@ def ASA_Loops( Task, Func, **kwargs ):
         If FALSE then the above is neglected.                               """
     if Task == 'Benchmarks':
         Fraction = False
-    else:
+    else: #Problems 
         Fraction = True
 
     kloop = 0 
@@ -245,12 +258,12 @@ def ASA_Loops( Task, Func, **kwargs ):
 
         #print '================================================================================kloop =', kloop
 
-        """ Beginning of the m loop: """
+        """ Beginning of the m loop: number of iterations """
         mloop = 0
         while mloop < SaT.NT:
 
 
-            """ Beginning of j loop: """
+            """ Beginning of j loop: number of cycles"""
             jloop = 0
             while jloop < SaT.NS:
 
@@ -287,7 +300,7 @@ def ASA_Loops( Task, Func, **kwargs ):
 
                     if Task == 'Benchmarks':
                         SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
-                    else:
+                    else: # Problems
                         SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, Z_Feed = Z_Feed )
 
                     #sys.exit()
