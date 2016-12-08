@@ -1,0 +1,46 @@
+###
+### COOLING SCHEDULE FOR THE GIBBS FREE ENERGY TEST-CASE 
+###       Mixture: CH4+CO2 @ 241 K and 4.33 bar
+###
+
+# N: Dimension of the problem (X1L, L)
+Number_Dimensions  2
+
+# Extremum: Maximum/Minimum
+Minimum  True
+
+# NS: Maximum number of cycles
+NS     10
+
+# NT: Maximum number of iterations before the temperature reduction
+NT     10
+
+# MaxEvl: Maximum number of evaluations of the objective function 
+MaxEvl  10000
+
+# EPS: Minimum acceptable discrepancy (used throughout the SAA)
+EPS  1.e-2
+
+# RT: Parameter for temperature reduction
+RT   0.65
+
+# Temp: SAA temperature parameter
+Temp   95.
+
+# X_Init: Initial guess for the solution-coordinate vector
+X_Init       0.1      0.1
+
+# LowerBounds: Lower bounds for the solution-coordinate vector
+LowerBounds  1.E-6   1.E-6
+
+# UpperBounds: Upper bounds for the solution-coordinate vector
+UpperBounds  0.99999   0.99999
+
+# VM: Stepping matrix (only the diagonal representing each direction)
+VM     1.E-2     1.E-2
+
+# C: Parameter for controlling the size of the stepping matrix
+C      0.60     0.60
+
+# Debugging: Option to dump all intermediate results into the *.out file (True or False)
+Debugging  False

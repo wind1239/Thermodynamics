@@ -28,9 +28,13 @@ import pylab as pl
     =========================================================================  """
 
 def SimulatedAnnealing( Method, Task, **kwargs ):
-
-    X_Optimum = [] ; F_Optimum = [] ; TestSolution = [] ; TestSolution_Name = [] ;
-    TestSolution_Time = [] ; Time_temp = []
+      
+    X_Optimum = [] 
+    F_Optimum = [] 
+    TestSolution = [] 
+    TestSolution_Name = [] 
+    TestSolution_Time = [] 
+    Time_temp = []
 
 
     """
@@ -68,6 +72,15 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
              
     else:
         sys.exit( 'In SimulatedAnnealing function. Option not found' )
+
+#--------------------------------------------------------------------------
+# **kwargs allows to pass variable number of keyword argument like this 
+#  def my_three(a, b, c):
+#      print(a, b, c)
+#  a = {'a': "one", 'b': "two", 'c': "three" }
+#  my_three(**a)
+#--------------------------------------------------------------------------
+
 
         
     """"
@@ -234,7 +247,7 @@ def ASA_Loops( Task, Func, **kwargs ):
         If FALSE then the above is neglected.                               """
     if Task == 'Benchmarks':
         Fraction = False
-    else:
+    else: #Problems 
         Fraction = True
 
     kloop = 0 
@@ -245,12 +258,12 @@ def ASA_Loops( Task, Func, **kwargs ):
 
         #print '================================================================================kloop =', kloop
 
-        """ Beginning of the m loop: """
+        """ Beginning of the m loop: number of iterations """
         mloop = 0
         while mloop < SaT.NT:
 
 
-            """ Beginning of j loop: """
+            """ Beginning of j loop: number of cycles"""
             jloop = 0
             while jloop < SaT.NS:
 
@@ -287,7 +300,7 @@ def ASA_Loops( Task, Func, **kwargs ):
 
                     if Task == 'Benchmarks':
                         SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
-                    else:
+                    else: # Problems
                         SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, Z_Feed = Z_Feed )
 
                     #sys.exit()
@@ -437,7 +450,6 @@ def ASA_Loops( Task, Func, **kwargs ):
 
         Print.Print_SAA_Diagnostic( Diagnostics = 'yes', FOpt = FOpt, NUp = NUp, NDown = NDown, NRej = NRej, NAcc = NAcc, LNobds = LNobds, NFCNEV = NFCNEV, XOpt = XOpt, FStar = FStar )
         
-
         # This will make the tests run faster as we know the solution, thus they do
         #     not need to continue search if the solution if close enough
         if Task == 'Benchmarks':
@@ -454,13 +466,16 @@ def ASA_Loops( Task, Func, **kwargs ):
                      Checking the stoppage criteria           
            ==========================================================  """
         
-        Quit = False ; FStar[ 0 ] = Func
+        Quit = True ; FStar[ 0 ] = Func
+          
+        #print '--------------------------------------' 
+        #print ' FOpt, FStar, Func', FOpt, FStar, Func
+        #print '--------------------------------------' 
 
-        print ' FOpt, FStar, Func', FOpt, FStar, Func
- 
         if FOpt - FStar[ 0 ]  <= SaT.EPS :
-            Quit = True
-        print ' ===== i am here ====='
+            Quit = False 
+        #print ' ===== i am here ====='
+        #print ' number of dimensions ', SaT.Ndim
         for i in range( NEps ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
                 Quit = False; #print ' SaT.EPS ', SaT.EPS
@@ -470,7 +485,7 @@ def ASA_Loops( Task, Func, **kwargs ):
         if Quit:
             if Task == 'Benchmarks':
                 Quit = BTest.AssessTests( XOpt_f, SaT.BenchmarkSolution )
-
+                
             elif Task == 'Problem' and IO.to_bool( SaT.BenchmarkSolution[ 0 ] ): # For validation
                 Solution = np.arange( float( SaT.Ndim ) )
                 for i in range( SaT.Ndim ):
@@ -496,8 +511,7 @@ def ASA_Loops( Task, Func, **kwargs ):
                         print 'X[',i,']', abs( XOpt[ i ] - Solution[ i ] ) / Solution[ i ] * 100., '%'
                     Quit == True
 
-
-            
+           
 
         #print '===>', SaT.BenchmarkSolution
         #print assert(SaT.BenchmarkSolution)
@@ -525,6 +539,8 @@ def ASA_Loops( Task, Func, **kwargs ):
                 SpFunc.CalcOtherPhase( XP, Z_Feed, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
 
             return XOpt_f, FOpt
+        
+        #print ' XOpt_f, FOpt ', XOpt_f, FOpt
 
         """
            ==========================================================
@@ -535,11 +551,12 @@ def ASA_Loops( Task, Func, **kwargs ):
         SaT.Temp = SaT.RT * SaT.Temp
         for i in xrange( NEps - 1, 0, -1 ):
             FStar[ i ] = FStar[ i - 1 ]
+            #print 'FStar[ i ]',FStar[ i ] 
 
         Func = FOpt
         for i in range( SaT.Ndim ):
             X_Try[ i ] = XOpt[ i ]
-        
+            #print 'X_Try[ i ]',X_Try[ i ] 
             
         """ End of k loop """
         kloop += 1

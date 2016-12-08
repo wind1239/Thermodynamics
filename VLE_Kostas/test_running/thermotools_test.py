@@ -29,10 +29,10 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
 
     ''' Open a file named 'input.dat' that contains all thermo-physical parameters for
         the model '''
-    #Filename = SaT.Function_Name + '.dat'
-    #with open( '../VLE_Kostas/test_running/' + Filename, 'rt' ) as file:
+    Filename = SaT.Function_Name + '.dat'
+    with open( '../VLE_Kostas/test_running/' + Filename, 'rt' ) as file:
     #with open( '../VLE_Kostas/test_running/input_test.dat', 'rt' ) as file:
-    with open( 'MethaneCO2_241K_4_33bar.dat', 'rt' ) as file:
+    #with open( 'MethaneCO2_271K_4_76bar.dat', 'rt' ) as file:
         reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
         
         for row in reader:

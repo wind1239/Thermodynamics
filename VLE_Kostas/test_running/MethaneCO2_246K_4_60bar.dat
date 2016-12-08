@@ -1,0 +1,53 @@
+###  
+### Input file for this test case
+###   Mixture: CH4+CO2 @ 246 K and 4.6 bar
+###
+
+# Number of Components: 
+Number_Components          2
+
+# Number of Phases:
+Number_Phases              2
+
+# Temperature in Kelvin (initial, final, increment)
+System_Temperature         246.00      246.00       0.0
+
+# Pressure in bar  (initial, final, increment)
+System_Pressure              4.6        4.6           0.0
+
+# Chemical species in the mixture
+Components                 "CH4-methane"       "CO2-Carbon-dioxide"        
+
+# Molar_fraction of the species 
+# Molar_fraction             0.2671       0.7328           
+
+# Critical temperature in Kelvin
+Crit_Temp                  190.56       304.15                   
+
+# Critical pressure in bar
+Crit_Pres                   46.40        73.8                              
+
+# Molar mass in g/gmol
+Molar_Mass                  16.04        44.01           
+
+# Accentric factor (dimensionless)
+Accentric_Factor            0.01          0.09        
+
+# Composition of the feeding stream (z, dimensionless)
+Feed_Composition            0.275         0.725
+
+
+# Binary interaction parameter
+# Component_i Component_j Value
+BinaryInteraction
+1      2        0.0913
+2      1        0.0913
+
+
+# Wilson equation parameters
+# Component_i Component_j Value
+Lamda_wilson 
+1      1       1
+1      2       1.0127
+2      1       0.5967
+2      2       1
