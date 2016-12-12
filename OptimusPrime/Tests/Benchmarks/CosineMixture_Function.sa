@@ -1,0 +1,60 @@
+###
+### COOLING SCHEDULE FOR THE COSINE MIXTURE FUNCTION (2D) 
+###   
+###  F(x,y) = -0.1 * Summation(i=1,n) cos(5*Pi*Xi) -
+###              summation(i=1,n)Xi**2
+###           
+###
+###    Domain: Xi = [-1., 1.] 
+###   
+###    Optimum: f(0, 0) = 0.2
+###
+###  Jamil etal. (2013) Int. J. Math. Mod. and Num. Optimisation
+###          4(2):150-194
+###       (doi: 10.1504/IJMMNO.2013.055204)
+###
+
+# N: Dimension of the problem
+Number_Dimensions  2
+
+# Extremum: Maximum/Minimum
+Minimum  True
+
+# NS: Maximum number of cycles
+NS     45
+
+# NT: Maximum number of iterations before the temperature reduction
+NT     10
+
+# MaxEvl: Maximum number of evaluations of the objective function
+MaxEvl  5000000
+
+# EPS: Minimum acceptable discrepancy (used throughout the SAA)
+EPS  1.e-3
+
+# RT: Parameter for temperature reduction
+RT   0.45
+
+# Temp: SAA temperature parameter
+Temp 5.
+
+# X_Init: Initial guess for the solution-coordinate vector
+X_Init       0.0  0.0
+
+# LowerBounds: Lower bounds for the solution-coordinate vector
+LowerBounds  -1.  -1.
+
+# UpperBounds: Upper bounds for the solution-coordinate vector
+UpperBounds   1.   1.
+
+# VM: Stepping matrix (only the diagonal representing each direction)
+VM     1.     1.
+
+# C: Parameter for controlling the size of the stepping matrix
+C      3.     3.
+
+# Debugging: Option to dump all intermediate results into the *.out file (True or False)
+Debugging  False
+
+# Benchmark_Solution: Solution-coordinate and solution of the Benchmark test-case
+Benchmark_Solution   0.   0.  0.2
