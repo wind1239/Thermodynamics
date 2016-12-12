@@ -25,8 +25,8 @@ import SystemPaths as SyP
               FUNCTION: Starting the Simulated Annealing Algorithm
 
        The SAA coded here in Python was adapted from the Fortran version 
-             by Goffee et al. (J. Econometrics 60(1994):65-99. And the code
-             may be obtained from:
+             by Goffee et al. (J. Econometrics 60(1994):65-99. And the 
+             Fortran code may be obtained from:
                 http://econpapers.repec.org/software/wpawuwppr/9406001.htm
 
     =========================================================================  """
@@ -118,14 +118,14 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                 if itest == Test:
                     SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                         SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
-                        SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = Test )
+                        SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = Test, Task = Task )
                     print '======================', SaT.Function_Name, '======================'
                 else:
                     continue
             else:
                 SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                     SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
-                    SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = itest )
+                    SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( Test_Number = itest, Task = Task )
                 print '======================', SaT.Function_Name, '======================'
                 
 
@@ -160,8 +160,6 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
         if Task == 'Problem':
             SpFunc.CalcOtherPhase( SaT.SA_X, Z_Feed, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
-        print Z_Feed
-        #stop 
 
 
         """
