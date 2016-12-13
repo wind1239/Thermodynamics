@@ -15,9 +15,10 @@ import time
 import pdb
 import pylab as pl
 
-lib_path = os.path.abspath('../Main' ) # path to SAA
+lib_path = os.environ.get('OptimusPATH') + '/Main/' 
 sys.path.append( lib_path ) # <== Adding the above in the sys path for python
 import SystemPaths as SyP
+
 
 
 """ =========================================================================
@@ -76,36 +77,26 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                     PhaseEquilibria = kwargs[ key ]
                     Test = 0 ; N_Tests = 1
                 else:
-                    sys.exit( 'In SimulatedAnnealing function. TASK-Problem option not found' )
+                    sys.exit( 'In SimulatedAnnealing function. TASK-Problem option not found.' )
              
     else:
-        sys.exit( 'In SimulatedAnnealing function. TASK option not found' )
-
-#--------------------------------------------------------------------------
-# **kwargs allows to pass variable number of keyword argument like this 
-#  def my_three(a, b, c):
-#      print(a, b, c)
-#  a = {'a': "one", 'b': "two", 'c': "three" }
-#  my_three(**a)
-#--------------------------------------------------------------------------
-
+        sys.exit( 'In SimulatedAnnealing function. TASK option not found. Currently only *Benchmarks* and *Problems* are acceptable.' )
 
         
     """"
-    ===================================================================
-        Now, depending on the case, 'Benchmarks' or 'Problem' we 
-          proceed the optimisation, if:
-    
-              a) 'Problem': then N_Tests = 1 and we run SAA just once
-                            or
-              b) 'Benchmarks': there are 2 options here,
-                  b.1 ) 'All': it will read each cooling schedule 
-                               file for all test-cases and proceed
-                               with the optimisation.
-                  b.2 ) 'N': where 1 <= N <= N_Tests. It will read
-                             only the cooling schedule of test-case
-                             N and proceed with the optimisation.
-    =================================================================== """
+        =======================================================================
+           Now, depending on the case, 'Benchmarks' or 'Problem' we 
+                proceed the optimisation, if:
+                  a) 'Benchmarks': there are 2 options here,
+                      a.1 ) 'All': it will read each cooling schedule 
+                                   file for all test-cases and proceed
+                                   with the optimisation.
+                      a.2 ) 'N': where 1 <= N <= N_Tests. It will read
+                                   only the cooling schedule of test-case
+                                   N and proceed with the optimisation.
+                or    
+                  b) 'Problem': then N_Tests = 1 and we run SAA just once
+        ======================================================================= """
 
     jtest = 0
 

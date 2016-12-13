@@ -6,7 +6,7 @@ import numpy as np
 import SA_Print as Print
 import pdb
 
-lib_path = os.path.abspath('../Main' ) # path to SAA
+lib_path = os.environ.get('OptimusPATH') + '/Main/' 
 sys.path.append( lib_path ) # <== Adding the above in the sys path for python
 import SystemPaths as SyP
 
