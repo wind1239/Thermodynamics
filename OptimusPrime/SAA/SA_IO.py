@@ -116,7 +116,7 @@ def ReadInCoolingSchedule( **kwargs ):
             elif( key == 'Test_Number' ): # For Benchmark Test-Cases
                 TestNumber = kwargs[ key ]
                 dummy, SA_Function = CountingNumberOfTests( Test_Case = TestNumber )
-                Function = os.path.abspath( SyP.ProbPATH + SA_Function + '.sa' )
+                Function = SyP.ProbPATH + SA_Function + '.sa'
 
             elif( key == 'Task' ): # For Problems
                 Task = kwargs[ key ]
@@ -211,7 +211,7 @@ def ReadInCoolingSchedule( **kwargs ):
 
 
 def ListOfCommentsStrings( row ):
-    """ This function identifies if the line is a comment."""
+    """ This function identifies if the line within the *.sa file is a comment."""
     list = []
     IsItaComment = False
     if (     row[ 0 ] == ''      or \

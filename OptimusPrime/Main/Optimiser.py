@@ -63,13 +63,13 @@ if len( sys.argv ) < 3:
     sys.exit()
     
 else:
-    Method = sys.argv[ 1 ]
-    Task = sys.argv[ 2 ]
+    Method = sys.argv[ 1 ] ; Task = sys.argv[ 2 ]
 
     if Task == 'Problem' or Task == 'Problems':
-        ProblemFileName = sys.argv[ 3 ]
-        if len( sys.argv ) == 5:
-            PhaseEquilibria = sys.argv[ 4 ]
+        if len( sys.argv ) == 5: # Dealing with a thermodynamic problem
+            PhaseEquilibria = sys.argv[ 3 ] ; ProblemFileName = sys.argv[ 4 ]
+        else: # dealing with any other optimisation problem
+            ProblemFileName = sys.argv[ 3 ]
         
     elif Task == 'Benchmarks':
         TestCases = sys.argv[ 3 ]
