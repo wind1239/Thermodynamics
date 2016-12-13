@@ -26,8 +26,8 @@ def EnvirVar():
 
 """ This function defines the environmental paths for the main directories
     used by the code. """
-def PathWays( Task, Method ):
-    global RootPATH, MainPATH, OptimiserPATH, ProbPATH
+def PathWays( Task, Method, **kwargs ):
+    global RootPATH, MainPATH, OptimiserPATH, SLVE_PATH, ProbPATH
     
     RootPATH = os.environ.get('OptimusPATH')
     MainPATH = RootPATH + '/Main/'
@@ -43,6 +43,11 @@ def PathWays( Task, Method ):
         OptimiserPATH = RootPATH + '/SAA/'
     else:
         sys.exit('Non-existent option for METHOD option')
+
+    if kwargs:
+        for key in kwargs:
+            if ( key == 'Thermodynamics' ):
+                SLVE_PATH = RootPATH + '/PhaseEquilibria/'
 
 
 

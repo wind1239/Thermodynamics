@@ -75,7 +75,7 @@ else:
         TestCases = sys.argv[ 3 ]
         
 # Creating Global Variables for directories pathways
-SyP.PathWays( Task, Method )
+SyP.PathWays( Task, Method, Thermodynamics = PhaseEquilibria )
 
 """ Creating a file for general output """
 if Task == 'Problem' or Task == 'Problems':
