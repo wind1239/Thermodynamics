@@ -53,31 +53,14 @@ def OutPut( Task, Method, *args, **kwargs ):
     else:
         sys.exit( 'In OutPut function. Option not found' )
 
+    """ Opening file at ProbPATH """
     f_SAOutput = open( os.path.join( SyP.ProbPATH, FileName ), 'w' )
 
 ###
 ###
 ###
-def CheckNumberTests():
-
-    FileName = SyP.ProbPATH + 'Benchmarks.in' ; ntest = 0
-    SA_Cooling_list = []
-    
-    with open( FileName, 'r' ) as f:
-        for line in f:
-            if line[ 0 ] == '$': # Variable's name
-                line.rstrip()
-                if line.find( 'Benchmark' ) > 0:
-                    ntest += 1
-
-    f.close()
-    return ntest
-
-###
-###
-###
 def CountingNumberOfTests( **kwargs ):
-    """ This function reads the file 'Benchmarks.in' that contains the list of
+    """ This function reads the file 'Benchmarks.in' which contains the list of
             benchmark test-cases. It returns the number of test-cases and
             if a test-case number is given (through the ** argument), then
             it will also returns the name of the function associated with

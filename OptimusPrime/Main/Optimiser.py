@@ -52,6 +52,7 @@ import SAA_Tools as SaT
                                                                                            """
 
 #global Time_Init, Time_Final
+SyP.EnvirVar()
 
 # Measuring CPU-time in the beginning of the simulation:
 SaT.Time_Init = time.clock()
