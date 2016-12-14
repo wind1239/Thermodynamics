@@ -132,7 +132,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
         """
             ===================================================================
-                      Initial Assessemnt of the Objective Function
+                      Initial Assessement of the Objective Function
             ===================================================================
         """
 
@@ -141,7 +141,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             Func = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X ) 
             
         else: # Problems
-            Func, Z_Feed = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X )
+            Func, Z_Feed = ObF.ObjFunction( SaT.SA_X, Thermodynamics = PhaseEquilibria )
             
         """ The function must be minimum """
         if SaT.Minimum:
@@ -312,7 +312,7 @@ def ASA_Loops( Task, Func, **kwargs ):
                     if Task == 'Benchmarks':
                         FuncP = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, XP )
                     else: # Problems
-                        FuncP, dummy = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, XP )
+                        FuncP, dummy = ObF.ObjFunction( XP, Thermodynamics = PhaseEquilibria )
 
                     #print 'here we are again .... oh dear :::',  XP, FuncP
                     #sys.exit()
@@ -489,8 +489,8 @@ def ASA_Loops( Task, Func, **kwargs ):
                 for i in range( SaT.Ndim ):
                     Solution[ i ] = IO.num( SaT.BenchmarkSolution[ i + 1 ] )
 
-                FuncValid, dummy = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, Solution )
-                FuncOpt, dummy = ObF.ObjFunction( SaT.Function_Name, SaT.Ndim, XOpt )
+                FuncValid, dummy = ObF.ObjFunction( Solution, Thermodynamics = PhaseEquilibria )
+                FuncOpt, dummy = ObF.ObjFunction( XOpt, Thermodynamics = PhaseEquilibria )
                 print 'Gibbs Function (Validation, Optimum):', FuncValid, FuncOpt
 
                 Pass = True

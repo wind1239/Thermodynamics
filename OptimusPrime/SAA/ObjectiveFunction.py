@@ -3,11 +3,12 @@
 
 import os, sys
 
+lib_path = os.environ.get('OptimusPATH') + 'PhaseEquilibria'
+sys.path.append( lib_path ) # <== Adding the above in the sys path for python
+
+
 # Add here the Functions that will be optimised
-lib_path = os.environ.get('OptimusPATH') + '/Main/' 
-sys.path.append( lib_path ) # <== Adding the above in the sys path for python
-lib_path = os.path.abspath('../Thermodynamics') # <== This is the syntax for using user-defined libraries in diff directories
-sys.path.append( lib_path ) # <== Adding the above in the sys path for python
+lib_path = os.environ.get('OptimusPATH') + 'PhaseEquilibria'
 #import WrapperGibbs as WpG
 #import gibbsfunction_test_10 as Kostas
 #import Test_A as Test 
@@ -22,11 +23,28 @@ import pdb
 ###            X_{1}^{L}, X_{2}^{L}, ... , X_{n-1}^{L}, L
 ###            see documentation. 
 ###
-def ObjFunction( Function_Name, Ndim, XSolution ):
+def ObjFunction( XSolution, **kwargs ):
 
-    #Result, Z_Feed = WpG.Wrapper( Ndim, XSolution )
+    if kwargs:
+        for key in kwargs:
+            if key == 'Thermodynamics':
+                ProbCase = kwargs[ key ]
+            elif key == 'StabilityAnalysis':
+                Stability = kwargs[ key ]
+            else:
+                sys.exit('In ObjectiveFunction, option for problem-type was not properly defined')
 
-    #Result, Z_Feed = WpG.Wrapper( Ndim, XSolution )
+        Result, Z_Feed = OptWrapper( XSolution, Thermodynamics = ProbCase )
+
+    else:
+        sys.exit('In ObjectiveFunction, option for problem-type was not properly defined (2)')
+
 
     return Result, Z_Feed
     
+
+def OptWrapper( Ndim, XSolution, **kwargs ):
+
+    MolarGibbs, Z_Feed = GBT.GibbsCalculation( XSolution )
+
+    return MolarGibbs
