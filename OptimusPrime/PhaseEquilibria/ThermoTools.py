@@ -1,9 +1,16 @@
 
 #!/usr/bin/env python
 
+import os, sys
 import numpy as np
 import math
-import sys
+
+lib_path = os.environ.get('OptimusPATH') + 'SAA'
+sys.path.append( lib_path ) # <== Adding the above in the sys path for python
+lib_path2 = os.environ.get('OptimusPATH') + 'Main'
+sys.path.append( lib_path2 ) # <== Adding the above in the sys path for python
+import SAA_Tools as SaT
+import SystemPaths as SyP
 
 # =================== ASSOCIATED/EXTERNAL FUNCTIONS ====================#
 
@@ -20,7 +27,7 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
         ===========================================================  """
 
     # System variables:
-    global NComp, NPhase, T_System, P_System,  MolarMass, Species
+    global NComp, NPhase, T_System, P_System, MolarMass, Species
 
     # Concentration-based variables:  
     global Z_Feed, MFrac, PhaseFrac
@@ -37,7 +44,7 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
     # Extra variables:
     global Debug, RConst, Residual
 
-    RConst = 8.314 # Gas constant [J/(gmol.K)]
+    RConst = 8.314 # Gas constant [J/(mol.K)]
     Residual = 1.e-10
     Debug = False
 
@@ -48,7 +55,8 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
 
     ''' Open a file named 'input.dat' that contains all thermo-physical parameters for
         the model '''
-    with open( 'input.dat', 'rt' ) as file:
+    Filename = SyP.ProbPATH + SaT.Function_Name + '.dat'
+    with open( Filename, 'rt' ) as file:
         reader = csv.reader( file, delimiter = ' ', skipinitialspace = True )
         
         for row in reader:
@@ -94,8 +102,8 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                 elif row[ 0 ] == 'BinaryInteraction':
                     BinaryParameter = ReadingRealMatrix( reader )
     #
-                    ''' Here we are reading the EOS and if the choice is PRSV, then we also
-                              read the K1 parameter '''
+                """ Here we are reading the EOS and if the choice is PRSV, then we also
+                            read the K1 parameter.                                       """
                 elif row[ 0 ] == 'Equations_of_State':
                     if row[ 1 ] == 'All':
                         EOS = []; EOS_K1 = []
@@ -129,18 +137,15 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                         if Activity_Model[ 0 ] == 'Wilson_Model':
                             Wilson_Lambda = ReadingRealMatrix( reader )
                         else:
-                            print 'Activity Model not implemented yet'
-                            sys,exit()
+                            sys,exit('Activity Model not implemented yet')
                     else:
-                        print 'Activity Model not implemented yet++'
-                        sys,exit()
+                        sys,exit('Activity Model not implemented yet++')
     #
                 elif row[ 0 ] == 'Debugging':
                     Debug = row[ 1 ]
     #
             else:
-                print 'Number_components was not defined in the FIRST line'
-                sys.exit()
+                sys.exit('In function ReadSet_Global_Variables. Number_components was not defined in the FIRST line')
                 
 
 # This function reads a row containing float elements
@@ -202,8 +207,8 @@ def ReadingBinaryParameters( reader ):
     Kij = [ 0. for i in range( NComp ** 2 ) ]
     Array_temp = [] 
 
-    #for line in reader: # Reading input file for Kij and allocating the data in a list
-    #    Array_temp.append(line)
+    """ For line in reader:  Reading input file for Kij and allocating the data in a list
+                Array_temp.append(line) """
 
     iline = 0
     for line in reader: # Reading input file for Kij and allocating the data in a list

@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 
 import os, sys
@@ -9,7 +8,7 @@ sys.path.append( lib_path ) # <== Adding the above in the sys path for python
 
 # Add here the Functions that will be optimised
 lib_path = os.environ.get('OptimusPATH') + 'PhaseEquilibria'
-#import WrapperGibbs as WpG
+import Main_Thermod as MTh
 #import gibbsfunction_test_10 as Kostas
 #import Test_A as Test 
 import pdb
@@ -25,26 +24,24 @@ import pdb
 ###
 def ObjFunction( XSolution, **kwargs ):
 
+    ProbStatus = 'Old'
     if kwargs:
         for key in kwargs:
             if key == 'Thermodynamics':
                 ProbCase = kwargs[ key ]
-            elif key == 'StabilityAnalysis':
-                Stability = kwargs[ key ]
+            elif key == 'Status':
+                ProbStatus = kwargs[ key ]
             else:
                 sys.exit('In ObjectiveFunction, option for problem-type was not properly defined')
 
-        Result, Z_Feed = OptWrapper( XSolution, Thermodynamics = ProbCase )
-
+        if ProbCase == 'PhaseEquilibria':
+            Result, Z_Feed = MTh.WrapThermodynamics( XSolution, Status = ProbStatus )
+        else:
+            sys.exit('In ObjectiveFunction, option for problem-type was not properly defined')
+            
     else:
         sys.exit('In ObjectiveFunction, option for problem-type was not properly defined (2)')
 
 
     return Result, Z_Feed
     
-
-def OptWrapper( Ndim, XSolution, **kwargs ):
-
-    MolarGibbs, Z_Feed = GBT.GibbsCalculation( XSolution )
-
-    return MolarGibbs

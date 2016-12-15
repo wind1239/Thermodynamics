@@ -127,7 +127,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
         else:
             sys.exit( 'In SimulatedAnnealing. Option not found' )
-
+        
 
 
         """
@@ -141,7 +141,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             Func = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X ) 
             
         else: # Problems
-            Func, Z_Feed = ObF.ObjFunction( SaT.SA_X, Thermodynamics = PhaseEquilibria )
+            Func, Z_Feed = ObF.ObjFunction( SaT.SA_X, Thermodynamics = PhaseEquilibria, Status = 'InitialCalculations' )
             
         """ The function must be minimum """
         if SaT.Minimum:

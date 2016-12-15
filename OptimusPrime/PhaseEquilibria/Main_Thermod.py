@@ -1,21 +1,39 @@
-
 #!/usr/bin/env python
 
-import matplotlib.pyplot as bplot
-import numpy as np
+import os, sys
 import math
+import numpy as np
 import ThermoTools as ThT
 import GibbsFunction as GibbsF
-import PhaseStability as Michaelsen
+import PhaseStability as PhSty
 import NormalisedConstraint as NC
 import pickle
 #import csv # Using csv (comma separated values) module
 
 
-''' This is the main program that aims to calculate the vapour-liquid equilibrium
-       composition of a mixture containing "NComp" components. The thermodynamic
-       formulation can be found in the documentation under the ../doc directory.
-'''
+""" ======================================================================================
+       This is the main function that calculates the fluid phase equilibria composition
+           of a mixture containing "NComp" components. The thermodynamic formulation can
+           be found in the documentation.
+     ===================================================================================== """
+
+def WrapThermodynamics( XSolution, **kwargs ):
+
+    if kwargs:
+        for key in kwargs:
+            if key == 'Status':
+                ProbStatus = kwargs[ key ]
+            else:
+                sys.exit('In WrapThermodynamics, option for problem-type was not defined')
+
+    if ProbStatus == 'InitialCalculations':
+        
+        """  Reading Input data from external file """
+        ThT.ReadSet_Global_Variables()
+
+        """ Michaelsen Stability Criteria """
+        PhSty.Phase_Stability( Temp, Press )
+
 
 
 # Reading Input data from external file:

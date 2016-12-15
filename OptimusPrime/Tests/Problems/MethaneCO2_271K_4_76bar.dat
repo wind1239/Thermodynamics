@@ -1,0 +1,83 @@
+###  
+### Input file for this test case
+###   Mixture: CH4+CO2 @ 271 K and 4.76 bar
+###
+
+# Number of Components: 
+Number_Components          2
+
+# Number of Phases:
+Number_Phases              2
+
+# Temperature in Kelvin (initial, final, increment)
+System_Temperature         271.10      271.10       0.0
+
+# Pressure in bar  (initial, final, increment)
+System_Pressure              4.76        4.76           0.0
+
+# Chemical species in the mixture
+Components                 "CH4-methane"       "CO2-Carbon-dioxide"        
+
+# Molar_fraction of the species 
+# Molar_fraction             0.2671       0.7328           
+
+# Critical temperature in Kelvin
+Crit_Temp                  190.56       304.15                   
+
+# Critical pressure in bar
+Crit_Pres                   46.40        73.8                              
+
+# Molar mass in g/mol
+Molar_Mass                  16.04        44.01           
+
+# Accentric factor (dimensionless)
+Accentric_Factor            0.01          0.09        
+
+# Composition of the feeding stream (z, dimensionless)
+Feed_Composition            0.275         0.725
+
+# Guess Composition: this is structured as Xij, where i=1,NComp and j=1,NPhase:
+#    X(1,1), X(2,1), ..., X(NComp,1), X(1, 2), ..., X(NComp,2), ..., X(NComp,NPhase)
+MFrac  0.20   0.80   0.85  0.15 
+
+# Guess Phase Fraction: this is structured as Xj, where j=1,NPhase
+PhaseFrac 0.40  0.60
+
+# Equations of State:  
+#     If the first line is 
+#           Equations_of_State   "Each"
+#        then an EOS is assigned to each component otherwise;
+#     If the first line is 
+#           Equations_of_State   "All"  "Peng-Robinson"
+#        then ONE EOS is assigned to ALL components.
+#
+#     If the option of EOS is Peng-Robinson-Stryjek-Vera, then a real (i.e., floating) 
+#        number is also read, representing the K1 parameter.          
+#
+# For the time being only Peng-Robinson and Peng-Robinson-Stryjek-Vera are available.
+
+Equations_of_State   "All"     "Peng-Robinson"
+
+# Mixing Rules:
+#     For now, only the classic and Wong-Sandler mixing rules (and associated combining 
+#        rules) are coded. The syntax is:
+#        Mixing_Rules     "Classic"
+#        Mixing_Rules     "Wong-Sandler"
+
+Mixing_Rules          "Classic"
+
+
+# Binary interaction parameter
+# Component_i Component_j Value
+BinaryInteraction
+0.0000   0.0923
+0.0923   0.0000
+
+
+# Activity Model:
+#     Options for ActivityModel: 
+#           (a) "Wilson-Model": Reading the Lambda parameter
+ActivityModel  "All" "Wilson_Model"
+1.0000    1.0127
+0.5967    1.0000
+
