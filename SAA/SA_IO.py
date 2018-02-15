@@ -130,6 +130,7 @@ def ReadInCoolingSchedule( **kwargs ):
                 TestNumber = kwargs[ key ]
                 dummy, SA_Function = CountingNumberOfTests( Test_Case = TestNumber )
                 Function = os.path.abspath( './Tests/' + SA_Function + '.sa' )
+                Task = 'Benchmarks'
 
             elif( key == 'Task' ): # For Problems
                 Task = kwargs[ key ]
