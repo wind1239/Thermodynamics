@@ -4,7 +4,6 @@
 import sys, os
 import time
 import SystemPaths as SyP
-
 lib_path = os.path.abspath('../SAA' ) # path to SAA
 sys.path.append( lib_path ) # <== Adding the above in the sys path for python
 import SA_IO as IO
@@ -76,6 +75,8 @@ else:
         
 # Creating Global Variables for directories pathways
 SyP.PathWays( Task, Method, Thermodynamics = PhaseEquilibria )
+
+
 
 """ Creating a file for general output """
 if Task == 'Problem' or Task == 'Problems':
