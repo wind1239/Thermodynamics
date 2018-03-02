@@ -102,8 +102,8 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                 elif row[ 0 ] == 'BinaryInteraction':
                     BinaryParameter = ReadingRealMatrix( reader )
     #
-                """ Here we are reading the EOS and if the choice is PRSV, then we also
-                            read the K1 parameter.                                       """
+    #            """ Here we are reading the EOS and if the choice is PRSV, then we also
+    #                        read the K1 parameter.                                       """
                 elif row[ 0 ] == 'Equations_of_State':
                     if row[ 1 ] == 'All':
                         EOS = []; EOS_K1 = []

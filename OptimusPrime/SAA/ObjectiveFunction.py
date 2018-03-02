@@ -2,12 +2,12 @@
 
 import os, sys
 
-lib_path = os.environ.get('OptimusPATH') + 'PhaseEquilibria'
+lib_path = os.environ.get('OptimusPATH') + '/PhaseEquilibria'
 sys.path.append( lib_path ) # <== Adding the above in the sys path for python
 
 
 # Add here the Functions that will be optimised
-lib_path = os.environ.get('OptimusPATH') + 'PhaseEquilibria'
+##lib_path = os.environ.get('OptimusPATH') + '/PhaseEquilibria'
 import Main_Thermod as MTh
 #import gibbsfunction_test_10 as Kostas
 #import Test_A as Test 
