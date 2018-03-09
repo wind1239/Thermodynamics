@@ -34,8 +34,8 @@ def MixingRules_EoS( Temp, Press, iphase, Composition ):
             print 'Fix this hack !!'
             sys.exit()
 
-        print 'This needs to be fixed ...'
-        sys.exit()
+        #print 'This needs to be fixed ...'
+        #sys.exit()
             
     elif ThT.MixingRules[ 0 ] == "Wong-Sandler":
         ( FugCoeff, ChemPot ) =  Mix_WS.MixingRules_EoS_WongSandler( Temp, Press, iphase, Composition )
@@ -55,18 +55,19 @@ def MixingRules_EoS_Classic( Temp, Composition ):
     aij = [ 0. for i in range( ThT.NComp**2 ) ] ; sum1 = 0. ; sum2 = 0.
     
     for icomp in range( ThT.NComp ):
-        ai, bi = Cubic_EoS( icomp, Temp )
+        ai, bi = EoS.Cubic_EoS( icomp, Temp )
         sum2 = sum2 + bi * Composition[ icomp ]
 
         sum1 = 0.        
         for jcomp in range( ThT.NComp ):
             node = icomp * ThT.NComp + jcomp
-            aj, bj = Cubic_EoS( jcomp, Temp )
+            aj, bj = EoS.Cubic_EoS( jcomp, Temp )
 
             if icomp == jcomp:
                 aij[ node ] = ai
             else:
-                aij[ node ] = math.sqrt( ai * aj ) * ( 1. - ThT.kij[ node ] )
+                #aij[ node ] = math.sqrt( ai * aj ) * ( 1. - ThT.kij[ node ] )
+                aij[ node ] = math.sqrt( ai * aj ) * ( 1. - ThT.BinaryParameter[ node ] )
 
             sum1 = sum1 + aij[ node ] * Composition[ icomp ] * Composition[ jcomp ]
 

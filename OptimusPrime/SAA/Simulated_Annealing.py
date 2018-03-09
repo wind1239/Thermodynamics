@@ -15,8 +15,8 @@ import time
 import pdb
 import pylab as pl
 
-lib_path = os.environ.get('OptimusPATH') + '/Main/' 
-sys.path.append( lib_path ) # <== Adding the above in the sys path for python
+#lib_path = os.environ.get('OptimusPATH') + '/Main/' 
+#sys.path.append( lib_path ) # <== Adding the above in the sys path for python
 import SystemPaths as SyP
 
 
@@ -180,11 +180,11 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             Time_temp.append( TestTime )
             if TestCases == 'All' :
                 if itest > 1:
-                    TestSolution_Time.append( TestTime - Time_temp[ itest - 1 ] )
+                    TestSolution_Time.append( TestTime - Time_temp[ itest - 2 ] )
                 else:
                     TestSolution_Time.append( TestTime )
                     
-            IO.f_SAOutput.write( '\n' )
+                    IO.f_SAOutput.write( '\n' )
             IO.f_SAOutput.write( '===========================================================' )
             IO.f_SAOutput.write( '\n' )
             IO.f_SAOutput.write( '            Assessment of the test-cases :      ' )
@@ -195,11 +195,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             
         else: # Problem
             TestTime = time.clock()
-            TestSolution_Time.append( time.clock() - SaT.Time_Init ) # Measuring CPU time for the problem/test
-
-
-    print 'Elapsed CPU-Time:', TestSolution_Time
-    
+            TestSolution_Time.append( time.clock() - SaT.Time_Init ) # Measuring CPU time for the problem/test   
 
     if ( Task == 'Benchmarks' ) and ( TestCases == 'All' ):
         Print.Print_SAA_Diagnostic( Bench_AllTestCases = 'yes', Solution = TestSolution, Solution_Name = TestSolution_Name, Solution_Time = TestSolution_Time  )

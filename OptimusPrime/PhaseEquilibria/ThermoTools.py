@@ -5,10 +5,10 @@ import os, sys
 import numpy as np
 import math
 
-lib_path = os.environ.get('OptimusPATH') + 'SAA'
-sys.path.append( lib_path ) # <== Adding the above in the sys path for python
-lib_path2 = os.environ.get('OptimusPATH') + 'Main'
-sys.path.append( lib_path2 ) # <== Adding the above in the sys path for python
+#lib_path = os.environ.get('OptimusPATH') + '/SAA'
+#sys.path.append( lib_path ) # <== Adding the above in the sys path for python
+#lib_path2 = os.environ.get('OptimusPATH') + '/Main'
+#sys.path.append( lib_path2 ) # <== Adding the above in the sys path for python
 import SAA_Tools as SaT
 import SystemPaths as SyP
 
@@ -113,7 +113,7 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                             EOS_K1.append( float( row[ 3 ] ) )
                         for i in range(1, NComp ):
                             EOS.append( EOS[ i - 1 ] )
-                            EOS_K1.append( float( EOS_K1[ i - 1 ] ) )
+                            #EOS_K1.append( float( EOS_K1[ i - 1 ] ) )
                     else:
                         EOS, EOS_K1 = ReadingEOS( reader )
     #
