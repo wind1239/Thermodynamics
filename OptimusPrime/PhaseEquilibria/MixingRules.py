@@ -72,6 +72,7 @@ def MixingRules_EoS_Classic( Temp, Composition ):
             sum1 = sum1 + aij[ node ] * Composition[ icomp ] * Composition[ jcomp ]
 
     am = sum1 ; bm = sum2 # am and bm (mixing rules)
+    print am, bm ; sys.exit('@@@')
 
     # need to calculate the and bm derivatives ... later
 

@@ -1,14 +1,8 @@
 #!/usr/bin/env python
 
 import os, sys
+import SystemPaths as SyP
 
-lib_path = os.environ.get('OptimusPATH') + '/PhaseEquilibria'
-sys.path.append( lib_path ) # <== Adding the above in the sys path for python
-
-
-# Add here the Functions that will be optimised
-##lib_path = os.environ.get('OptimusPATH') + '/PhaseEquilibria'
-import Main_Thermod as MTh
 #import gibbsfunction_test_10 as Kostas
 #import Test_A as Test 
 import pdb
@@ -34,7 +28,9 @@ def ObjFunction( XSolution, **kwargs ):
             else:
                 sys.exit('In ObjectiveFunction, option for problem-type was not properly defined')
 
+
         if ProbCase == 'PhaseEquilibria':
+            import Main_Thermod as MTh
             Result, Z_Feed = MTh.WrapThermodynamics( XSolution, Status = ProbStatus )
         else:
             sys.exit('In ObjectiveFunction, option for problem-type was not properly defined')

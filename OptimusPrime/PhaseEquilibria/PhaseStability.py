@@ -23,6 +23,7 @@ def Phase_Stability( Temp, Press ):
                  GZero contains the molar Gibbs energy based on the feed mole/
                         mass fraction.
                                                                                '''
+
     Alpha = AlphaPhases()
     if ThT.Debug:
         print 'Alpha ( V / L ):', Alpha
