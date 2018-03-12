@@ -24,7 +24,7 @@ def MixingRules_EoS( Temp, Press, iphase, Composition ):
         ( am, bm ) = MixingRules_EoS_Classic( Temp, Composition )
         
         """ This is temporary hack. This is valid only for VLE systems.
-            Calculating the Compressibility Factor (Z)                  """
+            Calculating the Compressibility Factor (Z) of phase iphase     """
         Zvapour, Zliquid = EoS.PR_Cubic( Temp, Press, am, bm )
         if iphase == 0: # Vapour phase
             Z = Zvapour

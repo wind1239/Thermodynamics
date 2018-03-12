@@ -142,6 +142,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             
         else: # Problems
             Func, Z_Feed = ObF.ObjFunction( SaT.SA_X, Thermodynamics = PhaseEquilibria, Status = 'InitialCalculations' )
+
             
         """ The function must be minimum """
         if SaT.Minimum:
@@ -272,10 +273,8 @@ def ASA_Loops( Task, Func, **kwargs ):
                     else:
                         dim = SaT.Ndim
 
-                    #for i in range( dim ):
                     for i in range( SaT.Ndim ):
                         rand = RanGen.RandomNumberGenerator( SaT.Ndim )
-                        #rand = RanGen.RandomNumberGenerator( dim )
 
                         if ( i == hloop ):
                             XP[ i ] = X_Try[ i ] + SaT.VM[ i ] * ( 2. * rand[ i ] - 1. ) 
@@ -310,7 +309,7 @@ def ASA_Loops( Task, Func, **kwargs ):
                     else: # Problems
                         FuncP, dummy = ObF.ObjFunction( XP, Thermodynamics = PhaseEquilibria )
 
-                    #print 'here we are again .... oh dear :::',  XP, FuncP
+                    print 'here we are again .... oh dear :::',  XP, FuncP
                     #sys.exit()
 
                         

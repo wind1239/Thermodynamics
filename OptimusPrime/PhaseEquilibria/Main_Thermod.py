@@ -31,7 +31,7 @@ def WrapThermodynamics( XSolution, **kwargs ):
         """  Reading Input data from external file """
         ThT.ReadSet_Global_Variables()
 
-        OutFile = open('output', 'w')
+        #OutFile = open('output', 'w')
 
         ''' ====================================================================
                Printing the data from the input file 
@@ -109,7 +109,8 @@ def WrapThermodynamics( XSolution, **kwargs ):
         """ Michaelsen Stability Criteria """
         ( Composition, Comp_Phase, index_phase, Molar_Gibbs_Free ) = PhSty.Phase_Stability( Temp, Press )
         PhSty.CheckingPhases( Comp_Phase, Molar_Gibbs_Free )
-        sys.exit('===')
+        #sys.exit('===')%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        return ( Molar_Gibbs_Free, Comp_Phase )
 
 
         
