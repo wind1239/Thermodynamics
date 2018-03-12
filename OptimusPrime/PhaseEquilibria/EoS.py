@@ -3,6 +3,7 @@
 
 import numpy as np
 import math 
+import sys
 import ThermoTools as ThT
 
 '''
@@ -39,6 +40,9 @@ def PR_EoS_Calc_a( i, T ):
             ThT.Accentric_Factor[ i ]**2 + 0.0196554 * ThT.Accentric_Factor[ i ]**3
         k = k0 + ThT.EOS_K1[ i ] * ( 1. + math.sqrt( T / ThT.T_Crit[ i ] ) ) * \
             ( 0.7 - math.sqrt( T / ThT.T_Crit[ i ] ) )
+    else:
+        sys.exit( 'Appropriate EOS was not found' )
+
     alpha = ( 1. + k * ( 1. - math.sqrt( T / ThT.T_Crit[ i ] ) )) **2
     a_k = 0.45724 * ( ThT.RConst * ThT.T_Crit[ i ] )**2 / ThT.P_Crit[ i ] * alpha
     return a_k

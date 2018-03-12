@@ -72,7 +72,7 @@ def ReadSet_Global_Variables(): # Read variables from a external file called 'in
                     NPhase = int( row[ 1 ] )
     #
                 elif row[ 0 ] == 'System_Temperature': # Temperature of the mixture (in K)
-                    T_System = Reading_MixtureConditions_Float( row ) 
+                    T_System = Reading_MixtureConditions_Float( row )
     #
                 elif row[ 0 ] == 'System_Pressure': # Pressure of the mixture (in bar)
                     P_System = Reading_MixtureConditions_Float( row )

@@ -64,7 +64,8 @@ Equations_of_State   "All"     "Peng-Robinson"
 #        Mixing_Rules     "Classic"
 #        Mixing_Rules     "Wong-Sandler"
 
-Mixing_Rules          "Classic"
+#Mixing_Rules          "Classic"
+Mixing_Rules          "Wong-Sandler"
 
 
 # Binary interaction parameter
@@ -80,4 +81,7 @@ BinaryInteraction
 ActivityModel  "All" "Wilson_Model"
 1.0000    1.0127
 0.5967    1.0000
+
+# Debugging: Option to dump all intermediate results into the *.out file (True or False)
+Debugging  True
 

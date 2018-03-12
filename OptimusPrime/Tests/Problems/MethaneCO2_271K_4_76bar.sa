@@ -16,16 +16,16 @@ NS     10
 NT     10
 
 # MaxEvl: Maximum number of evaluations of the objective function 
-MaxEvl  10000
+MaxEvl  50000
 
 # EPS: Minimum acceptable discrepancy (used throughout the SAA)
 EPS  1.e-2
 
 # RT: Parameter for temperature reduction
-RT   0.95
+RT   0.98
 
 # Temp: SAA temperature parameter
-Temp   95.
+Temp   35.
 
 # X_Init: Initial guess for the solution-coordinate vector
 X_Init       0.1      0.1
@@ -43,4 +43,4 @@ VM     1.E-2     1.E-2
 C      0.60     0.60
 
 # Debugging: Option to dump all intermediate results into the *.out file (True or False)
-Debugging  False
+Debugging  True
