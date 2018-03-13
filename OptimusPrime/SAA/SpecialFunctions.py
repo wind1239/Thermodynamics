@@ -144,7 +144,7 @@ def Envelope_Constraints( X, **kwargs ):
 ### Calculating the other phase
 ###
 def CalcOtherPhase( X, Z, UB, LB, **kwargs ):
-    """ This function calculates the composition of the other phase. The input is X[0:N], where X[N-1]
+    """ This function calculates the composition of the other phase. The input is X[0:N-1], where X[N-1]
             is the phase composition. Z[0:N] is the feed composition. UB and LB are the lower and upper
             bound arrays.                                                                               """
     N = len( Z )

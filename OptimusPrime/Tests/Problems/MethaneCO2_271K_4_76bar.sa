@@ -43,4 +43,4 @@ VM     1.E-2     1.E-2
 C      0.60     0.60
 
 # Debugging: Option to dump all intermediate results into the *.out file (True or False)
-Debugging  True
+Debugging  False
