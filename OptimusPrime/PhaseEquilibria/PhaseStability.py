@@ -79,6 +79,7 @@ def AlphaPhases():
        where i = 1, NComp and j = 1, Nphase.
 
     '''
+    print '--', ThT.MFrac ; sys.exit('ppp')
     Alpha_Phase = [ 0. for i in range( ThT.NPhase ) ]
     for iphase in range( ThT.NPhase ):
         sum = 0.
