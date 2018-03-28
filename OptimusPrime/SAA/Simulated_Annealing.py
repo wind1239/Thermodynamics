@@ -143,7 +143,6 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         else: # Problems
             Func, Z_Feed = ObF.ObjFunction( SaT.SA_X, Thermodynamics = PhaseEquilibria, Status = 'InitialCalculations' )
 
-        print '====>>>', Func, Z_Feed, SaT.SA_X ; sys.exit('fck')
         """ The function must be minimum """
         if SaT.Minimum:
             Func = -Func
