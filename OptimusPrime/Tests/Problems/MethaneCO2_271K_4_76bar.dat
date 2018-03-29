@@ -38,10 +38,10 @@ Feed_Composition            0.275         0.725
 
 # Guess Composition: this is structured as Xij, where i=1,NComp and j=1,NPhase:
 #    X(1,1), X(2,1), ..., X(NComp,1), X(1, 2), ..., X(NComp,2), ..., X(NComp,NPhase)
-MFrac  0.20   0.80   0.85  0.15 
+MFrac  0.80   0.20   0.15  0.85 
 
 # Guess Phase Fraction: this is structured as Xj, where j=1,NPhase
-PhaseFrac 0.40  0.60
+PhaseFrac 0.80  0.20
 
 # Equations of State:  
 #     If the first line is 
@@ -64,8 +64,8 @@ Equations_of_State   "All"     "Peng-Robinson"
 #        Mixing_Rules     "Classic"
 #        Mixing_Rules     "Wong-Sandler"
 
-#Mixing_Rules          "Classic"
-Mixing_Rules          "Wong-Sandler"
+Mixing_Rules          "Classic"
+#Mixing_Rules          "Wong-Sandler"
 
 
 # Binary interaction parameter
