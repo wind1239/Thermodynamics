@@ -1,0 +1,17 @@
+28.054D0				PESO MOLECULAR ETILENO
+282.0D0 				PESO MOLECULAR ICOSANO 
+8.314D-3  				CONSTANTE UNIVERSAL GASES  R 
+373.15D0         			TEMPERATURA (K)
+30000.0D0                               PRESSAO (KPa)
+5.0000D0                                PARAMETRO TAMANHO DO SEGMENTO
+0.710D0                                 PARAMETRO DE FLORY-HUGGINS
+0.2000D0	         		COMP. MASSICA DO SOLV. NA ALIM.
+0.089D0				        FATOR ACENTRICO DO SOLVENTE
+5040.0D0	    	                PRESSAO CRITIC. DO SOLVENTE	
+282.4D0 				TEMPERAT. CRITIC. DO SOLVENTE
+21.184D-3                               AI DO SOLUTO
+3.4244D-4                               BI DO SOLUTO
+0.50000D0                               COMPOSICAO DO SOLVENTE NA FASE VAPOR
+0.50000D0                               COMPOSICAO DO SOLVENTE NA FASE LIQUIDA
+0.50000D0                               FRACAO LIQUIDA
+0.810D0      			        PARAMETRO DE INTERACAO BINARIA

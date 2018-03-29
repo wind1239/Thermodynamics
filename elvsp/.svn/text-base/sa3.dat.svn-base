@@ -1,0 +1,20 @@
+.FALSE.			MAX    	-function maximized or minimized
+1.0D-15			EPS  	-error tolerance for termination
+0.0010D0	       	RT 	-temperature reduction factor
+1			ISEED1 	-first seed for randon number
+2			ISEED2	-second seed for randon number
+20			NS	-number of cycles
+50			NT   	-n. of iterations before temperature reduction
+1000000      		MAXEVL	-maximum number of function evaluations
+1			IPRINT	-controls printing inside SA
+1.0D1     		T	-the initial temperature
+2			N	-number of variables in the function
+0.000000001D0    	LB(1)	-lower bound for the allowable solution
+0.999999999D0		UB(1)	-upper bound for the allowable solution
+2.0D0	  		C(1)	-vector that controls the step length adjustment
+1.0D0	  		VM(1)	-the step length vector		
+0.000000001D0	  	LB(2)	-lower bound for the allowable solution
+0.999999999D0		UB(2)	-upper bound for the allowable solution
+2.0D0	  		C(2)	-vector that controls the step length adjustment
+1.0D0	  		VM(2)	-the step length vector
+   

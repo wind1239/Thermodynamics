@@ -1,0 +1,356 @@
+
+SIMULATED ANNEALIG
+
+NUMERO DE PARAMETROS :   2
+MAXIMIZACAO :     F
+TEMPERATURA INICIAL : 0.10    
+FATOR DE REDUCAO DE TEMPERATURA : 0.10E-02
+ERRO MINIMO PARA TERMINO : 0.10E-07
+NUMERO DE CICLOS :   3
+NUMERO DE ITERACOES ANTES DA REDUCAO DA TEMPERATURA:  8
+NUMERO FINAL DO VALOR DA FUNCAO (NEPS) :  4
+NUMERO MAXIMO DE AVALIACOES DA FUNCAO :    1000000
+IPRINT : 1
+ISEED1 :    1
+ISEED2 :    2
+
+                                        VALORES INICIAIS
+ 0.50000D+00  0.50000D-02
+
+                                        VETOR PASSO INICIAL
+ 0.10000D+01  0.10000D+01
+
+                                        LIMITE INFERIOR
+ 0.10000D-07  0.10000D-07
+
+                                        LIMITE SUPERIOR
+ 0.10000D+01  0.10000D+01
+
+                                        VETOR C
+ 0.20000D+01  0.20000D+01
+  
+ ******************************************************
+ ******************************************************
+  
+     FINAL DOS DADOS DE ENTRADA REFERENTES AO S.A.     
+  
+ ******************************************************
+ ******************************************************
+  
+  
+
+                                        VALORES INICIAIS DE X
+ 0.50000D+00  0.50000D-02
+
+VALOR INICIAL DE F :-0.287401640187831724D+02
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000    
+  
+VALOR MINIMO DA FUNCAO :  -28.7909453507022306    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        6
+MOVIMENTOS ACEITOS PARA CIMA :        8
+MOVIMENTOS REJEITADOS PARA CIMA :       34
+TENTATIVAS FORA DOS LIMITES :       34
+NEW MINIMA THIS TEMPERATURE :        2
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.54513D-01  0.50000D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000E-03
+  
+VALOR MINIMO DA FUNCAO :  -28.7909453507022306    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        0
+MOVIMENTOS ACEITOS PARA CIMA :        0
+MOVIMENTOS REJEITADOS PARA CIMA :       48
+TENTATIVAS FORA DOS LIMITES :       27
+NEW MINIMA THIS TEMPERATURE :        0
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.54513D-01  0.50000D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000E-06
+  
+VALOR MINIMO DA FUNCAO :  -28.8150211292072953    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        2
+MOVIMENTOS ACEITOS PARA CIMA :        0
+MOVIMENTOS REJEITADOS PARA CIMA :       46
+TENTATIVAS FORA DOS LIMITES :       29
+NEW MINIMA THIS TEMPERATURE :        2
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.30480D-02  0.10043D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000E-09
+  
+VALOR MINIMO DA FUNCAO :  -28.8150211292072953    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        0
+MOVIMENTOS ACEITOS PARA CIMA :        0
+MOVIMENTOS REJEITADOS PARA CIMA :       48
+TENTATIVAS FORA DOS LIMITES :       26
+NEW MINIMA THIS TEMPERATURE :        0
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.30480D-02  0.10043D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000E-12
+  
+VALOR MINIMO DA FUNCAO :  -28.8150211292072953    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        0
+MOVIMENTOS ACEITOS PARA CIMA :        0
+MOVIMENTOS REJEITADOS PARA CIMA :       48
+TENTATIVAS FORA DOS LIMITES :       29
+NEW MINIMA THIS TEMPERATURE :        0
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.30480D-02  0.10043D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000E-15
+  
+VALOR MINIMO DA FUNCAO :  -28.8150211292072953    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        0
+MOVIMENTOS ACEITOS PARA CIMA :        0
+MOVIMENTOS REJEITADOS PARA CIMA :       48
+TENTATIVAS FORA DOS LIMITES :       35
+NEW MINIMA THIS TEMPERATURE :        0
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.30480D-02  0.10043D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+ CRITERIO DE PARADA ALCANCADO PARA O ALGORITMO S.A.
+  
+
+                                        VALORES INICIAIS DE X
+ 0.30480D-02  0.10043D-02
+
+VALOR INICIAL DE F :-0.288079472159761210D+02
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000    
+  
+VALOR MINIMO DA FUNCAO :  -28.8116253855235982    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :       12
+MOVIMENTOS ACEITOS PARA CIMA :       11
+MOVIMENTOS REJEITADOS PARA CIMA :       25
+TENTATIVAS FORA DOS LIMITES :       64
+NEW MINIMA THIS TEMPERATURE :        2
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.13575D+00  0.10043D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000E-03
+  
+VALOR MINIMO DA FUNCAO :  -28.8116262681176103    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        1
+MOVIMENTOS ACEITOS PARA CIMA :        1
+MOVIMENTOS REJEITADOS PARA CIMA :       46
+TENTATIVAS FORA DOS LIMITES :       23
+NEW MINIMA THIS TEMPERATURE :        1
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.13546D+00  0.10043D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000E-06
+  
+VALOR MINIMO DA FUNCAO :  -28.8116532861905519    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        1
+MOVIMENTOS ACEITOS PARA CIMA :        0
+MOVIMENTOS REJEITADOS PARA CIMA :       47
+TENTATIVAS FORA DOS LIMITES :       28
+NEW MINIMA THIS TEMPERATURE :        1
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.11892D+00  0.10043D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000E-09
+  
+VALOR MINIMO DA FUNCAO :  -28.8116532861905519    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        0
+MOVIMENTOS ACEITOS PARA CIMA :        0
+MOVIMENTOS REJEITADOS PARA CIMA :       48
+TENTATIVAS FORA DOS LIMITES :       22
+NEW MINIMA THIS TEMPERATURE :        0
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.11892D+00  0.10043D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000E-12
+  
+VALOR MINIMO DA FUNCAO :  -28.8116532861905519    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        0
+MOVIMENTOS ACEITOS PARA CIMA :        0
+MOVIMENTOS REJEITADOS PARA CIMA :       48
+TENTATIVAS FORA DOS LIMITES :       23
+NEW MINIMA THIS TEMPERATURE :        0
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.11892D+00  0.10043D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+  
+ ******************************************************
+  
+ RESULTADOS INTERMEDIARIOS ANTES DA IMPLEMENTACAO DO 
+ REDUTOR DE TEMPERATURA - RT
+
+TEMPERATURA ATUAL :  0.10000E-15
+  
+VALOR MINIMO DA FUNCAO :  -28.8116532861905519    
+TOTAL DE MOVIMENTOS :       48
+MOVIMENTOS PARA BAIXO :        0
+MOVIMENTOS ACEITOS PARA CIMA :        0
+MOVIMENTOS REJEITADOS PARA CIMA :       48
+TENTATIVAS FORA DOS LIMITES :       25
+NEW MINIMA THIS TEMPERATURE :        0
+  
+
+                                        VETOR X OTIMO ATUAL
+ 0.11892D+00  0.10043D-02
+
+                                        VETOR VM
+ 0.10000D+01  0.10000D+01
+  
+ CRITERIO DE PARADA ALCANCADO PARA O ALGORITMO S.A.
+  
+  
+ ******************************************************
+ ******************************************************
+  
+  
+        RESULTADOS FINAIS APOS A IMPLEMENTACAO DO S.A.
+  
+  
+ ******************************************************
+ ******************************************************
+  
+  
+
+                                        SOLUCAO FINAL
+ 0.11892D+00  0.10043D-02
+
+                                        VETOR VM FINAL
+ 0.10000D+01  0.10000D+01
+  
+
+VALOR OTIMO DA FUNCAO : -0.2881165328619D+02
+NUMERO DE AVALIACOES DA FUNCAO :        289
+NUMERO DE AVALIACOES ACEITAS :         26
+NUMERO DE AVALIACOES FORA DOS LIMITES :        185
+PARAMETRO TEMPERATURA - FINAL :  0.1000000000000E-15
+IER :   0

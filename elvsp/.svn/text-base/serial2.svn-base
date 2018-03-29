@@ -1,0 +1,11 @@
+# makefile pour programme utilisant la bibliotheque FORTRAN
+#
+
+SER2	= -f -C -O4
+
+elvpol : samainrm.o functionrm.o sa.o  gvrm.o dupla.o glconsrm.o gvconsrm.o glrm.o aglrm.o agvrm.o conta.o mixr.o convw.o convm.o potquim.o ativ.o gibbs.o fugpure.o potclas.o
+	 f77  $(SER2) -o elvpol samainrm.o functionrm.o sa.o  gvrm.o dupla.o glconsrm.o gvconsrm.o glrm.o aglrm.o agvrm.o conta.o mixr.o convw.o convm.o potquim.o ativ.o gibbs.o fugpure.o potclas.o
+
+.f.o:				
+	f77 -c $(SER2) $*.f
+                               

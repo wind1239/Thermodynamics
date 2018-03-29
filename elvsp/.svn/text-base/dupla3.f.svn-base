@@ -1,0 +1,72 @@
+
+C	==========================================================
+C
+C	CALCULO DE Z PELO METODO ANALITICO
+C
+C	==========================================================
+
+ 	SUBROUTINE DUPLA(ICASE,METHOD,INIT,COEF,ZVAP,ZLIQ,IDIVG)
+
+ 	IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C       INCLUDE 'common.f'
+C       INCLUDE 'comcalc.f'
+        DOUBLE PRECISION COEF(3)
+      
+	OPEN(31,FILE ='CUBICA.OUT')
+	
+	P1=COEF(3)
+	P2=COEF(2)
+	P3=COEF(1)
+
+C	WRITE(31,*)P1,P2,P3
+
+C	CALCULO DE QC, RC E DC :
+
+	QC=(3.0D0*P2-P1**2)/9.0D0
+	RC=(9.0D0*P1*P2-27.0D0*P3-2.0D0*P1**3)/54.0D0
+	DC=QC**3+RC**2
+
+	IF(DC.LT.0.0D0)THEN
+	  WRITE(*,*)'CUBICA: 3 RAIZES REAIS E DISTINTAS'
+	  THETAC=ACOS(RC/SQRT(-QC**3))
+	  ZC1=2*SQRT(-QC)*COS(THETAC/3.0D0)-P1/3.0D0
+	  ZC2=2*SQRT(-QC)*COS(THETAC/3.0D0 + 120)-P1/3.0D0
+          ZC3=2*SQRT(-QC)*COS(THETAC/3.0D0 + 240)-P1/3.0D0
+	ELSEIF(DC.GT.0.0D0)THEN
+	  WRITE(*,*)'CUBICA : 1 RAIZ REAL E 2 IMAGINARIAS'
+	  SC=(RC+SQRT(DC))**(1/3)
+	  TC1=(RC-SQRT(DC))**(1/3)
+          ZC1=SC+TC1-P1/3.0D0
+	  ZC2=0.0D0
+          ZC3=0.0D0
+	ELSE
+	  WRITE(*,*)'CUBICA:RAIZES REAIS E PELO MENOS 2 SAO IGUAIS'
+          SC=(RC+SQRT(DC))**(1/3)
+	  TC1=(RC-SQRT(DC))**(1/3)	  
+          ZC1=SC+TC1-P1/3.0D0
+          ZC2=-(SC+TC1)/2.0D0-P1/3.0D0
+          ZC3=ZC2
+	ENDIF
+
+C	INIT = 1 : FASE VAPOR (MAIOR VALOR DE Z)
+C	INIT = 2 : FASE LIQUIDA (MENOR VALOR DE Z)
+
+C       WRITE(31,*)ZC1,ZC2,ZC2
+
+	IF(INIT.EQ.1)THEN
+	  ZVAP=MAX(ZC1,ZC2,ZC3)
+          ZLIQ=MIN(ZC1,ZC2,ZC3)
+          WRITE(31,*)'ZVAP(',ITERZZ,') : ',ZVAP
+          WRITE(31,*)'ZLIQ(',ITERZZ,') : ',ZLIQ
+      	ELSE
+	  ZLIQ=MIN(ZC1,ZC2,ZC3)
+          ZVAP=MAX(ZC1,ZC2,ZC3)
+          WRITE(31,*)'ZLIQ(',ITERZZ,') : ',ZLIQ
+          WRITE(31,*)'ZVAP(',ITERZZ,') : ',ZVAP
+	ENDIF
+        IDIVG=1
+        ITERZZ = ITERZZ + 1
+
+C	RETURN
+	END
+
