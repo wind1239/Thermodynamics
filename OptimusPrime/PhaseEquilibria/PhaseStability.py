@@ -47,9 +47,17 @@ def Phase_Stability( Temp, Press ):
         print ' '
         print '================================================='
 
+
     """ Calculating the Fugacity coefficient and Gibbs free energy (i.e., chemical potential) of
             the chosen phase (index_phase) """
-    ( Fug_Coeff, G_Phase ) = MixRules.MixingRules_EoS( Temp, Press, index_phase, ThT.Z_Feed )
+    Fug_Coeff = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
+    G_Phase = [ 0. for i in range( ThT.NComp * ThT.NPhase ) ]
+    for iphase in range( ThT.NPhase ):
+        node_init = iphase * ThT.NComp + 0
+        node_final = iphase * ThT.NComp + ThT.NComp
+        ( Fug_Coeff[node_init:node_final], G_Phase[node_init:node_final] ) = MixRules.MixingRules_EoS( Temp, Press, iphase, ThT.MFrac[node_init:node_final] )
+
+    print 'Fug_Coeff, G_Phase:', Fug_Coeff, G_Phase ; sys.exit()
   
     Composition = [ 0. for i in range( ThT.NComp ) ]
     Comp_Phase = [ 0. for i in range( ThT.NComp ) ]
@@ -79,7 +87,6 @@ def AlphaPhases():
        where i = 1, NComp and j = 1, Nphase.
 
     '''
-    print '--', ThT.MFrac ; sys.exit('ppp')
     Alpha_Phase = [ 0. for i in range( ThT.NPhase ) ]
     for iphase in range( ThT.NPhase ):
         sum = 0.

@@ -184,7 +184,8 @@ def Generate_MoleFraction( iter_comp, Inc_Comp ):
     sum = 0.
     for icomp in range( ThT.NComp - 1):
         node = ( ThT.NPhase - 1 ) * ThT.NComp + icomp
-        MolFrac[ node ] = max( ThT.Residual, min( 1. - ThT.Residual, ( ThT.Z_Feed[ icomp ] - ThT.PhaseFrac[ 0 ] * MolFrac[ icomp ] ) / ThT.PhaseFrac[ 1 ] ))
+        MolFrac_liq = ( ThT.Z_Feed[ icomp ] - ThT.PhaseFrac[ 0 ] * MolFrac[ icomp ] ) / ThT.PhaseFrac[ 1 ]
+        MolFrac[ node ] = max( ThT.Residual, min( 1. - ThT.Residual, MolFrac_liq ) )
         sum = sum + MolFrac[ node ]
 
     node2 = ( ThT.NPhase - 1 ) * ThT.NComp + ThT.NComp - 1

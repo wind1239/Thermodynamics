@@ -68,54 +68,56 @@ def WrapThermodynamics( XSolution, **kwargs ):
             print 'This function was hacked to work only on a 2-phases system, it thus needs to be generalised.'
             sys.exit()
 
-        else:
-            
-            # Preparing loop for automatically generating composition
-            #ThT.MFrac = 0. ; ThT.PhaseFrac = 0.
-            Inc_Phase = 0.25 ; Inc_Comp = 0.1
-            NearlyOne = 1. - ThT.Residual
+        if False:
 
-            Niter_Phase = int( 1. / Inc_Phase ) + 1 ; Niter_Comp = int( 1. / Inc_Comp ) + 1
+            #else:
 
-            Molar_Gibbs_Free = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
-            Composition  = [ 0. for i in range( Niter_Phase * Niter_Comp ) ] 
-            Phase = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
-            Comp_Phase = [ 0. for i in range( ThT.NComp ) ]
+                # Preparing loop for automatically generating composition
+                #ThT.MFrac = 0. ; ThT.PhaseFrac = 0.
+                Inc_Phase = 0.25 ; Inc_Comp = 0.1
+                NearlyOne = 1. - ThT.Residual
 
+                Niter_Phase = int( 1. / Inc_Phase ) + 1 ; Niter_Comp = int( 1. / Inc_Comp ) + 1
 
-            #if False:
-
-            """ This is a temporary hack to generate (on-the-fly) molar phase (mole/mass 
-                     fraction): Vapour (PhaFrac[0]) and Liquid (PhaFrac[1]).             """
-            for iter_phase in range( Niter_Phase ):
-                ThT.PhaseFrac = NC.Generate_PhaseFraction( iter_phase, Inc_Phase )
-                print 'PhaseFrac:', ThT.PhaseFrac ; sys.exit()
+                Molar_Gibbs_Free = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
+                Composition  = [ 0. for i in range( Niter_Phase * Niter_Comp ) ] 
+                Phase = [ 0. for i in range( Niter_Phase * Niter_Comp ) ]
+                Comp_Phase = [ 0. for i in range( ThT.NComp ) ]
 
 
-                """ This is a temporary hack to generate (on-the-fly) molar composition
-                         of all phases.                                                  """
-                for iter_comp in range( Niter_Comp ):
-                    ThT.MFrac = NC.Generate_MoleFraction( iter_comp, Inc_Comp )
+                #if False:
 
-                    if ThT.Debug:
-                        print ' ===================================='
-                        print '    Composition of components in all phases: '
-                        print '      ThT.MFrac:', ThT.MFrac
-                        print ' '
-                        print ' '
-                        print '    Composition of both phases: '
-                        print '      ThT.PhaseFrac:', ThT.PhaseFrac
-                        print ' '
-                        print ' ===================================='
-                        print ' '
+                """ This is a temporary hack to generate (on-the-fly) molar phase (mole/mass 
+                         fraction): Vapour (PhaFrac[0]) and Liquid (PhaFrac[1]).             """
+                for iter_phase in range( Niter_Phase ):
+                    ThT.PhaseFrac = NC.Generate_PhaseFraction( iter_phase, Inc_Phase )
 
-        """ Michaelsen Stability Criteria """
-        ( Composition, Comp_Phase, index_phase, Molar_Gibbs_Free ) = PhSty.Phase_Stability( Temp, Press )
-        PhSty.CheckingPhases( Comp_Phase, Molar_Gibbs_Free )
+
+                    """ This is a temporary hack to generate (on-the-fly) molar composition
+                             of all phases.                                                  """
+                    for iter_comp in range( Niter_Comp ):
+                        ThT.MFrac = NC.Generate_MoleFraction( iter_comp, Inc_Comp )
+
+                        if ThT.Debug:
+                            print ' ===================================='
+                            print '    Composition of components in all phases: '
+                            print '      ThT.MFrac:', ThT.MFrac
+                            print ' '
+                            print ' '
+                            print '    Composition of both phases: '
+                            print '      ThT.PhaseFrac:', ThT.PhaseFrac
+                            print ' '
+                            print ' ===================================='
+                            print ' '
+
+        #endif
+        
+
+    """ Michaelsen Stability Criteria """
+    ( Composition, Comp_Phase, index_phase, Molar_Gibbs_Free ) = PhSty.Phase_Stability( Temp, Press )
+    PhSty.CheckingPhases( Comp_Phase, Molar_Gibbs_Free )
         #sys.exit('===')#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    else:
-        sys.exit('missing code')
         
     return ( Molar_Gibbs_Free, Comp_Phase )
 
