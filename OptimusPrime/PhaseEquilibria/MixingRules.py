@@ -28,7 +28,6 @@ def MixingRules_EoS( Temp, Press, iphase, Composition ):
     else:
         sys.exit( 'Mixing rules were not defined correctly!' )
 
-    print '====::', FugCoeff, ChemPot ; sys.exit('opopop')
 
     return ( FugCoeff, ChemPot )
  

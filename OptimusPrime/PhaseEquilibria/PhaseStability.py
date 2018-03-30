@@ -34,19 +34,6 @@ def Phase_Stability( Temp, Press ):
         if Alpha[ iphase ] > BigNumber:
             BigNumber = Alpha[ iphase ] ; index_phase = iphase
 
-    if ThT.Debug:
-        print ' '
-        print '================================================='
-        print '       Initial stability test. Phase is:'
-        if index_phase == 0:
-            print '    ---->        Vapour        <----     '
-        elif index_phase == 1:
-            print '    ---->        Liquid        <----    '
-        else:
-            sys.exit()
-        print ' '
-        print '================================================='
-
 
     """ Calculating the Fugacity coefficient and Gibbs free energy (i.e., chemical potential) of
             the chosen phase (index_phase) """
@@ -57,7 +44,6 @@ def Phase_Stability( Temp, Press ):
         node_final = iphase * ThT.NComp + ThT.NComp
         ( Fug_Coeff[node_init:node_final], G_Phase[node_init:node_final] ) = MixRules.MixingRules_EoS( Temp, Press, iphase, ThT.MFrac[node_init:node_final] )
 
-    print 'Fug_Coeff, G_Phase:', Fug_Coeff, G_Phase ; sys.exit()
   
     Composition = [ 0. for i in range( ThT.NComp ) ]
     Comp_Phase = [ 0. for i in range( ThT.NComp ) ]
@@ -72,8 +58,25 @@ def Phase_Stability( Temp, Press ):
 
     GZero = 0.
     for icomp in range( ThT.NComp ):
-        GZero = GZero + ThT.Z_Feed[ icomp ] * G_Phase[ icomp ]
+        node = index_phase * ThT.NComp + icomp
+        GZero = GZero + ThT.Z_Feed[ icomp ] * G_Phase[ node ]
 
+    if ThT.Debug:
+        print ' '
+        print '================================================='
+        print '       Initial stability test. Phase is:'
+        if index_phase == 0:
+            print '    ---->        Vapour        <----     '
+        elif index_phase == 1:
+            print '    ---->        Liquid        <----    '
+        else:
+            sys.exit()
+        print ' '
+        print 'Composition[1 : Ncomp-1], Phase:', Comp_Phase
+        print 'Gibbs energy of the dominant phase:', GZero
+        print '================================================='
+
+        sys.exit()
         
     return ( Composition, Comp_Phase, index_phase, GZero )
 

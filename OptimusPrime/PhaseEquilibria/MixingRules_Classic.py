@@ -52,7 +52,6 @@ def MixingRules_EoS_Classic( Temp, Press, iphase, Composition ):
     else:
         sys.exit('At MixingRules_EoS_Classic function. Variable iphase not found')
 
-    ###BigAA = [ 0. for i in range( ThT.NComp ) ] ; BigBB = [ 0. for i in range( ThT.NComp ) ]
     for icomp in range( ThT.NComp ):
         ai, bi = EoS.Cubic_EoS( icomp, Temp )
         sum3 = 0.
