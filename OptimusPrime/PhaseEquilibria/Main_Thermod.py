@@ -65,8 +65,7 @@ def WrapThermodynamics( XSolution, **kwargs ):
 
 
         if ThT.NPhase > 2:
-            print 'This function was hacked to work only on a 2-phases system, it thus needs to be generalised.'
-            sys.exit()
+            sys.exit( 'Most of the functions within were designed for a 2-phase systems. For further number of phases, the code will need to be ammended.' )
 
         if False:
 
@@ -116,7 +115,8 @@ def WrapThermodynamics( XSolution, **kwargs ):
     """ Michaelsen Stability Criteria """
     ( Composition, Comp_Phase, index_phase, Molar_Gibbs_Free ) = PhSty.Phase_Stability( Temp, Press )
     PhSty.CheckingPhases( Comp_Phase, Molar_Gibbs_Free )
-        #sys.exit('===')#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    #PhSty.CheckingPhases( index_phase, Comp_Phase, Molar_Gibbs_Free )
+    sys.exit('===')#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         
     return ( Molar_Gibbs_Free, Comp_Phase )

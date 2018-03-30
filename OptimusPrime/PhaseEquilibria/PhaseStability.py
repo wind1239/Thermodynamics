@@ -72,11 +72,9 @@ def Phase_Stability( Temp, Press ):
         else:
             sys.exit()
         print ' '
-        print 'Composition[1 : Ncomp-1], Phase:', Composition, Comp_Phase
+        print 'Composition[1 : Ncomp-1], Phase:', Comp_Phase
         print 'Gibbs energy of the dominant phase:', GZero
         print '================================================='
-
-        sys.exit()
         
     return ( Composition, Comp_Phase, index_phase, GZero )
 
@@ -106,17 +104,17 @@ def AlphaPhases():
 #
 #==============
 
+#def CheckingPhases( index_phase, Comp_Phase, GibbsPhase ):
 def CheckingPhases( Comp_Phase, GibbsPhase ):
     """ Comp_Phase has dimension NComp. """
 
     """ Assessing the results of the VLE calculation and identifying the
         phase and compositions (mol fractions).
         Comp_Phase is an array that contains (NComp-1) mole fractions +
-        (1) PhaseFraction                                                """
+        (1) PhaseFraction  (phase : index_phase)                          """
 
     if ThT.NPhase > 2:
-        print 'This function was hacked to work only on a 2-phases system, it thus needs to be generalised.'
-        sys.exit()
+        sys.exit( 'Most of the functions within were designed for a 2-phase systems. For further number of phases, the code will need to be ammended.' )
 
     Gibbs = -GibbsPhase
     YSum = 0.
@@ -229,8 +227,6 @@ def CheckingPhases( Comp_Phase, GibbsPhase ):
 
     return 
         
-
-
 
 #==============
 #
