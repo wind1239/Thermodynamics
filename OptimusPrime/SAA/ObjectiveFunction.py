@@ -31,7 +31,7 @@ def ObjFunction( XSolution, **kwargs ):
 
         if ProbCase == 'PhaseEquilibria':
             import Main_Thermod as MTh
-            Result, Z_Feed = MTh.WrapThermodynamics( XSolution, Status = ProbStatus )
+            FSolution, XSolution = MTh.WrapThermodynamics( XSolution,  Status = ProbStatus )
         else:
             sys.exit('In ObjectiveFunction, option for problem-type was not properly defined')
             
@@ -39,5 +39,5 @@ def ObjFunction( XSolution, **kwargs ):
         sys.exit('In ObjectiveFunction, option for problem-type was not properly defined (2)')
 
 
-    return Result, Z_Feed
+    return ( FSolution, XSolution )
     

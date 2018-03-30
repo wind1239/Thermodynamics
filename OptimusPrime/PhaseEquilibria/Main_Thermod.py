@@ -17,7 +17,7 @@ import pickle
            be found in the documentation.
      ===================================================================================== """
 
-def WrapThermodynamics( XSolution, **kwargs ):
+def WrapThermodynamics(XSolution, **kwargs ):
 
     if kwargs:
         for key in kwargs:
@@ -34,7 +34,9 @@ def WrapThermodynamics( XSolution, **kwargs ):
             sys.exit( 'Most of the functions within were designed for a 2-phase systems. For further number of phases, the code will need to be ammended.' )
 
     else:
-        sys.exit('Need code here ...')
+        X_Solution = PhSty.CheckingPhases( CompPhase = XSolution, JustCheckPhases = True )
+        print 'Xsolution:', XSolution ; sys.exit('fck')
+        ThT.MFrac = X_Solution
 
 
 
@@ -45,7 +47,9 @@ def WrapThermodynamics( XSolution, **kwargs ):
     ( Composition, Comp_Phase, index_phase, Molar_Gibbs_Free ) = PhSty.Phase_Stability( Temp, Press )
 
     # Checking existing phases:
-    PhSty.CheckingPhases( Comp_Phase, Molar_Gibbs_Free )
+    #PhSty.CheckingPhases( Comp_Phase, Molar_Gibbs_Free )
+    PhSty.CheckingPhases( CompPhase = Comp_Phase, MolarGibbs = Molar_Gibbs_Free )
+
 
         
     return ( Molar_Gibbs_Free, Comp_Phase )

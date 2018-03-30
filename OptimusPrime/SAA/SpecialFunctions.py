@@ -2,10 +2,11 @@
 #!/usr/bin/env python
 
 import math
-import sys
+import sys, time
 import RandomGenerator as RanGen
 import SAA_Tools as SaT
 import SA_IO as IO
+import ThermoTools as ThT
 import pdb
 
    
@@ -60,7 +61,6 @@ def Envelope_Constraints( X, **kwargs ):
 
         #pdb.set_trace()
            
-        #for i in range( dim ):
         for i in range( n ):
             if ( ( X[ i ] < LowerBounds[ i ]) or ( X[ i ] > UpperBounds[ i ] ) ):
                 rand = RanGen.RandomNumberGenerator( n )
@@ -72,9 +72,10 @@ def Envelope_Constraints( X, **kwargs ):
         if ( IsNormalised ): # Thermod problem
             
             Sum = ListSum( X[ 0 : dim ] )
+            print 'Sum:', Sum
 
             if ( Sum < 1. ):
-                SumOneOtherPhase = CalcOtherPhase( X, Z_Feed, UpperBounds, LowerBounds )
+                SumOneOtherPhase = CalcOtherPhase( X, UpperBounds, LowerBounds )
                 if SumOneOtherPhase:
                     TryAgain = False
                     if kwargs:
@@ -143,11 +144,11 @@ def Envelope_Constraints( X, **kwargs ):
 ###
 ### Calculating the other phase
 ###
-def CalcOtherPhase( X, Z, UB, LB, **kwargs ):
+def CalcOtherPhase( X, UB, LB, **kwargs ):
     """ This function calculates the composition of the other phase. The input is X[0:N-1], where X[N-1]
-            is the phase composition. Z[0:N] is the feed composition. UB and LB are the lower and upper
+            is the phase composition. Z[0:N-1] is the feed composition. UB and LB are the lower and upper
             bound arrays.                                                                               """
-    N = len( Z )
+    N = len( ThT.Z_Feed )
     Lphase = X[ N - 1 ] ;  Vphase = 1. - Lphase
     
     MFrac = [ 0. for i in range( N * N ) ] # Generating an null array
@@ -157,7 +158,7 @@ def CalcOtherPhase( X, Z, UB, LB, **kwargs ):
     MFrac[ N - 1 ] = 1. - ListSum( MFrac[ 0 : N - 1 ] )
 
     for i in range( N ):
-        MFrac[ N + i ] = ( Z[ i ] - Lphase * MFrac[ i ] ) / Vphase
+        MFrac[ N + i ] = ( ThT.Z_Feed[ i ] - Lphase * MFrac[ i ] ) / Vphase
 
     if kwargs: # extra diagnostics ... print the components mol fraction and phase mol fraction
         for key in kwargs:
@@ -172,10 +173,9 @@ def CalcOtherPhase( X, Z, UB, LB, **kwargs ):
     for i in range( N ): # Checking bounds at the other phase
         if MFrac[ N + i ] < LB[ i ] or MFrac[ N + i ] > UB[ i ]:
             TestOtherPhase = False
-            return TestOtherPhase
 
     SumOtherPhase =  ListSum( MFrac[ N:N*N ] )
-    if abs( SumOtherPhase - 1. ) <= 1.0e-7:
+    if abs( SumOtherPhase - 1. ) <= ThT.Residual:
         TestOtherPhase = True
     else:
         TestOtherPhase = False

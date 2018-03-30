@@ -141,7 +141,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             Func = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X ) 
             
         else: # Problems
-            Func, Z_Feed = ObF.ObjFunction( SaT.SA_X, Thermodynamics = PhaseEquilibria, Status = 'InitialCalculations' )
+            Func, X_Feed = ObF.ObjFunction( SaT.SA_X, Thermodynamics = PhaseEquilibria, Status = 'InitialCalculations' )
 
         """ The function must be minimum """
         if SaT.Minimum:
@@ -151,7 +151,8 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
         if Task == 'Problem':
-            SpFunc.CalcOtherPhase( SaT.SA_X, Z_Feed, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
+            SpFunc.CalcOtherPhase( SaT.SA_X, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
+
 
 
         """
@@ -163,7 +164,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         if Task == 'Benchmarks':
             X_OPT, F_OPT = ASA_Loops( Task, Func )
         else: # Problems
-            X_OPT, F_OPT = ASA_Loops( Task, Func, Z_Feed = Z_Feed )
+            X_OPT, F_OPT = ASA_Loops( Task, Func, X_Feed = X_Feed )
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
@@ -214,8 +215,8 @@ def ASA_Loops( Task, Func, **kwargs ):
     TestName = SaT.Function_Name
     if kwargs:
         for key in kwargs:
-            if ( key == 'Z_Feed' ):
-                Z_Feed = kwargs[ key ]
+            if ( key == 'X_Feed' ):
+                X_Feed = kwargs[ key ]
         
 
     IO.f_SAOutput.write( '\n' )
@@ -250,7 +251,6 @@ def ASA_Loops( Task, Func, **kwargs ):
 
         NUp = 0; NRej = 0; NDown = 0; LNobds = 0
 
-        #print '================================================================================kloop =', kloop
 
         """ Beginning of the m loop: number of iterations """
         mloop = 0
@@ -293,7 +293,7 @@ def ASA_Loops( Task, Func, **kwargs ):
                     if Task == 'Benchmarks':
                         SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
                     else: # Problems
-                        SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, Z_Feed = Z_Feed )
+                        SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, X_Feed = X_Feed )
 
                     #sys.exit()
                     
@@ -306,6 +306,7 @@ def ASA_Loops( Task, Func, **kwargs ):
                     if Task == 'Benchmarks':
                         FuncP = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, XP )
                     else: # Problems
+                        print '--====--099980'
                         FuncP, dummy = ObF.ObjFunction( XP, Thermodynamics = PhaseEquilibria )
 
                     print 'here we are again .... oh dear :::',  XP, FuncP
@@ -528,7 +529,7 @@ def ASA_Loops( Task, Func, **kwargs ):
 
             Print.Print_SAA_Diagnostic( Termination = 'yes', FOpt = FOpt, NRej = NRej, XOpt = XOpt_f, NFCNEV = NFCNEV )
             if Task == 'Problem':
-                SpFunc.CalcOtherPhase( XP, Z_Feed, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
+                SpFunc.CalcOtherPhase( XP, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
 
             return XOpt_f, FOpt
         
