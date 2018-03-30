@@ -72,7 +72,7 @@ def Phase_Stability( Temp, Press ):
         else:
             sys.exit()
         print ' '
-        print 'Composition[1 : Ncomp-1], Phase:', Comp_Phase
+        print 'Composition[1 : Ncomp-1], Phase:', Composition, Comp_Phase
         print 'Gibbs energy of the dominant phase:', GZero
         print '================================================='
 
