@@ -151,7 +151,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
         if Task == 'Problem':
-            SpFunc.CalcOtherPhase( SaT.SA_X, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
+            SpFunc.CalcOtherPhase( SaT.SA_X, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )XXXXXXXX
 
 
 
