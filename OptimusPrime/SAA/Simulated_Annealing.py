@@ -8,7 +8,6 @@ import BenchmarkTests as BTest
 import SA_IO as IO
 import SA_Print as Print
 import RandomGenerator as RanGen
-import SpecialFunctions as SpFunc
 import SAA_Tools as SaT
 import ObjectiveFunction as ObF
 import time
@@ -18,6 +17,8 @@ import pylab as pl
 #lib_path = os.environ.get('OptimusPATH') + '/Main/' 
 #sys.path.append( lib_path ) # <== Adding the above in the sys path for python
 import SystemPaths as SyP
+import BoxFunctions as BoxF
+    
 
 
 
@@ -33,6 +34,9 @@ import SystemPaths as SyP
     =========================================================================  """
 
 def SimulatedAnnealing( Method, Task, **kwargs ):
+
+    if Task == 'Problem':
+        import SpecialFunctions as SpFunc
       
     X_Optimum = [] 
     F_Optimum = [] 
@@ -151,7 +155,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
         if Task == 'Problem':
-            SpFunc.CalcOtherPhase( SaT.SA_X, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )XXXXXXXX
+            SpFunc.CalcOtherPhase( SaT.SA_X, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )#XXXXXXXX
 
 
 
@@ -162,9 +166,9 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         """
 
         if Task == 'Benchmarks':
-            X_OPT, F_OPT = ASA_Loops( Task, Func )
+            X_OPT, F_OPT = ASA_Loops( Method, Task, Func )
         else: # Problems
-            X_OPT, F_OPT = ASA_Loops( Task, Func, X_Feed = X_Feed )
+            X_OPT, F_OPT = ASA_Loops( Method, Task, Func, X_Feed = X_Feed )
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
@@ -207,7 +211,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 ###
 ### Main SA loop
 ###
-def ASA_Loops( Task, Func, **kwargs ):
+def ASA_Loops( Method, Task, Func, **kwargs ):
         
     """ For debugging """
     #pdb.set_trace()
@@ -291,9 +295,10 @@ def ASA_Loops( Task, Func, **kwargs ):
                         #XP[ SaT.Ndim ] = X_Try[ SaT.Ndim ]
 
                     if Task == 'Benchmarks':
-                        SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
+                        BoxF.Envelope_Constraints( Method, Task, XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
+                        
                     else: # Problems
-                        SpFunc.Envelope_Constraints( XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, X_Feed = X_Feed )
+                        BoxF.Envelope_Constraints( Method, Task, XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, X_Feed = X_Feed )
 
                     #sys.exit()
                     

@@ -12,7 +12,8 @@ import SystemPaths as SyP
 """ Starting code. Procedure for input deck will be changed soon.
        The command line has 2 / 3 arguments with a prescribed order:
 
-            python Optimiser.py < Method > < Task > < Problem-File >
+            python Optimiser.py < Method > < Task > < TestCases >
+            python Optimiser.py < Method > < Task > < Problem Type > <Problem File >
 
       where,
         1. < Method > refers to the optimisation method used. Current 
@@ -35,7 +36,7 @@ import SystemPaths as SyP
           a) python Optimiser.py "SAA" "Benchmarks"
                Run benchmark test-cases with the SAA;
 
-          b) python Optimiser.py "SAA" "Problem" "Test_A"
+          b) python Optimiser.py "SAA" "Problem" "PhaseEquilibria" "Test_A"
                Optimise test-case using the SAA. The test-case, named 
                     "Test_A" is split into 3 files, 
                  i) "Test_A.saa" : contains information for the SAA's cooling schedule.
@@ -44,13 +45,26 @@ import SystemPaths as SyP
                                                                                            """
 # Input of argument:
 if len( sys.argv ) < 3:
-    Print.HelpInput()
+    print ' '
+    print 'Missing argument, command line should be:'
+    print ' '
+    print "python Optimiser.py <Method = 'SAA'> <Task = 'Benchmarks'> <Test = 'TestCases' >"
+    print "              OR  "
+    print "python Optimiser.py <Method = 'SAA'>  <Task = 'Problem'> <Type of Problem> <File Name >"
+    print ' '
+    print "e.g., python Optimiser.py SAA Benchmarks all"
+    print "e.g., python Optimiser.py SAA Benchmarks 2"
+    print "e.g., python Optimiser.py SAA Problem PhaseEquilibria VLE_MethanePentane "
+    print ' '
+    print " Info for the benchmark test-cases must be contained in the file"
+    print " Benchmarks.in"
+    print ' '
     sys.exit()
     
 else:
     Method = sys.argv[ 1 ] ; Task = sys.argv[ 2 ]
 
-    if Task == 'Problem' or Task == 'Problems':
+    if Task == 'Problem' or Task == 'Problems' or Task == 'problems' or Task == 'problem':
         if len( sys.argv ) == 5: # Dealing with a thermodynamic problem
             PhaseEquilibria = sys.argv[ 3 ] ; ProblemFileName = sys.argv[ 4 ]
             SyP.EnvirVar( Task, Method, Thermodynamics = PhaseEquilibria )# Creating Global Variables for directories pathways
@@ -58,7 +72,7 @@ else:
             ProblemFileName = sys.argv[ 3 ]
             sys.exit('Need to be finished')
         
-    elif Task == 'Benchmarks':
+    elif Task == 'Benchmarks' or Task == 'benchmarks' or Task == 'Benchmark' or Task == 'benchmark':
         TestCases = sys.argv[ 3 ]
         SyP.EnvirVar( Task, Method )# Creating Global Variables for directories pathways
         
@@ -79,9 +93,9 @@ else:
 """ Calling the optimisation routine """
 
 if ( Method == 'SAA' or Method == 'SA' ):
-    if Task == 'Problem' or Task == 'Problems':
+    if Task == 'Problem' or Task == 'Problems' or Task == 'problems' or Task == 'problem':
         X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = ProblemFileName, Thermodynamics = PhaseEquilibria )
-    elif Task == 'Benchmarks':
+    elif Task == 'Benchmarks' or Task == 'benchmarks' or Task == 'Benchmark' or Task == 'benchmark':
         X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = TestCases )
         
 else:
