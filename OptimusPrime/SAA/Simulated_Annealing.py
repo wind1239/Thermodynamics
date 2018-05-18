@@ -85,7 +85,6 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
              
     else:
         sys.exit( 'In SimulatedAnnealing function. TASK option not found. Currently only *Benchmarks* and *Problems* are acceptable.' )
-
         
     """"
         =======================================================================
@@ -168,7 +167,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         if Task == 'Benchmarks':
             X_OPT, F_OPT = ASA_Loops( Method, Task, Func )
         else: # Problems
-            X_OPT, F_OPT = ASA_Loops( Method, Task, Func, X_Feed = X_Feed )
+            X_OPT, F_OPT = ASA_Loops( Method, Task, Func, Thermodynamics = PhaseEquilibria, X_Feed = X_Feed )
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
@@ -221,7 +220,11 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
         for key in kwargs:
             if ( key == 'X_Feed' ):
                 X_Feed = kwargs[ key ]
-        
+            elif key == 'Thermodynamics':
+                PhaseEquilibria = kwargs[ key ]
+            else:
+                sys.exit( 'In ASA_Loops. Option was not defined' )
+
 
     IO.f_SAOutput.write( '\n' )
     IO.f_SAOutput.write( 'Initialising SA Algorithm for: {a:}'.format( a = TestName ) + '\n' )
@@ -311,7 +314,7 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                     if Task == 'Benchmarks':
                         FuncP = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, XP )
                     else: # Problems
-                        print '--====--099980'
+                        print '09998000000xxx'
                         FuncP, dummy = ObF.ObjFunction( XP, Thermodynamics = PhaseEquilibria )
 
                     print 'here we are again .... oh dear :::',  XP, FuncP
