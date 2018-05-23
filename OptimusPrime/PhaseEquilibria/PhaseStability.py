@@ -113,7 +113,7 @@ def CheckingPhases( **kwargs ):
         Comp_Phase is an array that contains (NComp-1) mole fractions +
         (1) PhaseFraction  (phase : index_phase)                          """
 
-    AssessPhases = False
+    AssessPhases = False ; GibbsPhaseCalc = False
 
     if kwargs:
         for key in kwargs:
@@ -121,6 +121,7 @@ def CheckingPhases( **kwargs ):
                 Comp_Phase = kwargs[ key ]
             elif key == 'MolarGibbs':
                 GibbsPhase = kwargs[ key ]
+                GibbsPhaseCalc = True
             elif key == 'JustCheckPhases':
                 AssessPhases = kwargs[ key ]
             else:
@@ -128,7 +129,9 @@ def CheckingPhases( **kwargs ):
 
     if AssessPhases is not None:
 
-        Gibbs = -GibbsPhase
+        if GibbsPhaseCalc:
+            Gibbs = -GibbsPhase
+            
         YSum = 0.
         for icomp in range( ThT.NComp - 1):
             YSum = YSum + Comp_Phase[ icomp ]
