@@ -314,7 +314,6 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                     if Task == 'Benchmarks':
                         FuncP = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, XP )
                     else: # Problems
-                        print '09998000000xxx'
                         FuncP, dummy = ObF.ObjFunction( XP, Thermodynamics = PhaseEquilibria )
 
                     print 'here we are again .... oh dear :::',  XP, FuncP

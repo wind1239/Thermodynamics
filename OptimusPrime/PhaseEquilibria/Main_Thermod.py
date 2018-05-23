@@ -35,7 +35,7 @@ def WrapThermodynamics(XSolution, **kwargs ):
 
     else:
         X_Solution = PhSty.CheckingPhases( CompPhase = XSolution, JustCheckPhases = True )
-        print 'Xsolution:', XSolution ; sys.exit('fck')
+        print 'Xsolution:', XSolution 
         ThT.MFrac = X_Solution
 
 

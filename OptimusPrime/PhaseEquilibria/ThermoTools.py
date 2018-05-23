@@ -263,7 +263,7 @@ def ListOfCommentsStrings( row ):
     return IsItaComment
     
 
-# This function checks if an normalised compositional array (e.g., mass, mole or volume fractions)
+# This function checks if a normalised compositional array (e.g., mass, mole or volume fractions)
 #     sums up to one
 def Sum2One( ident, Array, *positional_parameters, **keyword_parameters ):
 

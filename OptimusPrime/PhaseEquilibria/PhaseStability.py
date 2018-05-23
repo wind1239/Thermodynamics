@@ -72,7 +72,7 @@ def Phase_Stability( Temp, Press ):
         else:
             sys.exit()
         print ' '
-        print 'Composition[1 : Ncomp-1], Phase:', Comp_Phase
+        print '[Composition[1 : Ncomp-1], Phase]:', Comp_Phase
         print 'Gibbs energy of the dominant phase:', GZero
         print '================================================='
         
@@ -127,7 +127,9 @@ def CheckingPhases( **kwargs ):
             else:
                 sys.exit('In CheckingPhases, option was not defined')
 
-    if AssessPhases is not None:
+    
+
+    if not AssessPhases:
 
         if GibbsPhaseCalc:
             Gibbs = -GibbsPhase
@@ -248,7 +250,7 @@ def CheckingPhases( **kwargs ):
         YSum = 0.
         for icomp in range( ThT.NComp - 1):
             YSum = YSum + Comp_Phase[ icomp ]
-        XMet = 1. - YSum
+        XMet = 1. - YSum 
 
         if XMet > ThT.Z_Feed[ ThT.NComp - 1 ]: # Liquid phase
             index_phase = 1
@@ -263,9 +265,9 @@ def CheckingPhases( **kwargs ):
         for icomp in range(ThT.NComp):
             node0 = 0 * ThT.NPhase + icomp ; node1 = 1 * ThT.NPhase + icomp
             if index_phase == 1: # Liquid phase
-                XSolution[ node0 ] = ( ThT.Z_Feed( icomp ) - Comp_Phase[ ThT.NComp - 1 ] * XSolution[ node1 ] ) / ( 1. - Comp_Phase[ ThT.NComp - 1 ] )
+                XSolution[ node0 ] = ( ThT.Z_Feed[ icomp ] - Comp_Phase[ ThT.NComp - 1 ] * XSolution[ node1 ] ) / ( 1. - Comp_Phase[ ThT.NComp - 1 ] )
             else:  # Vapour phase
-                XSolution[ node1 ] = ( ThT.Z_Feed( icomp ) - Comp_Phase[ ThT.NComp - 1 ] * XSolution[ node0 ] ) / ( 1. - Comp_Phase[ ThT.NComp - 1 ] )
+                XSolution[ node1 ] = ( ThT.Z_Feed[ icomp ] - Comp_Phase[ ThT.NComp - 1 ] * XSolution[ node0 ] ) / ( 1. - Comp_Phase[ ThT.NComp - 1 ] )
 
         return XSolution
         
