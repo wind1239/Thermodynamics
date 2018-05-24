@@ -156,10 +156,6 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         if Task == 'Problem':
             SpFunc.CalcOtherPhase( SaT.SA_X, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
 
-        print X_Feed
-
-        sys.exit('here')
-
         """
             ===================================================================
                 Calling main SA loop:       
@@ -219,13 +215,13 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
     """ For debugging """
     #pdb.set_trace()
 
-    TestName = SaT.Function_Name
+    TestName = SaT.Function_Name ; SVLE_Problem = False
     if kwargs:
         for key in kwargs:
             if ( key == 'X_Feed' ):
                 X_Feed = kwargs[ key ]
             elif key == 'Thermodynamics':
-                PhaseEquilibria = kwargs[ key ]
+                PhaseEquilibria = kwargs[ key ] ;  SVLE_Problem = True
             else:
                 sys.exit( 'In ASA_Loops. Option was not defined' )
 
@@ -246,14 +242,14 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
     FOpt = Func ; XOpt = SaT.SA_X ; X_Try = SaT.SA_X 
     XOpt_f = [ 0. for i in range( SaT.Ndim ) ]
 
-    """ The 'Fraction' variable assess if the function to be optimised is
+    """ The 'Fraction' variable assesses if the function to be optimised is
            a thermodynamic function (TRUE) and therefore the elements of the
            solution-coordinate needs to be bounded (0,1) and the summation
            of the N-1 elements must be smaller than 1.
         If FALSE then the above is neglected.                               """
     if Task == 'Benchmarks':
         Fraction = False
-    else: #Problems 
+    elif Task == 'Problem' and SVLE_Problem: #Problems 
         Fraction = True
 
     kloop = 0 
@@ -292,6 +288,8 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                             XP[ i ] = X_Try[ i ]
 
                         #pdb.set_trace()
+                    print 'XP:', XP
+                    sys.exit('oo')
 
                     """ ===========================================================
                             Feasibility Test (only for Thermod problems) -- check
