@@ -476,10 +476,6 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
                 Quit = False
 
-        print '----', FOpt, FStar
-              
-        sys.exit('---')
-
         if Quit:
             if Task == 'Benchmarks':
                 Quit = BTest.AssessTests( XOpt_f, SaT.BenchmarkSolution )
@@ -554,7 +550,10 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
         Func = FOpt
         for i in range( SaT.Ndim ):
             X_Try[ i ] = XOpt[ i ]
-            #print 'X_Try[ i ]',X_Try[ i ] 
+            #print 'X_Try[ i ]',X_Try[ i ]
+
+        print SaT.Temp, FStar, X_Try
+        sys.exit()
             
         """ End of k loop """
         kloop += 1
