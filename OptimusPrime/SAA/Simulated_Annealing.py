@@ -252,8 +252,12 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
     elif Task == 'Problem' and SVLE_Problem: #Problems 
         Fraction = True
 
+    
+    """ =======================================================================
+                       Beginning of the main outter loop: 
+        ======================================================================= """
+
     kloop = 0 
-    """ Beginning of the main outter loop: """
     while kloop <= SaT.MaxEvl:
 
         NUp = 0; NRej = 0; NDown = 0; LNobds = 0
@@ -288,12 +292,9 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                             XP[ i ] = X_Try[ i ]
 
                         #pdb.set_trace()
-                    print 'XP:', XP
-                    sys.exit('oo')
 
                     """ ===========================================================
-                            Feasibility Test (only for Thermod problems) -- check
-                              for compositional constraints.
+                            Feasibility Test: check is solution is bounded.
                         =========================================================== """
                     #if Fraction:
                     #    XP[ dim ] = X_Try[ dim ]
@@ -304,9 +305,6 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                         
                     else: # Problems
                         BoxF.Envelope_Constraints( Method, Task, XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, X_Feed = X_Feed )
-
-                    #sys.exit()
-                    
                     
                     if Try:
                         LNobds += 1
@@ -317,9 +315,6 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                         FuncP = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, XP )
                     else: # Problems
                         FuncP, dummy = ObF.ObjFunction( XP, Thermodynamics = PhaseEquilibria )
-
-                    print 'here we are again .... oh dear :::',  XP, FuncP
-                    #sys.exit()
 
                         
                     """ The function must be minimum """
@@ -378,7 +373,7 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                             if SaT.Debugging == True :
                                 IO.f_SAOutput.write( '{s:20} New XOpt: {a:} with FOpt: {b:}'.format( s = ' ', a = XOpt_f, b = FOpt ) + '\n')
 
-                    else:
+                    else: # if ( FuncP > Func ):
                         """ However if FuncP is smaller than the others, thus the Metropolis criteria 
                                (Gaussian probability density function) - or any other density function
                                that may be added latter - may be used to either accept or reject this
@@ -475,14 +470,15 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
         #print '--------------------------------------' 
 
         if FOpt - FStar[ 0 ]  <= SaT.EPS :
-            Quit = False 
-        #print ' ===== i am here ====='
-        #print ' number of dimensions ', SaT.Ndim
+            Quit = False
+            
         for i in range( NEps ):
             if abs( Func - FStar[ i ] ) > SaT.EPS :
-                Quit = False; #print ' SaT.EPS ', SaT.EPS
+                Quit = False
+
+        print '----', FOpt, FStar
               
-        #stop  
+        sys.exit('---')
 
         if Quit:
             if Task == 'Benchmarks':
