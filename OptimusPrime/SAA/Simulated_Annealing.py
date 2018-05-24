@@ -141,10 +141,10 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
         """ Calling the function for the first time before the SA main loop """
         if Task == 'Benchmarks':
-            Func = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X ) 
+            Func = BTest.TestFunction( SaT. Function_Name, SaT.Ndim, SaT. SA_X ) 
             
         else: # Problems
-            Func, X_Feed = ObF.ObjFunction( SaT.SA_X, Thermodynamics = PhaseEquilibria, Status = 'InitialCalculations' )
+            Func, X_Feed = ObF.ObjFunction( SaT. SA_X, Thermodynamics = PhaseEquilibria, Status = 'InitialCalculations' )
 
         """ The function must be minimum """
         if SaT.Minimum:
@@ -154,9 +154,11 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
         if Task == 'Problem':
-            SpFunc.CalcOtherPhase( SaT.SA_X, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )#XXXXXXXX
+            SpFunc.CalcOtherPhase( SaT.SA_X, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
 
+        print X_Feed
 
+        sys.exit('here')
 
         """
             ===================================================================
@@ -171,6 +173,8 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
+
+        sys.exit('---')
 
         """
            =====================================================================

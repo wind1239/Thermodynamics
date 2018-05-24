@@ -49,8 +49,6 @@ def WrapThermodynamics(XSolution, **kwargs ):
     # Checking existing phases:
     #PhSty.CheckingPhases( Comp_Phase, Molar_Gibbs_Free )
     PhSty.CheckingPhases( CompPhase = Comp_Phase, MolarGibbs = Molar_Gibbs_Free )
-
-
         
     return ( Molar_Gibbs_Free, Comp_Phase )
 

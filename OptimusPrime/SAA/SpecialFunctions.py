@@ -166,6 +166,7 @@ def CalcOtherPhase( X, UB, LB, **kwargs ):
                 Diag = kwargs[ key ]
                 if Diag:
                     IO.f_SAOutput.write( '\n' )
+                    IO.f_SAOutput.write( 'Feed Composition: {a:}'.format( a = ThT.Z_Feed ) + '\n' )
                     IO.f_SAOutput.write( 'Composition (liq and vap): {a:}'.format( a = MFrac ) + '\n' )
                     IO.f_SAOutput.write( 'Liquid Phase Molar Fraction: {a:}'.format( a = Lphase ) + '\n' )
                     
@@ -177,8 +178,14 @@ def CalcOtherPhase( X, UB, LB, **kwargs ):
     SumOtherPhase =  ListSum( MFrac[ N:N*N ] )
     if abs( SumOtherPhase - 1. ) <= ThT.Residual:
         TestOtherPhase = True
+        IO.f_SAOutput.write( '\n' )
+        IO.f_SAOutput.write( 'Composition of both phases are consistent.' + '\n' )
+
     else:
         TestOtherPhase = False
+        IO.f_SAOutput.write( '\n' )
+        IO.f_SAOutput.write( 'Composition are not consistent!!' + '\n' )
+    
     return TestOtherPhase
            
 
