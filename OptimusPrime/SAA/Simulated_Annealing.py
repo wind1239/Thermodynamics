@@ -553,7 +553,8 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
             #print 'X_Try[ i ]',X_Try[ i ]
 
         print SaT.Temp, FStar, X_Try
-        sys.exit()
+        if kloop > 100:
+            sys.exit()
             
         """ End of k loop """
         kloop += 1
