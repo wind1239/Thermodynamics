@@ -291,6 +291,8 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                         else:
                             XP[ i ] = X_Try[ i ]
 
+                    IO.f_SAOutput.write( 'XP(b4):{a:}'.format( a= XP ) + '\n' )
+
                         #pdb.set_trace()
 
                     """ ===========================================================
@@ -305,6 +307,11 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                         
                     else: # Problems
                         BoxF.Envelope_Constraints( Method, Task, XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, X_Feed = X_Feed )
+
+                    IO.f_SAOutput.write( 'XP(after):{a:}'.format( a= XP ) + '\n' )
+                    IO.f_SAOutput.write( '\n' )
+                    if jloop > 2:
+                        sys.exit('fck')
                     
                     if Try:
                         LNobds += 1
@@ -554,7 +561,7 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
 
         print SaT.Temp, FStar, X_Try
         if kloop > 100:
-            sys.exit()
+            sys.exit('After kloop ==> 100 ' )
             
         """ End of k loop """
         kloop += 1
