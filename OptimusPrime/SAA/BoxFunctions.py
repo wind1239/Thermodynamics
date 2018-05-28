@@ -87,12 +87,12 @@ def Envelope_Constraints( Method, Task, X, **kwargs ):
 
         #pdb.set_trace()
         for i in range( n ):
-            if ( ( X[ i ] < LowerBounds[ i ] ) or ( X[ i ] > UpperBounds[ i ] ) or ( not SumOneOtherPhase )):
+            if ( ( X[ i ] < LowerBounds[ i ] ) or ( X[ i ] > UpperBounds[ i ] ) or ( not SumOneOtherPhase ) or ( not Try )):
                 rand = RanGen.RandomNumberGenerator( n )
                 X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
                     rand[ i ]
                 X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
-                Try = True
+                Try = True ; print 'farofa666', not IsNormalised
 
         if ( not IsNormalised ): 
             if kwargs:
@@ -110,9 +110,11 @@ def Envelope_Constraints( Method, Task, X, **kwargs ):
                 SumOneOtherPhase = CheckOtherPhase( Task, Method, X, UpperBounds, LowerBounds )
                 if SumOneOtherPhase:
                     if Try:
-                        sys.exit('farofa1') ; return X, Try
+                        return X, Try
                     else:
                         return X
+            else:
+                Try = False
                     #if kwargs:
                     #    for key in kwargs:
                     #        if ( key == 'TryC' ):
