@@ -310,7 +310,7 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
 
                     IO.f_SAOutput.write( 'XP(after):{a:}'.format( a= XP ) + '\n' )
                     IO.f_SAOutput.write( '\n' )
-                    if jloop > 2:
+                    if kloop > 10:
                         sys.exit('fck')
                     
                     if Try:
