@@ -47,6 +47,8 @@ def to_bool(value):
 ###
 def Envelope_Constraints( Method, Task, X, **kwargs ):
     """ This function ensures that variable 'X' is bounded """
+    SyP.EnvirVar( Task, Method, Thermodynamics = 'Thermodynamics' )
+    import ThermoTools as ThT
 
     rand = []
     TryAgain = True
@@ -78,19 +80,19 @@ def Envelope_Constraints( Method, Task, X, **kwargs ):
         dim = n - 1
     else:
         dim = n
+
+    SumOneOtherPhase = True
         
     while TryAgain:
 
         #pdb.set_trace()
-           
         for i in range( n ):
-            if ( ( X[ i ] < LowerBounds[ i ]) or ( X[ i ] > UpperBounds[ i ] ) ):
+            if ( ( X[ i ] < LowerBounds[ i ] ) or ( X[ i ] > UpperBounds[ i ] ) or ( not SumOneOtherPhase )):
                 rand = RanGen.RandomNumberGenerator( n )
                 X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
                     rand[ i ]
                 X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
                 Try = True
-
 
         if ( not IsNormalised ): 
             if kwargs:
@@ -107,14 +109,18 @@ def Envelope_Constraints( Method, Task, X, **kwargs ):
             if  ListSum( X[ 0 : dim ] ) < 1.:
                 SumOneOtherPhase = CheckOtherPhase( Task, Method, X, UpperBounds, LowerBounds )
                 if SumOneOtherPhase:
-                    if kwargs:
-                        for key in kwargs:
-                            if ( key == 'TryC' ):
-                                return X, Try
-                            else:
-                                return X
+                    if Try:
+                        sys.exit('farofa1') ; return X, Try
                     else:
                         return X
+                    #if kwargs:
+                    #    for key in kwargs:
+                    #        if ( key == 'TryC' ):
+                    #            sys.exit('farofa1') ; return X, Try
+                    #        else:
+                    #            return X
+                    #else:
+                    #    return X
 
 
 ###
@@ -130,9 +136,9 @@ def CheckOtherPhase( Task, Method, X, UB, LB, **kwargs ):
             MFrac[N : 2*N - 1]: mol fraction of components in the vapour phase.
             However, for generality the function is designed for an arbitrary number of
             phases. """
-
     SyP.EnvirVar( Task, Method, Thermodynamics = 'Thermodynamics' )
     import ThermoTools as ThT
+
     
     NC = ThT.NComp ; NP = max( 1, ThT.NPhase )
     MFrac = [ 0. for i in range( NC*NP ) ] # Generating null arrays
@@ -160,6 +166,7 @@ def CheckOtherPhase( Task, Method, X, UB, LB, **kwargs ):
                 sum2 = sum2 + PhFrac[ jphase ]
         MFrac[ node_comp ] = ( ThT.Z_Feed[ icomp ] - sum1 ) / ( 1. - max( sum2, ThT.Residual ) )
 
+
     if kwargs: # extra diagnostics ... print the components mol fraction and phase mol fraction
         for key in kwargs:
             if ( key == 'Diagnostics' ):
@@ -177,11 +184,10 @@ def CheckOtherPhase( Task, Method, X, UB, LB, **kwargs ):
                 TestOtherPhase = False
                 return TestOtherPhase
 
-        #sys.exit('chega')
 
         nodecomp0 = iphase * NC ; nodecomp1 = iphase * NC  + (NC - 1 )
 
-        if abs( ListSum( MFrac[ nodecomp0 : nodecomp1 + 1 ] )- 1. ) >= ThT.Residual:
+        if abs( ListSum( MFrac[ nodecomp0 : nodecomp1 + 1 ] ) - 1. ) >= ThT.Residual:
                 TestOtherPhase = False
                 return TestOtherPhase
 

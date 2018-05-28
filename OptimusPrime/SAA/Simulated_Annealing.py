@@ -310,8 +310,8 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
 
                     IO.f_SAOutput.write( 'XP(after):{a:}'.format( a= XP ) + '\n' )
                     IO.f_SAOutput.write( '\n' )
-                    if kloop > 10:
-                        sys.exit('fck')
+                    #if kloop > 10:
+                    #    sys.exit('fck')
                     
                     if Try:
                         LNobds += 1
@@ -558,10 +558,6 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
         for i in range( SaT.Ndim ):
             X_Try[ i ] = XOpt[ i ]
             #print 'X_Try[ i ]',X_Try[ i ]
-
-        print SaT.Temp, FStar, X_Try
-        if kloop > 100:
-            sys.exit('After kloop ==> 100 ' )
             
         """ End of k loop """
         kloop += 1
