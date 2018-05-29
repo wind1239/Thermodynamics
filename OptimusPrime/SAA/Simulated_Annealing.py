@@ -66,7 +66,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             for key in kwargs:
                 if key == 'FileName' :
                     TestCases = kwargs[ key ]
-                    if TestCases == 'All':
+                    if TestCases == 'All'or TestCases == 'all':
                         Test = 100 * N_Tests
                     else:
                         Test = int( TestCases )
@@ -291,7 +291,7 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                         else:
                             XP[ i ] = X_Try[ i ]
 
-                    IO.f_SAOutput.write( 'XP(b4):{a:}'.format( a= XP ) + '\n' )
+                    #IO.f_SAOutput.write( 'XP(b4):{a:}'.format( a= XP ) + '\n' )
 
                         #pdb.set_trace()
 
@@ -308,8 +308,8 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                     else: # Problems
                         BoxF.Envelope_Constraints( Method, Task, XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, X_Feed = X_Feed )
 
-                    IO.f_SAOutput.write( 'XP(after):{a:}'.format( a= XP ) + '\n' )
-                    IO.f_SAOutput.write( '\n' )
+                    #IO.f_SAOutput.write( 'XP(after):{a:}'.format( a= XP ) + '\n' )
+                    #IO.f_SAOutput.write( '\n' )
                     #if kloop > 10:
                     #    sys.exit('fck')
                     

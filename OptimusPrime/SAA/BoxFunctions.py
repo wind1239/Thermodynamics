@@ -92,7 +92,7 @@ def Envelope_Constraints( Method, Task, X, **kwargs ):
                 X[ i ] = LowerBounds[ i ] + ( UpperBounds[ i ] - LowerBounds[ i ] ) * \
                     rand[ i ]
                 X[ i ] = min( max( LowerBounds[ i ], X[ i ] ), UpperBounds[ i ] )
-                Try = True ; print 'farofa666', not IsNormalised
+                Try = True 
 
         if ( not IsNormalised ): 
             if kwargs:
