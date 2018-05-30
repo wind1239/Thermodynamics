@@ -46,8 +46,7 @@ import SystemPaths as SyP
 
 Time_Init = time.clock() # Measuring CPU-time in the beginning of the simulation
 
-# Input of argument:
-if len( sys.argv ) < 3:
+if len( sys.argv ) < 3: # Input of argument:
     print ' '
     print 'Missing argument, command line should be:'
     print ' '
