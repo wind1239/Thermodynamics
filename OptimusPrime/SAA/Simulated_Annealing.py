@@ -20,8 +20,6 @@ import SystemPaths as SyP
 import BoxFunctions as BoxF
     
 
-
-
 """ =========================================================================
 
               FUNCTION: Starting the Simulated Annealing Algorithm
@@ -38,68 +36,17 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
     if Task == 'Problem':
         import SpecialFunctions as SpFunc
       
-    X_Optimum = [] 
-    F_Optimum = [] 
-    TestSolution = [] 
-    TestSolution_Name = [] 
-    TestSolution_Time = [] 
-    Time_temp = []
+    X_Optimum = [] ; F_Optimum = [] ; Time_temp = []
+    TestSolution = [] ; TestSolution_Name = [] ; TestSolution_Time = []
 
-
-    """
-    ===================================================================
-        If we are undertaken model validation through benchmarks, we
-          may opt to run all benchmark test-cases or a specific one
-          controlled in the original command line as:
-    
-              a) python Optimiser.py SAA Benchmarks All
-                            or
-              b) python Optimiser.py SAA Benchmarks N
-    
-          respectively, where N is the number of the required test-case  
-          as defined in the 'Benchmarks.in' file.   
-    =================================================================== """
-    
-    if Task == 'Benchmarks':
-        N_Tests, dummy = IO.CountingNumberOfTests( ) # Checking the total number of test-cases.
-        if kwargs:
-            for key in kwargs:
-                if key == 'FileName' :
-                    TestCases = kwargs[ key ]
-                    if TestCases == 'All'or TestCases == 'all':
-                        Test = 100 * N_Tests
-                    else:
-                        Test = int( TestCases )
-
-    elif Task == 'Problem':
-        if kwargs: 
-            for key in kwargs:
-                if key == 'FileName': 
-                    ProblemFileName = kwargs[ key ]
-                    Test = 0 ; N_Tests = 1
-                elif key == 'Thermodynamics':
-                    PhaseEquilibria = kwargs[ key ]
-                    Test = 0 ; N_Tests = 1
-                else:
-                    sys.exit( 'In SimulatedAnnealing function. TASK-Problem option not found.' )
-             
-    else:
-        sys.exit( 'In SimulatedAnnealing function. TASK option not found. Currently only *Benchmarks* and *Problems* are acceptable.' )
-        
-    """"
-        =======================================================================
-           Now, depending on the case, 'Benchmarks' or 'Problem' we 
-                proceed the optimisation, if:
-                  a) 'Benchmarks': there are 2 options here,
-                      a.1 ) 'All': it will read each cooling schedule 
-                                   file for all test-cases and proceed
-                                   with the optimisation.
-                      a.2 ) 'N': where 1 <= N <= N_Tests. It will read
-                                   only the cooling schedule of test-case
-                                   N and proceed with the optimisation.
-                or    
-                  b) 'Problem': then N_Tests = 1 and we run SAA just once
-        ======================================================================= """
+    if kwargs:
+        for key in kwargs:
+            if key == 'FileName':
+                FileName = kwargs[ key ]
+            elif key == 'ProblemType':
+                ProblemType = kwargs[ key ]
+                
+    ( Test, N_Tests ) = AssignSolvingProblem( Method, Task, FileName )
 
     jtest = 0
 
@@ -107,7 +54,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
         if Task == 'Benchmarks':
             
-            if TestCases != 'All': # Dealing with test-case N
+            if TestCases != 'All':
                 
                 if itest == Test:
                     SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
@@ -116,6 +63,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                     print '======================', SaT.Function_Name, '======================'
                 else:
                     continue
+                    
             else:
                 SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                     SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
@@ -123,7 +71,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
                 print '======================', SaT.Function_Name, '======================'
                 
 
-        elif Task == 'Problem' or Task == 'Problems':
+        elif Task == 'Problem':
             SaT.Function_Name, SaT.Minimum, SaT.Ndim, SaT.NS, SaT.NT, SaT.MaxEvl, SaT.EPS, SaT.RT, SaT.Temp, \
                 SaT.LowerBounds, SaT.UpperBounds, SaT.VM, SaT.C, SaT.Debugging, \
                 SaT.SA_X, SaT.BenchmarkSolution = IO.ReadInCoolingSchedule( File_Name = ProblemFileName, Task = Task )
@@ -579,3 +527,56 @@ pl.show()
 '''
 
     
+
+###
+### Assign benchmark test case(s) or problem
+###
+def AssignSolvingProblem( Method, Task, TestCase ):
+    """
+    ===================================================================
+        If we are undertaken model validation through benchmarks, we
+          may opt to run all benchmark test-cases or a specific one
+          controlled in the original command line as:
+    
+              a) python Optimiser.py SAA Benchmarks All
+                            or
+              b) python Optimiser.py SAA Benchmarks all
+                            or
+              c) python Optimiser.py SAA Benchmarks N
+    
+          respectively, where N is the number of the required test-case  
+          as defined in the 'Benchmarks.in' file.
+
+          Now, depending on the case, 'Benchmarks' or 'Problem' we 
+                proceed the optimisation, if:
+                  a) 'Benchmarks': there are 2 options here,
+                      a.1 ) 'All': it will read each cooling schedule 
+                                   file for all test-cases and proceed
+                                   with the optimisation.
+                      a.2 ) 'N': where 1 <= N <= N_Tests. It will read
+                                   only the cooling schedule of test-case
+                                   N and proceed with the optimisation.
+                or    
+                  b) 'Problem': then N_Tests = 1 and we run SAA just once
+    =================================================================== """
+    
+        
+    """"
+        =======================================================================
+
+        ======================================================================= """
+
+    if Task == 'Benchmarks':
+        N_Tests, dummy = IO.CountingNumberOfTests( ) # Checking the total number of test-cases.
+        if TestCase == 'All' or TestCase == 'all':
+            Test = 100 * N_Tests
+        else:
+            Test = int( TestCase )
+            
+    elif Task == 'Problem':
+        Test = 0 ; N_Tests = 1
+             
+    else:
+        sys.exit( 'In AssignSolvingProblem function. TASK option not found. Currently only *Benchmarks* and *Problems* are acceptable.' )
+
+    return ( Test, N_Tests )
