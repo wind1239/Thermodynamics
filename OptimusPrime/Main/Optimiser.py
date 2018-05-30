@@ -73,9 +73,11 @@ else:
     else:
         sys.exit( 'Task is not defined' )
 
-    if Method == 'SAA' or Method == 'SA' or Method == 'SimulatedAnnealing' or Method == 'SimulatedAnnealingAlgorithm':
+    if ( Method == 'SAA' or Method == 'SA' or Method == 'SimulatedAnnealing' or
+         Method == 'SimulatedAnnealingAlgorithm' ):
         Method == 'SAA'
-        import SA_IO as IO ; import Simulated_Annealing as ASA ; import SA_Print as Print ; import SAA_Tools as SaT
+        import SA_IO as IO ; import Simulated_Annealing as ASA ; import SA_Print as Print ; \
+            import SAA_Tools as SaT
     else:
         sys.exit( 'Method is not defined' )
         
@@ -83,7 +85,8 @@ else:
     if Task == 'Problem':
         if len( sys.argv ) == 5: # Dealing with a thermodynamic problem
             ProblemType = sys.argv[ 3 ] ; ProblemFileName = sys.argv[ 4 ]
-            if ProblemType == 'PhaseEquilibria' or ProblemType == 'phaseequilibria' or ProblemType == 'Phase_Equilibria':
+            if ( ProblemType == 'PhaseEquilibria' or ProblemType == 'phaseequilibria' or
+                 ProblemType == 'Phase_Equilibria' ):
                 ProblemType = 'PhaseEquilibria'
                 SyP.EnvirVar( Task, Method, Thermodynamics = ProblemType )# Creating Global Variables for directories pathways
             else:
@@ -108,7 +111,8 @@ if Method == 'SAA':
     if Task == 'Problem':
         IO.OutPut( Task, Method, Problem_Name = ProblemFileName )
         if ProblemType == 'PhaseEquilibria':
-            X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = ProblemFileName, ProblemType = ProblemType )
+            X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = ProblemFileName,
+                                                   ProblemType = ProblemType )
         else:
             sys.exit( 'ProblemType was not defined' )
             
