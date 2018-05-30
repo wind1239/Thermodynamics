@@ -108,7 +108,7 @@ if Method == 'SAA':
     if Task == 'Problem':
         IO.OutPut( Task, Method, Problem_Name = ProblemFileName )
         if ProblemType == 'PhaseEquilibria':
-            X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = ProblemFileName, Thermodynamics = ProblemType )
+            X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = ProblemFileName, ProblemType = ProblemType )
         else:
             sys.exit( 'ProblemType was not defined' )
             
