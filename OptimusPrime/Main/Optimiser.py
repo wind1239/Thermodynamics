@@ -43,6 +43,9 @@ import SystemPaths as SyP
                 ii) "Test_A.phys": contains information -re the physical problem.
                iii) "Test_A.py": contains the main call for the test-function.
                                                                                            """
+
+Time_Init = time.clock() # Measuring CPU-time in the beginning of the simulation
+
 # Input of argument:
 if len( sys.argv ) < 3:
     print ' '
@@ -98,12 +101,10 @@ else:
         sys.exit( ' Task was not properly defined' )
         
 
-
-# Measuring CPU-time in the beginning of the simulation:
-Time_Init = time.clock()
-
-""" Creating a file for general output and
-           Calling the optimisation routine """
+"""
+                    Creating a file for general output and 
+                                     Calling the optimisation routine
+                                                                              """
 if Method == 'SAA':
     if Task == 'Problem':
         IO.OutPut( Task, Method, Problem_Name = ProblemFileName )
