@@ -74,10 +74,9 @@ else:
         sys.exit( 'Task is not defined' )
 
     if ( Method == 'SAA' or Method == 'SA' or Method == 'SimulatedAnnealing' or
-         Method == 'SimulatedAnnealingAlgorithm' ):
+         Method == 'SimulatedAnnealingAlgorithm' or Method == 'ASA' ):
         Method == 'SAA'
-        import SA_IO as IO ; import Simulated_Annealing as ASA ; import SA_Print as Print ; \
-            import SAA_Tools as SaT
+        
     else:
         sys.exit( 'Method is not defined' )
         
@@ -108,6 +107,9 @@ else:
                                      Calling the optimisation routine
                                                                               """
 if Method == 'SAA':
+    import SA_IO as IO ; import Simulated_Annealing as ASA ; import SA_Print as Print ; \
+        import SAA_Tools as SaT
+    
     if Task == 'Problem':
         IO.OutPut( Task, Method, Problem_Name = ProblemFileName )
         if ProblemType == 'PhaseEquilibria':
