@@ -23,8 +23,9 @@ def EnvirVar( Task, Method, **kwargs ):
             '            export OptimusPATH="/data2/UoA/ThermodynamicModels/OptimusPrime"  \n'
             ''
             '===================================================================================================== \n')
-        print(msg)
-        sys.exit( '                              **OptimusPATH** not defined.\n' )
+        
+        sys.exit( msg )
+        
     else:
         RootPATH = os.environ.get('OptimusPATH')
         MainPATH = RootPATH + '/Main/'
