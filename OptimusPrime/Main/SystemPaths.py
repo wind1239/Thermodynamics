@@ -39,7 +39,7 @@ def EnvirVar( Task, Method, **kwargs ):
             sys.exit('Non-existent option for PROBLEM type')
         sys.path.append( ProbPATH )
 
-        if Method == 'SAA' or Method == 'SA':
+        if Method == 'SAA':
             OptimiserPATH = RootPATH + '/SAA/'
         else:
             sys.exit('Non-existent option for METHOD option')
@@ -47,9 +47,14 @@ def EnvirVar( Task, Method, **kwargs ):
 
         if kwargs:
             for key in kwargs:
-                if ( key == 'Thermodynamics' ):
-                    SLVE_PATH = RootPATH + '/PhaseEquilibria/'
-                    sys.path.append( SLVE_PATH )
+                if key == 'ProblemType':
+                    Problem_Type = kwargs[ key ]
+                    if Problem_Type == 'PhaseEquilibria':
+                        SLVE_PATH = RootPATH + '/PhaseEquilibria/'
+                        sys.path.append( SLVE_PATH )
+                        
+                    else:
+                        sys.exit( 'In SystemPaths: ProblemType was not defined' )
 
     return
 
