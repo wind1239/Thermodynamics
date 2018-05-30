@@ -65,52 +65,72 @@ else:
     Method = sys.argv[ 1 ] ; Task = sys.argv[ 2 ]
 
     if Task == 'Problem' or Task == 'Problems' or Task == 'problems' or Task == 'problem':
+        Task = 'Problem'
+    elif Task == 'Benchmarks' or Task == 'benchmarks' or Task == 'Benchmark' or Task == 'benchmark':
+        Task == 'Benchmarks'
+    else:
+        sys.exit( 'Task is not defined' )
+
+    if Method == 'SAA' or Method == 'SA' or Method == 'SimulatedAnnealing' or Method == 'SimulatedAnnealingAlgorithm':
+        Method == 'SAA'
+        import SA_IO as IO ; import Simulated_Annealing as ASA ; import SA_Print as Print ; import SAA_Tools as SaT
+    else:
+        sys.exit( 'Method is not defined' )
+        
+
+    if Task == 'Problem':
         if len( sys.argv ) == 5: # Dealing with a thermodynamic problem
-            PhaseEquilibria = sys.argv[ 3 ] ; ProblemFileName = sys.argv[ 4 ]
-            SyP.EnvirVar( Task, Method, Thermodynamics = PhaseEquilibria )# Creating Global Variables for directories pathways
+            ProblemType = sys.argv[ 3 ] ; ProblemFileName = sys.argv[ 4 ]
+            if ProblemType == 'PhaseEquilibria' or ProblemType == 'phaseequilibria' or ProblemType == 'Phase_Equilibria':
+                ProblemType = 'PhaseEquilibria'
+                SyP.EnvirVar( Task, Method, Thermodynamics = ProblemType )# Creating Global Variables for directories pathways
+            else:
+                sys.exit('ProblemType must be defined') 
         else: # dealing with any other optimisation problem
             ProblemFileName = sys.argv[ 3 ]
-            sys.exit('Need to be finished')
+            sys.exit('ProblemFileName must be defined')
         
-    elif Task == 'Benchmarks' or Task == 'benchmarks' or Task == 'Benchmark' or Task == 'benchmark':
+    elif Task == 'Benchmarks':
         TestCases = sys.argv[ 3 ]
         SyP.EnvirVar( Task, Method )# Creating Global Variables for directories pathways
+
+    else:
+        sys.exit( ' Task was not properly defined' )
         
-import SA_IO as IO
-import Simulated_Annealing as ASA
-import SA_Print as Print
-import SAA_Tools as SaT
+
 
 # Measuring CPU-time in the beginning of the simulation:
-SaT.Time_Init = time.clock()
+Time_Init = time.clock()
 
-""" Creating a file for general output """
-if Task == 'Problem' or Task == 'Problems':
-    IO.OutPut( Task, Method, Problem_Name = ProblemFileName )
-else:
-    IO.OutPut( Task, Method, Benchmark_Number = TestCases )
-
-""" Calling the optimisation routine """
-
-if ( Method == 'SAA' or Method == 'SA' ):
-    if Task == 'Problem' or Task == 'Problems' or Task == 'problems' or Task == 'problem':
-        X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = ProblemFileName, Thermodynamics = PhaseEquilibria )
-    elif Task == 'Benchmarks' or Task == 'benchmarks' or Task == 'Benchmark' or Task == 'benchmark':
+""" Creating a file for general output and
+           Calling the optimisation routine """
+if Method == 'SAA':
+    if Task == 'Problem':
+        IO.OutPut( Task, Method, Problem_Name = ProblemFileName )
+        if ProblemType == 'PhaseEquilibria':
+            X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = ProblemFileName, Thermodynamics = PhaseEquilibria )
+        else:
+            sys.exit( 'ProblemType was not defined' )
+            
+            
+    elif Task == 'Benchmarks':
+        IO.OutPut( Task, Method, Benchmark_Number = TestCases )
         X_Opt, F_Opt = ASA.SimulatedAnnealing( Method, Task, FileName = TestCases )
         
+    else:
+        sys.exit( ' Task was not properly defined' )
+
+    Time_Final = time.clock() #  Measuring CPU-time at the end of the simulation
+    print 'Total CPU simulation time:', Time_Final - Time_Init
+    IO.f_SAOutput.write(  '\n' '\n' )
+    IO.f_SAOutput.write( '============================================================ \n' )
+    IO.f_SAOutput.write( '  TOTAL CPU TIME FOR THE OPTIMISATION PROBLEM                \n' )
+    IO.f_SAOutput.write( '============================================================ \n' )
+    IO.f_SAOutput.write( '\n' )
+    IO.f_SAOutput.write( 'CPU Time: {a:}'.format( a = Time_Final - Time_Init ) + '\n' )
+    IO.f_SAOutput.write(  '\n' '\n' )
+    
 else:
     print "Method", Method, "has not been defined yet!"
-    sys.exit()
+    sys.exit( )
 
-    
-
-# Measuring CPU-time at the end of the simulation and print it out:
-SaT.Time_Final = time.clock()
-
-print 'Total CPU simulation time:', SaT.Time_Final - SaT.Time_Init
-IO.f_SAOutput.write(  '\n' '\n' )
-IO.f_SAOutput.write( '============================================================ \n' )
-IO.f_SAOutput.write( '  TOTAL CPU TIME FOR THE OPTIMISATION PROBLEM                \n' )
-IO.f_SAOutput.write( '============================================================ \n' )
-IO.f_SAOutput.write( '\n' )
-IO.f_SAOutput.write( 'CPU Time: {a:}'.format( a = SaT.Time_Final - SaT.Time_Init ) + '\n' )
