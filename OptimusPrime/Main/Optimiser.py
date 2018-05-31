@@ -96,10 +96,12 @@ else:
         
     elif Task == 'Benchmarks':
         TestCases = sys.argv[ 3 ]
+        if TestCases == 'All' or TestCases == 'all':
+            TestCases = 'All'
         SyP.EnvirVar( Task, Method )# Creating Global Variables for directories pathways
 
     else:
-        sys.exit( ' Task was not properly defined' )
+        sys.exit( ' Task was not defined' )
         
 
 """
@@ -107,8 +109,23 @@ else:
                                      Calling the optimisation routine
                                                                               """
 if Method == 'SAA':
+    """      ================================================================
+    
+                             Importing Functions
+    
+             ================================================================  """
+    
     import SA_IO as IO ; import Simulated_Annealing as ASA ; import SA_Print as Print ; \
         import SAA_Tools as SaT
+
+
+
+    """     =================================================================
+
+                  Running the OPTIMISATION ALGORITHM ("Method") in the 
+                     associated PROBLEM ("Task" and "ProblemType")
+
+            =================================================================   """  
     
     if Task == 'Problem':
         IO.OutPut( Task, Method, Problem_Name = ProblemFileName )
@@ -125,6 +142,15 @@ if Method == 'SAA':
         
     else:
         sys.exit( ' Task was not properly defined' )
+
+
+        
+    """      =================================================================
+    
+              Assessment of CPU TIME of the associated PROBLEM ("Task" and 
+                 "ProblemType") using the OPTIMISATION ALGORITHM ("Method")                    
+    
+             =================================================================    """
 
     Time_Final = time.clock() #  Measuring CPU-time at the end of the simulation
     print 'Total CPU simulation time:', Time_Final - Time_Init
