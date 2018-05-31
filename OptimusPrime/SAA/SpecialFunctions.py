@@ -6,7 +6,7 @@ import sys, time
 import RandomGenerator as RanGen
 import SAA_Tools as SaT
 import SA_IO as IO
-import ThermoTools as ThT
+import SystemPaths as SyP
 import pdb
 
    
@@ -148,6 +148,8 @@ def CalcOtherPhase( X, UB, LB, **kwargs ):
     """ This function calculates the composition of the other phase. The input is X[0:N-1], where X[N-1]
             is the phase composition. Z[0:N-1] is the feed composition. UB and LB are the lower and upper
             bound arrays.                                                                               """
+
+    import ThermoTools as ThT
     N = len( ThT.Z_Feed )
     Lphase = X[ N - 1 ] ;  Vphase = 1. - Lphase
     

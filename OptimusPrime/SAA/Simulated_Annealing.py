@@ -98,7 +98,9 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             Func = BTest.TestFunction( SaT. Function_Name, SaT.Ndim, SaT. SA_X ) 
             
         else: # Problems
-            Func, X_Feed = ObF.ObjFunction( SaT. SA_X, Thermodynamics = PhaseEquilibria, Status = 'InitialCalculations' )
+            Func, X_Feed = ObF.ObjFunction( SaT. SA_X, Problem_Type = ProblemType, Status = 'InitialCalculations' )
+
+        sys.exit( Func )
 
             
 
@@ -121,7 +123,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         if Task == 'Benchmarks':
             X_OPT, F_OPT = ASA_Loops( Method, Task, Func )
         else: # Problems
-            X_OPT, F_OPT = ASA_Loops( Method, Task, Func, Thermodynamics = PhaseEquilibria, X_Feed = X_Feed )
+            X_OPT, F_OPT = ASA_Loops( Method, Task, Func, Problem_Type = ProblemType, X_Feed = X_Feed )
         
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )

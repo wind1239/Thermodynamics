@@ -21,7 +21,7 @@ def ObjFunction( XSolution, **kwargs ):
     ProbStatus = 'Old'
     if kwargs:
         for key in kwargs:
-            if key == 'Thermodynamics':
+            if key == 'Problem_Type':
                 ProbCase = kwargs[ key ]
             elif key == 'Status':
                 ProbStatus = kwargs[ key ]
