@@ -2,9 +2,6 @@
 
 import os, sys
 import SystemPaths as SyP
-
-#import gibbsfunction_test_10 as Kostas
-#import Test_A as Test 
 import pdb
 
 ###
@@ -30,6 +27,7 @@ def ObjFunction( XSolution, **kwargs ):
 
 
         if ProbCase == 'PhaseEquilibria':
+            SyP.EnvirVar( 'Problem', 'SAA', ProblemType = ProbCase )
             import Main_Thermod as MTh
             FSolution, XSolution = MTh.WrapThermodynamics( XSolution,  Status = ProbStatus )
         else:
