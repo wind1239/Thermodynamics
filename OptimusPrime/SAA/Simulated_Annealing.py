@@ -95,12 +95,12 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
         """ Calling the function for the first time before the SA main loop """
         if Task == 'Benchmarks':
-            Func = BTest.TestFunction( SaT. Function_Name, SaT.Ndim, SaT. SA_X ) 
+            Func = BTest.TestFunction( SaT.Function_Name, SaT.Ndim, SaT.SA_X ) 
             
         else: # Problems
-            Func, X_Feed = ObF.ObjFunction( SaT. SA_X, Problem_Type = ProblemType, Status = 'InitialCalculations' )
+            Func, X_Feed = ObF.ObjFunction( SaT.SA_X, Problem_Type = ProblemType, Status = 'InitialCalculations' )
 
-        sys.exit( Func )
+        #sys.exit( Func )
 
             
 
@@ -111,7 +111,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         """"                  Printing into the *out file                    """
         IO.f_SAOutput.write( '\n' )
         IO.f_SAOutput.write( 'Initial evaluation of the function: {a:.4e}'.format( a = Func ) + '\n' )
-        if Task == 'Problem':
+        if Task == 'Problem' and ProblemType == 'PhaseEquilibria':
             SpFunc.CalcOtherPhase( SaT.SA_X, SaT.UpperBounds, SaT.LowerBounds, Diagnostics = True )
 
         """
@@ -128,7 +128,9 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
         X_Optimum.append( X_OPT )
         F_Optimum.append( F_OPT )
 
-        sys.exit('---')
+        print X_Optimum, F_Optimum
+
+        #sys.exit('---')
 
         """
            =====================================================================
@@ -140,7 +142,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
 
             TestTime = time.clock()
             Time_temp.append( TestTime )
-            if TestCases == 'All' :
+            if FileName == 'All' :
                 if itest > 1:
                     TestSolution_Time.append( TestTime - Time_temp[ itest - 2 ] )
                 else:
@@ -159,7 +161,7 @@ def SimulatedAnnealing( Method, Task, **kwargs ):
             TestTime = time.clock()
             TestSolution_Time.append( time.clock() - SaT.Time_Init ) # Measuring CPU time for the problem/test   
 
-    if ( Task == 'Benchmarks' ) and ( TestCases == 'All' ):
+    if ( Task == 'Benchmarks' ) and ( FileName == 'All' ):
         Print.Print_SAA_Diagnostic( Bench_AllTestCases = 'yes', Solution = TestSolution, Solution_Name = TestSolution_Name, Solution_Time = TestSolution_Time  )
 
     return X_Optimum, F_Optimum
@@ -261,15 +263,19 @@ def ASA_Loops( Method, Task, Func, **kwargs ):
                         #XP[ SaT.Ndim ] = X_Try[ SaT.Ndim ]
 
                     if Task == 'Benchmarks':
-                        BoxF.Envelope_Constraints( Method, Task, XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
+                        BoxF.Envelope_Constraints( Method, Task, XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, \
+                                                   UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction )
                         
                     else: # Problems
-                        BoxF.Envelope_Constraints( Method, Task, XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, X_Feed = X_Feed )
+                        BoxF.Envelope_Constraints( Method, Task, XP, NDim = SaT.Ndim, LBounds = SaT.LowerBounds, \
+                                                   UBounds = SaT.UpperBounds, TryC = Try, IsNormalised = Fraction, \
+                                                   X_Feed = X_Feed )
 
                     #IO.f_SAOutput.write( 'XP(after):{a:}'.format( a= XP ) + '\n' )
                     #IO.f_SAOutput.write( '\n' )
                     #if kloop > 10:
-                    #    sys.exit('fck')
+                    print XP
+                    sys.exit('fck')
                     
                     if Try:
                         LNobds += 1

@@ -47,8 +47,10 @@ def to_bool(value):
 ###
 def Envelope_Constraints( Method, Task, X, **kwargs ):
     """ This function ensures that variable 'X' is bounded """
-    SyP.EnvirVar( Task, Method, Thermodynamics = 'Thermodynamics' )
-    import ThermoTools as ThT
+
+    #if Task == "Problem":
+    #    SyP.EnvirVar( Task, Method, Thermodynamics = 'Thermodynamics' )
+    #    import ThermoTools as ThT
 
     rand = []
     TryAgain = True

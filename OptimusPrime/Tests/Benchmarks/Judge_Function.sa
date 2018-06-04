@@ -31,28 +31,28 @@ MaxEvl  1000000
 EPS  1.e-2
 
 # RT: Parameter for temperature reduction
-RT   0.8
+RT   0.95
 
 # Temp: SAA temperature parameter
-Temp   45.
+Temp   85.
 
 # X_Init: Initial guess for the solution-coordinate vector
-X_Init       2.354471   -0.319186
+X_Init       0.75   1.25
 
 # LowerBounds: Lower bounds for the solution-coordinate vector
-LowerBounds   -1.e25   -1.e25
+LowerBounds   -1.e2   -1.e2
 
 # UpperBounds: Upper bounds for the solution-coordinate vector
-UpperBounds   1.e25     1.e25
+UpperBounds   1.e2     1.e2
 
 # VM: Stepping matrix (only the diagonal representing each direction)
-VM     1.        1.
+VM     1.e1        1.e1
 
 # C: Parameter for controlling the size of the stepping matrix
 C      2.        2.
 
 # Debugging: Option to dump all intermediate results into the *.out file (True or False)
-Debugging  False
+Debugging  True
 
 # Benchmark_Solution: Solution-coordinate and solution of the Benchmark test-case
 Benchmark_Solution  0.864   1.23   16.0817
